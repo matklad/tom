@@ -30,7 +30,10 @@ Number: () = {
     <l:@L> bare_key_or_number <r:@R> => events.shift(symbols::NUMBER, l, r),
 };
 Bool: () = <l:@L> bool <r:@R> => events.shift(symbols::BOOL, l, r);
-BareKey: () = <l:@L> bare_key <r:@R> => events.shift(symbols::BARE_KEY, l, r);
+BareKey: () = {
+    <l:@L> bare_key <r:@R> => events.shift(symbols::BARE_KEY, l, r),
+    <l:@L> bare_key_or_number <r:@R> => events.shift(symbols::BARE_KEY, l, r),
+};
 
 match {
     "=" => eq,

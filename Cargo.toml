@@ -8,8 +8,9 @@ lalrpop-util = "0.15"
 regex = "0.2"
 parse_tree = "0.0.3"
 
-[build-dependencies]
-lalrpop = "0.15"
+[build-dependencies.lalrpop]
+git = "https://github.com/matklad/lalrpop"
+branch = "caret-precedence"
 
 [dev-dependencies.testutils]
 path = "./tests/testutils"
