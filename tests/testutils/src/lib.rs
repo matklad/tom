@@ -64,7 +64,7 @@ fn test_from_dir(dir: &Path) -> Vec<PathBuf> {
     for file in read_dir(&dir).unwrap() {
         let file = file.unwrap();
         let path = file.path();
-        if path.extension().unwrap_or_default() == "rs" {
+        if path.extension().unwrap_or_default() == "toml" {
             acc.push(path);
         }
     }
