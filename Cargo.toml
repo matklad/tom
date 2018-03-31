@@ -1,0 +1,15 @@
+[package]
+name = "tom"
+version = "0.1.0"
+authors = ["Aleksey Kladov <aleksey.kladov@gmail.com>"]
+
+[dependencies]
+lalrpop-util = "0.15"
+regex = "0.2"
+parse_tree = "0.0.3"
+
+[build-dependencies]
+lalrpop = "0.15"
+
+[dev-dependencies.testutils]
+path = "./tests/testutils"

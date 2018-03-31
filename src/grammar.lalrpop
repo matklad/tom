@@ -1,0 +1,79 @@
+use events::Events;
+use symbols;
+
+grammar<E>(events: &mut E) where E: Events;
+
+pub TomlFile: () = {
+    <xs:FileForm*> => events.reduce(symbols::FILE, xs.len())
+};
+
+FileForm = {
+    KeyVal
+};
+
+KeyVal: () = KeyVal_ => events.reduce(symbols::KEY_VAL, 3);
+KeyVal_ = {
+   Key Eq Val
+};
+
+Key: () = Key_ => events.reduce(symbols::KEY, 1);
+Key_ = { BareKey };
+
+Val: () = Val_ => events.reduce(symbols::VAL, 1);
+Val_ = { Literal };
+
+Literal = { Number, Bool };
+
+Eq: () = <l:@L> eq <r:@R> => events.shift(symbols::EQ, l, r);
+Number: () = {
+    <l:@L> number <r:@R> => events.shift(symbols::NUMBER, l, r),
+    <l:@L> bare_key_or_number <r:@R> => events.shift(symbols::NUMBER, l, r),
+};
+Bool: () = <l:@L> bool <r:@R> => events.shift(symbols::BOOL, l, r);
+BareKey: () = <l:@L> bare_key <r:@R> => events.shift(symbols::BARE_KEY, l, r);
+
+match {
+    "=" => eq,
+    "," => comma,
+    "." => dot,
+    "[" => L_BRACK,
+    "]" => R_BRACK,
+    "{" => L_CURLY,
+    "}" => R_CURLY,
+    r"[0-9]+" => bare_key_or_number,
+
+    r#"(?x)
+       "
+        ([^\r\n"] | \\.)*
+       "
+    "# => basic_string,
+    r#"(?x)
+       """
+        ([^"] | \\. | "[^"] | ""[^"])*
+       """
+    "# => mutiline_basic_string,
+
+    r#"(?x)
+       '
+        ([^\r\n'] | \\.)*
+       '
+    "# => literal_string,
+    r#"(?x)
+       '''
+        ([^'] | \\. | '[^'] | ''[^'])*
+       '''
+    "# => mutiline_literal_string,
+
+
+    r"false|true" => bool,
+} else {
+    r"(?x)
+      [-+]?
+      (0|[1-9](_?[0-9])*) # no leading zeros
+      (\.[0-9](_?[0-9])*)?
+      ([eE][-+]?[1-9](_?[0-9])*)?
+    " => number,
+} else {
+    r"[0-9_\-a-zA-Z]+" => bare_key,
+}
+
