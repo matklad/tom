@@ -4,15 +4,15 @@ FILE@[0; 20)
       BARE_KEY@[0; 3) "foo"
     WHITESPACE@[3; 4)
     EQ@[4; 5) "="
-    VAL@[5; 8)
-      WHITESPACE@[5; 6)
+    WHITESPACE@[5; 6)
+    VAL@[6; 8)
       NUMBER@[6; 8) "92"
-  KEY_VAL@[8; 20)
-    KEY@[8; 12)
-      WHITESPACE@[8; 9)
+  WHITESPACE@[8; 9)
+  KEY_VAL@[9; 20)
+    KEY@[9; 12)
       BARE_KEY@[9; 12) "bar"
     WHITESPACE@[12; 13)
     EQ@[13; 14) "="
-    VAL@[14; 20)
-      WHITESPACE@[14; 15)
+    WHITESPACE@[14; 15)
+    VAL@[15; 20)
       BOOL@[15; 20) "false"

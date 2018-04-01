@@ -33,26 +33,26 @@ impl Builder {
 impl events::Events for Builder {
     fn shift(&mut self, symbol: Symbol, start: usize, end: usize) {
         let gap = start - self.prev;
-        let has_ws = if gap != 0 {
+        if gap != 0 {
+            self.stack.push(true);
             self.inner.shift(symbols::WHITESPACE, (gap as u32).into());
-            true
-        } else {
-            false
-        };
-        self.stack.push(has_ws);
+        }
+        self.stack.push(false);
         self.prev = end;
         let len = end - start;
         self.inner.shift(symbol, (len as u32).into())
     }
 
-    fn reduce(&mut self, symbol: Symbol, n_symbols: usize) {
-        let n = self.stack.iter().rev().take(n_symbols)
-            .map(|&has_ws| if has_ws { 2 } else { 1 })
-            .sum();
-        self.inner.reduce(symbol, n);
-        for _ in 0..n_symbols {
-            self.stack.pop().unwrap();
+    fn reduce(&mut self, symbol: Symbol, mut n_symbols: usize) {
+        let mut to_reduce = 0;
+        while n_symbols > 0 {
+            let is_ws = self.stack.pop().unwrap();
+            to_reduce += 1;
+            if !is_ws {
+                n_symbols -= 1;
+            }
         }
+        self.inner.reduce(symbol, to_reduce);
         self.stack.push(false);
     }
 }
