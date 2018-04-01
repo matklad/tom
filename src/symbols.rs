@@ -7,13 +7,16 @@ symbols! {
     VAL 13
     ARRAY 14
     DICT 15
+    TABLE_HEADER 16
+    TABLE 17
 
     EQ 20
-    COMMA 21
-    L_BRACK 22
-    R_BRACK 23
-    L_CURLY 24
-    R_CURLY 25
+    DOT 21
+    COMMA 22
+    L_BRACK 23
+    R_BRACK 24
+    L_CURLY 25
+    R_CURLY 26
 
     NUMBER 30
     BOOL 31

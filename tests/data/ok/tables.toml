@@ -1,0 +1,25 @@
+[table]
+
+[table-1]
+key1 = "some string"
+key2 = 123
+
+[table-2]
+key1 = "another string"
+key2 = 456
+
+[dog."tater.man"]
+type = "pug"
+
+[a.b.c]
+[ d.e.f ]
+[ g .  h  . i ]
+[ j . "ʞ" . 'l' ]
+
+[x.y.z.w]
+
+[a.b]
+c = 1
+
+[a]
+d = 2

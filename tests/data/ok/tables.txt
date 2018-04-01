@@ -1,0 +1,193 @@
+FILE@[0; 217)
+  TABLE@[0; 7)
+    TABLE_HEADER@[0; 7)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 6)
+        BARE_KEY@[1; 6) "table"
+      R_BRACK@[6; 7) "]"
+  TABLE@[7; 50)
+    TABLE_HEADER@[7; 18)
+      WHITESPACE@[7; 9)
+      L_BRACK@[9; 10) "["
+      KEY@[10; 17)
+        BARE_KEY@[10; 17) "table-1"
+      R_BRACK@[17; 18) "]"
+    KEY_VAL@[18; 39)
+      KEY@[18; 23)
+        WHITESPACE@[18; 19)
+        BARE_KEY@[19; 23) "key1"
+      WHITESPACE@[23; 24)
+      EQ@[24; 25) "="
+      VAL@[25; 39)
+        WHITESPACE@[25; 26)
+        BASIC_STRING@[26; 39) "\"some string\""
+    KEY_VAL@[39; 50)
+      KEY@[39; 44)
+        WHITESPACE@[39; 40)
+        BARE_KEY@[40; 44) "key2"
+      WHITESPACE@[44; 45)
+      EQ@[45; 46) "="
+      VAL@[46; 50)
+        WHITESPACE@[46; 47)
+        NUMBER@[47; 50) "123"
+  TABLE@[50; 96)
+    TABLE_HEADER@[50; 61)
+      WHITESPACE@[50; 52)
+      L_BRACK@[52; 53) "["
+      KEY@[53; 60)
+        BARE_KEY@[53; 60) "table-2"
+      R_BRACK@[60; 61) "]"
+    KEY_VAL@[61; 85)
+      KEY@[61; 66)
+        WHITESPACE@[61; 62)
+        BARE_KEY@[62; 66) "key1"
+      WHITESPACE@[66; 67)
+      EQ@[67; 68) "="
+      VAL@[68; 85)
+        WHITESPACE@[68; 69)
+        BASIC_STRING@[69; 85) "\"another string\""
+    KEY_VAL@[85; 96)
+      KEY@[85; 90)
+        WHITESPACE@[85; 86)
+        BARE_KEY@[86; 90) "key2"
+      WHITESPACE@[90; 91)
+      EQ@[91; 92) "="
+      VAL@[92; 96)
+        WHITESPACE@[92; 93)
+        NUMBER@[93; 96) "456"
+  TABLE@[96; 128)
+    TABLE_HEADER@[96; 115)
+      WHITESPACE@[96; 98)
+      L_BRACK@[98; 99) "["
+      KEY@[99; 102)
+        BARE_KEY@[99; 102) "dog"
+      DOT@[102; 103) "."
+      KEY@[103; 114)
+        BASIC_STRING@[103; 114) "\"tater.man\""
+      R_BRACK@[114; 115) "]"
+    KEY_VAL@[115; 128)
+      KEY@[115; 120)
+        WHITESPACE@[115; 116)
+        BARE_KEY@[116; 120) "type"
+      WHITESPACE@[120; 121)
+      EQ@[121; 122) "="
+      VAL@[122; 128)
+        WHITESPACE@[122; 123)
+        BASIC_STRING@[123; 128) "\"pug\""
+  TABLE@[128; 137)
+    TABLE_HEADER@[128; 137)
+      WHITESPACE@[128; 130)
+      L_BRACK@[130; 131) "["
+      KEY@[131; 132)
+        BARE_KEY@[131; 132) "a"
+      DOT@[132; 133) "."
+      KEY@[133; 134)
+        BARE_KEY@[133; 134) "b"
+      DOT@[134; 135) "."
+      KEY@[135; 136)
+        BARE_KEY@[135; 136) "c"
+      R_BRACK@[136; 137) "]"
+  TABLE@[137; 147)
+    TABLE_HEADER@[137; 147)
+      WHITESPACE@[137; 138)
+      L_BRACK@[138; 139) "["
+      KEY@[139; 141)
+        WHITESPACE@[139; 140)
+        BARE_KEY@[140; 141) "d"
+      DOT@[141; 142) "."
+      KEY@[142; 143)
+        BARE_KEY@[142; 143) "e"
+      DOT@[143; 144) "."
+      KEY@[144; 145)
+        BARE_KEY@[144; 145) "f"
+      WHITESPACE@[145; 146)
+      R_BRACK@[146; 147) "]"
+  TABLE@[147; 163)
+    TABLE_HEADER@[147; 163)
+      WHITESPACE@[147; 148)
+      L_BRACK@[148; 149) "["
+      KEY@[149; 151)
+        WHITESPACE@[149; 150)
+        BARE_KEY@[150; 151) "g"
+      WHITESPACE@[151; 152)
+      DOT@[152; 153) "."
+      KEY@[153; 156)
+        WHITESPACE@[153; 155)
+        BARE_KEY@[155; 156) "h"
+      WHITESPACE@[156; 158)
+      DOT@[158; 159) "."
+      KEY@[159; 161)
+        WHITESPACE@[159; 160)
+        BARE_KEY@[160; 161) "i"
+      WHITESPACE@[161; 162)
+      R_BRACK@[162; 163) "]"
+  TABLE@[163; 182)
+    TABLE_HEADER@[163; 182)
+      WHITESPACE@[163; 164)
+      L_BRACK@[164; 165) "["
+      KEY@[165; 167)
+        WHITESPACE@[165; 166)
+        BARE_KEY@[166; 167) "j"
+      WHITESPACE@[167; 168)
+      DOT@[168; 169) "."
+      KEY@[169; 174)
+        WHITESPACE@[169; 170)
+        BASIC_STRING@[170; 174) "\"ʞ\""
+      WHITESPACE@[174; 175)
+      DOT@[175; 176) "."
+      KEY@[176; 180)
+        WHITESPACE@[176; 177)
+        LITERAL_STRING@[177; 180) "\'l\'"
+      WHITESPACE@[180; 181)
+      R_BRACK@[181; 182) "]"
+  TABLE@[182; 193)
+    TABLE_HEADER@[182; 193)
+      WHITESPACE@[182; 184)
+      L_BRACK@[184; 185) "["
+      KEY@[185; 186)
+        BARE_KEY@[185; 186) "x"
+      DOT@[186; 187) "."
+      KEY@[187; 188)
+        BARE_KEY@[187; 188) "y"
+      DOT@[188; 189) "."
+      KEY@[189; 190)
+        BARE_KEY@[189; 190) "z"
+      DOT@[190; 191) "."
+      KEY@[191; 192)
+        BARE_KEY@[191; 192) "w"
+      R_BRACK@[192; 193) "]"
+  TABLE@[193; 206)
+    TABLE_HEADER@[193; 200)
+      WHITESPACE@[193; 195)
+      L_BRACK@[195; 196) "["
+      KEY@[196; 197)
+        BARE_KEY@[196; 197) "a"
+      DOT@[197; 198) "."
+      KEY@[198; 199)
+        BARE_KEY@[198; 199) "b"
+      R_BRACK@[199; 200) "]"
+    KEY_VAL@[200; 206)
+      KEY@[200; 202)
+        WHITESPACE@[200; 201)
+        BARE_KEY@[201; 202) "c"
+      WHITESPACE@[202; 203)
+      EQ@[203; 204) "="
+      VAL@[204; 206)
+        WHITESPACE@[204; 205)
+        NUMBER@[205; 206) "1"
+  TABLE@[206; 217)
+    TABLE_HEADER@[206; 211)
+      WHITESPACE@[206; 208)
+      L_BRACK@[208; 209) "["
+      KEY@[209; 210)
+        BARE_KEY@[209; 210) "a"
+      R_BRACK@[210; 211) "]"
+    KEY_VAL@[211; 217)
+      KEY@[211; 213)
+        WHITESPACE@[211; 212)
+        BARE_KEY@[212; 213) "d"
+      WHITESPACE@[213; 214)
+      EQ@[214; 215) "="
+      VAL@[215; 217)
+        WHITESPACE@[215; 216)
+        NUMBER@[216; 217) "2"
