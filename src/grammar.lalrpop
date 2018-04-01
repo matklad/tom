@@ -3,17 +3,13 @@ use symbols;
 
 grammar<E>(events: &mut E) where E: Events;
 
-pub TomlFile: () = <kvs:KeyVal*> <ts:Table*>
+pub TomlFile: () = <kvs:KeyVal*> <ts:AnyTable*>
     => events.reduce(symbols::FILE, kvs.len() + ts.len());
 
-FileForm = {
-    KeyVal, Table
-};
+AnyTable = { Table, ArrayTable };
 
-KeyVal: () = KeyVal_ => events.reduce(symbols::KEY_VAL, 3);
-KeyVal_ = {
-   Key Eq Val
-};
+KeyVal: () = Key Eq Val
+    => events.reduce(symbols::KEY_VAL, 3);
 
 Key: () = Key_ => events.reduce(symbols::KEY, 1);
 Key_ = { BareKey, BasicString, LiteralString };
@@ -39,6 +35,13 @@ Table: () = TableHeader <kvs:KeyVal*>
 
 TableHeader: () = L_BRACK Key <keys:(Dot Key)*> R_BRACK
     => events.reduce(symbols::TABLE_HEADER, 3 + keys.len() * 2);
+
+ArrayTable: () =  ArrayTableHeader <kvs:KeyVal*>
+    => events.reduce(symbols::ARRAY_TABLE, 1 + kvs.len());
+
+ArrayTableHeader: () = L_BRACK L_BRACK Key <keys:(Dot Key)*> R_BRACK R_BRACK
+    => events.reduce(symbols::TABLE_HEADER, 5 + keys.len() * 2);
+
 
 Eq: () = <l:@L> "=" <r:@R> => events.shift(symbols::EQ, l, r);
 Dot: () = <l:@L> "." <r:@R> => events.shift(symbols::DOT, l, r);

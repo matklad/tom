@@ -9,6 +9,7 @@ symbols! {
     DICT 15
     TABLE_HEADER 16
     TABLE 17
+    ARRAY_TABLE 18
 
     EQ 20
     DOT 21

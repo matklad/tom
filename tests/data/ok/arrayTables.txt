@@ -1,0 +1,318 @@
+FILE@[0; 482)
+  ARRAY_TABLE@[0; 44)
+    TABLE_HEADER@[0; 12)
+      L_BRACK@[0; 1) "["
+      L_BRACK@[1; 2) "["
+      KEY@[2; 10)
+        BARE_KEY@[2; 10) "products"
+      R_BRACK@[10; 11) "]"
+      R_BRACK@[11; 12) "]"
+    KEY_VAL@[12; 28)
+      KEY@[12; 17)
+        WHITESPACE@[12; 13)
+        BARE_KEY@[13; 17) "name"
+      WHITESPACE@[17; 18)
+      EQ@[18; 19) "="
+      VAL@[19; 28)
+        WHITESPACE@[19; 20)
+        BASIC_STRING@[20; 28) "\"Hammer\""
+    KEY_VAL@[28; 44)
+      KEY@[28; 32)
+        WHITESPACE@[28; 29)
+        BARE_KEY@[29; 32) "sku"
+      WHITESPACE@[32; 33)
+      EQ@[33; 34) "="
+      VAL@[34; 44)
+        WHITESPACE@[34; 35)
+        NUMBER@[35; 44) "738594937"
+  ARRAY_TABLE@[44; 58)
+    TABLE_HEADER@[44; 58)
+      WHITESPACE@[44; 46)
+      L_BRACK@[46; 47) "["
+      L_BRACK@[47; 48) "["
+      KEY@[48; 56)
+        BARE_KEY@[48; 56) "products"
+      R_BRACK@[56; 57) "]"
+      R_BRACK@[57; 58) "]"
+  ARRAY_TABLE@[58; 117)
+    TABLE_HEADER@[58; 72)
+      WHITESPACE@[58; 60)
+      L_BRACK@[60; 61) "["
+      L_BRACK@[61; 62) "["
+      KEY@[62; 70)
+        BARE_KEY@[62; 70) "products"
+      R_BRACK@[70; 71) "]"
+      R_BRACK@[71; 72) "]"
+    KEY_VAL@[72; 86)
+      KEY@[72; 77)
+        WHITESPACE@[72; 73)
+        BARE_KEY@[73; 77) "name"
+      WHITESPACE@[77; 78)
+      EQ@[78; 79) "="
+      VAL@[79; 86)
+        WHITESPACE@[79; 80)
+        BASIC_STRING@[80; 86) "\"Nail\""
+    KEY_VAL@[86; 102)
+      KEY@[86; 90)
+        WHITESPACE@[86; 87)
+        BARE_KEY@[87; 90) "sku"
+      WHITESPACE@[90; 91)
+      EQ@[91; 92) "="
+      VAL@[92; 102)
+        WHITESPACE@[92; 93)
+        NUMBER@[93; 102) "284758393"
+    KEY_VAL@[102; 117)
+      KEY@[102; 108)
+        WHITESPACE@[102; 103)
+        BARE_KEY@[103; 108) "color"
+      WHITESPACE@[108; 109)
+      EQ@[109; 110) "="
+      VAL@[110; 117)
+        WHITESPACE@[110; 111)
+        BASIC_STRING@[111; 117) "\"gray\""
+  ARRAY_TABLE@[117; 146)
+    TABLE_HEADER@[117; 129)
+      WHITESPACE@[117; 120)
+      L_BRACK@[120; 121) "["
+      L_BRACK@[121; 122) "["
+      KEY@[122; 127)
+        BARE_KEY@[122; 127) "fruit"
+      R_BRACK@[127; 128) "]"
+      R_BRACK@[128; 129) "]"
+    KEY_VAL@[129; 146)
+      KEY@[129; 136)
+        WHITESPACE@[129; 132)
+        BARE_KEY@[132; 136) "name"
+      WHITESPACE@[136; 137)
+      EQ@[137; 138) "="
+      VAL@[138; 146)
+        WHITESPACE@[138; 139)
+        BASIC_STRING@[139; 146) "\"apple\""
+  TABLE@[146; 204)
+    TABLE_HEADER@[146; 166)
+      WHITESPACE@[146; 150)
+      L_BRACK@[150; 151) "["
+      KEY@[151; 156)
+        BARE_KEY@[151; 156) "fruit"
+      DOT@[156; 157) "."
+      KEY@[157; 165)
+        BARE_KEY@[157; 165) "physical"
+      R_BRACK@[165; 166) "]"
+    KEY_VAL@[166; 184)
+      KEY@[166; 176)
+        WHITESPACE@[166; 171)
+        BARE_KEY@[171; 176) "color"
+      WHITESPACE@[176; 177)
+      EQ@[177; 178) "="
+      VAL@[178; 184)
+        WHITESPACE@[178; 179)
+        BASIC_STRING@[179; 184) "\"red\""
+    KEY_VAL@[184; 204)
+      KEY@[184; 194)
+        WHITESPACE@[184; 189)
+        BARE_KEY@[189; 194) "shape"
+      WHITESPACE@[194; 195)
+      EQ@[195; 196) "="
+      VAL@[196; 204)
+        WHITESPACE@[196; 197)
+        BASIC_STRING@[197; 204) "\"round\""
+  ARRAY_TABLE@[204; 252)
+    TABLE_HEADER@[204; 225)
+      WHITESPACE@[204; 208)
+      L_BRACK@[208; 209) "["
+      L_BRACK@[209; 210) "["
+      KEY@[210; 215)
+        BARE_KEY@[210; 215) "fruit"
+      DOT@[215; 216) "."
+      KEY@[216; 223)
+        BARE_KEY@[216; 223) "variety"
+      R_BRACK@[223; 224) "]"
+      R_BRACK@[224; 225) "]"
+    KEY_VAL@[225; 252)
+      KEY@[225; 234)
+        WHITESPACE@[225; 230)
+        BARE_KEY@[230; 234) "name"
+      WHITESPACE@[234; 235)
+      EQ@[235; 236) "="
+      VAL@[236; 252)
+        WHITESPACE@[236; 237)
+        BASIC_STRING@[237; 252) "\"red delicious\""
+  ARRAY_TABLE@[252; 299)
+    TABLE_HEADER@[252; 273)
+      WHITESPACE@[252; 256)
+      L_BRACK@[256; 257) "["
+      L_BRACK@[257; 258) "["
+      KEY@[258; 263)
+        BARE_KEY@[258; 263) "fruit"
+      DOT@[263; 264) "."
+      KEY@[264; 271)
+        BARE_KEY@[264; 271) "variety"
+      R_BRACK@[271; 272) "]"
+      R_BRACK@[272; 273) "]"
+    KEY_VAL@[273; 299)
+      KEY@[273; 282)
+        WHITESPACE@[273; 278)
+        BARE_KEY@[278; 282) "name"
+      WHITESPACE@[282; 283)
+      EQ@[283; 284) "="
+      VAL@[284; 299)
+        WHITESPACE@[284; 285)
+        BASIC_STRING@[285; 299) "\"granny smith\""
+  ARRAY_TABLE@[299; 328)
+    TABLE_HEADER@[299; 310)
+      WHITESPACE@[299; 301)
+      L_BRACK@[301; 302) "["
+      L_BRACK@[302; 303) "["
+      KEY@[303; 308)
+        BARE_KEY@[303; 308) "fruit"
+      R_BRACK@[308; 309) "]"
+      R_BRACK@[309; 310) "]"
+    KEY_VAL@[310; 328)
+      KEY@[310; 317)
+        WHITESPACE@[310; 313)
+        BARE_KEY@[313; 317) "name"
+      WHITESPACE@[317; 318)
+      EQ@[318; 319) "="
+      VAL@[319; 328)
+        WHITESPACE@[319; 320)
+        BASIC_STRING@[320; 328) "\"banana\""
+  ARRAY_TABLE@[328; 482)
+    TABLE_HEADER@[328; 349)
+      WHITESPACE@[328; 332)
+      L_BRACK@[332; 333) "["
+      L_BRACK@[333; 334) "["
+      KEY@[334; 339)
+        BARE_KEY@[334; 339) "fruit"
+      DOT@[339; 340) "."
+      KEY@[340; 347)
+        BARE_KEY@[340; 347) "variety"
+      R_BRACK@[347; 348) "]"
+      R_BRACK@[348; 349) "]"
+    KEY_VAL@[349; 371)
+      KEY@[349; 358)
+        WHITESPACE@[349; 354)
+        BARE_KEY@[354; 358) "name"
+      WHITESPACE@[358; 359)
+      EQ@[359; 360) "="
+      VAL@[360; 371)
+        WHITESPACE@[360; 361)
+        BASIC_STRING@[361; 371) "\"plantain\""
+    KEY_VAL@[371; 482)
+      KEY@[371; 380)
+        WHITESPACE@[371; 374)
+        BARE_KEY@[374; 380) "points"
+      WHITESPACE@[380; 381)
+      EQ@[381; 382) "="
+      VAL@[382; 482)
+        ARRAY@[382; 482)
+          WHITESPACE@[382; 383)
+          L_BRACK@[383; 384) "["
+          VAL@[384; 408)
+            DICT@[384; 408)
+              WHITESPACE@[384; 385)
+              L_CURLY@[385; 386) "{"
+              KEY_VAL@[386; 392)
+                KEY@[386; 388)
+                  WHITESPACE@[386; 387)
+                  BARE_KEY@[387; 388) "x"
+                WHITESPACE@[388; 389)
+                EQ@[389; 390) "="
+                VAL@[390; 392)
+                  WHITESPACE@[390; 391)
+                  NUMBER@[391; 392) "1"
+              COMMA@[392; 393) ","
+              KEY_VAL@[393; 399)
+                KEY@[393; 395)
+                  WHITESPACE@[393; 394)
+                  BARE_KEY@[394; 395) "y"
+                WHITESPACE@[395; 396)
+                EQ@[396; 397) "="
+                VAL@[397; 399)
+                  WHITESPACE@[397; 398)
+                  NUMBER@[398; 399) "2"
+              COMMA@[399; 400) ","
+              KEY_VAL@[400; 406)
+                KEY@[400; 402)
+                  WHITESPACE@[400; 401)
+                  BARE_KEY@[401; 402) "z"
+                WHITESPACE@[402; 403)
+                EQ@[403; 404) "="
+                VAL@[404; 406)
+                  WHITESPACE@[404; 405)
+                  NUMBER@[405; 406) "3"
+              WHITESPACE@[406; 407)
+              R_CURLY@[407; 408) "}"
+          COMMA@[408; 409) ","
+          VAL@[409; 444)
+            DICT@[409; 444)
+              WHITESPACE@[409; 421)
+              L_CURLY@[421; 422) "{"
+              KEY_VAL@[422; 428)
+                KEY@[422; 424)
+                  WHITESPACE@[422; 423)
+                  BARE_KEY@[423; 424) "x"
+                WHITESPACE@[424; 425)
+                EQ@[425; 426) "="
+                VAL@[426; 428)
+                  WHITESPACE@[426; 427)
+                  NUMBER@[427; 428) "7"
+              COMMA@[428; 429) ","
+              KEY_VAL@[429; 435)
+                KEY@[429; 431)
+                  WHITESPACE@[429; 430)
+                  BARE_KEY@[430; 431) "y"
+                WHITESPACE@[431; 432)
+                EQ@[432; 433) "="
+                VAL@[433; 435)
+                  WHITESPACE@[433; 434)
+                  NUMBER@[434; 435) "8"
+              COMMA@[435; 436) ","
+              KEY_VAL@[436; 442)
+                KEY@[436; 438)
+                  WHITESPACE@[436; 437)
+                  BARE_KEY@[437; 438) "z"
+                WHITESPACE@[438; 439)
+                EQ@[439; 440) "="
+                VAL@[440; 442)
+                  WHITESPACE@[440; 441)
+                  NUMBER@[441; 442) "9"
+              WHITESPACE@[442; 443)
+              R_CURLY@[443; 444) "}"
+          COMMA@[444; 445) ","
+          VAL@[445; 480)
+            DICT@[445; 480)
+              WHITESPACE@[445; 457)
+              L_CURLY@[457; 458) "{"
+              KEY_VAL@[458; 464)
+                KEY@[458; 460)
+                  WHITESPACE@[458; 459)
+                  BARE_KEY@[459; 460) "x"
+                WHITESPACE@[460; 461)
+                EQ@[461; 462) "="
+                VAL@[462; 464)
+                  WHITESPACE@[462; 463)
+                  NUMBER@[463; 464) "2"
+              COMMA@[464; 465) ","
+              KEY_VAL@[465; 471)
+                KEY@[465; 467)
+                  WHITESPACE@[465; 466)
+                  BARE_KEY@[466; 467) "y"
+                WHITESPACE@[467; 468)
+                EQ@[468; 469) "="
+                VAL@[469; 471)
+                  WHITESPACE@[469; 470)
+                  NUMBER@[470; 471) "4"
+              COMMA@[471; 472) ","
+              KEY_VAL@[472; 478)
+                KEY@[472; 474)
+                  WHITESPACE@[472; 473)
+                  BARE_KEY@[473; 474) "z"
+                WHITESPACE@[474; 475)
+                EQ@[475; 476) "="
+                VAL@[476; 478)
+                  WHITESPACE@[476; 477)
+                  NUMBER@[477; 478) "8"
+              WHITESPACE@[478; 479)
+              R_CURLY@[479; 480) "}"
+          WHITESPACE@[480; 481)
+          R_BRACK@[481; 482) "]"
