@@ -20,20 +20,25 @@ Key: () = Key_ => events.reduce(symbols::KEY, 1);
 Key_ = { BareKey };
 
 Val: () = Val_ => events.reduce(symbols::VAL, 1);
-Val_ = { Literal, Array };
+Val_ = { Literal, Array, Dict };
 
 Literal = { Number, Bool,
  BasicString, LiteralString,
  MultilineBasicString, MultilineLiteralString };
 
-Array: () = {
-    L_BRACK <xs:CommaList<Val>> R_BRACK => events.reduce(symbols::ARRAY, xs + 2),
-};
+Array: () =
+    L_BRACK <xs:CommaList<Val>> R_BRACK => events.reduce(symbols::ARRAY, xs + 2);
+
+
+Dict: () =
+    L_CURLY <xs:CommaList<KeyVal>> R_CURLY => events.reduce(symbols::DICT, xs + 2);
 
 Eq: () = <l:@L> eq <r:@R> => events.shift(symbols::EQ, l, r);
 Comma: () = <l:@L> comma <r:@R> => events.shift(symbols::COMMA, l, r);
 L_BRACK: () = <l:@L> l_brack <r:@R> => events.shift(symbols::L_BRACK, l, r);
 R_BRACK: () = <l:@L> r_brack <r:@R> => events.shift(symbols::R_BRACK, l, r);
+L_CURLY: () = <l:@L> l_curly <r:@R> => events.shift(symbols::L_CURLY, l, r);
+R_CURLY: () = <l:@L> r_curly <r:@R> => events.shift(symbols::R_CURLY, l, r);
 Number: () = {
     <l:@L> number <r:@R> => events.shift(symbols::NUMBER, l, r),
     <l:@L> bare_key_or_number <r:@R> => events.shift(symbols::NUMBER, l, r),

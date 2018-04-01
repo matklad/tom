@@ -6,11 +6,14 @@ symbols! {
     KEY 12
     VAL 13
     ARRAY 14
+    DICT 15
 
     EQ 20
     COMMA 21
     L_BRACK 22
     R_BRACK 23
+    L_CURLY 24
+    R_CURLY 25
 
     NUMBER 30
     BOOL 31
