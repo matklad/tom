@@ -92,13 +92,13 @@ fn gen_ast() {
             } else {
                 (format!("{}<'p>", s), "AstChildren::new(self.node().children()).next().unwrap()")
             };
-            ln!("    fn {}(&self) -> {} {{", acc, ret);
+            ln!("    pub fn {}(&self) -> {} {{", acc, ret);
             ln!("        {}", body);
             ln!("    }}");
         }
         ln!("}}");
     }
 
-    file::put_text("src/toml_ast.rs", &buff)
+    file::put_text("src/ast/generated.rs", &buff)
         .unwrap();
 }

@@ -150,23 +150,23 @@ impl<'p> AstNode<'p> for StringLit<'p> {
 }
 
 impl<'p> File<'p> {
-    fn tables(&self) -> AstChildren<'p, Table<'p>> {
+    pub fn tables(&self) -> AstChildren<'p, Table<'p>> {
         AstChildren::new(self.node().children())
     }
-    fn array_tables(&self) -> AstChildren<'p, ArrayTable<'p>> {
+    pub fn array_tables(&self) -> AstChildren<'p, ArrayTable<'p>> {
         AstChildren::new(self.node().children())
     }
 }
 impl<'p> TableHeader<'p> {
-    fn keys(&self) -> AstChildren<'p, Key<'p>> {
+    pub fn keys(&self) -> AstChildren<'p, Key<'p>> {
         AstChildren::new(self.node().children())
     }
 }
 impl<'p> KeyVal<'p> {
-    fn key(&self) -> Key<'p> {
+    pub fn key(&self) -> Key<'p> {
         AstChildren::new(self.node().children()).next().unwrap()
     }
-    fn val(&self) -> Val<'p> {
+    pub fn val(&self) -> Val<'p> {
         AstChildren::new(self.node().children()).next().unwrap()
     }
 }

@@ -1,6 +1,12 @@
 use parse_tree::{Node, Children};
 use std::marker::PhantomData;
 
+mod generated;
+pub use self::generated::*;
+mod ext;
+pub use self::ext::*;
+
+
 pub trait AstNode<'f>: Copy {
     fn cast(node: Node<'f>) -> Option<Self> where Self: Sized;
 

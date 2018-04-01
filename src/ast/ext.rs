@@ -1,5 +1,5 @@
 use ast::{AstNode, AstChildren};
-use toml_ast::{KeyVal, Dict, Table, ArrayTable, TableHeader, File};
+use ast::{KeyVal, Dict, Table, ArrayTable, TableHeader, File};
 
 trait KeyValueOwner<'p>: AstNode<'p> {
     fn entries(&self) -> AstChildren<'p, KeyVal<'p>> {

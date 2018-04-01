@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.15.0"
-use events::Events;
+use super::Events;
 use symbols;
 #[allow(unused_extern_crates)]
 extern crate lalrpop_util as __lalrpop_util;
@@ -8,7 +8,7 @@ extern crate lalrpop_util as __lalrpop_util;
 mod __parse__TomlFile {
     #![allow(non_snake_case, non_camel_case_types, unused_mut, unused_variables, unused_imports, unused_parens)]
 
-    use events::Events;
+    use super::super::Events;
     use symbols;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
@@ -1854,7 +1854,7 @@ pub use self::__parse__TomlFile::TomlFileParser;
 #[cfg_attr(rustfmt, rustfmt_skip)]
 mod __intern_token {
     #![allow(unused_imports)]
-    use events::Events;
+    use super::Events;
     use symbols;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
