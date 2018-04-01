@@ -438,13 +438,13 @@ mod __parse__TomlFile {
                 };
                 *__last_location = __lookahead.2.clone();
                 __integer = match __lookahead.1 {
-                    Token(0, _) if true => 0,
+                    Token(1, _) if true => 0,
                     Token(8, _) if true => 1,
                     Token(7, _) if true => 2,
                     Token(3, _) if true => 3,
                     Token(9, _) if true => 4,
                     Token(10, _) if true => 5,
-                    Token(1, _) if true => 6,
+                    Token(0, _) if true => 6,
                     Token(11, _) if true => 7,
                     Token(12, _) if true => 8,
                     Token(13, _) if true => 9,
@@ -470,7 +470,7 @@ mod __parse__TomlFile {
                     if __action > 0 {
                         let __symbol = match __integer {
                             0 => match __lookahead.1 {
-                                Token(0, __tok0) => __Symbol::Variant0((__tok0)),
+                                Token(1, __tok0) => __Symbol::Variant0((__tok0)),
                                 _ => unreachable!(),
                             },
                             1 => match __lookahead.1 {
@@ -494,7 +494,7 @@ mod __parse__TomlFile {
                                 _ => unreachable!(),
                             },
                             6 => match __lookahead.1 {
-                                Token(1, __tok0) => __Symbol::Variant0((__tok0)),
+                                Token(0, __tok0) => __Symbol::Variant0((__tok0)),
                                 _ => unreachable!(),
                             },
                             7 => match __lookahead.1 {
@@ -1441,15 +1441,15 @@ mod __intern_token {
     impl __MatcherBuilder {
         pub fn new() -> __MatcherBuilder {
             let __strs: &[&str] = &[
-                "^((?u:[-0-9A-Z_-_a-z])+)",
                 "^(((?u:[0-9]){4}(?u:\\-)(?u:[0-9]){2}(?u:\\-)(?u:[0-9]){2}((?u:[T-Tt-t])((?u:[0-9]){2}(?u::)(?u:[0-9]){2}(?u::)(?u:[0-9]){2}((?u:\\.)(?u:[0-9])+)?))?|((?u:[0-9]){2}(?u::)(?u:[0-9]){2}(?u::)(?u:[0-9]){2}((?u:\\.)(?u:[0-9])+)?))((?u:[Z-Zz-z])|(?u:[-\\+-\\+])(?u:[0-9]){2}(?u::)(?u:[0-9]){2})?)",
+                "^((?u:[-0-9A-Z_-_a-z])+)",
                 "^((?u:[-\\+-\\+])?((?u:0)|(?u:[1-9])((?u:_)?(?u:[0-9]))*)((?u:\\.)(?u:[0-9])((?u:_)?(?u:[0-9]))*)?((?u:[E-Ee-e])(?u:[-\\+-\\+])?(?u:[1-9])((?u:_)?(?u:[0-9]))*)?)",
                 "^((?u:\")((?u:[\u{0}-\t\u{b}-\u{c}\u{e}-!\\#-\\[\\]-\u{10ffff}])|(?u:\\\\)(?u:.))*(?u:\"))",
                 "^((?u:\"\"\")((?u:[\u{0}-!\\#-\u{10ffff}])|(?u:\\\\)(?u:.)|(?u:\")(?u:[\u{0}-!\\#-\u{10ffff}])|(?u:\"\")(?u:[\u{0}-!\\#-\u{10ffff}]))*(?u:\"\"\"))",
                 "^((?u:\')((?u:[\u{0}-\t\u{b}-\u{c}\u{e}-\\&\\(-\u{10ffff}])|(?u:\\\\)(?u:.))*(?u:\'))",
                 "^((?u:\'\'\')((?u:[\u{0}-\\&\\(-\u{10ffff}])|(?u:\\\\)(?u:.)|(?u:\')(?u:[\u{0}-\\&\\(-\u{10ffff}])|(?u:\'\')(?u:[\u{0}-\\&\\(-\u{10ffff}]))*(?u:\'\'\'))",
                 "^((?u:[0-9])+)",
-                "^((?u:[0-9]){4}(?u:\\-)(?u:[0-9]){2}(?u:\\-)(?u:[0-9]){2})",
+                "^((?u:[0-9]){4}(?u:\\-)(?u:[0-9]){2}(?u:\\-)(?u:[0-9]){2}(?u:[Z-Zz-z])?)",
                 "^((?u:false)|(?u:true))",
                 "^((?u:,))",
                 "^((?u:\\.))",
@@ -1461,15 +1461,15 @@ mod __intern_token {
             ];
             let __regex_set = __regex::RegexSet::new(__strs).unwrap();
             let __regex_vec = vec![
-                __regex::Regex::new("^((?u:[-0-9A-Z_-_a-z])+)").unwrap(),
                 __regex::Regex::new("^(((?u:[0-9]){4}(?u:\\-)(?u:[0-9]){2}(?u:\\-)(?u:[0-9]){2}((?u:[T-Tt-t])((?u:[0-9]){2}(?u::)(?u:[0-9]){2}(?u::)(?u:[0-9]){2}((?u:\\.)(?u:[0-9])+)?))?|((?u:[0-9]){2}(?u::)(?u:[0-9]){2}(?u::)(?u:[0-9]){2}((?u:\\.)(?u:[0-9])+)?))((?u:[Z-Zz-z])|(?u:[-\\+-\\+])(?u:[0-9]){2}(?u::)(?u:[0-9]){2})?)").unwrap(),
+                __regex::Regex::new("^((?u:[-0-9A-Z_-_a-z])+)").unwrap(),
                 __regex::Regex::new("^((?u:[-\\+-\\+])?((?u:0)|(?u:[1-9])((?u:_)?(?u:[0-9]))*)((?u:\\.)(?u:[0-9])((?u:_)?(?u:[0-9]))*)?((?u:[E-Ee-e])(?u:[-\\+-\\+])?(?u:[1-9])((?u:_)?(?u:[0-9]))*)?)").unwrap(),
                 __regex::Regex::new("^((?u:\")((?u:[\u{0}-\t\u{b}-\u{c}\u{e}-!\\#-\\[\\]-\u{10ffff}])|(?u:\\\\)(?u:.))*(?u:\"))").unwrap(),
                 __regex::Regex::new("^((?u:\"\"\")((?u:[\u{0}-!\\#-\u{10ffff}])|(?u:\\\\)(?u:.)|(?u:\")(?u:[\u{0}-!\\#-\u{10ffff}])|(?u:\"\")(?u:[\u{0}-!\\#-\u{10ffff}]))*(?u:\"\"\"))").unwrap(),
                 __regex::Regex::new("^((?u:\')((?u:[\u{0}-\t\u{b}-\u{c}\u{e}-\\&\\(-\u{10ffff}])|(?u:\\\\)(?u:.))*(?u:\'))").unwrap(),
                 __regex::Regex::new("^((?u:\'\'\')((?u:[\u{0}-\\&\\(-\u{10ffff}])|(?u:\\\\)(?u:.)|(?u:\')(?u:[\u{0}-\\&\\(-\u{10ffff}])|(?u:\'\')(?u:[\u{0}-\\&\\(-\u{10ffff}]))*(?u:\'\'\'))").unwrap(),
                 __regex::Regex::new("^((?u:[0-9])+)").unwrap(),
-                __regex::Regex::new("^((?u:[0-9]){4}(?u:\\-)(?u:[0-9]){2}(?u:\\-)(?u:[0-9]){2})").unwrap(),
+                __regex::Regex::new("^((?u:[0-9]){4}(?u:\\-)(?u:[0-9]){2}(?u:\\-)(?u:[0-9]){2}(?u:[Z-Zz-z])?)").unwrap(),
                 __regex::Regex::new("^((?u:false)|(?u:true))").unwrap(),
                 __regex::Regex::new("^((?u:,))").unwrap(),
                 __regex::Regex::new("^((?u:\\.))").unwrap(),
