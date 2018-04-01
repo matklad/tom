@@ -9,6 +9,9 @@ use parse_tree::ParseTree;
 pub mod grammar;
 mod symbols;
 mod events;
+mod ast;
+pub mod toml_ast;
+pub mod toml_ast_ext;
 
 struct Builder {
     inner: BottomUpBuilder,

@@ -8,6 +8,10 @@ lalrpop-util = "0.15"
 regex = "0.2"
 parse_tree = "0.0.3"
 
+[build-dependencies]
+file = "1.0"
+heck = "0.1.0"
+
 [build-dependencies.lalrpop]
 git = "https://github.com/matklad/lalrpop"
 branch = "caret-precedence"
