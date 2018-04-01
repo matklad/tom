@@ -1,0 +1,72 @@
+FILE@[0; 218)
+  KEY_VAL@[0; 27)
+    KEY@[0; 4)
+      BARE_KEY@[0; 4) "odt1"
+    WHITESPACE@[4; 5)
+    EQ@[5; 6) "="
+    VAL@[6; 27)
+      WHITESPACE@[6; 7)
+      DATE_TIME@[7; 27) "1979-05-27T07:32:00Z"
+  KEY_VAL@[27; 60)
+    KEY@[27; 32)
+      WHITESPACE@[27; 28)
+      BARE_KEY@[28; 32) "odt2"
+    WHITESPACE@[32; 33)
+    EQ@[33; 34) "="
+    VAL@[34; 60)
+      WHITESPACE@[34; 35)
+      DATE_TIME@[35; 60) "1979-05-27T00:32:00-07:00"
+  KEY_VAL@[60; 100)
+    KEY@[60; 65)
+      WHITESPACE@[60; 61)
+      BARE_KEY@[61; 65) "odt3"
+    WHITESPACE@[65; 66)
+    EQ@[66; 67) "="
+    VAL@[67; 100)
+      WHITESPACE@[67; 68)
+      DATE_TIME@[68; 100) "1979-05-27T00:32:00.999999-07:00"
+  KEY_VAL@[100; 128)
+    KEY@[100; 106)
+      WHITESPACE@[100; 102)
+      BARE_KEY@[102; 106) "ldt1"
+    WHITESPACE@[106; 107)
+    EQ@[107; 108) "="
+    VAL@[108; 128)
+      WHITESPACE@[108; 109)
+      DATE_TIME@[109; 128) "1979-05-27T07:32:00"
+  KEY_VAL@[128; 162)
+    KEY@[128; 133)
+      WHITESPACE@[128; 129)
+      BARE_KEY@[129; 133) "ldt2"
+    WHITESPACE@[133; 134)
+    EQ@[134; 135) "="
+    VAL@[135; 162)
+      WHITESPACE@[135; 136)
+      DATE_TIME@[136; 162) "1979-05-27T00:32:00.999999"
+  KEY_VAL@[162; 180)
+    KEY@[162; 167)
+      WHITESPACE@[162; 164)
+      BARE_KEY@[164; 167) "ld1"
+    WHITESPACE@[167; 168)
+    EQ@[168; 169) "="
+    VAL@[169; 180)
+      WHITESPACE@[169; 170)
+      DATE_TIME@[170; 180) "1979-05-27"
+  KEY_VAL@[180; 196)
+    KEY@[180; 185)
+      WHITESPACE@[180; 182)
+      BARE_KEY@[182; 185) "lt1"
+    WHITESPACE@[185; 186)
+    EQ@[186; 187) "="
+    VAL@[187; 196)
+      WHITESPACE@[187; 188)
+      DATE_TIME@[188; 196) "07:32:00"
+  KEY_VAL@[196; 218)
+    KEY@[196; 200)
+      WHITESPACE@[196; 197)
+      BARE_KEY@[197; 200) "lt2"
+    WHITESPACE@[200; 201)
+    EQ@[201; 202) "="
+    VAL@[202; 218)
+      WHITESPACE@[202; 203)
+      DATE_TIME@[203; 218) "00:32:00.999999"
