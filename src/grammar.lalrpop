@@ -35,12 +35,12 @@ Array: () =
 Dict: () =
     L_CURLY <xs:CommaList<KeyVal>> R_CURLY => events.reduce(symbols::DICT, xs + 2);
 
-Eq: () = <l:@L> eq <r:@R> => events.shift(symbols::EQ, l, r);
-Comma: () = <l:@L> comma <r:@R> => events.shift(symbols::COMMA, l, r);
-L_BRACK: () = <l:@L> l_brack <r:@R> => events.shift(symbols::L_BRACK, l, r);
-R_BRACK: () = <l:@L> r_brack <r:@R> => events.shift(symbols::R_BRACK, l, r);
-L_CURLY: () = <l:@L> l_curly <r:@R> => events.shift(symbols::L_CURLY, l, r);
-R_CURLY: () = <l:@L> r_curly <r:@R> => events.shift(symbols::R_CURLY, l, r);
+Eq: () = <l:@L> "=" <r:@R> => events.shift(symbols::EQ, l, r);
+Comma: () = <l:@L> "," <r:@R> => events.shift(symbols::COMMA, l, r);
+L_BRACK: () = <l:@L> "[" <r:@R> => events.shift(symbols::L_BRACK, l, r);
+R_BRACK: () = <l:@L> "]" <r:@R> => events.shift(symbols::R_BRACK, l, r);
+L_CURLY: () = <l:@L> "{" <r:@R> => events.shift(symbols::L_CURLY, l, r);
+R_CURLY: () = <l:@L> "}" <r:@R> => events.shift(symbols::R_CURLY, l, r);
 Number: () = {
     <l:@L> number <r:@R> => events.shift(symbols::NUMBER, l, r),
     <l:@L> bare_key_or_number <r:@R> => events.shift(symbols::NUMBER, l, r),
@@ -72,13 +72,6 @@ CommaList<T>: usize = {
 
 
 match {
-    "=" => eq,
-    "," => comma,
-    "." => dot,
-    "[" => l_brack,
-    "]" => r_brack,
-    "{" => l_curly,
-    "}" => r_curly,
     r"[0-9]+" => bare_key_or_number,
     r"[0-9]{4}-[0-9]{2}-[0-9]{2}[Zz]?" => bare_key_or_date,
 
@@ -119,5 +112,6 @@ match {
       ([Zz]|[+-][0-9]{2}:[0-9]{2})?
     " => date_time,
     r"[0-9_\-a-zA-Z]+" => bare_key,
+    _,
 }
 
