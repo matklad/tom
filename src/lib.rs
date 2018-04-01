@@ -5,24 +5,24 @@ use parse_tree::ParseTree;
 
 mod parsing;
 mod symbols;
+mod edit;
+
 pub mod ast;
 use ast::AstNode;
 
 pub struct TomlFile {
     tree: ParseTree,
-    text: String,
 }
 
 impl TomlFile {
     pub fn new(text: String) -> TomlFile {
-        let tree = parsing::parse(&text);
-        TomlFile { tree, text }
+        let tree = parsing::parse(text);
+        TomlFile { tree }
     }
 
     pub fn debug_dump(&self) -> String {
         parse_tree::debug_dump(
             self.tree.root(),
-            &self.text
         )
     }
 

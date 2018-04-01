@@ -23,8 +23,8 @@ impl Builder {
         }
     }
 
-    fn finish(self) -> ParseTree {
-        self.inner.finish()
+    fn finish(self, text: String) -> ParseTree {
+        self.inner.finish(text)
     }
 }
 
@@ -55,10 +55,10 @@ impl Events for Builder {
     }
 }
 
-pub(crate) fn parse(text: &str) -> ParseTree {
+pub(crate) fn parse(text: String) -> ParseTree {
     symbols::register();
     let p = grammar::TomlFileParser::new();
     let mut builder = Builder::new();
-    p.parse(&mut builder, text).unwrap();
-    builder.finish()
+    p.parse(&mut builder, &text).unwrap();
+    builder.finish(text)
 }
