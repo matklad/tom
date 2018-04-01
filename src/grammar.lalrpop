@@ -17,7 +17,7 @@ KeyVal_ = {
 };
 
 Key: () = Key_ => events.reduce(symbols::KEY, 1);
-Key_ = { BareKey };
+Key_ = { BareKey, BasicString, LiteralString };
 
 Val: () = Val_ => events.reduce(symbols::VAL, 1);
 Val_ = { Literal, Array, Dict };
