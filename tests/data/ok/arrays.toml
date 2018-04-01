@@ -4,7 +4,7 @@ arr3 = [ [ 1, 2 ], [3, 4, 5] ]
 arr4 = [ "all", 'strings', """are the same""", '''type''']
 arr5 = [ [ 1, 2 ], ["a", "b", "c"] ]
 
-arr6 = [ 1, 2.0 ] # INVALID
+arr6 = [ 1, 2.0 ]
 
 arr7 = [
   1, 2, 3
@@ -12,5 +12,5 @@ arr7 = [
 
 arr8 = [
   1,
-  2, # this is ok
+  2,
 ]

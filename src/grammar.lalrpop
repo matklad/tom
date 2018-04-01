@@ -20,11 +20,20 @@ Key: () = Key_ => events.reduce(symbols::KEY, 1);
 Key_ = { BareKey };
 
 Val: () = Val_ => events.reduce(symbols::VAL, 1);
-Val_ = { Literal };
+Val_ = { Literal, Array };
 
-Literal = { Number, Bool };
+Literal = { Number, Bool,
+ BasicString, LiteralString,
+ MultilineBasicString, MultilineLiteralString };
+
+Array: () = {
+    L_BRACK <xs:CommaList<Val>> R_BRACK => events.reduce(symbols::ARRAY, xs + 2),
+};
 
 Eq: () = <l:@L> eq <r:@R> => events.shift(symbols::EQ, l, r);
+Comma: () = <l:@L> comma <r:@R> => events.shift(symbols::COMMA, l, r);
+L_BRACK: () = <l:@L> l_brack <r:@R> => events.shift(symbols::L_BRACK, l, r);
+R_BRACK: () = <l:@L> r_brack <r:@R> => events.shift(symbols::R_BRACK, l, r);
 Number: () = {
     <l:@L> number <r:@R> => events.shift(symbols::NUMBER, l, r),
     <l:@L> bare_key_or_number <r:@R> => events.shift(symbols::NUMBER, l, r),
@@ -35,26 +44,41 @@ BareKey: () = {
     <l:@L> bare_key_or_number <r:@R> => events.shift(symbols::BARE_KEY, l, r),
 };
 
+BasicString: () = <l:@L> basic_string <r:@R> =>
+    events.shift(symbols::BASIC_STRING, l, r);
+MultilineBasicString: () = <l:@L> multiline_basic_string <r:@R> =>
+    events.shift(symbols::MULTILINE_BASIC_STRING, l, r);
+LiteralString: () = <l:@L> literal_string <r:@R> =>
+    events.shift(symbols::LITERAL_STRING, l, r);
+MultilineLiteralString: () = <l:@L> multiline_literal_string <r:@R> =>
+    events.shift(symbols::MULTILINE_LITERAL_STRING, l, r);
+
+
+CommaList<T>: usize = {
+    <v:(<T> Comma)*> <e:T?> => v.len() * 2 + e.into_iter().count(),
+};
+
+
 match {
     "=" => eq,
     "," => comma,
     "." => dot,
-    "[" => L_BRACK,
-    "]" => R_BRACK,
-    "{" => L_CURLY,
-    "}" => R_CURLY,
+    "[" => l_brack,
+    "]" => r_brack,
+    "{" => l_curly,
+    "}" => r_curly,
     r"[0-9]+" => bare_key_or_number,
 
     r#"(?x)
        "
-        ([^\r\n"] | \\.)*
+        ([^\r\n"\\] | \\.)*
        "
     "# => basic_string,
     r#"(?x)
        """
         ([^"] | \\. | "[^"] | ""[^"])*
        """
-    "# => mutiline_basic_string,
+    "# => multiline_basic_string,
 
     r#"(?x)
        '
@@ -65,7 +89,7 @@ match {
        '''
         ([^'] | \\. | '[^'] | ''[^'])*
        '''
-    "# => mutiline_literal_string,
+    "# => multiline_literal_string,
 
 
     r"false|true" => bool,
