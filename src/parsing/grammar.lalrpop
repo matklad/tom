@@ -104,7 +104,7 @@ match {
        '''
     "# => multiline_literal_string,
 
-    r"false|true" => bool,
+    r"(false|true)" => bool,
 } else {
     r"(?x)
       [-+]?

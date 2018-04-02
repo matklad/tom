@@ -1,10 +1,10 @@
 // auto-generated: "lalrpop 0.15.0"
+#![cfg_attr(rustfmt, rustfmt_skip)]
 use super::Events;
 use symbols;
 #[allow(unused_extern_crates)]
 extern crate lalrpop_util as __lalrpop_util;
 
-#[cfg_attr(rustfmt, rustfmt_skip)]
 mod __parse__TomlFile {
     #![allow(non_snake_case, non_camel_case_types, unused_mut, unused_variables, unused_imports, unused_parens)]
 
@@ -597,10 +597,10 @@ mod __parse__TomlFile {
                     Token(5, _) if true => 5,
                     Token(6, _) if true => 6,
                     Token(8, _) if true => 7,
-                    Token(15, _) if true => 8,
-                    Token(14, _) if true => 9,
+                    Token(16, _) if true => 8,
+                    Token(15, _) if true => 9,
                     Token(10, _) if true => 10,
-                    Token(16, _) if true => 11,
+                    Token(14, _) if true => 11,
                     Token(7, _) if true => 12,
                     Token(12, _) if true => 13,
                     Token(11, _) if true => 14,
@@ -653,11 +653,11 @@ mod __parse__TomlFile {
                                 _ => unreachable!(),
                             },
                             8 => match __lookahead.1 {
-                                Token(15, __tok0) => __Symbol::Variant0((__tok0)),
+                                Token(16, __tok0) => __Symbol::Variant0((__tok0)),
                                 _ => unreachable!(),
                             },
                             9 => match __lookahead.1 {
-                                Token(14, __tok0) => __Symbol::Variant0((__tok0)),
+                                Token(15, __tok0) => __Symbol::Variant0((__tok0)),
                                 _ => unreachable!(),
                             },
                             10 => match __lookahead.1 {
@@ -665,7 +665,7 @@ mod __parse__TomlFile {
                                 _ => unreachable!(),
                             },
                             11 => match __lookahead.1 {
-                                Token(16, __tok0) => __Symbol::Variant0((__tok0)),
+                                Token(14, __tok0) => __Symbol::Variant0((__tok0)),
                                 _ => unreachable!(),
                             },
                             12 => match __lookahead.1 {
@@ -748,977 +748,805 @@ mod __parse__TomlFile {
     {
         let (__pop_states, __symbol, __nonterminal) = match -__action {
             1 => {
-                (|| {
-                    // (<KeyVal> Comma) = KeyVal, Comma => ActionFn(67);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym1.2.clone();
-                    let __nt = super::__action67::<E>(events, input, __sym0, __sym1);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (2, __symbol, 0)
-                })()
+                // (<KeyVal> Comma) = KeyVal, Comma => ActionFn(67);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym1.2.clone();
+                let __nt = super::__action67::<E>(events, input, __sym0, __sym1);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (2, __symbol, 0)
             }
             2 => {
-                (|| {
-                    // (<KeyVal> Comma)* =  => ActionFn(65);
-                    let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
-                    let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-                    let __nt = super::__action65::<E>(events, input, &__start, &__end);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (0, __symbol, 1)
-                })()
+                // (<KeyVal> Comma)* =  => ActionFn(65);
+                let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
+                let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
+                let __nt = super::__action65::<E>(events, input, &__start, &__end);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (0, __symbol, 1)
             }
             3 => {
-                (|| {
-                    // (<KeyVal> Comma)* = (<KeyVal> Comma)+ => ActionFn(66);
-                    let __sym0 = __pop_Variant2(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action66::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (1, __symbol, 1)
-                })()
+                // (<KeyVal> Comma)* = (<KeyVal> Comma)+ => ActionFn(66);
+                let __sym0 = __pop_Variant2(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action66::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (1, __symbol, 1)
             }
             4 => {
-                (|| {
-                    // (<KeyVal> Comma)+ = KeyVal, Comma => ActionFn(74);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym1.2.clone();
-                    let __nt = super::__action74::<E>(events, input, __sym0, __sym1);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (2, __symbol, 2)
-                })()
+                // (<KeyVal> Comma)+ = KeyVal, Comma => ActionFn(74);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym1.2.clone();
+                let __nt = super::__action74::<E>(events, input, __sym0, __sym1);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (2, __symbol, 2)
             }
             5 => {
-                (|| {
-                    // (<KeyVal> Comma)+ = (<KeyVal> Comma)+, KeyVal, Comma => ActionFn(75);
-                    let __sym2 = __pop_Variant1(__symbols);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant2(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym2.2.clone();
-                    let __nt = super::__action75::<E>(events, input, __sym0, __sym1, __sym2);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (3, __symbol, 2)
-                })()
+                // (<KeyVal> Comma)+ = (<KeyVal> Comma)+, KeyVal, Comma => ActionFn(75);
+                let __sym2 = __pop_Variant1(__symbols);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant2(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym2.2.clone();
+                let __nt = super::__action75::<E>(events, input, __sym0, __sym1, __sym2);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (3, __symbol, 2)
             }
             6 => {
-                (|| {
-                    // (<Val> Comma) = Val, Comma => ActionFn(62);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym1.2.clone();
-                    let __nt = super::__action62::<E>(events, input, __sym0, __sym1);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (2, __symbol, 3)
-                })()
+                // (<Val> Comma) = Val, Comma => ActionFn(62);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym1.2.clone();
+                let __nt = super::__action62::<E>(events, input, __sym0, __sym1);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (2, __symbol, 3)
             }
             7 => {
-                (|| {
-                    // (<Val> Comma)* =  => ActionFn(60);
-                    let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
-                    let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-                    let __nt = super::__action60::<E>(events, input, &__start, &__end);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (0, __symbol, 4)
-                })()
+                // (<Val> Comma)* =  => ActionFn(60);
+                let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
+                let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
+                let __nt = super::__action60::<E>(events, input, &__start, &__end);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (0, __symbol, 4)
             }
             8 => {
-                (|| {
-                    // (<Val> Comma)* = (<Val> Comma)+ => ActionFn(61);
-                    let __sym0 = __pop_Variant2(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action61::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (1, __symbol, 4)
-                })()
+                // (<Val> Comma)* = (<Val> Comma)+ => ActionFn(61);
+                let __sym0 = __pop_Variant2(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action61::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (1, __symbol, 4)
             }
             9 => {
-                (|| {
-                    // (<Val> Comma)+ = Val, Comma => ActionFn(78);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym1.2.clone();
-                    let __nt = super::__action78::<E>(events, input, __sym0, __sym1);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (2, __symbol, 5)
-                })()
+                // (<Val> Comma)+ = Val, Comma => ActionFn(78);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym1.2.clone();
+                let __nt = super::__action78::<E>(events, input, __sym0, __sym1);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (2, __symbol, 5)
             }
             10 => {
-                (|| {
-                    // (<Val> Comma)+ = (<Val> Comma)+, Val, Comma => ActionFn(79);
-                    let __sym2 = __pop_Variant1(__symbols);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant2(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym2.2.clone();
-                    let __nt = super::__action79::<E>(events, input, __sym0, __sym1, __sym2);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (3, __symbol, 5)
-                })()
+                // (<Val> Comma)+ = (<Val> Comma)+, Val, Comma => ActionFn(79);
+                let __sym2 = __pop_Variant1(__symbols);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant2(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym2.2.clone();
+                let __nt = super::__action79::<E>(events, input, __sym0, __sym1, __sym2);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (3, __symbol, 5)
             }
             11 => {
-                (|| {
-                    // (Dot Key) = Dot, Key => ActionFn(47);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym1.2.clone();
-                    let __nt = super::__action47::<E>(events, input, __sym0, __sym1);
-                    let __symbol = (__start, __Symbol::Variant3(__nt), __end);
-                    (2, __symbol, 6)
-                })()
+                // (Dot Key) = Dot, Key => ActionFn(47);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym1.2.clone();
+                let __nt = super::__action47::<E>(events, input, __sym0, __sym1);
+                let __symbol = (__start, __Symbol::Variant3(__nt), __end);
+                (2, __symbol, 6)
             }
             12 => {
-                (|| {
-                    // (Dot Key)* =  => ActionFn(45);
-                    let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
-                    let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-                    let __nt = super::__action45::<E>(events, input, &__start, &__end);
-                    let __symbol = (__start, __Symbol::Variant4(__nt), __end);
-                    (0, __symbol, 7)
-                })()
+                // (Dot Key)* =  => ActionFn(45);
+                let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
+                let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
+                let __nt = super::__action45::<E>(events, input, &__start, &__end);
+                let __symbol = (__start, __Symbol::Variant4(__nt), __end);
+                (0, __symbol, 7)
             }
             13 => {
-                (|| {
-                    // (Dot Key)* = (Dot Key)+ => ActionFn(46);
-                    let __sym0 = __pop_Variant4(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action46::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant4(__nt), __end);
-                    (1, __symbol, 7)
-                })()
+                // (Dot Key)* = (Dot Key)+ => ActionFn(46);
+                let __sym0 = __pop_Variant4(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action46::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant4(__nt), __end);
+                (1, __symbol, 7)
             }
             14 => {
-                (|| {
-                    // (Dot Key)+ = Dot, Key => ActionFn(82);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym1.2.clone();
-                    let __nt = super::__action82::<E>(events, input, __sym0, __sym1);
-                    let __symbol = (__start, __Symbol::Variant4(__nt), __end);
-                    (2, __symbol, 8)
-                })()
+                // (Dot Key)+ = Dot, Key => ActionFn(82);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym1.2.clone();
+                let __nt = super::__action82::<E>(events, input, __sym0, __sym1);
+                let __symbol = (__start, __Symbol::Variant4(__nt), __end);
+                (2, __symbol, 8)
             }
             15 => {
-                (|| {
-                    // (Dot Key)+ = (Dot Key)+, Dot, Key => ActionFn(83);
-                    let __sym2 = __pop_Variant1(__symbols);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant4(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym2.2.clone();
-                    let __nt = super::__action83::<E>(events, input, __sym0, __sym1, __sym2);
-                    let __symbol = (__start, __Symbol::Variant4(__nt), __end);
-                    (3, __symbol, 8)
-                })()
+                // (Dot Key)+ = (Dot Key)+, Dot, Key => ActionFn(83);
+                let __sym2 = __pop_Variant1(__symbols);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant4(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym2.2.clone();
+                let __nt = super::__action83::<E>(events, input, __sym0, __sym1, __sym2);
+                let __symbol = (__start, __Symbol::Variant4(__nt), __end);
+                (3, __symbol, 8)
             }
             16 => {
-                (|| {
-                    // @L =  => ActionFn(44);
-                    let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
-                    let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-                    let __nt = super::__action44::<E>(events, input, &__start, &__end);
-                    let __symbol = (__start, __Symbol::Variant5(__nt), __end);
-                    (0, __symbol, 9)
-                })()
+                // @L =  => ActionFn(44);
+                let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
+                let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
+                let __nt = super::__action44::<E>(events, input, &__start, &__end);
+                let __symbol = (__start, __Symbol::Variant5(__nt), __end);
+                (0, __symbol, 9)
             }
             17 => {
-                (|| {
-                    // @R =  => ActionFn(43);
-                    let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
-                    let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-                    let __nt = super::__action43::<E>(events, input, &__start, &__end);
-                    let __symbol = (__start, __Symbol::Variant5(__nt), __end);
-                    (0, __symbol, 10)
-                })()
+                // @R =  => ActionFn(43);
+                let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
+                let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
+                let __nt = super::__action43::<E>(events, input, &__start, &__end);
+                let __symbol = (__start, __Symbol::Variant5(__nt), __end);
+                (0, __symbol, 10)
             }
             18 => {
-                (|| {
-                    // AnyTable = Table => ActionFn(2);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action2::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 11)
-                })()
+                // AnyTable = Table => ActionFn(2);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action2::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 11)
             }
             19 => {
-                (|| {
-                    // AnyTable = ArrayTable => ActionFn(3);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action3::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 11)
-                })()
+                // AnyTable = ArrayTable => ActionFn(3);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action3::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 11)
             }
             20 => {
-                (|| {
-                    // AnyTable* =  => ActionFn(50);
-                    let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
-                    let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-                    let __nt = super::__action50::<E>(events, input, &__start, &__end);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (0, __symbol, 12)
-                })()
+                // AnyTable* =  => ActionFn(50);
+                let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
+                let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
+                let __nt = super::__action50::<E>(events, input, &__start, &__end);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (0, __symbol, 12)
             }
             21 => {
-                (|| {
-                    // AnyTable* = AnyTable+ => ActionFn(51);
-                    let __sym0 = __pop_Variant2(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action51::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (1, __symbol, 12)
-                })()
+                // AnyTable* = AnyTable+ => ActionFn(51);
+                let __sym0 = __pop_Variant2(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action51::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (1, __symbol, 12)
             }
             22 => {
-                (|| {
-                    // AnyTable+ = AnyTable => ActionFn(56);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action56::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (1, __symbol, 13)
-                })()
+                // AnyTable+ = AnyTable => ActionFn(56);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action56::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (1, __symbol, 13)
             }
             23 => {
-                (|| {
-                    // AnyTable+ = AnyTable+, AnyTable => ActionFn(57);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant2(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym1.2.clone();
-                    let __nt = super::__action57::<E>(events, input, __sym0, __sym1);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (2, __symbol, 13)
-                })()
+                // AnyTable+ = AnyTable+, AnyTable => ActionFn(57);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant2(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym1.2.clone();
+                let __nt = super::__action57::<E>(events, input, __sym0, __sym1);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (2, __symbol, 13)
             }
             24 => {
-                (|| {
-                    // Array = L_BRACK, CommaList<Val>, R_BRACK => ActionFn(18);
-                    let __sym2 = __pop_Variant1(__symbols);
-                    let __sym1 = __pop_Variant5(__symbols);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym2.2.clone();
-                    let __nt = super::__action18::<E>(events, input, __sym0, __sym1, __sym2);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (3, __symbol, 14)
-                })()
+                // Array = L_BRACK, CommaList<Val>, R_BRACK => ActionFn(18);
+                let __sym2 = __pop_Variant1(__symbols);
+                let __sym1 = __pop_Variant5(__symbols);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym2.2.clone();
+                let __nt = super::__action18::<E>(events, input, __sym0, __sym1, __sym2);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (3, __symbol, 14)
             }
             25 => {
-                (|| {
-                    // ArrayTable = ArrayTableHeader => ActionFn(128);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action128::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 15)
-                })()
+                // ArrayTable = ArrayTableHeader => ActionFn(128);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action128::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 15)
             }
             26 => {
-                (|| {
-                    // ArrayTable = ArrayTableHeader, KeyVal+ => ActionFn(129);
-                    let __sym1 = __pop_Variant2(__symbols);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym1.2.clone();
-                    let __nt = super::__action129::<E>(events, input, __sym0, __sym1);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (2, __symbol, 15)
-                })()
+                // ArrayTable = ArrayTableHeader, KeyVal+ => ActionFn(129);
+                let __sym1 = __pop_Variant2(__symbols);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym1.2.clone();
+                let __nt = super::__action129::<E>(events, input, __sym0, __sym1);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (2, __symbol, 15)
             }
             27 => {
-                (|| {
-                    // ArrayTableHeader = L_BRACK, L_BRACK, Key, R_BRACK, R_BRACK => ActionFn(84);
-                    let __sym4 = __pop_Variant1(__symbols);
-                    let __sym3 = __pop_Variant1(__symbols);
-                    let __sym2 = __pop_Variant1(__symbols);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym4.2.clone();
-                    let __nt = super::__action84::<E>(events, input, __sym0, __sym1, __sym2, __sym3, __sym4);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (5, __symbol, 16)
-                })()
+                // ArrayTableHeader = L_BRACK, L_BRACK, Key, R_BRACK, R_BRACK => ActionFn(84);
+                let __sym4 = __pop_Variant1(__symbols);
+                let __sym3 = __pop_Variant1(__symbols);
+                let __sym2 = __pop_Variant1(__symbols);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym4.2.clone();
+                let __nt = super::__action84::<E>(events, input, __sym0, __sym1, __sym2, __sym3, __sym4);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (5, __symbol, 16)
             }
             28 => {
-                (|| {
-                    // ArrayTableHeader = L_BRACK, L_BRACK, Key, (Dot Key)+, R_BRACK, R_BRACK => ActionFn(85);
-                    let __sym5 = __pop_Variant1(__symbols);
-                    let __sym4 = __pop_Variant1(__symbols);
-                    let __sym3 = __pop_Variant4(__symbols);
-                    let __sym2 = __pop_Variant1(__symbols);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym5.2.clone();
-                    let __nt = super::__action85::<E>(events, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (6, __symbol, 16)
-                })()
+                // ArrayTableHeader = L_BRACK, L_BRACK, Key, (Dot Key)+, R_BRACK, R_BRACK => ActionFn(85);
+                let __sym5 = __pop_Variant1(__symbols);
+                let __sym4 = __pop_Variant1(__symbols);
+                let __sym3 = __pop_Variant4(__symbols);
+                let __sym2 = __pop_Variant1(__symbols);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym5.2.clone();
+                let __nt = super::__action85::<E>(events, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (6, __symbol, 16)
             }
             29 => {
-                (|| {
-                    // BareKey = bare_key => ActionFn(107);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action107::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 17)
-                })()
+                // BareKey = bare_key => ActionFn(107);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action107::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 17)
             }
             30 => {
-                (|| {
-                    // BareKey = bare_key_or_number => ActionFn(108);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action108::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 17)
-                })()
+                // BareKey = bare_key_or_number => ActionFn(108);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action108::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 17)
             }
             31 => {
-                (|| {
-                    // BareKey = bare_key_or_date => ActionFn(109);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action109::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 17)
-                })()
+                // BareKey = bare_key_or_date => ActionFn(109);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action109::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 17)
             }
             32 => {
-                (|| {
-                    // BasicString = basic_string => ActionFn(110);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action110::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 18)
-                })()
+                // BasicString = basic_string => ActionFn(110);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action110::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 18)
             }
             33 => {
-                (|| {
-                    // Bool = bool => ActionFn(111);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action111::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 19)
-                })()
+                // Bool = bool => ActionFn(111);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action111::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 19)
             }
             34 => {
-                (|| {
-                    // Comma = "," => ActionFn(112);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action112::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 20)
-                })()
+                // Comma = "," => ActionFn(112);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action112::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 20)
             }
             35 => {
-                (|| {
-                    // CommaList<KeyVal> = KeyVal => ActionFn(136);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action136::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant5(__nt), __end);
-                    (1, __symbol, 21)
-                })()
+                // CommaList<KeyVal> = KeyVal => ActionFn(136);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action136::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant5(__nt), __end);
+                (1, __symbol, 21)
             }
             36 => {
-                (|| {
-                    // CommaList<KeyVal> =  => ActionFn(137);
-                    let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
-                    let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-                    let __nt = super::__action137::<E>(events, input, &__start, &__end);
-                    let __symbol = (__start, __Symbol::Variant5(__nt), __end);
-                    (0, __symbol, 21)
-                })()
+                // CommaList<KeyVal> =  => ActionFn(137);
+                let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
+                let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
+                let __nt = super::__action137::<E>(events, input, &__start, &__end);
+                let __symbol = (__start, __Symbol::Variant5(__nt), __end);
+                (0, __symbol, 21)
             }
             37 => {
-                (|| {
-                    // CommaList<KeyVal> = (<KeyVal> Comma)+, KeyVal => ActionFn(138);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant2(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym1.2.clone();
-                    let __nt = super::__action138::<E>(events, input, __sym0, __sym1);
-                    let __symbol = (__start, __Symbol::Variant5(__nt), __end);
-                    (2, __symbol, 21)
-                })()
+                // CommaList<KeyVal> = (<KeyVal> Comma)+, KeyVal => ActionFn(138);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant2(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym1.2.clone();
+                let __nt = super::__action138::<E>(events, input, __sym0, __sym1);
+                let __symbol = (__start, __Symbol::Variant5(__nt), __end);
+                (2, __symbol, 21)
             }
             38 => {
-                (|| {
-                    // CommaList<KeyVal> = (<KeyVal> Comma)+ => ActionFn(139);
-                    let __sym0 = __pop_Variant2(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action139::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant5(__nt), __end);
-                    (1, __symbol, 21)
-                })()
+                // CommaList<KeyVal> = (<KeyVal> Comma)+ => ActionFn(139);
+                let __sym0 = __pop_Variant2(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action139::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant5(__nt), __end);
+                (1, __symbol, 21)
             }
             39 => {
-                (|| {
-                    // CommaList<Val> = Val => ActionFn(140);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action140::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant5(__nt), __end);
-                    (1, __symbol, 22)
-                })()
+                // CommaList<Val> = Val => ActionFn(140);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action140::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant5(__nt), __end);
+                (1, __symbol, 22)
             }
             40 => {
-                (|| {
-                    // CommaList<Val> =  => ActionFn(141);
-                    let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
-                    let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-                    let __nt = super::__action141::<E>(events, input, &__start, &__end);
-                    let __symbol = (__start, __Symbol::Variant5(__nt), __end);
-                    (0, __symbol, 22)
-                })()
+                // CommaList<Val> =  => ActionFn(141);
+                let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
+                let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
+                let __nt = super::__action141::<E>(events, input, &__start, &__end);
+                let __symbol = (__start, __Symbol::Variant5(__nt), __end);
+                (0, __symbol, 22)
             }
             41 => {
-                (|| {
-                    // CommaList<Val> = (<Val> Comma)+, Val => ActionFn(142);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant2(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym1.2.clone();
-                    let __nt = super::__action142::<E>(events, input, __sym0, __sym1);
-                    let __symbol = (__start, __Symbol::Variant5(__nt), __end);
-                    (2, __symbol, 22)
-                })()
+                // CommaList<Val> = (<Val> Comma)+, Val => ActionFn(142);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant2(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym1.2.clone();
+                let __nt = super::__action142::<E>(events, input, __sym0, __sym1);
+                let __symbol = (__start, __Symbol::Variant5(__nt), __end);
+                (2, __symbol, 22)
             }
             42 => {
-                (|| {
-                    // CommaList<Val> = (<Val> Comma)+ => ActionFn(143);
-                    let __sym0 = __pop_Variant2(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action143::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant5(__nt), __end);
-                    (1, __symbol, 22)
-                })()
+                // CommaList<Val> = (<Val> Comma)+ => ActionFn(143);
+                let __sym0 = __pop_Variant2(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action143::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant5(__nt), __end);
+                (1, __symbol, 22)
             }
             43 => {
-                (|| {
-                    // DateTime = date_time => ActionFn(113);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action113::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 23)
-                })()
+                // DateTime = date_time => ActionFn(113);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action113::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 23)
             }
             44 => {
-                (|| {
-                    // DateTime = bare_key_or_date => ActionFn(114);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action114::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 23)
-                })()
+                // DateTime = bare_key_or_date => ActionFn(114);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action114::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 23)
             }
             45 => {
-                (|| {
-                    // Dict = L_CURLY, CommaList<KeyVal>, R_CURLY => ActionFn(19);
-                    let __sym2 = __pop_Variant1(__symbols);
-                    let __sym1 = __pop_Variant5(__symbols);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym2.2.clone();
-                    let __nt = super::__action19::<E>(events, input, __sym0, __sym1, __sym2);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (3, __symbol, 24)
-                })()
+                // Dict = L_CURLY, CommaList<KeyVal>, R_CURLY => ActionFn(19);
+                let __sym2 = __pop_Variant1(__symbols);
+                let __sym1 = __pop_Variant5(__symbols);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym2.2.clone();
+                let __nt = super::__action19::<E>(events, input, __sym0, __sym1, __sym2);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (3, __symbol, 24)
             }
             46 => {
-                (|| {
-                    // Dot = "." => ActionFn(115);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action115::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 25)
-                })()
+                // Dot = "." => ActionFn(115);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action115::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 25)
             }
             47 => {
-                (|| {
-                    // Eq = "=" => ActionFn(116);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action116::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 26)
-                })()
+                // Eq = "=" => ActionFn(116);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action116::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 26)
             }
             48 => {
-                (|| {
-                    // Key = BareKey => ActionFn(5);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action5::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 27)
-                })()
+                // Key = BareKey => ActionFn(5);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action5::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 27)
             }
             49 => {
-                (|| {
-                    // Key = BasicString => ActionFn(6);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action6::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 27)
-                })()
+                // Key = BasicString => ActionFn(6);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action6::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 27)
             }
             50 => {
-                (|| {
-                    // Key = LiteralString => ActionFn(7);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action7::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 27)
-                })()
+                // Key = LiteralString => ActionFn(7);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action7::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 27)
             }
             51 => {
-                (|| {
-                    // KeyVal = Key, Eq, Val => ActionFn(4);
-                    let __sym2 = __pop_Variant1(__symbols);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym2.2.clone();
-                    let __nt = super::__action4::<E>(events, input, __sym0, __sym1, __sym2);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (3, __symbol, 28)
-                })()
+                // KeyVal = Key, Eq, Val => ActionFn(4);
+                let __sym2 = __pop_Variant1(__symbols);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym2.2.clone();
+                let __nt = super::__action4::<E>(events, input, __sym0, __sym1, __sym2);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (3, __symbol, 28)
             }
             52 => {
-                (|| {
-                    // KeyVal* =  => ActionFn(52);
-                    let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
-                    let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-                    let __nt = super::__action52::<E>(events, input, &__start, &__end);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (0, __symbol, 29)
-                })()
+                // KeyVal* =  => ActionFn(52);
+                let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
+                let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
+                let __nt = super::__action52::<E>(events, input, &__start, &__end);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (0, __symbol, 29)
             }
             53 => {
-                (|| {
-                    // KeyVal* = KeyVal+ => ActionFn(53);
-                    let __sym0 = __pop_Variant2(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action53::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (1, __symbol, 29)
-                })()
+                // KeyVal* = KeyVal+ => ActionFn(53);
+                let __sym0 = __pop_Variant2(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action53::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (1, __symbol, 29)
             }
             54 => {
-                (|| {
-                    // KeyVal+ = KeyVal => ActionFn(54);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action54::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (1, __symbol, 30)
-                })()
+                // KeyVal+ = KeyVal => ActionFn(54);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action54::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (1, __symbol, 30)
             }
             55 => {
-                (|| {
-                    // KeyVal+ = KeyVal+, KeyVal => ActionFn(55);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant2(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym1.2.clone();
-                    let __nt = super::__action55::<E>(events, input, __sym0, __sym1);
-                    let __symbol = (__start, __Symbol::Variant2(__nt), __end);
-                    (2, __symbol, 30)
-                })()
+                // KeyVal+ = KeyVal+, KeyVal => ActionFn(55);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant2(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym1.2.clone();
+                let __nt = super::__action55::<E>(events, input, __sym0, __sym1);
+                let __symbol = (__start, __Symbol::Variant2(__nt), __end);
+                (2, __symbol, 30)
             }
             56 => {
-                (|| {
-                    // KeyVal? = KeyVal => ActionFn(63);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action63::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant6(__nt), __end);
-                    (1, __symbol, 31)
-                })()
+                // KeyVal? = KeyVal => ActionFn(63);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action63::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant6(__nt), __end);
+                (1, __symbol, 31)
             }
             57 => {
-                (|| {
-                    // KeyVal? =  => ActionFn(64);
-                    let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
-                    let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-                    let __nt = super::__action64::<E>(events, input, &__start, &__end);
-                    let __symbol = (__start, __Symbol::Variant6(__nt), __end);
-                    (0, __symbol, 31)
-                })()
+                // KeyVal? =  => ActionFn(64);
+                let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
+                let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
+                let __nt = super::__action64::<E>(events, input, &__start, &__end);
+                let __symbol = (__start, __Symbol::Variant6(__nt), __end);
+                (0, __symbol, 31)
             }
             58 => {
-                (|| {
-                    // L_BRACK = "[" => ActionFn(117);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action117::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 32)
-                })()
+                // L_BRACK = "[" => ActionFn(117);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action117::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 32)
             }
             59 => {
-                (|| {
-                    // L_CURLY = "{" => ActionFn(118);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action118::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 33)
-                })()
+                // L_CURLY = "{" => ActionFn(118);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action118::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 33)
             }
             60 => {
-                (|| {
-                    // Literal = Number => ActionFn(11);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action11::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 34)
-                })()
+                // Literal = Number => ActionFn(11);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action11::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 34)
             }
             61 => {
-                (|| {
-                    // Literal = Bool => ActionFn(12);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action12::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 34)
-                })()
+                // Literal = Bool => ActionFn(12);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action12::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 34)
             }
             62 => {
-                (|| {
-                    // Literal = DateTime => ActionFn(13);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action13::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 34)
-                })()
+                // Literal = DateTime => ActionFn(13);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action13::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 34)
             }
             63 => {
-                (|| {
-                    // Literal = BasicString => ActionFn(14);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action14::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 34)
-                })()
+                // Literal = BasicString => ActionFn(14);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action14::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 34)
             }
             64 => {
-                (|| {
-                    // Literal = MultilineBasicString => ActionFn(15);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action15::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 34)
-                })()
+                // Literal = MultilineBasicString => ActionFn(15);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action15::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 34)
             }
             65 => {
-                (|| {
-                    // Literal = LiteralString => ActionFn(16);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action16::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 34)
-                })()
+                // Literal = LiteralString => ActionFn(16);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action16::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 34)
             }
             66 => {
-                (|| {
-                    // Literal = MultilineLiteralString => ActionFn(17);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action17::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 34)
-                })()
+                // Literal = MultilineLiteralString => ActionFn(17);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action17::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 34)
             }
             67 => {
-                (|| {
-                    // LiteralString = literal_string => ActionFn(119);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action119::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 35)
-                })()
+                // LiteralString = literal_string => ActionFn(119);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action119::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 35)
             }
             68 => {
-                (|| {
-                    // MultilineBasicString = multiline_basic_string => ActionFn(120);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action120::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 36)
-                })()
+                // MultilineBasicString = multiline_basic_string => ActionFn(120);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action120::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 36)
             }
             69 => {
-                (|| {
-                    // MultilineLiteralString = multiline_literal_string => ActionFn(121);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action121::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 37)
-                })()
+                // MultilineLiteralString = multiline_literal_string => ActionFn(121);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action121::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 37)
             }
             70 => {
-                (|| {
-                    // Number = number => ActionFn(122);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action122::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 38)
-                })()
+                // Number = number => ActionFn(122);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action122::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 38)
             }
             71 => {
-                (|| {
-                    // Number = bare_key_or_number => ActionFn(123);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action123::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 38)
-                })()
+                // Number = bare_key_or_number => ActionFn(123);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action123::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 38)
             }
             72 => {
-                (|| {
-                    // R_BRACK = "]" => ActionFn(124);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action124::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 39)
-                })()
+                // R_BRACK = "]" => ActionFn(124);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action124::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 39)
             }
             73 => {
-                (|| {
-                    // R_CURLY = "}" => ActionFn(125);
-                    let __sym0 = __pop_Variant0(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action125::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 40)
-                })()
+                // R_CURLY = "}" => ActionFn(125);
+                let __sym0 = __pop_Variant0(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action125::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 40)
             }
             74 => {
-                (|| {
-                    // Table = TableHeader => ActionFn(130);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action130::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 41)
-                })()
+                // Table = TableHeader => ActionFn(130);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action130::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 41)
             }
             75 => {
-                (|| {
-                    // Table = TableHeader, KeyVal+ => ActionFn(131);
-                    let __sym1 = __pop_Variant2(__symbols);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym1.2.clone();
-                    let __nt = super::__action131::<E>(events, input, __sym0, __sym1);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (2, __symbol, 41)
-                })()
+                // Table = TableHeader, KeyVal+ => ActionFn(131);
+                let __sym1 = __pop_Variant2(__symbols);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym1.2.clone();
+                let __nt = super::__action131::<E>(events, input, __sym0, __sym1);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (2, __symbol, 41)
             }
             76 => {
-                (|| {
-                    // TableHeader = L_BRACK, Key, R_BRACK => ActionFn(86);
-                    let __sym2 = __pop_Variant1(__symbols);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym2.2.clone();
-                    let __nt = super::__action86::<E>(events, input, __sym0, __sym1, __sym2);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (3, __symbol, 42)
-                })()
+                // TableHeader = L_BRACK, Key, R_BRACK => ActionFn(86);
+                let __sym2 = __pop_Variant1(__symbols);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym2.2.clone();
+                let __nt = super::__action86::<E>(events, input, __sym0, __sym1, __sym2);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (3, __symbol, 42)
             }
             77 => {
-                (|| {
-                    // TableHeader = L_BRACK, Key, (Dot Key)+, R_BRACK => ActionFn(87);
-                    let __sym3 = __pop_Variant1(__symbols);
-                    let __sym2 = __pop_Variant4(__symbols);
-                    let __sym1 = __pop_Variant1(__symbols);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym3.2.clone();
-                    let __nt = super::__action87::<E>(events, input, __sym0, __sym1, __sym2, __sym3);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (4, __symbol, 42)
-                })()
+                // TableHeader = L_BRACK, Key, (Dot Key)+, R_BRACK => ActionFn(87);
+                let __sym3 = __pop_Variant1(__symbols);
+                let __sym2 = __pop_Variant4(__symbols);
+                let __sym1 = __pop_Variant1(__symbols);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym3.2.clone();
+                let __nt = super::__action87::<E>(events, input, __sym0, __sym1, __sym2, __sym3);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (4, __symbol, 42)
             }
             78 => {
-                (|| {
-                    // TomlFile =  => ActionFn(132);
-                    let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
-                    let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-                    let __nt = super::__action132::<E>(events, input, &__start, &__end);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (0, __symbol, 43)
-                })()
+                // TomlFile =  => ActionFn(132);
+                let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
+                let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
+                let __nt = super::__action132::<E>(events, input, &__start, &__end);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (0, __symbol, 43)
             }
             79 => {
-                (|| {
-                    // TomlFile = KeyVal+ => ActionFn(133);
-                    let __sym0 = __pop_Variant2(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action133::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 43)
-                })()
+                // TomlFile = KeyVal+ => ActionFn(133);
+                let __sym0 = __pop_Variant2(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action133::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 43)
             }
             80 => {
-                (|| {
-                    // TomlFile = AnyTable+ => ActionFn(134);
-                    let __sym0 = __pop_Variant2(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action134::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 43)
-                })()
+                // TomlFile = AnyTable+ => ActionFn(134);
+                let __sym0 = __pop_Variant2(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action134::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 43)
             }
             81 => {
-                (|| {
-                    // TomlFile = KeyVal+, AnyTable+ => ActionFn(135);
-                    let __sym1 = __pop_Variant2(__symbols);
-                    let __sym0 = __pop_Variant2(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym1.2.clone();
-                    let __nt = super::__action135::<E>(events, input, __sym0, __sym1);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (2, __symbol, 43)
-                })()
+                // TomlFile = KeyVal+, AnyTable+ => ActionFn(135);
+                let __sym1 = __pop_Variant2(__symbols);
+                let __sym0 = __pop_Variant2(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym1.2.clone();
+                let __nt = super::__action135::<E>(events, input, __sym0, __sym1);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (2, __symbol, 43)
             }
             82 => {
-                (|| {
-                    // Val = Literal => ActionFn(8);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action8::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 44)
-                })()
+                // Val = Literal => ActionFn(8);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action8::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 44)
             }
             83 => {
-                (|| {
-                    // Val = Array => ActionFn(9);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action9::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 44)
-                })()
+                // Val = Array => ActionFn(9);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action9::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 44)
             }
             84 => {
-                (|| {
-                    // Val = Dict => ActionFn(10);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action10::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant1(__nt), __end);
-                    (1, __symbol, 44)
-                })()
+                // Val = Dict => ActionFn(10);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action10::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant1(__nt), __end);
+                (1, __symbol, 44)
             }
             85 => {
-                (|| {
-                    // Val? = Val => ActionFn(58);
-                    let __sym0 = __pop_Variant1(__symbols);
-                    let __start = __sym0.0.clone();
-                    let __end = __sym0.2.clone();
-                    let __nt = super::__action58::<E>(events, input, __sym0);
-                    let __symbol = (__start, __Symbol::Variant6(__nt), __end);
-                    (1, __symbol, 45)
-                })()
+                // Val? = Val => ActionFn(58);
+                let __sym0 = __pop_Variant1(__symbols);
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action58::<E>(events, input, __sym0);
+                let __symbol = (__start, __Symbol::Variant6(__nt), __end);
+                (1, __symbol, 45)
             }
             86 => {
-                (|| {
-                    // Val? =  => ActionFn(59);
-                    let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
-                    let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-                    let __nt = super::__action59::<E>(events, input, &__start, &__end);
-                    let __symbol = (__start, __Symbol::Variant6(__nt), __end);
-                    (0, __symbol, 45)
-                })()
+                // Val? =  => ActionFn(59);
+                let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
+                let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
+                let __nt = super::__action59::<E>(events, input, &__start, &__end);
+                let __symbol = (__start, __Symbol::Variant6(__nt), __end);
+                (0, __symbol, 45)
             }
             87 => {
                 // __TomlFile = TomlFile => ActionFn(0);
@@ -1817,7 +1645,6 @@ mod __parse__TomlFile {
     }
 }
 pub use self::__parse__TomlFile::TomlFileParser;
-#[cfg_attr(rustfmt, rustfmt_skip)]
 mod __intern_token {
     #![allow(unused_imports)]
     use super::Events;
@@ -1843,43 +1670,43 @@ mod __intern_token {
     impl __MatcherBuilder {
         pub fn new() -> __MatcherBuilder {
             let __strs: &[&str] = &[
-                "^((?u:,))",
-                "^((?u:\\.))",
-                "^((?u:=))",
-                "^((?u:\\[))",
-                "^((?u:\\]))",
-                "^((?u:\\{))",
-                "^((?u:\\}))",
-                "^(((?u:[0-9]){4}(?u:\\-)(?u:[0-9]){2}(?u:\\-)(?u:[0-9]){2}((?u:[T-Tt-t])((?u:[0-9]){2}(?u::)(?u:[0-9]){2}(?u::)(?u:[0-9]){2}((?u:\\.)(?u:[0-9])+)?))?|((?u:[0-9]){2}(?u::)(?u:[0-9]){2}(?u::)(?u:[0-9]){2}((?u:\\.)(?u:[0-9])+)?))((?u:[Z-Zz-z])|(?u:[-\\+-\\+])(?u:[0-9]){2}(?u::)(?u:[0-9]){2})?)",
-                "^((?u:[-0-9A-Z_-_a-z])+)",
-                "^((?u:[-\\+-\\+])?((?u:0)|(?u:[1-9])((?u:_)?(?u:[0-9]))*)((?u:\\.)(?u:[0-9])((?u:_)?(?u:[0-9]))*)?((?u:[E-Ee-e])(?u:[-\\+-\\+])?(?u:[1-9])((?u:_)?(?u:[0-9]))*)?)",
-                "^((?u:\")((?u:[\u{0}-\t\u{b}-\u{c}\u{e}-!\\#-\\[\\]-\u{10ffff}])|(?u:\\\\)(?u:.))*(?u:\"))",
-                "^((?u:\"\"\")((?u:[\u{0}-!\\#-\u{10ffff}])|(?u:\\\\)(?u:.)|(?u:\")(?u:[\u{0}-!\\#-\u{10ffff}])|(?u:\"\")(?u:[\u{0}-!\\#-\u{10ffff}]))*(?u:\"\"\"))",
-                "^((?u:\')((?u:[\u{0}-\t\u{b}-\u{c}\u{e}-\\&\\(-\u{10ffff}])|(?u:\\\\)(?u:.))*(?u:\'))",
-                "^((?u:\'\'\')((?u:[\u{0}-\\&\\(-\u{10ffff}])|(?u:\\\\)(?u:.)|(?u:\')(?u:[\u{0}-\\&\\(-\u{10ffff}])|(?u:\'\')(?u:[\u{0}-\\&\\(-\u{10ffff}]))*(?u:\'\'\'))",
-                "^((?u:[0-9])+)",
-                "^((?u:[0-9]){4}(?u:\\-)(?u:[0-9]){2}(?u:\\-)(?u:[0-9]){2}(?u:[Z-Zz-z])?)",
+                "^(?u:,)",
+                "^(?u:\\.)",
+                "^(?u:=)",
+                "^(?u:\\[)",
+                "^(?u:\\])",
+                "^(?u:\\{)",
+                "^(?u:\\})",
+                "^((?u:[0-9]){4}(?u:\\-)(?u:[0-9]){2}(?u:\\-)(?u:[0-9]){2}((?u:[T-Tt-t])((?u:[0-9]){2}(?u::)(?u:[0-9]){2}(?u::)(?u:[0-9]){2}((?u:\\.)(?u:[0-9])+)?))?|((?u:[0-9]){2}(?u::)(?u:[0-9]){2}(?u::)(?u:[0-9]){2}((?u:\\.)(?u:[0-9])+)?))((?u:[Z-Zz-z])|(?u:[-\\+-\\+])(?u:[0-9]){2}(?u::)(?u:[0-9]){2})?",
+                "^(?u:[-0-9A-Z_-_a-z])+",
+                "^(?u:[-\\+-\\+])?((?u:0)|(?u:[1-9])((?u:_)?(?u:[0-9]))*)((?u:\\.)(?u:[0-9])((?u:_)?(?u:[0-9]))*)?((?u:[E-Ee-e])(?u:[-\\+-\\+])?(?u:[1-9])((?u:_)?(?u:[0-9]))*)?",
+                "^(?u:\")((?u:[\u{0}-\t\u{b}-\u{c}\u{e}-!\\#-\\[\\]-\u{10ffff}])|(?u:\\\\)(?u:.))*(?u:\")",
+                "^(?u:\"\"\")((?u:[\u{0}-!\\#-\u{10ffff}])|(?u:\\\\)(?u:.)|(?u:\")(?u:[\u{0}-!\\#-\u{10ffff}])|(?u:\"\")(?u:[\u{0}-!\\#-\u{10ffff}]))*(?u:\"\"\")",
+                "^(?u:\')((?u:[\u{0}-\t\u{b}-\u{c}\u{e}-\\&\\(-\u{10ffff}])|(?u:\\\\)(?u:.))*(?u:\')",
+                "^(?u:\'\'\')((?u:[\u{0}-\\&\\(-\u{10ffff}])|(?u:\\\\)(?u:.)|(?u:\')(?u:[\u{0}-\\&\\(-\u{10ffff}])|(?u:\'\')(?u:[\u{0}-\\&\\(-\u{10ffff}]))*(?u:\'\'\')",
                 "^((?u:false)|(?u:true))",
+                "^(?u:[0-9])+",
+                "^(?u:[0-9]){4}(?u:\\-)(?u:[0-9]){2}(?u:\\-)(?u:[0-9]){2}(?u:[Z-Zz-z])?",
             ];
             let __regex_set = __regex::RegexSet::new(__strs).unwrap();
             let __regex_vec = vec![
-                __regex::Regex::new("^((?u:,))").unwrap(),
-                __regex::Regex::new("^((?u:\\.))").unwrap(),
-                __regex::Regex::new("^((?u:=))").unwrap(),
-                __regex::Regex::new("^((?u:\\[))").unwrap(),
-                __regex::Regex::new("^((?u:\\]))").unwrap(),
-                __regex::Regex::new("^((?u:\\{))").unwrap(),
-                __regex::Regex::new("^((?u:\\}))").unwrap(),
-                __regex::Regex::new("^(((?u:[0-9]){4}(?u:\\-)(?u:[0-9]){2}(?u:\\-)(?u:[0-9]){2}((?u:[T-Tt-t])((?u:[0-9]){2}(?u::)(?u:[0-9]){2}(?u::)(?u:[0-9]){2}((?u:\\.)(?u:[0-9])+)?))?|((?u:[0-9]){2}(?u::)(?u:[0-9]){2}(?u::)(?u:[0-9]){2}((?u:\\.)(?u:[0-9])+)?))((?u:[Z-Zz-z])|(?u:[-\\+-\\+])(?u:[0-9]){2}(?u::)(?u:[0-9]){2})?)").unwrap(),
-                __regex::Regex::new("^((?u:[-0-9A-Z_-_a-z])+)").unwrap(),
-                __regex::Regex::new("^((?u:[-\\+-\\+])?((?u:0)|(?u:[1-9])((?u:_)?(?u:[0-9]))*)((?u:\\.)(?u:[0-9])((?u:_)?(?u:[0-9]))*)?((?u:[E-Ee-e])(?u:[-\\+-\\+])?(?u:[1-9])((?u:_)?(?u:[0-9]))*)?)").unwrap(),
-                __regex::Regex::new("^((?u:\")((?u:[\u{0}-\t\u{b}-\u{c}\u{e}-!\\#-\\[\\]-\u{10ffff}])|(?u:\\\\)(?u:.))*(?u:\"))").unwrap(),
-                __regex::Regex::new("^((?u:\"\"\")((?u:[\u{0}-!\\#-\u{10ffff}])|(?u:\\\\)(?u:.)|(?u:\")(?u:[\u{0}-!\\#-\u{10ffff}])|(?u:\"\")(?u:[\u{0}-!\\#-\u{10ffff}]))*(?u:\"\"\"))").unwrap(),
-                __regex::Regex::new("^((?u:\')((?u:[\u{0}-\t\u{b}-\u{c}\u{e}-\\&\\(-\u{10ffff}])|(?u:\\\\)(?u:.))*(?u:\'))").unwrap(),
-                __regex::Regex::new("^((?u:\'\'\')((?u:[\u{0}-\\&\\(-\u{10ffff}])|(?u:\\\\)(?u:.)|(?u:\')(?u:[\u{0}-\\&\\(-\u{10ffff}])|(?u:\'\')(?u:[\u{0}-\\&\\(-\u{10ffff}]))*(?u:\'\'\'))").unwrap(),
-                __regex::Regex::new("^((?u:[0-9])+)").unwrap(),
-                __regex::Regex::new("^((?u:[0-9]){4}(?u:\\-)(?u:[0-9]){2}(?u:\\-)(?u:[0-9]){2}(?u:[Z-Zz-z])?)").unwrap(),
+                __regex::Regex::new("^(?u:,)").unwrap(),
+                __regex::Regex::new("^(?u:\\.)").unwrap(),
+                __regex::Regex::new("^(?u:=)").unwrap(),
+                __regex::Regex::new("^(?u:\\[)").unwrap(),
+                __regex::Regex::new("^(?u:\\])").unwrap(),
+                __regex::Regex::new("^(?u:\\{)").unwrap(),
+                __regex::Regex::new("^(?u:\\})").unwrap(),
+                __regex::Regex::new("^((?u:[0-9]){4}(?u:\\-)(?u:[0-9]){2}(?u:\\-)(?u:[0-9]){2}((?u:[T-Tt-t])((?u:[0-9]){2}(?u::)(?u:[0-9]){2}(?u::)(?u:[0-9]){2}((?u:\\.)(?u:[0-9])+)?))?|((?u:[0-9]){2}(?u::)(?u:[0-9]){2}(?u::)(?u:[0-9]){2}((?u:\\.)(?u:[0-9])+)?))((?u:[Z-Zz-z])|(?u:[-\\+-\\+])(?u:[0-9]){2}(?u::)(?u:[0-9]){2})?").unwrap(),
+                __regex::Regex::new("^(?u:[-0-9A-Z_-_a-z])+").unwrap(),
+                __regex::Regex::new("^(?u:[-\\+-\\+])?((?u:0)|(?u:[1-9])((?u:_)?(?u:[0-9]))*)((?u:\\.)(?u:[0-9])((?u:_)?(?u:[0-9]))*)?((?u:[E-Ee-e])(?u:[-\\+-\\+])?(?u:[1-9])((?u:_)?(?u:[0-9]))*)?").unwrap(),
+                __regex::Regex::new("^(?u:\")((?u:[\u{0}-\t\u{b}-\u{c}\u{e}-!\\#-\\[\\]-\u{10ffff}])|(?u:\\\\)(?u:.))*(?u:\")").unwrap(),
+                __regex::Regex::new("^(?u:\"\"\")((?u:[\u{0}-!\\#-\u{10ffff}])|(?u:\\\\)(?u:.)|(?u:\")(?u:[\u{0}-!\\#-\u{10ffff}])|(?u:\"\")(?u:[\u{0}-!\\#-\u{10ffff}]))*(?u:\"\"\")").unwrap(),
+                __regex::Regex::new("^(?u:\')((?u:[\u{0}-\t\u{b}-\u{c}\u{e}-\\&\\(-\u{10ffff}])|(?u:\\\\)(?u:.))*(?u:\')").unwrap(),
+                __regex::Regex::new("^(?u:\'\'\')((?u:[\u{0}-\\&\\(-\u{10ffff}])|(?u:\\\\)(?u:.)|(?u:\')(?u:[\u{0}-\\&\\(-\u{10ffff}])|(?u:\'\')(?u:[\u{0}-\\&\\(-\u{10ffff}]))*(?u:\'\'\')").unwrap(),
                 __regex::Regex::new("^((?u:false)|(?u:true))").unwrap(),
+                __regex::Regex::new("^(?u:[0-9])+").unwrap(),
+                __regex::Regex::new("^(?u:[0-9]){4}(?u:\\-)(?u:[0-9]){2}(?u:\\-)(?u:[0-9]){2}(?u:[Z-Zz-z])?").unwrap(),
             ];
             __MatcherBuilder { regex_set: __regex_set, regex_vec: __regex_vec }
         }

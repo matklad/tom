@@ -6,15 +6,12 @@ authors = ["Aleksey Kladov <aleksey.kladov@gmail.com>"]
 [dependencies]
 lalrpop-util = "0.15"
 regex = "0.2"
-parse_tree = { path = "../parse_tree" }
+parse_tree = "0.0.4"
 
 [build-dependencies]
 file = "1.0"
 heck = "0.1.0"
-
-[build-dependencies.lalrpop]
-git = "https://github.com/matklad/lalrpop"
-branch = "caret-precedence"
+lalrpop = "0.15"
 
 [dev-dependencies.testutils]
 path = "./tests/testutils"
