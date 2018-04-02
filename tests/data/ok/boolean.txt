@@ -1,18 +1,15 @@
-FILE@[0; 26)
+FILE@[0; 27)
   KEY_VAL@[0; 12)
-    KEY@[0; 5)
-      BARE_KEY@[0; 5) "bool1"
+    BARE_KEY@[0; 5) "bool1"
     WHITESPACE@[5; 6)
     EQ@[6; 7) "="
     WHITESPACE@[7; 8)
-    VAL@[8; 12)
-      BOOL@[8; 12) "true"
+    BOOL@[8; 12) "true"
   WHITESPACE@[12; 13)
   KEY_VAL@[13; 26)
-    KEY@[13; 18)
-      BARE_KEY@[13; 18) "bool2"
+    BARE_KEY@[13; 18) "bool2"
     WHITESPACE@[18; 19)
     EQ@[19; 20) "="
     WHITESPACE@[20; 21)
-    VAL@[21; 26)
-      BOOL@[21; 26) "false"
+    BOOL@[21; 26) "false"
+  WHITESPACE@[26; 27)

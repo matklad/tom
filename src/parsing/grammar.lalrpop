@@ -11,11 +11,9 @@ AnyTable = { Table, ArrayTable };
 KeyVal: () = Key Eq Val
     => events.reduce(symbols::KEY_VAL, 3);
 
-Key: () = Key_ => events.reduce(symbols::KEY, 1);
-Key_ = { BareKey, BasicString, LiteralString };
+Key = { BareKey, BasicString, LiteralString };
 
-Val: () = Val_ => events.reduce(symbols::VAL, 1);
-Val_ = { Literal, Array, Dict };
+Val = { Literal, Array, Dict };
 
 Literal = {
     Number, Bool, DateTime,

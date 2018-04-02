@@ -25,7 +25,7 @@ fn gen_ast() {
     ln!();
     let wrappers = &[
         "File", "BareKey", "Array", "Dict", "Number", "Bool", "DateTime",
-        "KeyVal", "Key", "Val", "Table", "ArrayTable", "TableHeader",
+        "KeyVal", "Table", "ArrayTable", "TableHeader",
     ];
     let multi_wrappers = &[
         ("StringLit", &[
@@ -35,13 +35,28 @@ fn gen_ast() {
             "MULTILINE_LITERAL_STRING",
         ])
     ];
+    let enums: &[(&str, &[&str])] = &[
+        ("Key", &["StringLit", "BareKey"]),
+        ("Val", &["Array", "Dict", "Number", "Bool", "DateTime", "StringLit"]),
+    ];
 
     for &symbol in wrappers.iter().chain(multi_wrappers.iter().map(|&(ref w, _)| w)) {
-        ln!("#[derive(Clone, Copy, PartialEq, Eq)]");
+        ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
         ln!("pub struct {}<'p>(Node<'p>);", symbol);
         ln!();
     }
     ln!();
+
+    for &(ref symbol, ref variants) in enums.iter() {
+        ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
+        ln!("pub enum {}<'p> {{", symbol);
+        for &v in variants.iter() {
+            ln!("    {}({}<'p>),", v, v);
+        }
+        ln!("}}");
+        ln!();
+    }
+
 
     for &symbol in wrappers.iter() {
         ln!("impl<'p> AstNode<'p> for {}<'p> {{", symbol);
@@ -74,6 +89,30 @@ fn gen_ast() {
         ln!("    }}");
         ln!("    fn node(self) -> Node<'p> {{ self.0 }}");
 
+        ln!("}}");
+        ln!();
+    }
+
+    for &(ref symbol, ref variants) in enums.iter() {
+        ln!("impl<'p> AstNode<'p> for {}<'p> {{", symbol);
+        ln!("    fn cast(node: Node<'p>) -> Option<Self> where Self: Sized {{");
+        for &v in variants.iter() {
+            ln!(
+                "        if let Some(n) = {}::cast(node) {{ return Some({}::{}(n)); }}",
+                v,
+                symbol,
+                v,
+            );
+        }
+        ln!("        None");
+        ln!("    }}");
+        ln!("    fn node(self) -> Node<'p> {{");
+        ln!("        match self {{");
+        for &v in variants.iter() {
+            ln!("            {}::{}(n) => n.node(),", symbol, v);
+        }
+        ln!("        }}");
+        ln!("    }}");
         ln!("}}");
         ln!();
     }

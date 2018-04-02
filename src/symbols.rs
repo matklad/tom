@@ -3,8 +3,6 @@ symbols! {
     WHITESPACE 0
     FILE 10
     KEY_VAL 11
-    KEY 12
-    VAL 13
     ARRAY 14
     DICT 15
     TABLE_HEADER 16

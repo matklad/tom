@@ -1,105 +1,84 @@
-FILE@[0; 217)
+FILE@[0; 218)
   TABLE@[0; 7)
     TABLE_HEADER@[0; 7)
       L_BRACK@[0; 1) "["
-      KEY@[1; 6)
-        BARE_KEY@[1; 6) "table"
+      BARE_KEY@[1; 6) "table"
       R_BRACK@[6; 7) "]"
   WHITESPACE@[7; 9)
   TABLE@[9; 50)
     TABLE_HEADER@[9; 18)
       L_BRACK@[9; 10) "["
-      KEY@[10; 17)
-        BARE_KEY@[10; 17) "table-1"
+      BARE_KEY@[10; 17) "table-1"
       R_BRACK@[17; 18) "]"
     WHITESPACE@[18; 19)
     KEY_VAL@[19; 39)
-      KEY@[19; 23)
-        BARE_KEY@[19; 23) "key1"
+      BARE_KEY@[19; 23) "key1"
       WHITESPACE@[23; 24)
       EQ@[24; 25) "="
       WHITESPACE@[25; 26)
-      VAL@[26; 39)
-        BASIC_STRING@[26; 39) "\"some string\""
+      BASIC_STRING@[26; 39) "\"some string\""
     WHITESPACE@[39; 40)
     KEY_VAL@[40; 50)
-      KEY@[40; 44)
-        BARE_KEY@[40; 44) "key2"
+      BARE_KEY@[40; 44) "key2"
       WHITESPACE@[44; 45)
       EQ@[45; 46) "="
       WHITESPACE@[46; 47)
-      VAL@[47; 50)
-        NUMBER@[47; 50) "123"
+      NUMBER@[47; 50) "123"
   WHITESPACE@[50; 52)
   TABLE@[52; 96)
     TABLE_HEADER@[52; 61)
       L_BRACK@[52; 53) "["
-      KEY@[53; 60)
-        BARE_KEY@[53; 60) "table-2"
+      BARE_KEY@[53; 60) "table-2"
       R_BRACK@[60; 61) "]"
     WHITESPACE@[61; 62)
     KEY_VAL@[62; 85)
-      KEY@[62; 66)
-        BARE_KEY@[62; 66) "key1"
+      BARE_KEY@[62; 66) "key1"
       WHITESPACE@[66; 67)
       EQ@[67; 68) "="
       WHITESPACE@[68; 69)
-      VAL@[69; 85)
-        BASIC_STRING@[69; 85) "\"another string\""
+      BASIC_STRING@[69; 85) "\"another string\""
     WHITESPACE@[85; 86)
     KEY_VAL@[86; 96)
-      KEY@[86; 90)
-        BARE_KEY@[86; 90) "key2"
+      BARE_KEY@[86; 90) "key2"
       WHITESPACE@[90; 91)
       EQ@[91; 92) "="
       WHITESPACE@[92; 93)
-      VAL@[93; 96)
-        NUMBER@[93; 96) "456"
+      NUMBER@[93; 96) "456"
   WHITESPACE@[96; 98)
   TABLE@[98; 128)
     TABLE_HEADER@[98; 115)
       L_BRACK@[98; 99) "["
-      KEY@[99; 102)
-        BARE_KEY@[99; 102) "dog"
+      BARE_KEY@[99; 102) "dog"
       DOT@[102; 103) "."
-      KEY@[103; 114)
-        BASIC_STRING@[103; 114) "\"tater.man\""
+      BASIC_STRING@[103; 114) "\"tater.man\""
       R_BRACK@[114; 115) "]"
     WHITESPACE@[115; 116)
     KEY_VAL@[116; 128)
-      KEY@[116; 120)
-        BARE_KEY@[116; 120) "type"
+      BARE_KEY@[116; 120) "type"
       WHITESPACE@[120; 121)
       EQ@[121; 122) "="
       WHITESPACE@[122; 123)
-      VAL@[123; 128)
-        BASIC_STRING@[123; 128) "\"pug\""
+      BASIC_STRING@[123; 128) "\"pug\""
   WHITESPACE@[128; 130)
   TABLE@[130; 137)
     TABLE_HEADER@[130; 137)
       L_BRACK@[130; 131) "["
-      KEY@[131; 132)
-        BARE_KEY@[131; 132) "a"
+      BARE_KEY@[131; 132) "a"
       DOT@[132; 133) "."
-      KEY@[133; 134)
-        BARE_KEY@[133; 134) "b"
+      BARE_KEY@[133; 134) "b"
       DOT@[134; 135) "."
-      KEY@[135; 136)
-        BARE_KEY@[135; 136) "c"
+      BARE_KEY@[135; 136) "c"
       R_BRACK@[136; 137) "]"
   WHITESPACE@[137; 138)
   TABLE@[138; 147)
     TABLE_HEADER@[138; 147)
       L_BRACK@[138; 139) "["
       WHITESPACE@[139; 140)
-      KEY@[140; 141)
-        BARE_KEY@[140; 141) "d"
+      BARE_KEY@[140; 141) "d"
       DOT@[141; 142) "."
-      KEY@[142; 143)
-        BARE_KEY@[142; 143) "e"
+      BARE_KEY@[142; 143) "e"
       DOT@[143; 144) "."
-      KEY@[144; 145)
-        BARE_KEY@[144; 145) "f"
+      BARE_KEY@[144; 145) "f"
       WHITESPACE@[145; 146)
       R_BRACK@[146; 147) "]"
   WHITESPACE@[147; 148)
@@ -107,18 +86,15 @@ FILE@[0; 217)
     TABLE_HEADER@[148; 163)
       L_BRACK@[148; 149) "["
       WHITESPACE@[149; 150)
-      KEY@[150; 151)
-        BARE_KEY@[150; 151) "g"
+      BARE_KEY@[150; 151) "g"
       WHITESPACE@[151; 152)
       DOT@[152; 153) "."
       WHITESPACE@[153; 155)
-      KEY@[155; 156)
-        BARE_KEY@[155; 156) "h"
+      BARE_KEY@[155; 156) "h"
       WHITESPACE@[156; 158)
       DOT@[158; 159) "."
       WHITESPACE@[159; 160)
-      KEY@[160; 161)
-        BARE_KEY@[160; 161) "i"
+      BARE_KEY@[160; 161) "i"
       WHITESPACE@[161; 162)
       R_BRACK@[162; 163) "]"
   WHITESPACE@[163; 164)
@@ -126,68 +102,55 @@ FILE@[0; 217)
     TABLE_HEADER@[164; 182)
       L_BRACK@[164; 165) "["
       WHITESPACE@[165; 166)
-      KEY@[166; 167)
-        BARE_KEY@[166; 167) "j"
+      BARE_KEY@[166; 167) "j"
       WHITESPACE@[167; 168)
       DOT@[168; 169) "."
       WHITESPACE@[169; 170)
-      KEY@[170; 174)
-        BASIC_STRING@[170; 174) "\"ʞ\""
+      BASIC_STRING@[170; 174) "\"ʞ\""
       WHITESPACE@[174; 175)
       DOT@[175; 176) "."
       WHITESPACE@[176; 177)
-      KEY@[177; 180)
-        LITERAL_STRING@[177; 180) "\'l\'"
+      LITERAL_STRING@[177; 180) "\'l\'"
       WHITESPACE@[180; 181)
       R_BRACK@[181; 182) "]"
   WHITESPACE@[182; 184)
   TABLE@[184; 193)
     TABLE_HEADER@[184; 193)
       L_BRACK@[184; 185) "["
-      KEY@[185; 186)
-        BARE_KEY@[185; 186) "x"
+      BARE_KEY@[185; 186) "x"
       DOT@[186; 187) "."
-      KEY@[187; 188)
-        BARE_KEY@[187; 188) "y"
+      BARE_KEY@[187; 188) "y"
       DOT@[188; 189) "."
-      KEY@[189; 190)
-        BARE_KEY@[189; 190) "z"
+      BARE_KEY@[189; 190) "z"
       DOT@[190; 191) "."
-      KEY@[191; 192)
-        BARE_KEY@[191; 192) "w"
+      BARE_KEY@[191; 192) "w"
       R_BRACK@[192; 193) "]"
   WHITESPACE@[193; 195)
   TABLE@[195; 206)
     TABLE_HEADER@[195; 200)
       L_BRACK@[195; 196) "["
-      KEY@[196; 197)
-        BARE_KEY@[196; 197) "a"
+      BARE_KEY@[196; 197) "a"
       DOT@[197; 198) "."
-      KEY@[198; 199)
-        BARE_KEY@[198; 199) "b"
+      BARE_KEY@[198; 199) "b"
       R_BRACK@[199; 200) "]"
     WHITESPACE@[200; 201)
     KEY_VAL@[201; 206)
-      KEY@[201; 202)
-        BARE_KEY@[201; 202) "c"
+      BARE_KEY@[201; 202) "c"
       WHITESPACE@[202; 203)
       EQ@[203; 204) "="
       WHITESPACE@[204; 205)
-      VAL@[205; 206)
-        NUMBER@[205; 206) "1"
+      NUMBER@[205; 206) "1"
   WHITESPACE@[206; 208)
   TABLE@[208; 217)
     TABLE_HEADER@[208; 211)
       L_BRACK@[208; 209) "["
-      KEY@[209; 210)
-        BARE_KEY@[209; 210) "a"
+      BARE_KEY@[209; 210) "a"
       R_BRACK@[210; 211) "]"
     WHITESPACE@[211; 212)
     KEY_VAL@[212; 217)
-      KEY@[212; 213)
-        BARE_KEY@[212; 213) "d"
+      BARE_KEY@[212; 213) "d"
       WHITESPACE@[213; 214)
       EQ@[214; 215) "="
       WHITESPACE@[215; 216)
-      VAL@[216; 217)
-        NUMBER@[216; 217) "2"
+      NUMBER@[216; 217) "2"
+  WHITESPACE@[217; 218)

@@ -39,3 +39,23 @@ impl<'f, A: AstNode<'f>> Iterator for AstChildren<'f, A> {
         return None;
     }
 }
+
+pub mod search {
+    use parse_tree::{Node, TextUnit};
+    use parse_tree::search::{ancestors, find_leaf_at_offset, LeafAtOffset};
+    use super::AstNode;
+
+    pub fn ancestor<'f, T: AstNode<'f>>(node: Node<'f>) -> Option<T> {
+        ancestors(node)
+            .filter_map(T::cast)
+            .next()
+    }
+
+    pub fn node_at_offset<'f, T: AstNode<'f>>(node: Node<'f>, offset: TextUnit) -> Option<T> {
+        match find_leaf_at_offset(node, offset) {
+            LeafAtOffset::None => None,
+            LeafAtOffset::Single(node) => ancestor(node),
+            LeafAtOffset::Between(left, right) => ancestor(left).or_else(|| ancestor(right)),
+        }
+    }
+}

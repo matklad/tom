@@ -1,117 +1,92 @@
-FILE@[0; 715)
+FILE@[0; 716)
   KEY_VAL@[0; 74)
-    KEY@[0; 3)
-      BARE_KEY@[0; 3) "str"
+    BARE_KEY@[0; 3) "str"
     WHITESPACE@[3; 4)
     EQ@[4; 5) "="
     WHITESPACE@[5; 6)
-    VAL@[6; 74)
-      BASIC_STRING@[6; 74) "\"I\'m a string. \\\"You can quote me\\\". Name\\tJos\\u00E9\\nLocation\\tSF.\""
+    BASIC_STRING@[6; 74) "\"I\'m a string. \\\"You can quote me\\\". Name\\tJos\\u00E9\\nLocation\\tSF.\""
   WHITESPACE@[74; 76)
   KEY_VAL@[76; 120)
-    KEY@[76; 80)
-      BARE_KEY@[76; 80) "str1"
+    BARE_KEY@[76; 80) "str1"
     WHITESPACE@[80; 81)
     EQ@[81; 82) "="
     WHITESPACE@[82; 83)
-    VAL@[83; 120)
-      MULTILINE_BASIC_STRING@[83; 120) "\"\"\"\nRoses are red\nViolets are blue\"\"\""
+    MULTILINE_BASIC_STRING@[83; 120) "\"\"\"\nRoses are red\nViolets are blue\"\"\""
   WHITESPACE@[120; 121)
   KEY_VAL@[121; 161)
-    KEY@[121; 125)
-      BARE_KEY@[121; 125) "str2"
+    BARE_KEY@[121; 125) "str2"
     WHITESPACE@[125; 126)
     EQ@[126; 127) "="
     WHITESPACE@[127; 128)
-    VAL@[128; 161)
-      BASIC_STRING@[128; 161) "\"Roses are red\\nViolets are blue\""
+    BASIC_STRING@[128; 161) "\"Roses are red\\nViolets are blue\""
   WHITESPACE@[161; 162)
   KEY_VAL@[162; 204)
-    KEY@[162; 166)
-      BARE_KEY@[162; 166) "str3"
+    BARE_KEY@[162; 166) "str3"
     WHITESPACE@[166; 167)
     EQ@[167; 168) "="
     WHITESPACE@[168; 169)
-    VAL@[169; 204)
-      BASIC_STRING@[169; 204) "\"Roses are red\\r\\nViolets are blue\""
+    BASIC_STRING@[169; 204) "\"Roses are red\\r\\nViolets are blue\""
   WHITESPACE@[204; 206)
   KEY_VAL@[206; 259)
-    KEY@[206; 210)
-      BARE_KEY@[206; 210) "str1"
+    BARE_KEY@[206; 210) "str1"
     WHITESPACE@[210; 211)
     EQ@[211; 212) "="
     WHITESPACE@[212; 213)
-    VAL@[213; 259)
-      BASIC_STRING@[213; 259) "\"The quick brown fox jumps over the lazy dog.\""
+    BASIC_STRING@[213; 259) "\"The quick brown fox jumps over the lazy dog.\""
   WHITESPACE@[259; 260)
   KEY_VAL@[260; 330)
-    KEY@[260; 264)
-      BARE_KEY@[260; 264) "str2"
+    BARE_KEY@[260; 264) "str2"
     WHITESPACE@[264; 265)
     EQ@[265; 266) "="
     WHITESPACE@[266; 267)
-    VAL@[267; 330)
-      MULTILINE_BASIC_STRING@[267; 330) "\"\"\"\nThe quick brown \\\n\n\n  fox jumps over \\\n    the lazy dog.\"\"\""
+    MULTILINE_BASIC_STRING@[267; 330) "\"\"\"\nThe quick brown \\\n\n\n  fox jumps over \\\n    the lazy dog.\"\"\""
   WHITESPACE@[330; 331)
   KEY_VAL@[331; 424)
-    KEY@[331; 335)
-      BARE_KEY@[331; 335) "str3"
+    BARE_KEY@[331; 335) "str3"
     WHITESPACE@[335; 336)
     EQ@[336; 337) "="
     WHITESPACE@[337; 338)
-    VAL@[338; 424)
-      MULTILINE_BASIC_STRING@[338; 424) "\"\"\"\\\n       The quick brown \\\n       fox jumps over \\\n       the lazy dog.\\\n       \"\"\""
+    MULTILINE_BASIC_STRING@[338; 424) "\"\"\"\\\n       The quick brown \\\n       fox jumps over \\\n       the lazy dog.\\\n       \"\"\""
   WHITESPACE@[424; 426)
   KEY_VAL@[426; 464)
-    KEY@[426; 433)
-      BARE_KEY@[426; 433) "winpath"
+    BARE_KEY@[426; 433) "winpath"
     WHITESPACE@[433; 435)
     EQ@[435; 436) "="
     WHITESPACE@[436; 437)
-    VAL@[437; 464)
-      LITERAL_STRING@[437; 464) "\'C:\\Users\\nodejs\\templates\'"
+    LITERAL_STRING@[437; 464) "\'C:\\Users\\nodejs\\templates\'"
   WHITESPACE@[464; 465)
   KEY_VAL@[465; 504)
-    KEY@[465; 473)
-      BARE_KEY@[465; 473) "winpath2"
+    BARE_KEY@[465; 473) "winpath2"
     WHITESPACE@[473; 474)
     EQ@[474; 475) "="
     WHITESPACE@[475; 476)
-    VAL@[476; 504)
-      LITERAL_STRING@[476; 504) "\'\\\\ServerX\\admin$\\system32\\\'"
+    LITERAL_STRING@[476; 504) "\'\\\\ServerX\\admin$\\system32\\\'"
   WHITESPACE@[504; 505)
   KEY_VAL@[505; 543)
-    KEY@[505; 511)
-      BARE_KEY@[505; 511) "quoted"
+    BARE_KEY@[505; 511) "quoted"
     WHITESPACE@[511; 514)
     EQ@[514; 515) "="
     WHITESPACE@[515; 516)
-    VAL@[516; 543)
-      LITERAL_STRING@[516; 543) "\'Tom \"Dubs\" Preston-Werner\'"
+    LITERAL_STRING@[516; 543) "\'Tom \"Dubs\" Preston-Werner\'"
   WHITESPACE@[543; 544)
   KEY_VAL@[544; 567)
-    KEY@[544; 549)
-      BARE_KEY@[544; 549) "regex"
+    BARE_KEY@[544; 549) "regex"
     WHITESPACE@[549; 553)
     EQ@[553; 554) "="
     WHITESPACE@[554; 555)
-    VAL@[555; 567)
-      LITERAL_STRING@[555; 567) "\'<\\i\\c*\\s*>\'"
+    LITERAL_STRING@[555; 567) "\'<\\i\\c*\\s*>\'"
   WHITESPACE@[567; 569)
   KEY_VAL@[569; 612)
-    KEY@[569; 575)
-      BARE_KEY@[569; 575) "regex2"
+    BARE_KEY@[569; 575) "regex2"
     WHITESPACE@[575; 576)
     EQ@[576; 577) "="
     WHITESPACE@[577; 578)
-    VAL@[578; 612)
-      MULTILINE_LITERAL_STRING@[578; 612) "\'\'\'I [dw]on\'t need \\d{2} apples\'\'\'"
+    MULTILINE_LITERAL_STRING@[578; 612) "\'\'\'I [dw]on\'t need \\d{2} apples\'\'\'"
   WHITESPACE@[612; 613)
   KEY_VAL@[613; 715)
-    KEY@[613; 618)
-      BARE_KEY@[613; 618) "lines"
+    BARE_KEY@[613; 618) "lines"
     WHITESPACE@[618; 620)
     EQ@[620; 621) "="
     WHITESPACE@[621; 622)
-    VAL@[622; 715)
-      MULTILINE_LITERAL_STRING@[622; 715) "\'\'\'\nThe first newline is\ntrimmed in raw strings.\n   All other whitespace\n   is preserved.\n\'\'\'"
+    MULTILINE_LITERAL_STRING@[622; 715) "\'\'\'\nThe first newline is\ntrimmed in raw strings.\n   All other whitespace\n   is preserved.\n\'\'\'"
+  WHITESPACE@[715; 716)

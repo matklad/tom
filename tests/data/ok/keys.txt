@@ -1,99 +1,78 @@
-FILE@[0; 210)
+FILE@[0; 211)
   KEY_VAL@[0; 13)
-    KEY@[0; 3)
-      BARE_KEY@[0; 3) "key"
+    BARE_KEY@[0; 3) "key"
     WHITESPACE@[3; 4)
     EQ@[4; 5) "="
     WHITESPACE@[5; 6)
-    VAL@[6; 13)
-      BASIC_STRING@[6; 13) "\"value\""
+    BASIC_STRING@[6; 13) "\"value\""
   WHITESPACE@[13; 14)
   KEY_VAL@[14; 32)
-    KEY@[14; 22)
-      BARE_KEY@[14; 22) "bare_key"
+    BARE_KEY@[14; 22) "bare_key"
     WHITESPACE@[22; 23)
     EQ@[23; 24) "="
     WHITESPACE@[24; 25)
-    VAL@[25; 32)
-      BASIC_STRING@[25; 32) "\"value\""
+    BASIC_STRING@[25; 32) "\"value\""
   WHITESPACE@[32; 33)
   KEY_VAL@[33; 51)
-    KEY@[33; 41)
-      BARE_KEY@[33; 41) "bare-key"
+    BARE_KEY@[33; 41) "bare-key"
     WHITESPACE@[41; 42)
     EQ@[42; 43) "="
     WHITESPACE@[43; 44)
-    VAL@[44; 51)
-      BASIC_STRING@[44; 51) "\"value\""
+    BASIC_STRING@[44; 51) "\"value\""
   WHITESPACE@[51; 52)
   KEY_VAL@[52; 66)
-    KEY@[52; 56)
-      BARE_KEY@[52; 56) "1234"
+    BARE_KEY@[52; 56) "1234"
     WHITESPACE@[56; 57)
     EQ@[57; 58) "="
     WHITESPACE@[58; 59)
-    VAL@[59; 66)
-      BASIC_STRING@[59; 66) "\"value\""
+    BASIC_STRING@[59; 66) "\"value\""
   WHITESPACE@[66; 68)
   KEY_VAL@[68; 89)
-    KEY@[68; 79)
-      BASIC_STRING@[68; 79) "\"127.0.0.1\""
+    BASIC_STRING@[68; 79) "\"127.0.0.1\""
     WHITESPACE@[79; 80)
     EQ@[80; 81) "="
     WHITESPACE@[81; 82)
-    VAL@[82; 89)
-      BASIC_STRING@[82; 89) "\"value\""
+    BASIC_STRING@[82; 89) "\"value\""
   WHITESPACE@[89; 90)
   KEY_VAL@[90; 120)
-    KEY@[90; 110)
-      BASIC_STRING@[90; 110) "\"character encoding\""
+    BASIC_STRING@[90; 110) "\"character encoding\""
     WHITESPACE@[110; 111)
     EQ@[111; 112) "="
     WHITESPACE@[112; 113)
-    VAL@[113; 120)
-      BASIC_STRING@[113; 120) "\"value\""
+    BASIC_STRING@[113; 120) "\"value\""
   WHITESPACE@[120; 121)
   KEY_VAL@[121; 139)
-    KEY@[121; 129)
-      BASIC_STRING@[121; 129) "\"ʎǝʞ\""
+    BASIC_STRING@[121; 129) "\"ʎǝʞ\""
     WHITESPACE@[129; 130)
     EQ@[130; 131) "="
     WHITESPACE@[131; 132)
-    VAL@[132; 139)
-      BASIC_STRING@[132; 139) "\"value\""
+    BASIC_STRING@[132; 139) "\"value\""
   WHITESPACE@[139; 140)
   KEY_VAL@[140; 156)
-    KEY@[140; 146)
-      LITERAL_STRING@[140; 146) "\'key2\'"
+    LITERAL_STRING@[140; 146) "\'key2\'"
     WHITESPACE@[146; 147)
     EQ@[147; 148) "="
     WHITESPACE@[148; 149)
-    VAL@[149; 156)
-      BASIC_STRING@[149; 156) "\"value\""
+    BASIC_STRING@[149; 156) "\"value\""
   WHITESPACE@[156; 157)
   KEY_VAL@[157; 183)
-    KEY@[157; 173)
-      LITERAL_STRING@[157; 173) "\'quoted \"value\"\'"
+    LITERAL_STRING@[157; 173) "\'quoted \"value\"\'"
     WHITESPACE@[173; 174)
     EQ@[174; 175) "="
     WHITESPACE@[175; 176)
-    VAL@[176; 183)
-      BASIC_STRING@[176; 183) "\"value\""
+    BASIC_STRING@[176; 183) "\"value\""
   WHITESPACE@[183; 185)
   KEY_VAL@[185; 197)
-    KEY@[185; 187)
-      BASIC_STRING@[185; 187) "\"\""
+    BASIC_STRING@[185; 187) "\"\""
     WHITESPACE@[187; 188)
     EQ@[188; 189) "="
     WHITESPACE@[189; 190)
-    VAL@[190; 197)
-      BASIC_STRING@[190; 197) "\"value\""
+    BASIC_STRING@[190; 197) "\"value\""
   WHITESPACE@[197; 198)
   KEY_VAL@[198; 210)
-    KEY@[198; 200)
-      LITERAL_STRING@[198; 200) "\'\'"
+    LITERAL_STRING@[198; 200) "\'\'"
     WHITESPACE@[200; 201)
     EQ@[201; 202) "="
     WHITESPACE@[202; 203)
-    VAL@[203; 210)
-      BASIC_STRING@[203; 210) "\"value\""
+    BASIC_STRING@[203; 210) "\"value\""
+  WHITESPACE@[210; 211)

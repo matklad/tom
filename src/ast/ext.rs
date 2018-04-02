@@ -1,7 +1,7 @@
 use ast::{AstNode, AstChildren};
 use ast::{KeyVal, Dict, Table, ArrayTable, TableHeader, File};
 
-trait KeyValueOwner<'p>: AstNode<'p> {
+pub trait KeyValueOwner<'p>: AstNode<'p> {
     fn entries(&self) -> AstChildren<'p, KeyVal<'p>> {
         AstChildren::new(self.node().children())
     }
@@ -19,7 +19,7 @@ impl<'p> KeyValueOwner<'p> for ArrayTable<'p> {
 impl<'p> KeyValueOwner<'p> for File<'p> {
 }
 
-trait TableHeaderOwner<'p>: AstNode<'p> {
+pub trait TableHeaderOwner<'p>: AstNode<'p> {
     fn header(&self) ->  TableHeader<'p> {
         AstChildren::new(self.node().children())
             .next()

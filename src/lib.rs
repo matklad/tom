@@ -2,13 +2,14 @@
 extern crate parse_tree;
 
 use parse_tree::ParseTree;
+use ast::AstNode;
 
 mod parsing;
 mod symbols;
-mod edit;
 
 pub mod ast;
-use ast::AstNode;
+pub mod edit;
+pub mod ide;
 
 pub struct TomlFile {
     tree: ParseTree,

@@ -2,48 +2,58 @@ use parse_tree::Node;
 use ast::{AstNode, AstChildren};
 use symbols::*;
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct File<'p>(Node<'p>);
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct BareKey<'p>(Node<'p>);
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Array<'p>(Node<'p>);
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Dict<'p>(Node<'p>);
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Number<'p>(Node<'p>);
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Bool<'p>(Node<'p>);
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct DateTime<'p>(Node<'p>);
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct KeyVal<'p>(Node<'p>);
 
-#[derive(Clone, Copy, PartialEq, Eq)]
-pub struct Key<'p>(Node<'p>);
-
-#[derive(Clone, Copy, PartialEq, Eq)]
-pub struct Val<'p>(Node<'p>);
-
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Table<'p>(Node<'p>);
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct ArrayTable<'p>(Node<'p>);
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct TableHeader<'p>(Node<'p>);
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct StringLit<'p>(Node<'p>);
 
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Key<'p> {
+    StringLit(StringLit<'p>),
+    BareKey(BareKey<'p>),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Val<'p> {
+    Array(Array<'p>),
+    Dict(Dict<'p>),
+    Number(Number<'p>),
+    Bool(Bool<'p>),
+    DateTime(DateTime<'p>),
+    StringLit(StringLit<'p>),
+}
 
 impl<'p> AstNode<'p> for File<'p> {
     fn cast(node: Node<'p>) -> Option<Self> where Self: Sized {
@@ -101,20 +111,6 @@ impl<'p> AstNode<'p> for KeyVal<'p> {
     fn node(self) -> Node<'p> { self.0 }
 }
 
-impl<'p> AstNode<'p> for Key<'p> {
-    fn cast(node: Node<'p>) -> Option<Self> where Self: Sized {
-        if node.symbol() == KEY { Some(Key(node)) } else { None }
-    }
-    fn node(self) -> Node<'p> { self.0 }
-}
-
-impl<'p> AstNode<'p> for Val<'p> {
-    fn cast(node: Node<'p>) -> Option<Self> where Self: Sized {
-        if node.symbol() == VAL { Some(Val(node)) } else { None }
-    }
-    fn node(self) -> Node<'p> { self.0 }
-}
-
 impl<'p> AstNode<'p> for Table<'p> {
     fn cast(node: Node<'p>) -> Option<Self> where Self: Sized {
         if node.symbol() == TABLE { Some(Table(node)) } else { None }
@@ -147,6 +143,42 @@ impl<'p> AstNode<'p> for StringLit<'p> {
         }
     }
     fn node(self) -> Node<'p> { self.0 }
+}
+
+impl<'p> AstNode<'p> for Key<'p> {
+    fn cast(node: Node<'p>) -> Option<Self> where Self: Sized {
+        if let Some(n) = StringLit::cast(node) { return Some(Key::StringLit(n)); }
+        if let Some(n) = BareKey::cast(node) { return Some(Key::BareKey(n)); }
+        None
+    }
+    fn node(self) -> Node<'p> {
+        match self {
+            Key::StringLit(n) => n.node(),
+            Key::BareKey(n) => n.node(),
+        }
+    }
+}
+
+impl<'p> AstNode<'p> for Val<'p> {
+    fn cast(node: Node<'p>) -> Option<Self> where Self: Sized {
+        if let Some(n) = Array::cast(node) { return Some(Val::Array(n)); }
+        if let Some(n) = Dict::cast(node) { return Some(Val::Dict(n)); }
+        if let Some(n) = Number::cast(node) { return Some(Val::Number(n)); }
+        if let Some(n) = Bool::cast(node) { return Some(Val::Bool(n)); }
+        if let Some(n) = DateTime::cast(node) { return Some(Val::DateTime(n)); }
+        if let Some(n) = StringLit::cast(node) { return Some(Val::StringLit(n)); }
+        None
+    }
+    fn node(self) -> Node<'p> {
+        match self {
+            Val::Array(n) => n.node(),
+            Val::Dict(n) => n.node(),
+            Val::Number(n) => n.node(),
+            Val::Bool(n) => n.node(),
+            Val::DateTime(n) => n.node(),
+            Val::StringLit(n) => n.node(),
+        }
+    }
 }
 
 impl<'p> File<'p> {

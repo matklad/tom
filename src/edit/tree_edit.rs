@@ -1,6 +1,6 @@
 use parse_tree::{
     search::find_covering_node,
-    TextRange, TextUnit, ParseTree, Node,
+    TextRange, ParseTree, Node,
 };
 use super::text_edit::{TextEdit, TextEditBuilder, TextEditOp};
 
