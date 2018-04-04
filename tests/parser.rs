@@ -1,6 +1,5 @@
 extern crate tom;
 extern crate testutils;
-extern crate parse_tree;
 
 #[test]
 fn test_ok() {

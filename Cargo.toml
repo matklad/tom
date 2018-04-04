@@ -6,7 +6,7 @@ authors = ["Aleksey Kladov <aleksey.kladov@gmail.com>"]
 [dependencies]
 lalrpop-util = "0.15"
 regex = "0.2"
-parse_tree = "0.0.4"
+lazy_static = "1"
 
 [build-dependencies]
 file = "1.0"

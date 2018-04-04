@@ -1,9 +1,12 @@
 #[macro_use]
-extern crate parse_tree;
+extern crate lazy_static;
 
 use parse_tree::ParseTree;
 use ast::AstNode;
 use edit::TreeEdit;
+
+#[macro_use]
+pub mod parse_tree;
 
 mod parsing;
 mod symbols;
