@@ -7,7 +7,7 @@ use symbols::WHITESPACE;
 
 /// Sorts entries in the `[dependencies]` section of Cargo.toml
 pub fn sort_dependencies(toml: &TomlFile) -> Option<TextEdit> {
-    let deps_table = dependencies_table(toml)?;
+    let deps_table = toml.ast().find_table("dependencies")?;
     let mut entries: Vec<_> = deps_table.entries().collect();
     entries.sort_by_key(|e| e.key().node().text());
 
@@ -19,11 +19,7 @@ pub fn sort_dependencies(toml: &TomlFile) -> Option<TextEdit> {
 }
 
 fn dependencies_table(toml: &TomlFile) -> Option<Table> {
-    toml.ast()
-        .tables()
-        .find(|table| {
-            table.header().keys().next().map(|key| key.node().text()) == Some("dependencies")
-        })
+    toml.ast().find_table("dependencies")
 }
 
 #[test]

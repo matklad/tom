@@ -32,3 +32,16 @@ impl<'p> TableHeaderOwner<'p> for Table<'p> {
 
 impl<'p> TableHeaderOwner<'p> for ArrayTable<'p> {
 }
+
+impl<'p> File<'p> {
+    pub fn find_table(&self, name: &str) -> Option<Table<'p>> {
+        self.tables()
+            .find(|t| {
+                let mut keys = t.header().keys();
+                match keys.next() {
+                    Some(key) => key.node().text() == name && keys.next().is_none(),
+                    None => false,
+                }
+            })
+    }
+}
