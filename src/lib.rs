@@ -3,6 +3,7 @@ extern crate parse_tree;
 
 use parse_tree::ParseTree;
 use ast::AstNode;
+use edit::TreeEdit;
 
 mod parsing;
 mod symbols;
@@ -12,22 +13,30 @@ pub mod edit;
 pub mod ide;
 
 pub struct TomlFile {
-    tree: ParseTree,
+    parse_tree: ParseTree,
 }
 
 impl TomlFile {
     pub fn new(text: String) -> TomlFile {
         let tree = parsing::parse(text);
-        TomlFile { tree }
+        TomlFile { parse_tree: tree }
+    }
+
+    pub fn parse_tree(&self) -> &ParseTree {
+        &self.parse_tree
+    }
+
+    pub fn ast(&self) -> ast::File {
+        ast::File::cast(self.parse_tree().root()).unwrap()
+    }
+
+    pub fn edit(&self) -> TreeEdit {
+        TreeEdit::new(self.parse_tree())
     }
 
     pub fn debug_dump(&self) -> String {
         parse_tree::debug_dump(
-            self.tree.root(),
+            self.parse_tree().root(),
         )
-    }
-
-    pub fn ast(&self) -> ast::File {
-        ast::File::cast(self.tree.root()).unwrap()
     }
 }

@@ -1,25 +1,25 @@
 use TomlFile;
-use edit::{TextEdit, TreeEdit};
+use edit::TextEdit;
 use ast::{self, AstNode, TableHeaderOwner, KeyValueOwner, Table, KeyVal, File, Val};
 use parse_tree::{TextUnit, Node};
 use symbols::WHITESPACE;
 
 
 /// Sorts entries in the `[dependencies]` section of Cargo.toml
-pub fn sort_dependencies(file: &TomlFile) -> Option<TextEdit> {
-    let deps_table = dependencies_table(file)?;
+pub fn sort_dependencies(toml: &TomlFile) -> Option<TextEdit> {
+    let deps_table = dependencies_table(toml)?;
     let mut entries: Vec<_> = deps_table.entries().collect();
     entries.sort_by_key(|e| e.key().node().text());
 
-    let mut edit = TreeEdit::new(&file.tree);
+    let mut edit = toml.edit();
     for (old, new) in deps_table.entries().zip(entries) {
         edit.replace(old.node(), new.node());
     }
     Some(edit.into_text_edit())
 }
 
-fn dependencies_table(file: &TomlFile) -> Option<Table> {
-    file.ast()
+fn dependencies_table(toml: &TomlFile) -> Option<Table> {
+    toml.ast()
         .tables()
         .find(|table| {
             table.header().keys().next().map(|key| key.node().text()) == Some("dependencies")
@@ -52,15 +52,15 @@ parse_tree = {  path = "../parse_tree"}
 regex= "0.2"
 "#;
 
-    let file = ::TomlFile::new(before.to_string());
-    let edit = sort_dependencies(&file).unwrap();
+    let toml = ::TomlFile::new(before.to_string());
+    let edit = sort_dependencies(&toml).unwrap();
     let actual = edit.apply(before);
     assert_eq!(after, actual);
 }
 
 pub fn add_dependency(file: &TomlFile, name: &str, version: &str) -> Option<TextEdit> {
     let deps_table = dependencies_table(file)?;
-    let mut edit = TreeEdit::new(&file.tree);
+    let mut edit = file.edit();
     edit.insert_text_after(
         deps_table.node(),
         format!("\n{} = \"{}\"", name, version),
@@ -99,15 +99,15 @@ lalrpop-util = "0.15"
 lalrpop = "0.15"
 "#;
 
-    let file = ::TomlFile::new(before.to_string());
-    let edit = add_dependency(&file, "lalrpop-util", "0.15").unwrap();
+    let toml = ::TomlFile::new(before.to_string());
+    let edit = add_dependency(&toml, "lalrpop-util", "0.15").unwrap();
     let actual = edit.apply(before);
     assert_eq!(after, actual);
 }
 
 
-pub fn dict_to_table(file: &TomlFile, offset: TextUnit) -> Option<TextEdit> {
-    let key_val: KeyVal = ast::search::node_at_offset(file.ast().node(), offset)?;
+pub fn dict_to_table(toml: &TomlFile, offset: TextUnit) -> Option<TextEdit> {
+    let key_val: KeyVal = ast::search::node_at_offset(toml.ast().node(), offset)?;
     let parent = key_val.node().parent().unwrap();
     let dict = match key_val.val() {
         Val::Dict(dict) => dict,
@@ -131,7 +131,7 @@ pub fn dict_to_table(file: &TomlFile, offset: TextUnit) -> Option<TextEdit> {
         text += "\n";
     }
 
-    let mut edit = TreeEdit::new(&file.tree);
+    let mut edit = toml.edit();
     match table {
         None => edit.replace_with_text(key_val.node(), text),
         Some(table) => {
@@ -178,8 +178,8 @@ branch = "dev"
     fn do_test(before: &str, after: &str, offset: u32) {
         let before = before.trim();
         let after = after.trim();
-        let file = ::TomlFile::new(before.to_string());
-        let edit = dict_to_table(&file, offset.into()).unwrap();
+        let toml = ::TomlFile::new(before.to_string());
+        let edit = dict_to_table(&toml, offset.into()).unwrap();
         let actual = edit.apply(before);
         assert_eq!(after, actual.trim());
     }
