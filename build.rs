@@ -19,9 +19,8 @@ fn gen_ast() {
         }};
     }
 
-    ln!("use parse_tree::Node;");
+    ln!("use *;");
     ln!("use ast::{{AstNode, AstChildren}};");
-    ln!("use symbols::*;");
     ln!();
     let wrappers = &[
         "File", "BareKey", "Array", "Dict", "Number", "Bool", "DateTime",
@@ -42,16 +41,16 @@ fn gen_ast() {
 
     for &symbol in wrappers.iter().chain(multi_wrappers.iter().map(|&(ref w, _)| w)) {
         ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
-        ln!("pub struct {}<'p>(Node<'p>);", symbol);
+        ln!("pub struct {}<'f>(TomlNode<'f>);", symbol);
         ln!();
     }
     ln!();
 
     for &(ref symbol, ref variants) in enums.iter() {
         ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
-        ln!("pub enum {}<'p> {{", symbol);
+        ln!("pub enum {}<'f> {{", symbol);
         for &v in variants.iter() {
-            ln!("    {}({}<'p>),", v, v);
+            ln!("    {}({}<'f>),", v, v);
         }
         ln!("}}");
         ln!();
@@ -59,23 +58,23 @@ fn gen_ast() {
 
 
     for &symbol in wrappers.iter() {
-        ln!("impl<'p> AstNode<'p> for {}<'p> {{", symbol);
-        ln!("    fn cast(node: Node<'p>) -> Option<Self> where Self: Sized {{");
+        ln!("impl<'f> AstNode<'f> for {}<'f> {{", symbol);
+        ln!("    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {{");
         ln!(
             "        if node.symbol() == {} {{ Some({}(node)) }} else {{ None }}",
             symbol.to_shouty_snake_case(),
             symbol
         );
         ln!("    }}");
-        ln!("    fn node(self) -> Node<'p> {{ self.0 }}");
+        ln!("    fn node(self) -> TomlNode<'f> {{ self.0 }}");
 
         ln!("}}");
         ln!();
     }
 
     for &(ref symbol, ref m) in multi_wrappers.iter() {
-        ln!("impl<'p> AstNode<'p> for {}<'p> {{", symbol);
-        ln!("    fn cast(node: Node<'p>) -> Option<Self> where Self: Sized {{");
+        ln!("impl<'f> AstNode<'f> for {}<'f> {{", symbol);
+        ln!("    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {{");
         ln!("        match node.symbol() {{");
         for &s in m.iter() {
             ln!(
@@ -87,15 +86,15 @@ fn gen_ast() {
         ln!("            _ => None,");
         ln!("        }}");
         ln!("    }}");
-        ln!("    fn node(self) -> Node<'p> {{ self.0 }}");
+        ln!("    fn node(self) -> TomlNode<'f> {{ self.0 }}");
 
         ln!("}}");
         ln!();
     }
 
     for &(ref symbol, ref variants) in enums.iter() {
-        ln!("impl<'p> AstNode<'p> for {}<'p> {{", symbol);
-        ln!("    fn cast(node: Node<'p>) -> Option<Self> where Self: Sized {{");
+        ln!("impl<'f> AstNode<'f> for {}<'f> {{", symbol);
+        ln!("    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {{");
         for &v in variants.iter() {
             ln!(
                 "        if let Some(n) = {}::cast(node) {{ return Some({}::{}(n)); }}",
@@ -106,7 +105,7 @@ fn gen_ast() {
         }
         ln!("        None");
         ln!("    }}");
-        ln!("    fn node(self) -> Node<'p> {{");
+        ln!("    fn node(self) -> TomlNode<'f> {{");
         ln!("        match self {{");
         for &v in variants.iter() {
             ln!("            {}::{}(n) => n.node(),", symbol, v);
@@ -124,12 +123,12 @@ fn gen_ast() {
     ];
 
     for &(ref s, ref ms) in methods.iter() {
-        ln!("impl<'p> {}<'p> {{", s);
+        ln!("impl<'f> {}<'f> {{", s);
         for &(ref acc, ref s) in ms.iter() {
             let (ret, body) = if acc.ends_with("s") {
-                (format!("AstChildren<'p, {}<'p>>", s), "AstChildren::new(self.node().children())")
+                (format!("AstChildren<'f, {}<'f>>", s), "AstChildren::new(self.node().children())")
             } else {
-                (format!("{}<'p>", s), "AstChildren::new(self.node().children()).next().unwrap()")
+                (format!("{}<'f>", s), "AstChildren::new(self.node().children()).next().unwrap()")
             };
             ln!("    pub fn {}(&self) -> {} {{", acc, ret);
             ln!("        {}", body);

@@ -378,7 +378,6 @@ dependencies = [
  "heck 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "lalrpop 0.15.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "lalrpop-util 0.15.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "lazy_static 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "regex 0.2.10 (registry+https://github.com/rust-lang/crates.io-index)",
  "testutils 0.1.0",
 ]

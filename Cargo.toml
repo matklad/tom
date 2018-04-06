@@ -6,12 +6,11 @@ authors = ["Aleksey Kladov <aleksey.kladov@gmail.com>"]
 [dependencies]
 lalrpop-util = "0.15"
 regex = "0.2"
-lazy_static = "1"
 
 [build-dependencies]
 file = "1.0"
 heck = "0.1.0"
 lalrpop = "0.15"
 
-[dev-dependencies.testutils]
-path = "./tests/testutils"
+[dev-dependencies]
+testutils = { path = "./tests/testutils" }

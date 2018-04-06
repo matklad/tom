@@ -1,15 +1,15 @@
 use super::Events;
-use symbols;
+use *;
 
 grammar<E>(events: &mut E) where E: Events;
 
 pub TomlFile: () = <kvs:KeyVal*> <ts:AnyTable*>
-    => events.reduce(symbols::FILE, kvs.len() + ts.len());
+    => events.reduce(FILE, kvs.len() + ts.len());
 
 AnyTable = { Table, ArrayTable };
 
 KeyVal: () = Key Eq Val
-    => events.reduce(symbols::KEY_VAL, 3);
+    => events.reduce(KEY_VAL, 3);
 
 Key = { BareKey, BasicString, LiteralString };
 
@@ -22,55 +22,55 @@ Literal = {
 };
 
 Array: () = L_BRACK <xs:CommaList<Val>> R_BRACK
-    => events.reduce(symbols::ARRAY, xs + 2);
+    => events.reduce(ARRAY, xs + 2);
 
 
 Dict: () = L_CURLY <xs:CommaList<KeyVal>> R_CURLY
-    => events.reduce(symbols::DICT, xs + 2);
+    => events.reduce(DICT, xs + 2);
 
 Table: () = TableHeader <kvs:KeyVal*>
-    => events.reduce(symbols::TABLE, 1 + kvs.len());
+    => events.reduce(TABLE, 1 + kvs.len());
 
 TableHeader: () = L_BRACK Key <keys:(Dot Key)*> R_BRACK
-    => events.reduce(symbols::TABLE_HEADER, 3 + keys.len() * 2);
+    => events.reduce(TABLE_HEADER, 3 + keys.len() * 2);
 
 ArrayTable: () =  ArrayTableHeader <kvs:KeyVal*>
-    => events.reduce(symbols::ARRAY_TABLE, 1 + kvs.len());
+    => events.reduce(ARRAY_TABLE, 1 + kvs.len());
 
 ArrayTableHeader: () = L_BRACK L_BRACK Key <keys:(Dot Key)*> R_BRACK R_BRACK
-    => events.reduce(symbols::TABLE_HEADER, 5 + keys.len() * 2);
+    => events.reduce(TABLE_HEADER, 5 + keys.len() * 2);
 
 
-Eq: () = <l:@L> "=" <r:@R> => events.shift(symbols::EQ, l, r);
-Dot: () = <l:@L> "." <r:@R> => events.shift(symbols::DOT, l, r);
-Comma: () = <l:@L> "," <r:@R> => events.shift(symbols::COMMA, l, r);
-L_BRACK: () = <l:@L> "[" <r:@R> => events.shift(symbols::L_BRACK, l, r);
-R_BRACK: () = <l:@L> "]" <r:@R> => events.shift(symbols::R_BRACK, l, r);
-L_CURLY: () = <l:@L> "{" <r:@R> => events.shift(symbols::L_CURLY, l, r);
-R_CURLY: () = <l:@L> "}" <r:@R> => events.shift(symbols::R_CURLY, l, r);
+Eq: () = <l:@L> "=" <r:@R> => events.shift(EQ, l, r);
+Dot: () = <l:@L> "." <r:@R> => events.shift(DOT, l, r);
+Comma: () = <l:@L> "," <r:@R> => events.shift(COMMA, l, r);
+L_BRACK: () = <l:@L> "[" <r:@R> => events.shift(L_BRACK, l, r);
+R_BRACK: () = <l:@L> "]" <r:@R> => events.shift(R_BRACK, l, r);
+L_CURLY: () = <l:@L> "{" <r:@R> => events.shift(L_CURLY, l, r);
+R_CURLY: () = <l:@L> "}" <r:@R> => events.shift(R_CURLY, l, r);
 Number: () = {
-    <l:@L> number <r:@R> => events.shift(symbols::NUMBER, l, r),
-    <l:@L> bare_key_or_number <r:@R> => events.shift(symbols::NUMBER, l, r),
+    <l:@L> number <r:@R> => events.shift(NUMBER, l, r),
+    <l:@L> bare_key_or_number <r:@R> => events.shift(NUMBER, l, r),
 };
 DateTime: () = {
-    <l:@L> date_time <r:@R> => events.shift(symbols::DATE_TIME, l, r),
-    <l:@L> bare_key_or_date <r:@R> => events.shift(symbols::DATE_TIME, l, r),
+    <l:@L> date_time <r:@R> => events.shift(DATE_TIME, l, r),
+    <l:@L> bare_key_or_date <r:@R> => events.shift(DATE_TIME, l, r),
 };
-Bool: () = <l:@L> bool <r:@R> => events.shift(symbols::BOOL, l, r);
+Bool: () = <l:@L> bool <r:@R> => events.shift(BOOL, l, r);
 BareKey: () = {
-    <l:@L> bare_key <r:@R> => events.shift(symbols::BARE_KEY, l, r),
-    <l:@L> bare_key_or_number <r:@R> => events.shift(symbols::BARE_KEY, l, r),
-    <l:@L> bare_key_or_date <r:@R> => events.shift(symbols::BARE_KEY, l, r),
+    <l:@L> bare_key <r:@R> => events.shift(BARE_KEY, l, r),
+    <l:@L> bare_key_or_number <r:@R> => events.shift(BARE_KEY, l, r),
+    <l:@L> bare_key_or_date <r:@R> => events.shift(BARE_KEY, l, r),
 };
 
 BasicString: () = <l:@L> basic_string <r:@R> =>
-    events.shift(symbols::BASIC_STRING, l, r);
+    events.shift(BASIC_STRING, l, r);
 MultilineBasicString: () = <l:@L> multiline_basic_string <r:@R> =>
-    events.shift(symbols::MULTILINE_BASIC_STRING, l, r);
+    events.shift(MULTILINE_BASIC_STRING, l, r);
 LiteralString: () = <l:@L> literal_string <r:@R> =>
-    events.shift(symbols::LITERAL_STRING, l, r);
+    events.shift(LITERAL_STRING, l, r);
 MultilineLiteralString: () = <l:@L> multiline_literal_string <r:@R> =>
-    events.shift(symbols::MULTILINE_LITERAL_STRING, l, r);
+    events.shift(MULTILINE_LITERAL_STRING, l, r);
 
 
 CommaList<T>: usize = {

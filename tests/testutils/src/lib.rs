@@ -94,6 +94,20 @@ fn print_difference(expected: &str, actual: &str, path: &Path) {
     panic!("Comparison failed")
 }
 
+pub fn assert_eq_text(expected: &str, actual: &str) {
+    if expected == actual {
+        return;
+    }
+    if expected.trim() == actual.trim() {
+        eprintln!("whitespace difference!");
+        eprintln!("expected, actual:\n{:?}\n{:?}", expected, actual);
+        panic!("Comparison failed");
+    }
+    let changeset = Changeset::new(actual, expected, "\n");
+    print!("{}", changeset);
+    panic!("Comparison failed")
+}
+
 fn project_dir() -> PathBuf {
     let dir = env!("CARGO_MANIFEST_DIR");
     PathBuf::from(dir)

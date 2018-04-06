@@ -1,5 +1,5 @@
-use parse_tree::{Symbol, ParseTree, BottomUpBuilder};
-use symbols;
+use {Symbol, WHITESPACE, FILE};
+use parse_tree::{ParseTree, BottomUpBuilder};
 
 mod grammar;
 
@@ -25,15 +25,15 @@ impl Builder {
         }
     }
 
-    fn finish(self, text: String) -> ParseTree {
-        self.inner.finish(text)
+    fn finish(self) -> ParseTree {
+        self.inner.finish()
     }
 
     fn shift_ws(&mut self, current: usize) {
         let len = current - self.prev;
         if len != 0 {
             self.stack.push(true);
-            self.inner.shift(symbols::WHITESPACE, (len as u32).into());
+            self.inner.shift(WHITESPACE, (len as u32).into());
         }
     }
 }
@@ -49,7 +49,7 @@ impl Events for Builder {
 
     fn reduce(&mut self, symbol: Symbol, mut n_symbols: usize) {
         // trailing space
-        if symbol == symbols::FILE {
+        if symbol == FILE {
             let total = self.total;
             self.shift_ws(total);
         }
@@ -62,7 +62,7 @@ impl Events for Builder {
             }
         }
         // leading space
-        if symbol == symbols::FILE {
+        if symbol == FILE {
             while let Some(&is_ws) = self.stack.last() {
                 if is_ws {
                     self.stack.pop().unwrap();
@@ -75,10 +75,9 @@ impl Events for Builder {
     }
 }
 
-pub(crate) fn parse(text: String) -> ParseTree {
-    symbols::register();
+pub(crate) fn parse(text: &str) -> ParseTree {
     let p = grammar::TomlFileParser::new();
     let mut builder = Builder::new(text.len());
-    p.parse(&mut builder, &text).unwrap();
-    builder.finish(text)
+    p.parse(&mut builder, text).unwrap();
+    builder.finish()
 }

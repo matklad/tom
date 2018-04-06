@@ -1,7 +1,7 @@
 // auto-generated: "lalrpop 0.15.0"
 #![cfg_attr(rustfmt, rustfmt_skip)]
 use super::Events;
-use symbols;
+use *;
 #[allow(unused_extern_crates)]
 extern crate lalrpop_util as __lalrpop_util;
 
@@ -9,7 +9,7 @@ mod __parse__TomlFile {
     #![allow(non_snake_case, non_camel_case_types, unused_mut, unused_variables, unused_imports, unused_parens)]
 
     use super::super::Events;
-    use symbols;
+    use *;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     use super::__intern_token::Token;
@@ -1648,7 +1648,7 @@ pub use self::__parse__TomlFile::TomlFileParser;
 mod __intern_token {
     #![allow(unused_imports)]
     use super::Events;
-    use symbols;
+    use *;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     extern crate regex as __regex;
@@ -1796,7 +1796,7 @@ fn __action1<
 ) -> () where
   E:  Events,
 {
-    events.reduce(symbols::FILE, kvs.len() + ts.len())
+    events.reduce(FILE, kvs.len() + ts.len())
 }
 
 #[allow(unused_variables)]
@@ -1840,7 +1840,7 @@ fn __action4<
 ) -> () where
   E:  Events,
 {
-    events.reduce(symbols::KEY_VAL, 3)
+    events.reduce(KEY_VAL, 3)
 }
 
 #[allow(unused_variables)]
@@ -2038,7 +2038,7 @@ fn __action18<
 ) -> () where
   E:  Events,
 {
-    events.reduce(symbols::ARRAY, xs + 2)
+    events.reduce(ARRAY, xs + 2)
 }
 
 #[allow(unused_variables)]
@@ -2054,7 +2054,7 @@ fn __action19<
 ) -> () where
   E:  Events,
 {
-    events.reduce(symbols::DICT, xs + 2)
+    events.reduce(DICT, xs + 2)
 }
 
 #[allow(unused_variables)]
@@ -2069,7 +2069,7 @@ fn __action20<
 ) -> () where
   E:  Events,
 {
-    events.reduce(symbols::TABLE, 1 + kvs.len())
+    events.reduce(TABLE, 1 + kvs.len())
 }
 
 #[allow(unused_variables)]
@@ -2086,7 +2086,7 @@ fn __action21<
 ) -> () where
   E:  Events,
 {
-    events.reduce(symbols::TABLE_HEADER, 3 + keys.len() * 2)
+    events.reduce(TABLE_HEADER, 3 + keys.len() * 2)
 }
 
 #[allow(unused_variables)]
@@ -2101,7 +2101,7 @@ fn __action22<
 ) -> () where
   E:  Events,
 {
-    events.reduce(symbols::ARRAY_TABLE, 1 + kvs.len())
+    events.reduce(ARRAY_TABLE, 1 + kvs.len())
 }
 
 #[allow(unused_variables)]
@@ -2120,7 +2120,7 @@ fn __action23<
 ) -> () where
   E:  Events,
 {
-    events.reduce(symbols::TABLE_HEADER, 5 + keys.len() * 2)
+    events.reduce(TABLE_HEADER, 5 + keys.len() * 2)
 }
 
 #[allow(unused_variables)]
@@ -2136,7 +2136,7 @@ fn __action24<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::EQ, l, r)
+    events.shift(EQ, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2152,7 +2152,7 @@ fn __action25<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::DOT, l, r)
+    events.shift(DOT, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2168,7 +2168,7 @@ fn __action26<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::COMMA, l, r)
+    events.shift(COMMA, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2184,7 +2184,7 @@ fn __action27<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::L_BRACK, l, r)
+    events.shift(L_BRACK, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2200,7 +2200,7 @@ fn __action28<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::R_BRACK, l, r)
+    events.shift(R_BRACK, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2216,7 +2216,7 @@ fn __action29<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::L_CURLY, l, r)
+    events.shift(L_CURLY, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2232,7 +2232,7 @@ fn __action30<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::R_CURLY, l, r)
+    events.shift(R_CURLY, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2248,7 +2248,7 @@ fn __action31<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::NUMBER, l, r)
+    events.shift(NUMBER, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2264,7 +2264,7 @@ fn __action32<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::NUMBER, l, r)
+    events.shift(NUMBER, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2280,7 +2280,7 @@ fn __action33<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::DATE_TIME, l, r)
+    events.shift(DATE_TIME, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2296,7 +2296,7 @@ fn __action34<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::DATE_TIME, l, r)
+    events.shift(DATE_TIME, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2312,7 +2312,7 @@ fn __action35<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::BOOL, l, r)
+    events.shift(BOOL, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2328,7 +2328,7 @@ fn __action36<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::BARE_KEY, l, r)
+    events.shift(BARE_KEY, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2344,7 +2344,7 @@ fn __action37<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::BARE_KEY, l, r)
+    events.shift(BARE_KEY, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2360,7 +2360,7 @@ fn __action38<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::BARE_KEY, l, r)
+    events.shift(BARE_KEY, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2376,7 +2376,7 @@ fn __action39<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::BASIC_STRING, l, r)
+    events.shift(BASIC_STRING, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2392,7 +2392,7 @@ fn __action40<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::MULTILINE_BASIC_STRING, l, r)
+    events.shift(MULTILINE_BASIC_STRING, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2408,7 +2408,7 @@ fn __action41<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::LITERAL_STRING, l, r)
+    events.shift(LITERAL_STRING, l, r)
 }
 
 #[allow(unused_variables)]
@@ -2424,7 +2424,7 @@ fn __action42<
 ) -> () where
   E:  Events,
 {
-    events.shift(symbols::MULTILINE_LITERAL_STRING, l, r)
+    events.shift(MULTILINE_LITERAL_STRING, l, r)
 }
 
 #[allow(unused_variables)]
