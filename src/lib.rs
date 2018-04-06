@@ -16,7 +16,7 @@ pub use symbol::*;
 pub mod ast;
 pub use edit::Edit;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TomlFile {
     parse_tree: ParseTree,
     text: String,
