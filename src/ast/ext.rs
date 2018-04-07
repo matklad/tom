@@ -34,14 +34,12 @@ impl<'p> TableHeaderOwner<'p> for ArrayTable<'p> {
 }
 
 impl<'p> File<'p> {
-    pub fn find_table(&self, name: &str) -> Option<Table<'p>> {
+    pub fn find_table<S: AsRef<str>>(&self, keys: &[S]) -> Option<Table<'p>> {
         self.tables()
             .find(|t| {
-                let mut keys = t.header().keys();
-                match keys.next() {
-                    Some(key) => key.node().text() == name && keys.next().is_none(),
-                    None => false,
-                }
+                let xs = keys.iter().map(|s| s.as_ref());
+                let ys = t.header().keys().map(|key| key.node().text());
+                xs.eq(ys)
             })
     }
 }

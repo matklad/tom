@@ -1,3 +1,5 @@
+extern crate typed_arena;
+
 use std::ptr;
 use std::fmt;
 
@@ -10,11 +12,13 @@ mod symbol;
 mod parse_tree;
 mod parser;
 mod edit;
+mod factory;
 
 pub use text::{TextUnit, TextRange};
 pub use symbol::*;
 pub mod ast;
 pub use edit::Edit;
+pub use factory::Factory;
 
 #[derive(Debug, Clone)]
 pub struct TomlFile {

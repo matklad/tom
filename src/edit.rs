@@ -31,6 +31,11 @@ impl<'f> Edit<'f> {
         self.deleted.push(node)
     }
 
+    pub fn insert_after(&mut self, anchor: TomlNode<'f>, new_node: TomlNode) {
+        let text = format!("\n{}", new_node.text());
+        self.insert_text_after(anchor, text)
+    }
+
     pub fn insert_text_after(&mut self, anchor: TomlNode<'f>, text: String) {
         self.inserted.push((anchor, text))
     }
