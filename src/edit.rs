@@ -1,5 +1,5 @@
+use symbol::*;
 use {TomlFile, TomlNode};
-use ast::{self, AstNode};
 
 #[derive(Debug)]
 pub struct Edit<'f> {
@@ -27,22 +27,22 @@ impl<'f> Edit<'f> {
         self.replaced.push((node, replacement))
     }
 
+    pub fn append_child(&mut self, parent: TomlNode<'f>, child: TomlNode) {
+        let sibling = parent.children().last();
+        let ws = match sibling {
+            None => String::new(),
+            Some(sibling) => compute_ws(sibling, child),
+        };
+        let text = format!("{}{}", ws, child.text());
+        self.append_text(parent, text)
+    }
+
+    pub fn append_text(&mut self, node: TomlNode<'f>, text: String) {
+        self.inserted.push((node, text))
+    }
+
     pub fn delete(&mut self, node: TomlNode<'f>) {
         self.deleted.push(node)
-    }
-
-    pub fn insert_after(&mut self, anchor: TomlNode<'f>, new_node: TomlNode) {
-        let text = format!("\n{}", new_node.text());
-        self.insert_text_after(anchor, text)
-    }
-
-    pub fn insert_text_after(&mut self, anchor: TomlNode<'f>, text: String) {
-        self.inserted.push((anchor, text))
-    }
-
-    pub fn append_key_value(&mut self, table: ast::Table<'f>, key: &str, value: &str) {
-        let last_child = table.node().children().last().unwrap();
-        self.insert_text_after(last_child, format!("\n{} = {}", key, value))
     }
 
     pub fn finish(self) -> String {
@@ -70,5 +70,15 @@ impl<'f> Edit<'f> {
         if let Some(&(_, ref text)) = self.inserted.iter().find(|&&(n, _)| n == node) {
             buff.push_str(text)
         }
+    }
+}
+
+fn compute_ws(left: TomlNode, right: TomlNode) -> String {
+    match (left.node().symbol(), right.node().symbol()) {
+        (KEY_VAL, KEY_VAL) |
+        (TABLE_HEADER, KEY_VAL) => String::from("\n"),
+        (TABLE, TABLE) |
+        (KEY_VAL, TABLE) => String::from("\n\n"),
+        _ => String::new()
     }
 }

@@ -11,8 +11,13 @@ impl Factory {
         Factory { arena: Arena::new() }
     }
 
-    pub fn key_val(&self, key: &str, val: &str) -> ast::KeyVal {
-        let file = self.file(format!("{} = {}", escaped_key(key), val));
+    pub fn val_string(&self, val: &str) -> ast::Val {
+        let file = self.file(format!("foo = {:?}", val));
+        file.ast().entries().next().unwrap().val()
+    }
+
+    pub fn key_val(&self, key: &str, val: ast::Val) -> ast::KeyVal {
+        let file = self.file(format!("{} = {}", escaped_key(key), val.node().text()));
         file.ast().entries().next().unwrap()
     }
 
@@ -56,15 +61,18 @@ fn escaped_key(key: &str) -> String {
 #[test]
 fn test_create_key_val() {
     let f = Factory::new();
-    let kv = f.key_val("foo", "\"1.0\"");
+    let val = f.val_string("1.0");
+    let kv = f.key_val("foo", val);
     assert_eq!(kv.node().text(), r#"foo = "1.0""#);
 }
 
 #[test]
 fn test_create_table() {
     let f = Factory::new();
-    let a = f.key_val("foo", "\"1.0\"");
-    let b = f.key_val("bar", "\"0.0.1\"");
+    let va = f.val_string("1.0");
+    let a = f.key_val("foo", va);
+    let vb = f.val_string("0.0.1");
+    let b = f.key_val("bar", vb);
     let table = f.table(
         &mut vec!["target", "x86_64.json", "dependencies"].into_iter(),
         &mut vec![a, b].into_iter()

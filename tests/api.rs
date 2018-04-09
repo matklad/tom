@@ -1,16 +1,18 @@
 extern crate tom;
 extern crate testutils;
 
-use tom::TomlFile;
+use tom::{TomlFile, Factory};
+use tom::ast::AstNode;
 use testutils::assert_eq_text;
 
 
 fn add_dependency(file: &TomlFile, name: &str, version: &str) -> String {
-    let deps = file.ast().find_table("dependencies").unwrap();
+    let deps = file.ast().find_table(&["dependencies"]).unwrap();
     let mut edit = file.edit();
-    edit.append_key_value(
-        deps, name, &format!("{:?}", version)
-    );
+    let f = Factory::new();
+    let version = f.val_string(version);
+    let dep = f.key_val(name, version);
+    edit.append_child(deps.node(), dep.node());
     edit.finish()
 }
 
