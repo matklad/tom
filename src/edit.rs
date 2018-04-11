@@ -28,13 +28,20 @@ impl<'f> Edit<'f> {
     }
 
     pub fn append_child(&mut self, parent: TomlNode<'f>, child: TomlNode) {
-        let sibling = parent.children().last();
-        let ws = match sibling {
-            None => String::new(),
-            Some(sibling) => compute_ws(sibling, child),
-        };
-        let text = format!("{}{}", ws, child.text());
-        self.append_text(parent, text)
+        self.append_children(parent, &mut ::std::iter::once(child))
+    }
+
+    pub fn append_children(&mut self, parent: TomlNode<'f>, children: &mut Iterator<Item=TomlNode>) {
+        let mut prev_sibling = parent.children().last();
+        let mut buff = String::new();
+        for child in children {
+            if let Some(sibling) = prev_sibling {
+                buff.push_str(&compute_ws(sibling, child));
+            }
+            buff.push_str(child.text());
+            prev_sibling = Some(child)
+        }
+       self.append_text(parent, buff)
     }
 
     pub fn append_text(&mut self, node: TomlNode<'f>, text: String) {

@@ -1,4 +1,4 @@
-use {Symbol, WHITESPACE, FILE};
+use {Symbol, WHITESPACE, FILE, ERROR};
 use parse_tree::{ParseTree, BottomUpBuilder};
 
 mod grammar;
@@ -78,6 +78,12 @@ impl Events for Builder {
 pub(crate) fn parse(text: &str) -> ParseTree {
     let p = grammar::TomlFileParser::new();
     let mut builder = Builder::new(text.len());
-    p.parse(&mut builder, text).unwrap();
-    builder.finish()
+    if p.parse(&mut builder, text).is_ok() {
+        builder.finish()
+    } else {
+        let mut builder = Builder::new(text.len());
+        builder.shift(ERROR, 0, text.len());
+        builder.reduce(FILE, 1);
+        builder.finish()
+    }
 }

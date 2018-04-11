@@ -18,6 +18,15 @@ pub struct AstChildren<'f, A: AstNode<'f>> {
     phantom: PhantomData<*const A>,
 }
 
+impl<'f, A: AstNode<'f>> Clone for AstChildren<'f, A> {
+    fn clone(&self) -> Self {
+        AstChildren {
+            inner: self.inner.clone(),
+            phantom: PhantomData,
+        }
+    }
+}
+
 impl<'f, A: AstNode<'f>> AstChildren<'f, A> {
     pub fn new(children: Children<'f>) -> Self {
         AstChildren {

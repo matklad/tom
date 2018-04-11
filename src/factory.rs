@@ -16,6 +16,24 @@ impl Factory {
         file.ast().entries().next().unwrap().val()
     }
 
+    pub fn val_bool(&self, val: bool) -> ast::Val {
+        let file = self.file(format!("foo = {}", val));
+        file.ast().entries().next().unwrap().val()
+    }
+
+    pub fn val_dict(&self, entries: &mut Iterator<Item=ast::KeyVal>) -> ast::Val {
+        let mut buff = String::from("{");
+        let mut first = true;
+        for e in entries {
+            buff.push_str(if first { " " } else { ", " });
+            first = false;
+            buff.push_str(e.node().text());
+        }
+        buff.push_str(" }");
+        let file = self.file(format!("foo = {}", buff));
+        file.ast().entries().next().unwrap().val()
+    }
+
     pub fn key_val(&self, key: &str, val: ast::Val) -> ast::KeyVal {
         let file = self.file(format!("{} = {}", escaped_key(key), val.node().text()));
         file.ast().entries().next().unwrap()

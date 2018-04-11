@@ -43,6 +43,7 @@ const SYMBOLS: &[SymbolInfo] = &[
     SymbolInfo(20, "LITERAL_STRING"),
     SymbolInfo(21, "MULTILINE_LITERAL_STRING"),
     SymbolInfo(22, "DATE_TIME"),
+    SymbolInfo(23, "ERROR"),
 ];
 
 pub const WHITESPACE: Symbol               = Symbol(SYMBOLS[00].0);
@@ -68,3 +69,4 @@ pub const MULTILINE_BASIC_STRING: Symbol   = Symbol(SYMBOLS[19].0);
 pub const LITERAL_STRING: Symbol           = Symbol(SYMBOLS[20].0);
 pub const MULTILINE_LITERAL_STRING: Symbol = Symbol(SYMBOLS[21].0);
 pub const DATE_TIME: Symbol                = Symbol(SYMBOLS[22].0);
+pub const ERROR: Symbol                    = Symbol(SYMBOLS[23].0);

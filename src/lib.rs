@@ -130,6 +130,7 @@ impl<'f> TomlNode<'f> {
     }
 }
 
+#[derive(Clone)]
 pub struct Children<'f> {
     file: &'f TomlFile,
     id: Option<NodeId>,
