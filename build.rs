@@ -1,7 +1,7 @@
 extern crate lalrpop;
-extern crate file;
 extern crate heck;
 
+use std::fs;
 use heck::ShoutySnakeCase;
 
 fn main() {
@@ -137,6 +137,6 @@ fn gen_ast() {
         ln!("}}");
     }
 
-    file::put_text("src/ast/generated.rs", &buff)
+    fs::write("src/ast/generated.rs", &buff)
         .unwrap();
 }
