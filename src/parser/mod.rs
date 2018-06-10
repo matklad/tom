@@ -1,11 +1,11 @@
-use {Symbol, WHITESPACE, FILE, ERROR};
+use {TomlSymbol, WHITESPACE, FILE, ERROR};
 use parse_tree::{ParseTree, BottomUpBuilder};
 
 mod grammar;
 
 pub trait Events {
-    fn shift(&mut self, symbol: Symbol, start: usize, end: usize);
-    fn reduce(&mut self, symbol: Symbol, n_symbols: usize);
+    fn shift(&mut self, symbol: TomlSymbol, start: usize, end: usize);
+    fn reduce(&mut self, symbol: TomlSymbol, n_symbols: usize);
 }
 
 struct Builder {
@@ -33,21 +33,21 @@ impl Builder {
         let len = current - self.prev;
         if len != 0 {
             self.stack.push(true);
-            self.inner.shift(WHITESPACE, (len as u32).into());
+            self.inner.shift(WHITESPACE.0, (len as u32).into());
         }
     }
 }
 
 impl Events for Builder {
-    fn shift(&mut self, symbol: Symbol, start: usize, end: usize) {
+    fn shift(&mut self, symbol: TomlSymbol, start: usize, end: usize) {
         self.shift_ws(start);
         self.stack.push(false);
         self.prev = end;
         let len = end - start;
-        self.inner.shift(symbol, (len as u32).into())
+        self.inner.shift(symbol.0, (len as u32).into())
     }
 
-    fn reduce(&mut self, symbol: Symbol, mut n_symbols: usize) {
+    fn reduce(&mut self, symbol: TomlSymbol, mut n_symbols: usize) {
         // trailing space
         if symbol == FILE {
             let total = self.total;
@@ -70,7 +70,7 @@ impl Events for Builder {
                 }
             }
         }
-        self.inner.reduce(symbol, to_reduce);
+        self.inner.reduce(symbol.0, to_reduce);
         self.stack.push(false);
     }
 }

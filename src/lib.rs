@@ -1,15 +1,15 @@
+extern crate parse_tree;
 extern crate typed_arena;
 
 use std::ptr;
 use std::fmt;
 
-use parse_tree::{ParseTree, NodeId};
+use parse_tree::{ParseTree, PtNodeId, PtNode};
 use ast::AstNode;
 //use edit::TreeEdit;
 
 mod text;
 mod symbol;
-mod parse_tree;
 mod parser;
 mod edit;
 mod factory;
@@ -77,7 +77,7 @@ impl TomlFile {
 #[derive(Copy, Clone)]
 pub struct TomlNode<'f> {
     file: &'f TomlFile,
-    id: NodeId,
+    id: PtNodeId,
 }
 
 impl<'f> PartialEq<TomlNode<'f>> for TomlNode<'f> {
@@ -90,13 +90,13 @@ impl<'f> Eq for TomlNode<'f> {}
 
 impl<'t> fmt::Debug for TomlNode<'t> {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        write!(fmt, "{}@{:?}", self.node().symbol().name(), self.node().range())
+        write!(fmt, "{}@{:?}", self.symbol().name(), self.node().range())
     }
 }
 
 impl<'f> TomlNode<'f> {
-    pub fn symbol(&self) -> Symbol {
-        self.node().symbol()
+    pub fn symbol(&self) -> TomlSymbol {
+        TomlSymbol(self.node().symbol())
     }
 
     pub fn range(&self) -> TextRange {
@@ -125,7 +125,7 @@ impl<'f> TomlNode<'f> {
         self.node().first_child().is_none()
     }
 
-    fn node(&self) -> &parse_tree::Node {
+    fn node(&self) -> &PtNode {
         &self.file.parse_tree[self.id]
     }
 }
@@ -133,7 +133,7 @@ impl<'f> TomlNode<'f> {
 #[derive(Clone)]
 pub struct Children<'f> {
     file: &'f TomlFile,
-    id: Option<NodeId>,
+    id: Option<PtNodeId>,
 }
 
 impl<'f> Iterator for Children<'f> {

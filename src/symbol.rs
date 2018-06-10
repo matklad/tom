@@ -1,23 +1,28 @@
+use parse_tree::Symbol;
 use std::fmt;
 
-/// A type of a syntactic construct, including both leaf tokens
-/// and composite nodes, like "a comma" or "a table".
 #[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
-pub struct Symbol(#[doc(hidden)] pub u32);
+pub struct TomlSymbol(pub(crate) Symbol);
 
-impl Symbol {
+impl TomlSymbol {
     pub fn name(&self) -> &'static str {
-        SYMBOLS[self.0 as usize].1
+        self.info().1
+    }
+
+    pub(crate) fn info(&self) -> &SymbolInfo {
+        let idx = self.0;
+        let idx = idx.0 as usize;
+        &SYMBOLS[idx]
     }
 }
 
-impl fmt::Debug for Symbol {
+impl fmt::Debug for TomlSymbol {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         write!(f, "`{}", self.name())
     }
 }
 
-struct SymbolInfo(u32, &'static str);
+pub(crate) struct SymbolInfo(u16, &'static str);
 
 const SYMBOLS: &[SymbolInfo] = &[
     SymbolInfo(00, "WHITESPACE"),
@@ -46,27 +51,27 @@ const SYMBOLS: &[SymbolInfo] = &[
     SymbolInfo(23, "ERROR"),
 ];
 
-pub const WHITESPACE: Symbol               = Symbol(SYMBOLS[00].0);
-pub const FILE: Symbol                     = Symbol(SYMBOLS[01].0);
-pub const KEY_VAL: Symbol                  = Symbol(SYMBOLS[02].0);
-pub const ARRAY: Symbol                    = Symbol(SYMBOLS[03].0);
-pub const DICT: Symbol                     = Symbol(SYMBOLS[04].0);
-pub const TABLE_HEADER: Symbol             = Symbol(SYMBOLS[05].0);
-pub const TABLE: Symbol                    = Symbol(SYMBOLS[06].0);
-pub const ARRAY_TABLE: Symbol              = Symbol(SYMBOLS[07].0);
-pub const EQ: Symbol                       = Symbol(SYMBOLS[08].0);
-pub const DOT: Symbol                      = Symbol(SYMBOLS[09].0);
-pub const COMMA: Symbol                    = Symbol(SYMBOLS[10].0);
-pub const L_BRACK: Symbol                  = Symbol(SYMBOLS[11].0);
-pub const R_BRACK: Symbol                  = Symbol(SYMBOLS[12].0);
-pub const L_CURLY: Symbol                  = Symbol(SYMBOLS[13].0);
-pub const R_CURLY: Symbol                  = Symbol(SYMBOLS[14].0);
-pub const NUMBER: Symbol                   = Symbol(SYMBOLS[15].0);
-pub const BOOL: Symbol                     = Symbol(SYMBOLS[16].0);
-pub const BARE_KEY: Symbol                 = Symbol(SYMBOLS[17].0);
-pub const BASIC_STRING: Symbol             = Symbol(SYMBOLS[18].0);
-pub const MULTILINE_BASIC_STRING: Symbol   = Symbol(SYMBOLS[19].0);
-pub const LITERAL_STRING: Symbol           = Symbol(SYMBOLS[20].0);
-pub const MULTILINE_LITERAL_STRING: Symbol = Symbol(SYMBOLS[21].0);
-pub const DATE_TIME: Symbol                = Symbol(SYMBOLS[22].0);
-pub const ERROR: Symbol                    = Symbol(SYMBOLS[23].0);
+pub const WHITESPACE: TomlSymbol               = TomlSymbol(Symbol(SYMBOLS[00].0));
+pub const FILE: TomlSymbol                     = TomlSymbol(Symbol(SYMBOLS[01].0));
+pub const KEY_VAL: TomlSymbol                  = TomlSymbol(Symbol(SYMBOLS[02].0));
+pub const ARRAY: TomlSymbol                    = TomlSymbol(Symbol(SYMBOLS[03].0));
+pub const DICT: TomlSymbol                     = TomlSymbol(Symbol(SYMBOLS[04].0));
+pub const TABLE_HEADER: TomlSymbol             = TomlSymbol(Symbol(SYMBOLS[05].0));
+pub const TABLE: TomlSymbol                    = TomlSymbol(Symbol(SYMBOLS[06].0));
+pub const ARRAY_TABLE: TomlSymbol              = TomlSymbol(Symbol(SYMBOLS[07].0));
+pub const EQ: TomlSymbol                       = TomlSymbol(Symbol(SYMBOLS[08].0));
+pub const DOT: TomlSymbol                      = TomlSymbol(Symbol(SYMBOLS[09].0));
+pub const COMMA: TomlSymbol                    = TomlSymbol(Symbol(SYMBOLS[10].0));
+pub const L_BRACK: TomlSymbol                  = TomlSymbol(Symbol(SYMBOLS[11].0));
+pub const R_BRACK: TomlSymbol                  = TomlSymbol(Symbol(SYMBOLS[12].0));
+pub const L_CURLY: TomlSymbol                  = TomlSymbol(Symbol(SYMBOLS[13].0));
+pub const R_CURLY: TomlSymbol                  = TomlSymbol(Symbol(SYMBOLS[14].0));
+pub const NUMBER: TomlSymbol                   = TomlSymbol(Symbol(SYMBOLS[15].0));
+pub const BOOL: TomlSymbol                     = TomlSymbol(Symbol(SYMBOLS[16].0));
+pub const BARE_KEY: TomlSymbol                 = TomlSymbol(Symbol(SYMBOLS[17].0));
+pub const BASIC_STRING: TomlSymbol             = TomlSymbol(Symbol(SYMBOLS[18].0));
+pub const MULTILINE_BASIC_STRING: TomlSymbol   = TomlSymbol(Symbol(SYMBOLS[19].0));
+pub const LITERAL_STRING: TomlSymbol           = TomlSymbol(Symbol(SYMBOLS[20].0));
+pub const MULTILINE_LITERAL_STRING: TomlSymbol = TomlSymbol(Symbol(SYMBOLS[21].0));
+pub const DATE_TIME: TomlSymbol                = TomlSymbol(Symbol(SYMBOLS[22].0));
+pub const ERROR: TomlSymbol                    = TomlSymbol(Symbol(SYMBOLS[23].0));

@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["Aleksey Kladov <aleksey.kladov@gmail.com>"]
 
 [dependencies]
+parse_tree = {path="/home/matklad/projects/parse_tree"}
 lalrpop-util = "0.15"
 regex = "1"
 typed-arena = "1.3"

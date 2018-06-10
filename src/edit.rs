@@ -81,7 +81,7 @@ impl<'f> Edit<'f> {
 }
 
 fn compute_ws(left: TomlNode, right: TomlNode) -> String {
-    match (left.node().symbol(), right.node().symbol()) {
+    match (left.symbol(), right.symbol()) {
         (KEY_VAL, KEY_VAL) |
         (TABLE_HEADER, KEY_VAL) => String::from("\n"),
         (TABLE, TABLE) |
