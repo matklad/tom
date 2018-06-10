@@ -7,9 +7,14 @@ use testutils::assert_eq_text;
 
 
 fn add_dependency(file: &TomlFile, name: &str, version: &str) -> String {
-    let deps = file.ast().find_table(&["dependencies"]).unwrap();
-    let mut edit = file.edit();
     let f = Factory::new();
+    let mut edit = file.edit();
+    let deps = file.ast().find_table(&["dependencies"])
+        .unwrap_or_else(|| {
+            let table = f.table(&mut ["dependencies"].iter().cloned(), &mut [].iter().cloned());
+            edit.append_child(file.ast().node(), table.node());
+            table
+        });
     let version = f.val_string(version);
     let dep = f.key_val(name, version);
     edit.append_child(deps.node(), dep.node());
@@ -50,7 +55,6 @@ name = "tom"
         r#"
 [package]
 name = "tom"
-
 [dependencies]
 pest = "1.0"
 "#,

@@ -1,82 +1,119 @@
-use symbol::*;
-use {TomlFile, TomlNode};
+use ::{
+    TomlFile, TomlNode,
+    symbol::*,
+};
 
 #[derive(Debug)]
 pub struct Edit<'f> {
     file: &'f TomlFile,
-    inserted: Vec<(TomlNode<'f>, String)>,
-    replaced: Vec<(TomlNode<'f>, String)>,
-    deleted: Vec<TomlNode<'f>>,
+    ops: Vec<(TomlNode<'f>, Op<'f>)>,
+}
+
+
+#[derive(Debug)]
+enum Op<'f> {
+    Delete,
+    Replace(TomlNode<'f>),
+    Rewrite(String),
+    Insert {
+        children: Vec<TomlNode<'f>>,
+        position: usize,
+    },
 }
 
 impl<'f> Edit<'f> {
     pub fn new(file: &'f TomlFile) -> Edit {
         Edit {
             file,
-            inserted: Vec::new(),
-            replaced: Vec::new(),
-            deleted: Vec::new(),
+            ops: Vec::new(),
         }
     }
 
-    pub fn replace(&mut self, node: TomlNode<'f>, replacement: TomlNode) {
-        self.replace_with_text(node, replacement.text().to_string())
+    pub fn replace(&mut self, node: TomlNode<'f>, replacement: TomlNode<'f>) {
+        self.op(node, Op::Replace(replacement));
     }
 
     pub fn replace_with_text(&mut self, node: TomlNode<'f>, replacement: String) {
-        self.replaced.push((node, replacement))
+        self.op(node, Op::Rewrite(replacement));
     }
 
-    pub fn append_child(&mut self, parent: TomlNode<'f>, child: TomlNode) {
-        self.append_children(parent, &mut ::std::iter::once(child))
+    pub fn append_child(&mut self, parent: TomlNode<'f>, child: TomlNode<'f>) {
+        self.append_children(parent, vec![child]);
     }
 
-    pub fn append_children(&mut self, parent: TomlNode<'f>, children: &mut Iterator<Item=TomlNode>) {
-        let mut prev_sibling = parent.children().last();
-        let mut buff = String::new();
-        for child in children {
-            if let Some(sibling) = prev_sibling {
-                buff.push_str(&compute_ws(sibling, child));
-            }
-            buff.push_str(child.text());
-            prev_sibling = Some(child)
-        }
-       self.append_text(parent, buff)
-    }
-
-    pub fn append_text(&mut self, node: TomlNode<'f>, text: String) {
-        self.inserted.push((node, text))
+    pub fn append_children(&mut self, parent: TomlNode<'f>, children: Vec<TomlNode<'f>>) {
+        self.op(parent, Op::Insert {
+            children,
+            position: parent.children().count(),
+        });
     }
 
     pub fn delete(&mut self, node: TomlNode<'f>) {
-        self.deleted.push(node)
+        self.op(node, Op::Delete);
     }
 
     pub fn finish(self) -> String {
-        let mut buff = String::new();
-        self.write(self.file.parse_tree(), &mut buff);
-        buff
+        let root = self.file.parse_tree();
+        let mut res = self.rendered(root);
+        if !res.ends_with("\n") {
+            res += "\n";
+        }
+        res
     }
 
-    fn write(&self, node: TomlNode, buff: &mut String) {
-        if self.deleted.iter().find(|&&n| n == node).is_some() {
-            return;
-        }
-        if let Some(&(_, ref text)) = self.replaced.iter().find(|&&(n, _)| n == node) {
-            buff.push_str(text);
-            return;
+    fn op(&mut self, target: TomlNode<'f>, op: Op<'f>) {
+        self.ops.push((target, op))
+    }
+}
+
+impl<'f> Edit<'f> {
+    fn rendered(&self, node: TomlNode<'f>) -> String {
+        for op in self.ops_for(node) {
+            return match op {
+                Op::Delete => String::new(),
+                Op::Rewrite(text) => text.to_owned(),
+                Op::Replace(replacement) => self.rendered(*replacement),
+                Op::Insert { children, position } => {
+                    let mut buff = String::new();
+                    let mut prev_child = None;
+                    for child in node.children().take(*position) {
+                        buff += &self.rendered(child);
+                        prev_child = Some(child);
+                    }
+                    for &child in children {
+                        if let Some(prev) = prev_child {
+                            buff += &compute_ws(prev, child);
+                        }
+                        buff += &self.rendered(child);
+                        prev_child = Some(child);
+                    }
+                    for child in node.children().skip(*position) {
+                        if let Some(prev) = prev_child {
+                            buff += &compute_ws(prev, child);
+                            prev_child = None;
+                        }
+                        buff += &self.rendered(child);
+                    }
+                    buff
+                }
+            };
         }
 
         if node.is_leaf() {
-            buff.push_str(node.text())
+            node.text().to_owned()
         } else {
+            let mut buff = String::new();
             for child in node.children() {
-                self.write(child, buff);
+                buff += &self.rendered(child);
             }
+            buff
         }
-        if let Some(&(_, ref text)) = self.inserted.iter().find(|&&(n, _)| n == node) {
-            buff.push_str(text)
-        }
+    }
+
+    fn ops_for(&self, target: TomlNode<'f>) -> impl Iterator<Item=&Op<'f>> {
+        self.ops.iter()
+            .filter(move |(node, _)| *node == target)
+            .map(|(_, op)| op)
     }
 }
 

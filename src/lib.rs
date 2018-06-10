@@ -1,8 +1,9 @@
 extern crate parse_tree;
 extern crate typed_arena;
 
-use std::ptr;
-use std::fmt;
+use std::{
+    ptr, fmt
+};
 
 use parse_tree::{ParseTree, PtNodeId, PtNode};
 use ast::AstNode;
@@ -20,7 +21,7 @@ pub mod ast;
 pub use edit::Edit;
 pub use factory::Factory;
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct TomlFile {
     parse_tree: ParseTree,
     text: String,
@@ -71,6 +72,12 @@ impl TomlFile {
                 go(child, buff, level + 1)
             }
         }
+    }
+}
+
+impl fmt::Debug for TomlFile {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        write!(fmt, "TomlFile {{ ... }}")
     }
 }
 
