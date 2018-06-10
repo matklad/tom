@@ -17,44 +17,55 @@ fn add_dependency(file: &TomlFile, name: &str, version: &str) -> String {
 }
 
 #[test]
-fn adding_dependency() {
-    let before = r#"[package]
+fn adding_dependency_to_table() {
+    check_edit(
+        r#"
+[package]
 name = "tom"
-version = "0.1.0"
-authors = ["Aleksey Kladov <aleksey.kladov@gmail.com>"]
 
 [dependencies]
 lalrpop-util = "0.15"
 regex = "0.2"
-
-[build-dependencies]
-file = "1.0"
-heck = "0.1.0"
-lalrpop = "0.15"
-
-[dev-dependencies.testutils]
-path = "./tests/testutils"
-"#;
-    let file = TomlFile::new(before.to_string());
-    let actual = add_dependency(&file, "pest", "1.0");
-
-    let after = r#"[package]
+"#,
+        r#"
+[package]
 name = "tom"
-version = "0.1.0"
-authors = ["Aleksey Kladov <aleksey.kladov@gmail.com>"]
 
 [dependencies]
 lalrpop-util = "0.15"
 regex = "0.2"
 pest = "1.0"
+"#,
+        &|file| add_dependency(file, "pest", "1.0"),
+    );
+}
 
-[build-dependencies]
-file = "1.0"
-heck = "0.1.0"
-lalrpop = "0.15"
+#[test]
+fn adding_dependency_no_table() {
+    check_edit(
+        r#"
+[package]
+name = "tom"
+"#,
+        r#"
+[package]
+name = "tom"
 
-[dev-dependencies.testutils]
-path = "./tests/testutils"
-"#;
+[dependencies]
+pest = "1.0"
+"#,
+        &|file| add_dependency(file, "pest", "1.0"),
+    );
+}
+
+
+
+fn check_edit(
+    before: &str,
+    after: &str,
+    edit: &Fn(&TomlFile) -> String,
+) {
+    let file = TomlFile::new(before.to_string());
+    let actual = edit(&file);
     assert_eq_text(after, &actual);
 }
