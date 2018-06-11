@@ -1,6 +1,6 @@
 use tom::{
-    TomlFile, Factory, Edit,
-    ast::{self, AstNode},
+    TomlFile, Factory, Edit, Position,
+    ast,
 };
 
 pub struct CargoToml<'f> {
@@ -30,7 +30,7 @@ impl<'f> CargoToml<'f> {
             name,
             self.factory.val_string(version),
         );
-        self.edit.append_child(table, dep);
+        self.edit.insert(dep, Position::end_of(table));
     }
 
     fn dependencies_table(&mut self) -> ast::Table<'f> {
@@ -50,10 +50,11 @@ impl<'f> CargoToml<'f> {
                 .with_name("dependencies")
                 .build();
 
-        match self.package_table() {
-            None => self.edit.append_child(self.toml, new_table),
-            Some(pkg) => self.edit.insert_sibling(pkg, new_table),
-        }
+        let position = match self.package_table() {
+            None => Position::end_of(self.toml),
+            Some(pkg) => Position::after(pkg),
+        };
+        self.edit.insert(new_table, position);
 
         new_table
     }

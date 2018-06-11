@@ -16,7 +16,7 @@ mod text;
 pub use symbol::*;
 pub use text::{TextRange, TextUnit};
 pub mod ast;
-pub use edit::Edit;
+pub use edit::{Edit, Position};
 pub use factory::Factory;
 
 #[derive(Clone)]

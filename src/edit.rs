@@ -10,6 +10,29 @@ pub struct Edit<'f> {
     ops: HashMap<TomlNode<'f>, Op<'f>>,
 }
 
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
+pub enum Position<'f> {
+    After(TomlNode<'f>),
+    Before(TomlNode<'f>),
+    StartOf(TomlNode<'f>),
+    EndOf(TomlNode<'f>),
+}
+
+impl<'f> Position<'f> {
+    pub fn after(node: impl Into<TomlNode<'f>>) -> Position<'f> {
+        Position::After(node.into())
+    }
+    pub fn before(node: impl Into<TomlNode<'f>>) -> Position<'f> {
+        Position::Before(node.into())
+    }
+    pub fn start_of(node: impl Into<TomlNode<'f>>) -> Position<'f> {
+        Position::StartOf(node.into())
+    }
+    pub fn end_of(node: impl Into<TomlNode<'f>>) -> Position<'f> {
+        Position::EndOf(node.into())
+    }
+}
+
 #[derive(Debug, Clone)]
 enum Op<'f> {
     Delete,
@@ -62,27 +85,35 @@ impl<'f> Edit<'f> {
         self.op(node.into(), Op::Rewrite(replacement));
     }
 
-    pub fn append_child(
+    pub fn insert(
         &mut self,
-        parent: impl Into<TomlNode<'f>>,
-        child: impl Into<TomlNode<'f>>,
+        node: impl Into<TomlNode<'f>>,
+        position: Position<'f>,
     ) {
-        self.append_children(parent, vec![child]);
+        self.insert_many(vec![node], position)
     }
 
-    pub fn insert_sibling(
+    pub fn insert_many(
         &mut self,
-        left_sibling: impl Into<TomlNode<'f>>,
-        new_node: impl Into<TomlNode<'f>>,
+        children: Vec<impl Into<TomlNode<'f>>>,
+        position: Position<'f>,
     ) {
-        let node = left_sibling.into();
-        let parent = node.parent().unwrap();
-        self.op(parent, Op::ChangeContents(ChangeContents {
-            ops: vec![ContentsChange {
-                new_child: new_node.into(),
-                position: parent.children().position(|child| child == node).unwrap() + 1
-            }]
-        }))
+        let (parent, position) = match position {
+            Position::After(a) => {
+                let (parent, position) = parent(a);
+                (parent, position + 1)
+            }
+            Position::Before(a) => {
+                let (parent, position) = parent(a);
+                (parent, position)
+            }
+            Position::StartOf(a) => (a, 0),
+            Position::EndOf(a) => (a, a.children().count()),
+        };
+        let ops = children.into_iter().map(Into::into)
+            .map(|new_child| ContentsChange { new_child, position })
+            .collect();
+        self.op(parent, Op::ChangeContents(ChangeContents { ops }));
     }
 
     pub fn append_children(
@@ -188,4 +219,10 @@ fn compute_ws(left: TomlNode, right: TomlNode) -> String {
         (TABLE, TABLE) | (KEY_VAL, TABLE) => String::from("\n\n"),
         _ => String::new(),
     }
+}
+
+fn parent<'f>(child: TomlNode<'f>) -> (TomlNode<'f>, usize) {
+    let parent = child.parent().unwrap();
+    let position = parent.children().position(|it| it == child).unwrap();
+    (parent, position)
 }
