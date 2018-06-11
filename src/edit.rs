@@ -25,30 +25,47 @@ impl<'f> Edit<'f> {
         }
     }
 
-    pub fn replace(&mut self, node: TomlNode<'f>, replacement: TomlNode<'f>) {
-        self.op(node, Op::Replace(replacement));
+    pub fn replace(
+        &mut self,
+        node: impl Into<TomlNode<'f>>,
+        replacement: impl Into<TomlNode<'f>>,
+    ) {
+        self.op(node.into(), Op::Replace(replacement.into()));
     }
 
-    pub fn replace_with_text(&mut self, node: TomlNode<'f>, replacement: String) {
-        self.op(node, Op::Rewrite(replacement));
+    pub fn replace_with_text(
+        &mut self,
+        node: impl Into<TomlNode<'f>>,
+        replacement: String
+    ) {
+        self.op(node.into(), Op::Rewrite(replacement));
     }
 
-    pub fn append_child(&mut self, parent: TomlNode<'f>, child: TomlNode<'f>) {
+    pub fn append_child(
+        &mut self,
+        parent: impl Into<TomlNode<'f>>,
+        child: impl Into<TomlNode<'f>>
+    ) {
         self.append_children(parent, vec![child]);
     }
 
-    pub fn append_children(&mut self, parent: TomlNode<'f>, children: Vec<TomlNode<'f>>) {
+    pub fn append_children(
+        &mut self,
+        parent: impl Into<TomlNode<'f>>,
+        children: Vec<impl Into<TomlNode<'f>>>
+    ) {
+        let parent = parent.into();
         self.op(
             parent,
             Op::Insert {
-                children,
+                children: children.into_iter().map(Into::into).collect(),
                 position: parent.children().count(),
             },
         );
     }
 
-    pub fn delete(&mut self, node: TomlNode<'f>) {
-        self.op(node, Op::Delete);
+    pub fn delete(&mut self, node: impl Into<TomlNode<'f>>) {
+        self.op(node.into(), Op::Delete);
     }
 
     pub fn finish(self) -> String {

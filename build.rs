@@ -133,6 +133,17 @@ fn gen_ast() {
         ln!();
     }
 
+    let all_symbols =
+        wrappers.iter()
+            .chain(multi_wrappers.iter().map(|(s, _)| s))
+            .chain(enums.iter().map(|(s, _)| s));
+    for symbol in all_symbols {
+        ln!("impl<'f> From<{}<'f>> for TomlNode<'f> {{", symbol);
+        ln!("    fn from(ast: {}<'f>) -> TomlNode<'f> {{ ast.node() }}", symbol);
+        ln!("}}");
+        ln!();
+    }
+
     let methods: &[(&str, &[(&str, &str)])] = &[
         (
             "File",

@@ -30,7 +30,7 @@ impl<'f> CargoToml<'f> {
             name,
             self.factory.val_string(version),
         );
-        self.edit.append_child(table.node(), dep.node());
+        self.edit.append_child(table, dep);
     }
 
     fn dependencies_table(&mut self) -> ast::Table<'f> {

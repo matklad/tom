@@ -180,6 +180,62 @@ impl<'f> AstNode<'f> for Val<'f> {
     }
 }
 
+impl<'f> From<File<'f>> for TomlNode<'f> {
+    fn from(ast: File<'f>) -> TomlNode<'f> { ast.node() }
+}
+
+impl<'f> From<BareKey<'f>> for TomlNode<'f> {
+    fn from(ast: BareKey<'f>) -> TomlNode<'f> { ast.node() }
+}
+
+impl<'f> From<Array<'f>> for TomlNode<'f> {
+    fn from(ast: Array<'f>) -> TomlNode<'f> { ast.node() }
+}
+
+impl<'f> From<Dict<'f>> for TomlNode<'f> {
+    fn from(ast: Dict<'f>) -> TomlNode<'f> { ast.node() }
+}
+
+impl<'f> From<Number<'f>> for TomlNode<'f> {
+    fn from(ast: Number<'f>) -> TomlNode<'f> { ast.node() }
+}
+
+impl<'f> From<Bool<'f>> for TomlNode<'f> {
+    fn from(ast: Bool<'f>) -> TomlNode<'f> { ast.node() }
+}
+
+impl<'f> From<DateTime<'f>> for TomlNode<'f> {
+    fn from(ast: DateTime<'f>) -> TomlNode<'f> { ast.node() }
+}
+
+impl<'f> From<KeyVal<'f>> for TomlNode<'f> {
+    fn from(ast: KeyVal<'f>) -> TomlNode<'f> { ast.node() }
+}
+
+impl<'f> From<Table<'f>> for TomlNode<'f> {
+    fn from(ast: Table<'f>) -> TomlNode<'f> { ast.node() }
+}
+
+impl<'f> From<ArrayTable<'f>> for TomlNode<'f> {
+    fn from(ast: ArrayTable<'f>) -> TomlNode<'f> { ast.node() }
+}
+
+impl<'f> From<TableHeader<'f>> for TomlNode<'f> {
+    fn from(ast: TableHeader<'f>) -> TomlNode<'f> { ast.node() }
+}
+
+impl<'f> From<StringLit<'f>> for TomlNode<'f> {
+    fn from(ast: StringLit<'f>) -> TomlNode<'f> { ast.node() }
+}
+
+impl<'f> From<Key<'f>> for TomlNode<'f> {
+    fn from(ast: Key<'f>) -> TomlNode<'f> { ast.node() }
+}
+
+impl<'f> From<Val<'f>> for TomlNode<'f> {
+    fn from(ast: Val<'f>) -> TomlNode<'f> { ast.node() }
+}
+
 impl<'f> File<'f> {
     pub fn tables(self) -> AstChildren<'f, Table<'f>> {
         AstChildren::new(self.node().children())
