@@ -22,8 +22,8 @@ fn read_text(path: &Path) -> String {
 }
 
 pub fn dir_tests<F>(paths: &[&str], f: F)
-where
-    F: Fn(&str) -> String,
+    where
+        F: Fn(&str) -> String,
 {
     for path in collect_tests(paths) {
         let input_code = read_text(&path);
@@ -104,8 +104,29 @@ pub fn assert_eq_text(expected: &str, actual: &str) {
         panic!("Comparison failed");
     }
     let changeset = Changeset::new(actual, expected, "\n");
-    print!("{}", changeset);
-    panic!("Comparison failed")
+    if expected.lines().count() < 20 {
+        let line = "--------------------------";
+        eprintln!("
+Expected:
+{line}
+{expected}
+{line}
+Actual:
+{line}
+{actual}
+{line}
+Diff:
+{diff}
+",
+                  line = line,
+                  expected = expected,
+                  actual = actual,
+                  diff = changeset);
+        panic!("Comparison failed")
+    } else {
+        print!("{}", changeset);
+        panic!("Comparison failed")
+    }
 }
 
 fn project_dir() -> PathBuf {

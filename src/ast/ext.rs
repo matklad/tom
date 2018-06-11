@@ -10,34 +10,34 @@ use ::{
     },
 };
 
-pub trait KeyValueOwner<'p>: AstNode<'p> {
-    fn entries(self) -> AstChildren<'p, KeyVal<'p>> {
+pub trait KeyValueOwner<'f>: AstNode<'f> {
+    fn entries(self) -> AstChildren<'f, KeyVal<'f>> {
         AstChildren::new(self.node().children())
     }
 }
 
-impl<'p> KeyValueOwner<'p> for Dict<'p> {}
+impl<'f> KeyValueOwner<'f> for Dict<'f> {}
 
-impl<'p> KeyValueOwner<'p> for Table<'p> {}
+impl<'f> KeyValueOwner<'f> for Table<'f> {}
 
-impl<'p> KeyValueOwner<'p> for ArrayTable<'p> {}
+impl<'f> KeyValueOwner<'f> for ArrayTable<'f> {}
 
-impl<'p> KeyValueOwner<'p> for File<'p> {}
+impl<'f> KeyValueOwner<'f> for File<'f> {}
 
-pub trait TableHeaderOwner<'p>: AstNode<'p> {
-    fn header(self) -> TableHeader<'p> {
+pub trait TableHeaderOwner<'f>: AstNode<'f> {
+    fn header(self) -> TableHeader<'f> {
         AstChildren::new(self.node().children())
             .next()
             .expect("Table without header")
     }
 }
 
-impl<'p> TableHeaderOwner<'p> for Table<'p> {}
+impl<'f> TableHeaderOwner<'f> for Table<'f> {}
 
-impl<'p> TableHeaderOwner<'p> for ArrayTable<'p> {}
+impl<'f> TableHeaderOwner<'f> for ArrayTable<'f> {}
 
-impl<'p> Key<'p> {
-    pub fn name(self) -> Cow<'p, str> {
+impl<'f> Key<'f> {
+    pub fn name(self) -> Cow<'f, str> {
         match self {
             Key::BareKey(bare) => Cow::from(bare.node().text()),
             Key::StringLit(lit) => lit.value(),
@@ -45,8 +45,8 @@ impl<'p> Key<'p> {
     }
 }
 
-impl<'p> StringLit<'p> {
-    pub fn value(self) -> Cow<'p, str> {
+impl<'f> StringLit<'f> {
+    pub fn value(self) -> Cow<'f, str> {
         //TODO: broken completely
         let text = self.node().text();
         let len = text.len();
@@ -54,19 +54,19 @@ impl<'p> StringLit<'p> {
     }
 }
 
-impl<'p> File<'p> {
-    pub fn find_table_by_key(self, key: &str) -> Option<Table<'p>> {
+impl<'f> File<'f> {
+    pub fn find_table_by_key(self, key: &str) -> Option<Table<'f>> {
         self.filter_tables(iter::once(key))
             .next()
     }
 
-    pub fn find_table_by_keys(self, keys: &[&str]) -> Option<Table<'p>> {
+    pub fn find_table_by_keys(self, keys: &[&str]) -> Option<Table<'f>> {
         self.filter_tables(keys.iter().cloned())
             .next()
     }
 
 
-    pub fn filter_tables<'a, K>(self, keys: K) -> impl Iterator<Item=Table<'p>>
+    pub fn filter_tables<'a, K>(self, keys: K) -> impl Iterator<Item=Table<'f>>
         where K: Iterator<Item=&'a str> + Clone
     {
         self.tables()

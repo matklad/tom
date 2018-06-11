@@ -1,40 +1,81 @@
-use tom::Factory;
-use tom::ast::AstNode;
+use tom::{
+    Factory, TomlNode,
+    ast::AstNode,
+};
+use testutils::assert_eq_text;
 
 #[test]
 fn test_create_key_val_trivial() {
-    let f = Factory::new();
-    let val = f.val_string("1.0");
-    let kv = f.key_val("foo", val);
-    assert_eq!(kv.node().text(), r#"foo = "1.0""#);
+    check(
+        |f| {
+            let val = f.val_string("1.0");
+            f.key_val("foo", val)
+                .node()
+        },
+        r#"foo = "1.0""#,
+    );
 }
 
 #[test]
 fn test_create_key_val_space_in_key() {
-    let f = Factory::new();
-    let val = f.val_string("1.0");
-    let kv = f.key_val("foo bar", val);
-    assert_eq!(kv.node().text(), r#""foo bar" = "1.0""#);
+    check(
+        |f| {
+            let val = f.val_string("1.0");
+            f.key_val("foo bar", val)
+                .node()
+        },
+        r#""foo bar" = "1.0""#,
+    );
+}
+
+#[test]
+fn create_table() {
+    check(
+        |f| {
+            let va = f.val_string("1.0");
+            let a = f.key_val("foo", va);
+            let vb = f.val_string("0.0.1");
+            let b = f.key_val("bar", vb);
+
+            f.table()
+                .with_names(vec!["target", "x86_64.json", "dependencies"].into_iter())
+                .with_entries(vec![a, b].into_iter())
+                .build()
+                .node()
+        },
+        r#"[target."x86_64.json".dependencies]
+foo = "1.0"
+bar = "0.0.1""#,
+    );
 }
 
 
 #[test]
-fn test_create_table() {
+#[should_panic]
+fn table_with_two_names() {
     let f = Factory::new();
-    let va = f.val_string("1.0");
-    let a = f.key_val("foo", va);
-    let vb = f.val_string("0.0.1");
-    let b = f.key_val("bar", vb);
-    let table = f.table(
-        &mut vec!["target", "x86_64.json", "dependencies"].into_iter(),
-        &mut vec![a, b].into_iter(),
-    );
-    assert_eq!(
-        table.node().text(),
-        r#"
-[target.'x86_64.json'.dependencies]
-foo = "1.0"
-bar = "0.0.1"
-"#.trim()
-    );
+    f.table()
+        .with_name("foo")
+        .with_name("bar")
+        .build();
+}
+
+#[test]
+#[should_panic]
+fn table_without_name() {
+    let f = Factory::new();
+    f.table()
+        .with_name("foo")
+        .with_name("bar")
+        .build();
+}
+
+fn check(f: impl for<'f> FnOnce(&'f Factory) -> TomlNode<'f>, expected: &str)
+{
+    let factory = Factory::new();
+    let ast = f(&factory);
+    assert_eq_text(
+        expected,
+        ast.text(),
+    )
 }

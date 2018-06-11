@@ -15,19 +15,19 @@ fn toml(text: &str) -> TomlFile {
     TomlFile::new(text.to_owned())
 }
 
-fn find<'p, A: AstNode<'p>>(toml: &'p TomlFile) -> A {
+fn find<'f, A: AstNode<'f>>(toml: &'f TomlFile) -> A {
     subtree(toml.parse_tree()).into_iter()
         .filter_map(A::cast)
         .next()
         .unwrap()
 }
 
-fn subtree<'p>(node: TomlNode<'p>) -> Vec<TomlNode<'p>> {
+fn subtree<'f>(node: TomlNode<'f>) -> Vec<TomlNode<'f>> {
     let mut buff = Vec::new();
     go(node, &mut buff);
     return buff;
 
-    fn go<'p>(node: TomlNode<'p>, buff: &mut Vec<TomlNode<'p>>) {
+    fn go<'f>(node: TomlNode<'f>, buff: &mut Vec<TomlNode<'f>>) {
         buff.push(node);
         for child in node.children() {
             go(child, buff);
