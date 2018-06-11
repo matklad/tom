@@ -1,14 +1,15 @@
-use ::{Children, TomlNode};
 use std::marker::PhantomData;
+use {Children, TomlNode};
 
 mod generated;
 pub use self::generated::*;
 mod ext;
 pub use self::ext::*;
 
-
 pub trait AstNode<'f>: Copy {
-    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized;
+    fn cast(node: TomlNode<'f>) -> Option<Self>
+    where
+        Self: Sized;
 
     fn node(self) -> TomlNode<'f>;
 }

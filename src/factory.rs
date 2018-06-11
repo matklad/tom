@@ -1,14 +1,16 @@
 use TomlFile;
-use ast::{self, KeyValueOwner, AstNode};
+use ast::{self, AstNode, KeyValueOwner};
 use typed_arena::Arena;
 
 pub struct Factory {
-    arena: Arena<TomlFile>
+    arena: Arena<TomlFile>,
 }
 
 impl Factory {
     pub fn new() -> Factory {
-        Factory { arena: Arena::new() }
+        Factory {
+            arena: Arena::new(),
+        }
     }
 
     pub fn val_string(&self, val: &str) -> ast::Val {
@@ -21,7 +23,7 @@ impl Factory {
         file.ast().entries().next().unwrap().val()
     }
 
-    pub fn val_dict(&self, entries: &mut Iterator<Item=ast::KeyVal>) -> ast::Val {
+    pub fn val_dict(&self, entries: &mut Iterator<Item = ast::KeyVal>) -> ast::Val {
         let mut buff = String::from("{");
         let mut first = true;
         for e in entries {
@@ -41,8 +43,8 @@ impl Factory {
 
     pub fn table(
         &self,
-        keys: &mut Iterator<Item=&str>,
-        entries: &mut Iterator<Item=ast::KeyVal>,
+        keys: &mut Iterator<Item = &str>,
+        entries: &mut Iterator<Item = ast::KeyVal>,
     ) -> ast::Table {
         let mut buff = String::from("[");
         let mut first = true;
@@ -68,13 +70,14 @@ impl Factory {
 }
 
 fn escaped_key(key: &str) -> String {
-    if key.chars().all(|c| c.is_alphanumeric() || c == '_' || c == '-') {
+    if key.chars()
+        .all(|c| c.is_alphanumeric() || c == '_' || c == '-')
+    {
         key.to_string()
     } else {
         format!("'{}'", key)
     }
 }
-
 
 #[test]
 fn test_create_key_val() {
@@ -93,11 +96,14 @@ fn test_create_table() {
     let b = f.key_val("bar", vb);
     let table = f.table(
         &mut vec!["target", "x86_64.json", "dependencies"].into_iter(),
-        &mut vec![a, b].into_iter()
+        &mut vec![a, b].into_iter(),
     );
-    assert_eq!(table.node().text(), r#"
+    assert_eq!(
+        table.node().text(),
+        r#"
 [target.'x86_64.json'.dependencies]
 foo = "1.0"
 bar = "0.0.1"
-"#.trim());
+"#.trim()
+    );
 }

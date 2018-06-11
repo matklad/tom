@@ -1,14 +1,10 @@
-use ::{
-    TomlFile, TomlNode,
-    symbol::*,
-};
+use {TomlFile, TomlNode, symbol::*};
 
 #[derive(Debug)]
 pub struct Edit<'f> {
     file: &'f TomlFile,
     ops: Vec<(TomlNode<'f>, Op<'f>)>,
 }
-
 
 #[derive(Debug)]
 enum Op<'f> {
@@ -42,10 +38,13 @@ impl<'f> Edit<'f> {
     }
 
     pub fn append_children(&mut self, parent: TomlNode<'f>, children: Vec<TomlNode<'f>>) {
-        self.op(parent, Op::Insert {
-            children,
-            position: parent.children().count(),
-        });
+        self.op(
+            parent,
+            Op::Insert {
+                children,
+                position: parent.children().count(),
+            },
+        );
     }
 
     pub fn delete(&mut self, node: TomlNode<'f>) {
@@ -110,8 +109,9 @@ impl<'f> Edit<'f> {
         }
     }
 
-    fn ops_for(&self, target: TomlNode<'f>) -> impl Iterator<Item=&Op<'f>> {
-        self.ops.iter()
+    fn ops_for(&self, target: TomlNode<'f>) -> impl Iterator<Item = &Op<'f>> {
+        self.ops
+            .iter()
             .filter(move |(node, _)| *node == target)
             .map(|(_, op)| op)
     }
@@ -119,10 +119,8 @@ impl<'f> Edit<'f> {
 
 fn compute_ws(left: TomlNode, right: TomlNode) -> String {
     match (left.symbol(), right.symbol()) {
-        (KEY_VAL, KEY_VAL) |
-        (TABLE_HEADER, KEY_VAL) => String::from("\n"),
-        (TABLE, TABLE) |
-        (KEY_VAL, TABLE) => String::from("\n\n"),
-        _ => String::new()
+        (KEY_VAL, KEY_VAL) | (TABLE_HEADER, KEY_VAL) => String::from("\n"),
+        (TABLE, TABLE) | (KEY_VAL, TABLE) => String::from("\n\n"),
+        _ => String::new(),
     }
 }

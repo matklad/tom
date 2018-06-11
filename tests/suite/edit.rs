@@ -1,17 +1,17 @@
-extern crate tom;
-extern crate testutils;
-
-use tom::{TomlFile, Factory};
-use tom::ast::AstNode;
 use testutils::assert_eq_text;
-
+use tom::ast::AstNode;
+use tom::{Factory, TomlFile};
 
 fn add_dependency(file: &TomlFile, name: &str, version: &str) -> String {
     let f = Factory::new();
     let mut edit = file.edit();
-    let deps = file.ast().find_table(&["dependencies"])
+    let deps = file.ast()
+        .find_table_by_key("dependencies")
         .unwrap_or_else(|| {
-            let table = f.table(&mut ["dependencies"].iter().cloned(), &mut [].iter().cloned());
+            let table = f.table(
+                &mut ["dependencies"].iter().cloned(),
+                &mut [].iter().cloned(),
+            );
             edit.append_child(file.ast().node(), table.node());
             table
         });
@@ -62,13 +62,7 @@ pest = "1.0"
     );
 }
 
-
-
-fn check_edit(
-    before: &str,
-    after: &str,
-    edit: &Fn(&TomlFile) -> String,
-) {
+fn check_edit(before: &str, after: &str, edit: &Fn(&TomlFile) -> String) {
     let file = TomlFile::new(before.to_string());
     let actual = edit(&file);
     assert_eq_text(after, &actual);

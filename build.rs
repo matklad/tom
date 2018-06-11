@@ -1,8 +1,8 @@
-extern crate lalrpop;
 extern crate heck;
+extern crate lalrpop;
 
-use std::fs;
 use heck::ShoutySnakeCase;
+use std::fs;
 
 fn main() {
     lalrpop::process_root().unwrap();
@@ -23,23 +23,41 @@ fn gen_ast() {
     ln!("use ast::{{AstNode, AstChildren}};");
     ln!();
     let wrappers = &[
-        "File", "BareKey", "Array", "Dict", "Number", "Bool", "DateTime",
-        "KeyVal", "Table", "ArrayTable", "TableHeader",
+        "File",
+        "BareKey",
+        "Array",
+        "Dict",
+        "Number",
+        "Bool",
+        "DateTime",
+        "KeyVal",
+        "Table",
+        "ArrayTable",
+        "TableHeader",
     ];
     let multi_wrappers = &[
-        ("StringLit", &[
-            "BASIC_STRING",
-            "MULTILINE_BASIC_STRING",
-            "LITERAL_STRING",
-            "MULTILINE_LITERAL_STRING",
-        ])
+        (
+            "StringLit",
+            &[
+                "BASIC_STRING",
+                "MULTILINE_BASIC_STRING",
+                "LITERAL_STRING",
+                "MULTILINE_LITERAL_STRING",
+            ],
+        ),
     ];
     let enums: &[(&str, &[&str])] = &[
         ("Key", &["StringLit", "BareKey"]),
-        ("Val", &["Array", "Dict", "Number", "Bool", "DateTime", "StringLit"]),
+        (
+            "Val",
+            &["Array", "Dict", "Number", "Bool", "DateTime", "StringLit"],
+        ),
     ];
 
-    for &symbol in wrappers.iter().chain(multi_wrappers.iter().map(|&(ref w, _)| w)) {
+    for &symbol in wrappers
+        .iter()
+        .chain(multi_wrappers.iter().map(|&(ref w, _)| w))
+    {
         ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
         ln!("pub struct {}<'f>(TomlNode<'f>);", symbol);
         ln!();
@@ -55,7 +73,6 @@ fn gen_ast() {
         ln!("}}");
         ln!();
     }
-
 
     for &symbol in wrappers.iter() {
         ln!("impl<'f> AstNode<'f> for {}<'f> {{", symbol);
@@ -117,7 +134,10 @@ fn gen_ast() {
     }
 
     let methods: &[(&str, &[(&str, &str)])] = &[
-        ("File", &[("tables", "Table"), ("array_tables", "ArrayTable")]),
+        (
+            "File",
+            &[("tables", "Table"), ("array_tables", "ArrayTable")],
+        ),
         ("TableHeader", &[("keys", "Key")]),
         ("KeyVal", &[("key", "Key"), ("val", "Val")]),
     ];
@@ -126,17 +146,22 @@ fn gen_ast() {
         ln!("impl<'f> {}<'f> {{", s);
         for &(ref acc, ref s) in ms.iter() {
             let (ret, body) = if acc.ends_with("s") {
-                (format!("AstChildren<'f, {}<'f>>", s), "AstChildren::new(self.node().children())")
+                (
+                    format!("AstChildren<'f, {}<'f>>", s),
+                    "AstChildren::new(self.node().children())",
+                )
             } else {
-                (format!("{}<'f>", s), "AstChildren::new(self.node().children()).next().unwrap()")
+                (
+                    format!("{}<'f>", s),
+                    "AstChildren::new(self.node().children()).next().unwrap()",
+                )
             };
-            ln!("    pub fn {}(&self) -> {} {{", acc, ret);
+            ln!("    pub fn {}(self) -> {} {{", acc, ret);
             ln!("        {}", body);
             ln!("    }}");
         }
         ln!("}}");
     }
 
-    fs::write("src/ast/generated.rs", &buff)
-        .unwrap();
+    fs::write("src/ast/generated.rs", &buff).unwrap();
 }

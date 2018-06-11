@@ -1,22 +1,20 @@
 extern crate parse_tree;
 extern crate typed_arena;
 
-use std::{
-    ptr, fmt
-};
+use std::{fmt, ptr};
 
-use parse_tree::{ParseTree, PtNodeId, PtNode};
 use ast::AstNode;
+use parse_tree::{ParseTree, PtNode, PtNodeId};
 //use edit::TreeEdit;
 
-mod text;
-mod symbol;
-mod parser;
 mod edit;
 mod factory;
+mod parser;
+mod symbol;
+mod text;
 
-pub use text::{TextUnit, TextRange};
 pub use symbol::*;
+pub use text::{TextRange, TextUnit};
 pub mod ast;
 pub use edit::Edit;
 pub use factory::Factory;
@@ -149,7 +147,10 @@ impl<'f> Iterator for Children<'f> {
     fn next(&mut self) -> Option<<Self as Iterator>::Item> {
         self.id.map(|id| {
             self.id = self.file.parse_tree[id].next_sibling();
-            TomlNode { file: &self.file, id }
+            TomlNode {
+                file: &self.file,
+                id,
+            }
         })
     }
 }
