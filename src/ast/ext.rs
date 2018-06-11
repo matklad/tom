@@ -37,7 +37,7 @@ impl<'p> TableHeaderOwner<'p> for Table<'p> {}
 impl<'p> TableHeaderOwner<'p> for ArrayTable<'p> {}
 
 impl<'p> Key<'p> {
-    fn name(self) -> Cow<'p, str> {
+    pub fn name(self) -> Cow<'p, str> {
         match self {
             Key::BareKey(bare) => Cow::from(bare.node().text()),
             Key::StringLit(lit) => lit.value(),
@@ -46,7 +46,7 @@ impl<'p> Key<'p> {
 }
 
 impl<'p> StringLit<'p> {
-    fn value(self) -> Cow<'p, str> {
+    pub fn value(self) -> Cow<'p, str> {
         //TODO: broken completely
         let text = self.node().text();
         let len = text.len();

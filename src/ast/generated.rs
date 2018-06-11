@@ -1,5 +1,5 @@
-use ast::{AstChildren, AstNode};
 use *;
+use ast::{AstNode, AstChildren};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct File<'f>(TomlNode<'f>);
@@ -37,6 +37,7 @@ pub struct TableHeader<'f>(TomlNode<'f>);
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct StringLit<'f>(TomlNode<'f>);
 
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Key<'f> {
     StringLit(StringLit<'f>),
@@ -54,186 +55,84 @@ pub enum Val<'f> {
 }
 
 impl<'f> AstNode<'f> for File<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self>
-    where
-        Self: Sized,
-    {
-        if node.symbol() == FILE {
-            Some(File(node))
-        } else {
-            None
-        }
+    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+        if node.symbol() == FILE { Some(File(node)) } else { None }
     }
-    fn node(self) -> TomlNode<'f> {
-        self.0
-    }
+    fn node(self) -> TomlNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for BareKey<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self>
-    where
-        Self: Sized,
-    {
-        if node.symbol() == BARE_KEY {
-            Some(BareKey(node))
-        } else {
-            None
-        }
+    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+        if node.symbol() == BARE_KEY { Some(BareKey(node)) } else { None }
     }
-    fn node(self) -> TomlNode<'f> {
-        self.0
-    }
+    fn node(self) -> TomlNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for Array<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self>
-    where
-        Self: Sized,
-    {
-        if node.symbol() == ARRAY {
-            Some(Array(node))
-        } else {
-            None
-        }
+    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+        if node.symbol() == ARRAY { Some(Array(node)) } else { None }
     }
-    fn node(self) -> TomlNode<'f> {
-        self.0
-    }
+    fn node(self) -> TomlNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for Dict<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self>
-    where
-        Self: Sized,
-    {
-        if node.symbol() == DICT {
-            Some(Dict(node))
-        } else {
-            None
-        }
+    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+        if node.symbol() == DICT { Some(Dict(node)) } else { None }
     }
-    fn node(self) -> TomlNode<'f> {
-        self.0
-    }
+    fn node(self) -> TomlNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for Number<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self>
-    where
-        Self: Sized,
-    {
-        if node.symbol() == NUMBER {
-            Some(Number(node))
-        } else {
-            None
-        }
+    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+        if node.symbol() == NUMBER { Some(Number(node)) } else { None }
     }
-    fn node(self) -> TomlNode<'f> {
-        self.0
-    }
+    fn node(self) -> TomlNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for Bool<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self>
-    where
-        Self: Sized,
-    {
-        if node.symbol() == BOOL {
-            Some(Bool(node))
-        } else {
-            None
-        }
+    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+        if node.symbol() == BOOL { Some(Bool(node)) } else { None }
     }
-    fn node(self) -> TomlNode<'f> {
-        self.0
-    }
+    fn node(self) -> TomlNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for DateTime<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self>
-    where
-        Self: Sized,
-    {
-        if node.symbol() == DATE_TIME {
-            Some(DateTime(node))
-        } else {
-            None
-        }
+    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+        if node.symbol() == DATE_TIME { Some(DateTime(node)) } else { None }
     }
-    fn node(self) -> TomlNode<'f> {
-        self.0
-    }
+    fn node(self) -> TomlNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for KeyVal<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self>
-    where
-        Self: Sized,
-    {
-        if node.symbol() == KEY_VAL {
-            Some(KeyVal(node))
-        } else {
-            None
-        }
+    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+        if node.symbol() == KEY_VAL { Some(KeyVal(node)) } else { None }
     }
-    fn node(self) -> TomlNode<'f> {
-        self.0
-    }
+    fn node(self) -> TomlNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for Table<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self>
-    where
-        Self: Sized,
-    {
-        if node.symbol() == TABLE {
-            Some(Table(node))
-        } else {
-            None
-        }
+    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+        if node.symbol() == TABLE { Some(Table(node)) } else { None }
     }
-    fn node(self) -> TomlNode<'f> {
-        self.0
-    }
+    fn node(self) -> TomlNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for ArrayTable<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self>
-    where
-        Self: Sized,
-    {
-        if node.symbol() == ARRAY_TABLE {
-            Some(ArrayTable(node))
-        } else {
-            None
-        }
+    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+        if node.symbol() == ARRAY_TABLE { Some(ArrayTable(node)) } else { None }
     }
-    fn node(self) -> TomlNode<'f> {
-        self.0
-    }
+    fn node(self) -> TomlNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for TableHeader<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self>
-    where
-        Self: Sized,
-    {
-        if node.symbol() == TABLE_HEADER {
-            Some(TableHeader(node))
-        } else {
-            None
-        }
+    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+        if node.symbol() == TABLE_HEADER { Some(TableHeader(node)) } else { None }
     }
-    fn node(self) -> TomlNode<'f> {
-        self.0
-    }
+    fn node(self) -> TomlNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for StringLit<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self>
-    where
-        Self: Sized,
-    {
+    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
             BASIC_STRING => Some(StringLit(node)),
             MULTILINE_BASIC_STRING => Some(StringLit(node)),
@@ -242,22 +141,13 @@ impl<'f> AstNode<'f> for StringLit<'f> {
             _ => None,
         }
     }
-    fn node(self) -> TomlNode<'f> {
-        self.0
-    }
+    fn node(self) -> TomlNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for Key<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self>
-    where
-        Self: Sized,
-    {
-        if let Some(n) = StringLit::cast(node) {
-            return Some(Key::StringLit(n));
-        }
-        if let Some(n) = BareKey::cast(node) {
-            return Some(Key::BareKey(n));
-        }
+    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+        if let Some(n) = StringLit::cast(node) { return Some(Key::StringLit(n)); }
+        if let Some(n) = BareKey::cast(node) { return Some(Key::BareKey(n)); }
         None
     }
     fn node(self) -> TomlNode<'f> {
@@ -269,28 +159,13 @@ impl<'f> AstNode<'f> for Key<'f> {
 }
 
 impl<'f> AstNode<'f> for Val<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self>
-    where
-        Self: Sized,
-    {
-        if let Some(n) = Array::cast(node) {
-            return Some(Val::Array(n));
-        }
-        if let Some(n) = Dict::cast(node) {
-            return Some(Val::Dict(n));
-        }
-        if let Some(n) = Number::cast(node) {
-            return Some(Val::Number(n));
-        }
-        if let Some(n) = Bool::cast(node) {
-            return Some(Val::Bool(n));
-        }
-        if let Some(n) = DateTime::cast(node) {
-            return Some(Val::DateTime(n));
-        }
-        if let Some(n) = StringLit::cast(node) {
-            return Some(Val::StringLit(n));
-        }
+    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+        if let Some(n) = Array::cast(node) { return Some(Val::Array(n)); }
+        if let Some(n) = Dict::cast(node) { return Some(Val::Dict(n)); }
+        if let Some(n) = Number::cast(node) { return Some(Val::Number(n)); }
+        if let Some(n) = Bool::cast(node) { return Some(Val::Bool(n)); }
+        if let Some(n) = DateTime::cast(node) { return Some(Val::DateTime(n)); }
+        if let Some(n) = StringLit::cast(node) { return Some(Val::StringLit(n)); }
         None
     }
     fn node(self) -> TomlNode<'f> {

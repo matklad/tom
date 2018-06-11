@@ -1,8 +1,9 @@
-use tom::{TomlFile, ast::{self, AstNode}};
+use tom::{ast::{self, AstNode}};
+use ::{toml, find};
 
 #[test]
 fn test_find_table() {
-    let toml = TomlFile::new(
+    let toml = toml(
         r#"
 [foo]
 x = 1
@@ -15,10 +16,10 @@ x = 3
 
 ['escaped key']
 x = 4
-        "#.to_owned(),
+        "#
     );
-
     let ast = toml.ast();
+
     check_table(ast.find_table_by_key("foo"), "[foo]\nx = 1");
 
     check_table(ast.find_table_by_keys(&["foo", "bar"]), "[foo.bar]\nx = 2");
@@ -49,4 +50,46 @@ x = 4
             }
         }
     }
+}
+
+#[test]
+fn string_escaping_trivial() {
+    let file = toml(r#"foo = "hello""#);
+    let lit: ast::StringLit = find(&file);
+    assert_eq!(lit.value(), "hello");
+
+    let file = toml(r#"foo = 'hello world'"#);
+    let lit: ast::StringLit = find(&file);
+    assert_eq!(lit.value(), "hello world");
+}
+
+#[test]
+#[ignore]
+fn string_escaping_escape_sequences() {
+    let file = toml(r#"foo = "hello\nworld""#);
+    let lit: ast::StringLit = find(&file);
+    assert_eq!(lit.value(), "hello\nworld");
+}
+
+#[test]
+fn key_name() {
+    let file = toml(r#"foo = false"#);
+    let key: ast::Key = find(&file);
+    assert_eq!(key.name(), "foo");
+
+    let file = toml(r#"92 = false"#);
+    let key: ast::Key = find(&file);
+    assert_eq!(key.name(), "92");
+
+    let file = toml(r#"'hello world' = false"#);
+    let key: ast::Key = find(&file);
+    assert_eq!(key.name(), "hello world");
+}
+
+#[test]
+#[ignore]
+fn key_name_with_escape() {
+    let file = toml(r#""hello\nworld" = false"#);
+    let key: ast::Key = find(&file);
+    assert_eq!(key.name(), "hello\nworld");
 }
