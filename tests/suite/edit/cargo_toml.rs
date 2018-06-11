@@ -50,13 +50,10 @@ impl<'f> CargoToml<'f> {
                 .with_name("dependencies")
                 .build();
 
-//        match self.package_table() {
-//            None => self.edit.append_child(
-//                self.toml.node(),
-//                new_table.node(),
-//            ),
-//            Some(pkg) => self.edit.ap
-//        }
+        match self.package_table() {
+            None => self.edit.append_child(self.toml, new_table),
+            Some(pkg) => self.edit.insert_sibling(pkg, new_table),
+        }
 
         new_table
     }

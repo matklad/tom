@@ -43,12 +43,16 @@ name = "tom"
         r#"
 [package]
 name = "tom"
+
 [dependencies]
 pest = "1.0"
 "#,
         |toml| toml.add_dependency("pest", "1.0"),
     );
+}
 
+#[test]
+fn adding_dependency_no_table_bin_section() {
     check_cargo_toml_edit(
         r#"
 [package]
@@ -60,6 +64,7 @@ name = "baz"
         r#"
 [package]
 name = "tom"
+
 [dependencies]
 pest = "1.0"
 
@@ -69,6 +74,29 @@ name = "baz"
         |toml| toml.add_dependency("pest", "1.0"),
     )
 }
+
+#[test]
+fn adding_two_dependencies() {
+    check_cargo_toml_edit(
+        r#"
+[package]
+name = "tom"
+[dependencies]
+"#,
+        r#"
+[package]
+name = "tom"
+[dependencies]
+regex = "1.0"
+pest = "1.0"
+"#,
+        |toml| {
+            toml.add_dependency("regex", "1.0");
+            toml.add_dependency("pest", "1.0");
+        },
+    );
+}
+
 
 fn check_cargo_toml_edit(
     before: &str,

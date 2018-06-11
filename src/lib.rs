@@ -1,7 +1,7 @@
 extern crate parse_tree;
 extern crate typed_arena;
 
-use std::{fmt, ptr};
+use std::{fmt, ptr, hash};
 
 use ast::AstNode;
 use parse_tree::{ParseTree, PtNode, PtNodeId};
@@ -92,6 +92,12 @@ impl<'f> PartialEq<TomlNode<'f>> for TomlNode<'f> {
 }
 
 impl<'f> Eq for TomlNode<'f> {}
+
+impl<'f> hash::Hash for TomlNode<'f> {
+    fn hash<H: hash::Hasher>(&self, state: &mut H) {
+        self.id.hash(state)
+    }
+}
 
 impl<'t> fmt::Debug for TomlNode<'t> {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
