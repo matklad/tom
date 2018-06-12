@@ -15,13 +15,11 @@ impl Factory {
 
     pub fn val_string(&self, val: &str) -> ast::Val {
         //TODO: escaping
-        let doc = self.doc(format!("foo = {:?}", val));
-        doc.ast().entries().next().unwrap().val()
+        self.entry(format!("foo = {:?}", val)).val()
     }
 
     pub fn val_bool(&self, val: bool) -> ast::Val {
-        let doc = self.doc(format!("foo = {}", val));
-        doc.ast().entries().next().unwrap().val()
+        self.entry(format!("foo = {}", val)).val()
     }
 
     pub fn val_dict(&self, entries: &mut Iterator<Item=ast::KeyVal>) -> ast::Val {
@@ -33,13 +31,12 @@ impl Factory {
             buff.push_str(e.node().text());
         }
         buff.push_str(" }");
-        let doc = self.doc(format!("foo = {}", buff));
-        doc.ast().entries().next().unwrap().val()
+        self.entry(format!("foo = {}", buff)).val()
     }
 
     pub fn key_val(&self, key: &str, val: ast::Val) -> ast::KeyVal {
-        let doc = self.doc(format!("{} = {}", escaped_key(key), val.node().text()));
-        doc.ast().entries().next().unwrap()
+        let text = format!("{} = {}", escaped_key(key), val.node().text());
+        self.entry(text)
     }
 
     pub fn table(&self) -> TableBuilder {
@@ -48,6 +45,11 @@ impl Factory {
 
     fn doc(&self, text: String) -> &TomlDoc {
         self.arena.alloc(TomlDoc::new(text))
+    }
+
+    fn entry(&self, text: String) -> ast::KeyVal {
+        let doc = self.doc(text);
+        doc.ast().entries().next().unwrap()
     }
 }
 
