@@ -1,8 +1,9 @@
 extern crate difference;
-extern crate file;
 
-use std::path::{Path, PathBuf};
-use std::fs::read_dir;
+use std::{
+    path::{Path, PathBuf},
+    fs::{self, read_dir},
+};
 
 use difference::Changeset;
 
@@ -18,7 +19,7 @@ use difference::Changeset;
 ///
 /// so this should always be correct.
 fn read_text(path: &Path) -> String {
-    file::get_text(path).unwrap().replace("\r\n", "\n")
+    fs::read_to_string(path).unwrap().replace("\r\n", "\n")
 }
 
 pub fn dir_tests<F>(paths: &[&str], f: F)
@@ -33,7 +34,7 @@ pub fn dir_tests<F>(paths: &[&str], f: F)
             println!("\nfile: {}", path.display());
             println!("No .txt file with expected result, creating...\n");
             println!("{}\n{}", input_code, parse_tree);
-            file::put_text(&path, parse_tree).unwrap();
+            fs::write(&path, parse_tree).unwrap();
             panic!("No expected result")
         }
         let expected = read_text(&path);
@@ -80,12 +81,12 @@ fn print_difference(expected: &str, actual: &str, path: &Path) {
     if expected.trim() == actual.trim() {
         println!("whitespace difference, rewriting");
         println!("file: {}\n", path.display());
-        file::put_text(path, actual).unwrap();
+        fs::write(path, actual).unwrap();
         return;
     }
     if REWRITE {
         println!("rewriting {}", path.display());
-        file::put_text(path, actual).unwrap();
+        fs::write(path, actual).unwrap();
         return;
     }
     let changeset = Changeset::new(actual, expected, "\n");
