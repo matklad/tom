@@ -82,7 +82,7 @@ impl TomlDoc {
 
 impl fmt::Debug for TomlDoc {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        write!(fmt, "TomlFile {{ ... }}")
+        write!(fmt, "TomlDoc {{ ... }}")
     }
 }
 
