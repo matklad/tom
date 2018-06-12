@@ -1,13 +1,7 @@
-use testutils::assert_eq_text;
+mod manipulator;
 
-use tom::{
-    Factory, TomlFile,
-};
-
-mod cargo_toml;
-
-use self::cargo_toml::CargoTomlManipulator;
-
+use self::manipulator::CargoTomlManipulator;
+use check_edit;
 
 #[test]
 fn adding_dependency_to_table() {
@@ -109,11 +103,5 @@ fn check_cargo_toml_edit(
         edit(&mut cargo_toml);
         cargo_toml.finish()
     })
-}
-
-fn check_edit(before: &str, after: &str, edit: impl FnOnce(&TomlFile) -> String) {
-    let file = TomlFile::new(before.to_string());
-    let actual = edit(&file);
-    assert_eq_text(after, &actual);
 }
 

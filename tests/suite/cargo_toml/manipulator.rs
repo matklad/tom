@@ -3,6 +3,7 @@ use tom::{
     ast,
 };
 
+
 pub struct CargoTomlManipulator<'f> {
     toml: ast::File<'f>,
     factory: &'f Factory,

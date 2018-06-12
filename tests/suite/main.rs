@@ -5,6 +5,9 @@ use tom::{
     TomlFile, TomlNode,
     ast::AstNode,
 };
+use testutils::{
+    assert_eq_text
+};
 
 mod ast;
 mod edit;
@@ -34,6 +37,13 @@ fn subtree<'f>(node: TomlNode<'f>) -> Vec<TomlNode<'f>> {
         }
     }
 }
+
+pub fn check_edit(before: &str, after: &str, edit: impl FnOnce(&TomlFile) -> String) {
+    let file = TomlFile::new(before.to_string());
+    let actual = edit(&file);
+    assert_eq_text(after, &actual);
+}
+
 
 #[test]
 fn test_parser_ok() {
