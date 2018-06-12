@@ -3,8 +3,8 @@ use *;
 
 grammar<E>(events: &mut E) where E: Events;
 
-pub TomlFile: () = <kvs:KeyVal*> <ts:AnyTable*>
-    => events.reduce(FILE, kvs.len() + ts.len());
+pub Doc: () = <kvs:KeyVal*> <ts:AnyTable*>
+    => events.reduce(DOC, kvs.len() + ts.len());
 
 AnyTable = { Table, ArrayTable };
 

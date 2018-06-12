@@ -6,10 +6,20 @@ use std::fs;
 
 fn main() {
     lalrpop::process_root().unwrap();
-    gen_ast();
+
+    let ast = gen_ast();
+
+    let generated_ast = "src/ast/generated.rs";
+    match fs::read_to_string(generated_ast) {
+        Ok(ref old_ast) if old_ast == &ast => {
+            return;
+        }
+        _ => (),
+    }
+    fs::write(generated_ast, &ast).unwrap();
 }
 
-fn gen_ast() {
+fn gen_ast() -> String {
     let mut buff = String::new();
     macro_rules! ln {
         () => { buff.push_str("\n") };
@@ -23,7 +33,7 @@ fn gen_ast() {
     ln!("use ast::{{AstNode, AstChildren}};");
     ln!();
     let wrappers = &[
-        "File",
+        "Doc",
         "BareKey",
         "Array",
         "Dict",
@@ -146,7 +156,7 @@ fn gen_ast() {
 
     let methods: &[(&str, &[(&str, &str)])] = &[
         (
-            "File",
+            "Doc",
             &[("tables", "Table"), ("array_tables", "ArrayTable")],
         ),
         ("TableHeader", &[("keys", "Key")]),
@@ -173,6 +183,5 @@ fn gen_ast() {
         }
         ln!("}}");
     }
-
-    fs::write("src/ast/generated.rs", &buff).unwrap();
+    buff
 }

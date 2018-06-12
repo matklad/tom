@@ -1,4 +1,4 @@
-FILE@[0; 27)
+DOC@[0; 27)
   KEY_VAL@[0; 12)
     BARE_KEY@[0; 5) "bool1"
     WHITESPACE@[5; 6)

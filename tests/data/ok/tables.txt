@@ -1,4 +1,4 @@
-FILE@[0; 218)
+DOC@[0; 218)
   TABLE@[0; 7)
     TABLE_HEADER@[0; 7)
       L_BRACK@[0; 1) "["

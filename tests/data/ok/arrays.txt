@@ -1,4 +1,4 @@
-FILE@[0; 245)
+DOC@[0; 245)
   KEY_VAL@[0; 18)
     BARE_KEY@[0; 4) "arr1"
     WHITESPACE@[4; 5)

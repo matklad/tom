@@ -1,4 +1,4 @@
-FILE@[0; 211)
+DOC@[0; 211)
   KEY_VAL@[0; 13)
     BARE_KEY@[0; 3) "key"
     WHITESPACE@[3; 4)

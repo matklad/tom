@@ -1,9 +1,9 @@
-use TomlFile;
+use TomlDoc;
 use ast::{self, AstNode, KeyValueOwner};
 use typed_arena::Arena;
 
 pub struct Factory {
-    arena: Arena<TomlFile>,
+    arena: Arena<TomlDoc>,
 }
 
 impl Factory {
@@ -46,8 +46,8 @@ impl Factory {
         TableBuilder::new(self)
     }
 
-    fn file(&self, text: String) -> &TomlFile {
-        self.arena.alloc(TomlFile::new(text))
+    fn file(&self, text: String) -> &TomlDoc {
+        self.arena.alloc(TomlDoc::new(text))
     }
 }
 

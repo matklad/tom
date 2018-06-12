@@ -1,4 +1,4 @@
-use {TomlSymbol, WHITESPACE, FILE, ERROR};
+use {TomlSymbol, WHITESPACE, DOC, ERROR};
 use parse_tree::{ParseTree, BottomUpBuilder};
 
 mod grammar;
@@ -49,7 +49,7 @@ impl Events for Builder {
 
     fn reduce(&mut self, symbol: TomlSymbol, mut n_symbols: usize) {
         // trailing space
-        if symbol == FILE {
+        if symbol == DOC {
             let total = self.total;
             self.shift_ws(total);
         }
@@ -62,7 +62,7 @@ impl Events for Builder {
             }
         }
         // leading space
-        if symbol == FILE {
+        if symbol == DOC {
             while let Some(&is_ws) = self.stack.last() {
                 if is_ws {
                     self.stack.pop().unwrap();
@@ -76,14 +76,14 @@ impl Events for Builder {
 }
 
 pub(crate) fn parse(text: &str) -> ParseTree {
-    let p = grammar::TomlFileParser::new();
+    let p = grammar::DocParser::new();
     let mut builder = Builder::new(text.len());
     if p.parse(&mut builder, text).is_ok() {
         builder.finish()
     } else {
         let mut builder = Builder::new(text.len());
         builder.shift(ERROR, 0, text.len());
-        builder.reduce(FILE, 1);
+        builder.reduce(DOC, 1);
         builder.finish()
     }
 }

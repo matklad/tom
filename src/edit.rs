@@ -2,11 +2,11 @@ use std::{
     collections::HashMap,
 };
 
-use {TomlFile, TomlNode, symbol::*};
+use {TomlDoc, TomlNode, symbol::*};
 
 #[derive(Debug)]
 pub struct Edit<'f> {
-    file: &'f TomlFile,
+    file: &'f TomlDoc,
     ops: HashMap<TomlNode<'f>, Op<'f>>,
 }
 
@@ -62,7 +62,7 @@ struct ContentsChange<'f> {
 }
 
 impl<'f> Edit<'f> {
-    pub fn new(file: &'f TomlFile) -> Edit {
+    pub fn new(file: &'f TomlDoc) -> Edit {
         Edit {
             file,
             ops: HashMap::new(),

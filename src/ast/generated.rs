@@ -2,7 +2,7 @@ use *;
 use ast::{AstNode, AstChildren};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct File<'f>(TomlNode<'f>);
+pub struct Doc<'f>(TomlNode<'f>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct BareKey<'f>(TomlNode<'f>);
@@ -54,9 +54,9 @@ pub enum Val<'f> {
     StringLit(StringLit<'f>),
 }
 
-impl<'f> AstNode<'f> for File<'f> {
+impl<'f> AstNode<'f> for Doc<'f> {
     fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
-        if node.symbol() == FILE { Some(File(node)) } else { None }
+        if node.symbol() == DOC { Some(Doc(node)) } else { None }
     }
     fn node(self) -> TomlNode<'f> { self.0 }
 }
@@ -180,8 +180,8 @@ impl<'f> AstNode<'f> for Val<'f> {
     }
 }
 
-impl<'f> From<File<'f>> for TomlNode<'f> {
-    fn from(ast: File<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<Doc<'f>> for TomlNode<'f> {
+    fn from(ast: Doc<'f>) -> TomlNode<'f> { ast.node() }
 }
 
 impl<'f> From<BareKey<'f>> for TomlNode<'f> {
@@ -236,7 +236,7 @@ impl<'f> From<Val<'f>> for TomlNode<'f> {
     fn from(ast: Val<'f>) -> TomlNode<'f> { ast.node() }
 }
 
-impl<'f> File<'f> {
+impl<'f> Doc<'f> {
     pub fn tables(self) -> AstChildren<'f, Table<'f>> {
         AstChildren::new(self.node().children())
     }

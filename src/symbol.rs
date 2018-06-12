@@ -26,7 +26,7 @@ pub(crate) struct SymbolInfo(u16, &'static str);
 
 const SYMBOLS: &[SymbolInfo] = &[
     SymbolInfo(00, "WHITESPACE"),
-    SymbolInfo(01, "FILE"),
+    SymbolInfo(01, "DOC"),
     SymbolInfo(02, "KEY_VAL"),
     SymbolInfo(03, "ARRAY"),
     SymbolInfo(04, "DICT"),
@@ -52,7 +52,7 @@ const SYMBOLS: &[SymbolInfo] = &[
 ];
 
 pub const WHITESPACE: TomlSymbol               = TomlSymbol(Symbol(SYMBOLS[00].0));
-pub const FILE: TomlSymbol                     = TomlSymbol(Symbol(SYMBOLS[01].0));
+pub const DOC: TomlSymbol                     = TomlSymbol(Symbol(SYMBOLS[01].0));
 pub const KEY_VAL: TomlSymbol                  = TomlSymbol(Symbol(SYMBOLS[02].0));
 pub const ARRAY: TomlSymbol                    = TomlSymbol(Symbol(SYMBOLS[03].0));
 pub const DICT: TomlSymbol                     = TomlSymbol(Symbol(SYMBOLS[04].0));

@@ -6,7 +6,7 @@ use std::{
 use ::{
     ast::{
         AstNode, AstChildren,
-        KeyVal, Dict, Table, ArrayTable, TableHeader, File, Key, StringLit,
+        KeyVal, Dict, Table, ArrayTable, TableHeader, Doc, Key, StringLit,
     },
 };
 
@@ -22,7 +22,7 @@ impl<'f> KeyValueOwner<'f> for Table<'f> {}
 
 impl<'f> KeyValueOwner<'f> for ArrayTable<'f> {}
 
-impl<'f> KeyValueOwner<'f> for File<'f> {}
+impl<'f> KeyValueOwner<'f> for Doc<'f> {}
 
 pub trait TableHeaderOwner<'f>: AstNode<'f> {
     fn header(self) -> TableHeader<'f> {
@@ -54,7 +54,7 @@ impl<'f> StringLit<'f> {
     }
 }
 
-impl<'f> File<'f> {
+impl<'f> Doc<'f> {
     pub fn find_table_by_key(self, key: &str) -> Option<Table<'f>> {
         self.filter_tables(iter::once(key))
             .next()

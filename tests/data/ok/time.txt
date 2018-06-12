@@ -1,4 +1,4 @@
-FILE@[0; 219)
+DOC@[0; 219)
   KEY_VAL@[0; 27)
     BARE_KEY@[0; 4) "odt1"
     WHITESPACE@[4; 5)

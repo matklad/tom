@@ -20,15 +20,15 @@ pub use edit::{Edit, Position};
 pub use factory::Factory;
 
 #[derive(Clone)]
-pub struct TomlFile {
+pub struct TomlDoc {
     parse_tree: ParseTree,
     text: String,
 }
 
-impl TomlFile {
-    pub fn new(text: String) -> TomlFile {
+impl TomlDoc {
+    pub fn new(text: String) -> TomlDoc {
         let parse_tree = parser::parse(&text);
-        TomlFile { parse_tree, text }
+        TomlDoc { parse_tree, text }
     }
 
     pub fn text(&self) -> &str {
@@ -42,8 +42,8 @@ impl TomlFile {
         }
     }
 
-    pub fn ast(&self) -> ast::File {
-        ast::File::cast(self.parse_tree()).unwrap()
+    pub fn ast(&self) -> ast::Doc {
+        ast::Doc::cast(self.parse_tree()).unwrap()
     }
 
     pub fn edit(&self) -> Edit {
@@ -73,7 +73,7 @@ impl TomlFile {
     }
 }
 
-impl fmt::Debug for TomlFile {
+impl fmt::Debug for TomlDoc {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         write!(fmt, "TomlFile {{ ... }}")
     }
@@ -81,7 +81,7 @@ impl fmt::Debug for TomlFile {
 
 #[derive(Copy, Clone)]
 pub struct TomlNode<'f> {
-    file: &'f TomlFile,
+    file: &'f TomlDoc,
     id: PtNodeId,
 }
 
@@ -143,7 +143,7 @@ impl<'f> TomlNode<'f> {
 
 #[derive(Clone)]
 pub struct Children<'f> {
-    file: &'f TomlFile,
+    file: &'f TomlDoc,
     id: Option<PtNodeId>,
 }
 

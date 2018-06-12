@@ -2,7 +2,7 @@ extern crate testutils;
 extern crate tom;
 
 use tom::{
-    TomlFile, TomlNode,
+    TomlDoc, TomlNode,
     ast::AstNode,
 };
 use testutils::{
@@ -14,11 +14,11 @@ mod edit;
 mod factory;
 
 
-fn toml(text: &str) -> TomlFile {
-    TomlFile::new(text.to_owned())
+fn toml(text: &str) -> TomlDoc {
+    TomlDoc::new(text.to_owned())
 }
 
-fn find<'f, A: AstNode<'f>>(toml: &'f TomlFile) -> A {
+fn find<'f, A: AstNode<'f>>(toml: &'f TomlDoc) -> A {
     subtree(toml.parse_tree()).into_iter()
         .filter_map(A::cast)
         .next()
@@ -38,8 +38,8 @@ fn subtree<'f>(node: TomlNode<'f>) -> Vec<TomlNode<'f>> {
     }
 }
 
-pub fn check_edit(before: &str, after: &str, edit: impl FnOnce(&TomlFile) -> String) {
-    let file = TomlFile::new(before.to_string());
+pub fn check_edit(before: &str, after: &str, edit: impl FnOnce(&TomlDoc) -> String) {
+    let file = TomlDoc::new(before.to_string());
     let actual = edit(&file);
     assert_eq_text(after, &actual);
 }
