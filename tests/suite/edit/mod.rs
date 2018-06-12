@@ -6,7 +6,7 @@ use tom::{
 
 mod cargo_toml;
 
-use self::cargo_toml::CargoToml;
+use self::cargo_toml::CargoTomlManipulator;
 
 
 #[test]
@@ -101,11 +101,11 @@ pest = "1.0"
 fn check_cargo_toml_edit(
     before: &str,
     after: &str,
-    edit: impl FnOnce(&mut CargoToml),
+    edit: impl FnOnce(&mut CargoTomlManipulator),
 ) {
     check_edit(before, after, |file| {
         let factory = Factory::new();
-        let mut cargo_toml = CargoToml::new(file, &factory);
+        let mut cargo_toml = CargoTomlManipulator::new(file, &factory);
         edit(&mut cargo_toml);
         cargo_toml.finish()
     })

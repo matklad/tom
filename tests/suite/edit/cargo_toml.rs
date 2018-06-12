@@ -3,16 +3,16 @@ use tom::{
     ast,
 };
 
-pub struct CargoToml<'f> {
+pub struct CargoTomlManipulator<'f> {
     toml: ast::File<'f>,
     factory: &'f Factory,
     edit: Edit<'f>,
     dependencies: Option<ast::Table<'f>>,
 }
 
-impl<'f> CargoToml<'f> {
-    pub fn new(toml: &'f TomlFile, factory: &'f Factory) -> CargoToml<'f> {
-        CargoToml {
+impl<'f> CargoTomlManipulator<'f> {
+    pub fn new(toml: &'f TomlFile, factory: &'f Factory) -> CargoTomlManipulator<'f> {
+        CargoTomlManipulator {
             toml: toml.ast(),
             factory,
             edit: Edit::new(toml),
