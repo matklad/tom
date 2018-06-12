@@ -10,8 +10,9 @@ use testutils::{
 };
 
 mod ast;
-mod edit;
 mod factory;
+mod edit;
+mod cargo_toml;
 
 
 fn toml(text: &str) -> TomlDoc {

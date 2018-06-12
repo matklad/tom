@@ -1,5 +1,6 @@
 mod manipulator;
 
+use tom::Factory;
 use self::manipulator::CargoTomlManipulator;
 use check_edit;
 

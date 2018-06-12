@@ -1,5 +1,4 @@
 use std::{
-    iter,
     borrow::Cow,
 };
 
@@ -51,29 +50,5 @@ impl<'f> StringLit<'f> {
         let text = self.node().text();
         let len = text.len();
         Cow::from(&text[1..len - 1])
-    }
-}
-
-impl<'f> Doc<'f> {
-    pub fn find_table_by_key(self, key: &str) -> Option<Table<'f>> {
-        self.filter_tables(iter::once(key))
-            .next()
-    }
-
-    pub fn find_table_by_keys(self, keys: &[&str]) -> Option<Table<'f>> {
-        self.filter_tables(keys.iter().cloned())
-            .next()
-    }
-
-
-    pub fn filter_tables<'a, K>(self, keys: K) -> impl Iterator<Item=Table<'f>>
-        where K: Iterator<Item=&'a str> + Clone
-    {
-        self.tables()
-            .filter(move |t| {
-                let xs = keys.clone();
-                let ys = t.header().keys().map(|key| key.name());
-                xs.eq(ys)
-            })
     }
 }

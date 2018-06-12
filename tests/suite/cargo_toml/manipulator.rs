@@ -1,20 +1,21 @@
+use std::iter;
 use tom::{
-    TomlFile, Factory, Edit, Position,
-    ast,
+    TomlDoc, Factory, Edit, Position,
+    ast::{self, TableHeaderOwner},
 };
 
 
 pub struct CargoTomlManipulator<'f> {
-    toml: ast::File<'f>,
+    doc: ast::Doc<'f>,
     factory: &'f Factory,
     edit: Edit<'f>,
     dependencies: Option<ast::Table<'f>>,
 }
 
 impl<'f> CargoTomlManipulator<'f> {
-    pub fn new(toml: &'f TomlFile, factory: &'f Factory) -> CargoTomlManipulator<'f> {
+    pub fn new(toml: &'f TomlDoc, factory: &'f Factory) -> CargoTomlManipulator<'f> {
         CargoTomlManipulator {
-            toml: toml.ast(),
+            doc: toml.ast(),
             factory,
             edit: Edit::new(toml),
             dependencies: None,
@@ -36,8 +37,8 @@ impl<'f> CargoTomlManipulator<'f> {
 
     fn dependencies_table(&mut self) -> ast::Table<'f> {
         if self.dependencies.is_none() {
-            let deps = self.toml
-                .find_table_by_key("dependencies")
+            let deps = self
+                .find_table("dependencies")
                 .unwrap_or_else(|| self.insert_empty_dependencies_table());
             self.dependencies = Some(deps)
         }
@@ -52,7 +53,7 @@ impl<'f> CargoTomlManipulator<'f> {
                 .build();
 
         let position = match self.package_table() {
-            None => Position::end_of(self.toml),
+            None => Position::end_of(self.doc),
             Some(pkg) => Position::after(pkg),
         };
         self.edit.insert(new_table, position);
@@ -61,7 +62,17 @@ impl<'f> CargoTomlManipulator<'f> {
     }
 
     fn package_table(&self) -> Option<ast::Table<'f>> {
-        self.toml.find_table_by_key("package")
-            .or_else(|| self.toml.find_table_by_key("project"))
+        self.find_table("package")
+            .or_else(|| self.find_table("project"))
+    }
+
+    // NB: does not handle `dependencies = { foo = "1.0.0" }` case
+    fn find_table(&self, name: &str) -> Option<ast::Table<'f>> {
+        self.doc.tables()
+            .find(|table| {
+                table.header().keys()
+                    .map(|key| key.name())
+                    .eq(iter::once(name))
+            })
     }
 }
