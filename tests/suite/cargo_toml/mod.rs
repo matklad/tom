@@ -97,9 +97,9 @@ fn check_cargo_toml_edit(
     after: &str,
     edit: impl FnOnce(&mut CargoTomlManipulator),
 ) {
-    check_edit(before, after, |file| {
+    check_edit(before, after, |doc| {
         let factory = Factory::new();
-        let mut cargo_toml = CargoTomlManipulator::new(file, &factory);
+        let mut cargo_toml = CargoTomlManipulator::new(doc, &factory);
         edit(&mut cargo_toml);
         cargo_toml.finish()
     })
