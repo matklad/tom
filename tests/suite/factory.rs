@@ -3,6 +3,7 @@ use tom::{
     ast::AstNode,
 };
 use testutils::assert_eq_text;
+use check_panics;
 
 #[test]
 fn test_create_key_val_trivial() {
@@ -51,23 +52,24 @@ bar = "0.0.1""#,
 
 
 #[test]
-#[should_panic]
 fn table_with_two_names() {
+    covers!("table_with_two_names");
     let f = Factory::new();
-    f.table()
-        .with_name("foo")
-        .with_name("bar")
-        .build();
+    check_panics(|| {
+        f.table()
+            .with_name("foo")
+            .with_name("bar")
+            .build();
+    })
 }
 
 #[test]
-#[should_panic]
 fn table_without_name() {
+    covers!("table_without_name");
     let f = Factory::new();
-    f.table()
-        .with_name("foo")
-        .with_name("bar")
-        .build();
+    check_panics(|| {
+        f.table().build();
+    });
 }
 
 fn check(f: impl for<'f> FnOnce(&'f Factory) -> TomlNode<'f>, expected: &str)

@@ -481,6 +481,7 @@ dependencies = [
  "regex 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "testutils 0.1.0",
  "typed-arena 1.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "uncover 0.1.0",
 ]
 
 [[package]]
@@ -497,6 +498,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 name = "ucd-util"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "uncover"
+version = "0.1.0"
+dependencies = [
+ "lazy_static 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "unicode-segmentation"

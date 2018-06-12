@@ -2,7 +2,8 @@ use tom::{
     Edit,
     ast::KeyValueOwner,
 };
-use {check_edit};
+use {toml, check_edit, check_panics};
+use tom::Position;
 
 #[test]
 fn test_swap() {
@@ -19,4 +20,14 @@ fn test_swap() {
             edit.finish()
         }
     );
+}
+
+#[test]
+fn infinite_doc() {
+    covers!("infinite_doc");
+    let doc = toml("foo = false");
+    let entry = doc.ast().entries().next().unwrap();
+    let mut edit = Edit::new(&doc);
+    edit.insert(entry, Position::end_of(entry));
+    check_panics(|| drop(edit.finish()));
 }

@@ -69,7 +69,10 @@ impl<'f, 'e> TableBuilder<'f, 'e> {
     }
 
     pub fn with_name(mut self, key: &str) -> Self {
-        assert!(self.keys.is_empty());
+        if !self.keys.is_empty() {
+            covered_by!("table_with_two_names");
+            panic!("table header is already specified, can't reset to {:?}", key)
+        }
         self.keys.push(key.to_owned());
         self
     }
@@ -86,7 +89,10 @@ impl<'f, 'e> TableBuilder<'f, 'e> {
     }
 
     pub fn build(self) -> ast::Table<'f> {
-        assert!(!self.keys.is_empty());
+        if self.keys.is_empty() {
+            covered_by!("table_without_name");
+            panic!("");
+        }
         let mut buff = String::from("[");
         let mut first = true;
         for key in self.keys {

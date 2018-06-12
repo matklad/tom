@@ -1,5 +1,8 @@
 extern crate testutils;
+#[macro_use]
 extern crate tom;
+
+use std::panic;
 
 use tom::{
     TomlDoc, TomlNode,
@@ -45,6 +48,14 @@ pub fn check_edit(before: &str, after: &str, edit: impl FnOnce(&TomlDoc) -> Stri
     assert_eq_text(after, &actual);
 }
 
+
+pub fn check_panics(f: impl FnOnce()) {
+    let old_hook = panic::take_hook();
+    panic::set_hook(Box::new(|_| ()));
+    let result = panic::catch_unwind(panic::AssertUnwindSafe(f));
+    panic::set_hook(old_hook);
+    assert!(result.is_err());
+}
 
 #[test]
 fn test_parser_ok() {

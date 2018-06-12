@@ -9,6 +9,7 @@ lalrpop-util = "0.15"
 regex = "1"
 typed-arena = "1.3"
 itertools = "0.7"
+uncover = "0.0.1"
 
 [build-dependencies]
 heck = "0.1.0"

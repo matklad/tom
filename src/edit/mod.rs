@@ -5,8 +5,9 @@ use std::{
 use {TomlDoc, TomlNode, symbol::*};
 
 mod node_change;
+
 use self::node_change::{
-    Changes, MergedChild, ChildChangeOp
+    Changes, MergedChild, ChildChangeOp,
 };
 
 #[derive(Debug)]
@@ -50,7 +51,7 @@ impl<'f> Edit<'f> {
     ) {
         let (parent, pos) = parent(node.into());
         self.changes_mut(parent).add_child_change(
-            pos, ChildChangeOp::Replace(replacement.into())
+            pos, ChildChangeOp::Replace(replacement.into()),
         );
     }
 
@@ -75,16 +76,6 @@ impl<'f> Edit<'f> {
             .add_child_change(pos, ChildChangeOp::Insert(node.into()));
     }
 
-    pub fn insert_many(
-        &mut self,
-        children: Vec<impl Into<TomlNode<'f>>>,
-        position: Position<'f>,
-    ) {
-        for child in children {
-            self.insert(child, position);
-        }
-    }
-
     pub fn delete(&mut self, node: impl Into<TomlNode<'f>>) {
         let (parent, pos) = parent(node.into());
         self.changes_mut(parent)
@@ -93,7 +84,7 @@ impl<'f> Edit<'f> {
 
     pub fn finish(self) -> String {
         let root = self.doc.parse_tree();
-        let mut res = self.rendered(root);
+        let mut res = self.rendered(root, 0);
         if !res.ends_with("\n") {
             res += "\n";
         }
@@ -110,7 +101,11 @@ impl<'f> Edit<'f> {
 }
 
 impl<'f> Edit<'f> {
-    fn rendered(&self, node: TomlNode<'f>) -> String {
+    fn rendered(&self, node: TomlNode<'f>, level: u16) -> String {
+        if level > 999 {
+            covered_by!("infinite_doc");
+            panic!("Infinite edit");
+        }
         match self.changes(node) {
             None => {
                 if node.is_leaf() {
@@ -118,7 +113,7 @@ impl<'f> Edit<'f> {
                 } else {
                     let mut buff = String::new();
                     for child in node.children() {
-                        buff += &self.rendered(child);
+                        buff += &self.rendered(child, level + 1);
                     }
                     buff
                 }
@@ -137,21 +132,21 @@ impl<'f> Edit<'f> {
                                 }
                                 _ => (),
                             };
-                            buff += &self.rendered(child);
+                            buff += &self.rendered(child, level + 1);
                             prev = Some((true, child));
-                        },
+                        }
                         MergedChild::Deleted(_) => (),
                         MergedChild::Replaced(new_child) => {
-                            buff += &self.rendered(new_child);
+                            buff += &self.rendered(new_child, level + 1);
                             prev = Some((false, new_child));
-                        },
+                        }
                         MergedChild::Inserted(new_child) => {
                             if let Some((_, prev)) = prev {
                                 buff += &compute_ws(prev, new_child);
                             }
-                            buff += &self.rendered(new_child);
+                            buff += &self.rendered(new_child, level + 1);
                             prev = Some((false, new_child));
-                        },
+                        }
                     }
                 }
                 buff

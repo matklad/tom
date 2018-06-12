@@ -1,12 +1,18 @@
 extern crate parse_tree;
 extern crate typed_arena;
 extern crate itertools;
+#[macro_use]
+extern crate uncover;
 
 use std::{fmt, ptr, hash};
 
 use ast::AstNode;
 use parse_tree::{ParseTree, PtNode, PtNodeId};
-//use edit::TreeEdit;
+
+define_uncover_macros!(
+    enable_if(cfg!(debug_assertions))
+);
+
 
 mod edit;
 mod factory;
