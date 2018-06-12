@@ -474,6 +474,7 @@ name = "tom"
 version = "0.1.0"
 dependencies = [
  "heck 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "itertools 0.7.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "lalrpop 0.15.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "lalrpop-util 0.15.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "parse_tree 0.0.6 (registry+https://github.com/rust-lang/crates.io-index)",

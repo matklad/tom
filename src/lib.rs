@@ -1,5 +1,6 @@
 extern crate parse_tree;
 extern crate typed_arena;
+extern crate itertools;
 
 use std::{fmt, ptr, hash};
 

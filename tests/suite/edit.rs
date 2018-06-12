@@ -7,8 +7,8 @@ use {check_edit};
 #[test]
 fn test_swap() {
     check_edit(
-        "foo = true\nbar = false",
-        "bar = false\nfoo = true",
+        "foo = true\nbar = false\n",
+        "bar = false\nfoo = true\n",
         |doc| {
             let mut edit = Edit::new(doc);
             let ast = doc.ast();
