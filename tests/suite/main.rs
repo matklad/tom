@@ -39,8 +39,8 @@ fn subtree<'f>(node: TomlNode<'f>) -> Vec<TomlNode<'f>> {
 }
 
 pub fn check_edit(before: &str, after: &str, edit: impl FnOnce(&TomlDoc) -> String) {
-    let file = TomlDoc::new(before.to_string());
-    let actual = edit(&file);
+    let doc = TomlDoc::new(before.to_string());
+    let actual = edit(&doc);
     assert_eq_text(after, &actual);
 }
 
