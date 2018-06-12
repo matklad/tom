@@ -45,6 +45,7 @@ impl<'f> Changes<'f> {
                             }
                         }
                     }
+                    res.push(MergedChild::Old(old_child));
                 }
                 EitherOrBoth::Left((_, group)) => {
                     for change in group {
