@@ -6,23 +6,22 @@ extern crate uncover;
 
 use std::{fmt, ptr, hash};
 
-use ast::AstNode;
 use parse_tree::{ParseTree, PtNode, PtNodeId};
+
+use ast::AstNode;
 
 define_uncover_macros!(
     enable_if(cfg!(debug_assertions))
 );
 
-
 mod edit;
 mod factory;
 mod parser;
 mod symbol;
-mod text;
 
-pub use symbol::*;
-pub use text::{TextRange, TextUnit};
 pub mod ast;
+pub use symbol::*;
+pub use parse_tree::{TextRange, TextUnit};
 pub use edit::{Edit, Position};
 pub use factory::Factory;
 
