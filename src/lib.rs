@@ -37,7 +37,7 @@ impl TomlDoc {
 
     pub fn parse_tree(&self) -> TomlNode {
         TomlNode {
-            file: self,
+            doc: self,
             id: self.parse_tree.root(),
         }
     }
@@ -81,13 +81,13 @@ impl fmt::Debug for TomlDoc {
 
 #[derive(Copy, Clone)]
 pub struct TomlNode<'f> {
-    file: &'f TomlDoc,
+    doc: &'f TomlDoc,
     id: PtNodeId,
 }
 
 impl<'f> PartialEq<TomlNode<'f>> for TomlNode<'f> {
     fn eq(&self, other: &TomlNode) -> bool {
-        self.id == other.id && ptr::eq(self.file, other.file)
+        self.id == other.id && ptr::eq(self.doc, other.doc)
     }
 }
 
@@ -115,19 +115,19 @@ impl<'f> TomlNode<'f> {
     }
 
     pub fn text(&self) -> &'f str {
-        &self.file.text[self.range()]
+        &self.doc.text[self.range()]
     }
 
     pub fn parent(&self) -> Option<TomlNode<'f>> {
         self.node().parent().map(|id| TomlNode {
-            file: self.file,
+            doc: self.doc,
             id,
         })
     }
 
     pub fn children(&self) -> Children<'f> {
         Children {
-            file: self.file,
+            doc: self.doc,
             id: self.node().first_child(),
         }
     }
@@ -137,13 +137,13 @@ impl<'f> TomlNode<'f> {
     }
 
     fn node(&self) -> &PtNode {
-        &self.file.parse_tree[self.id]
+        &self.doc.parse_tree[self.id]
     }
 }
 
 #[derive(Clone)]
 pub struct Children<'f> {
-    file: &'f TomlDoc,
+    doc: &'f TomlDoc,
     id: Option<PtNodeId>,
 }
 
@@ -152,11 +152,8 @@ impl<'f> Iterator for Children<'f> {
 
     fn next(&mut self) -> Option<<Self as Iterator>::Item> {
         self.id.map(|id| {
-            self.id = self.file.parse_tree[id].next_sibling();
-            TomlNode {
-                file: &self.file,
-                id,
-            }
+            self.id = self.doc.parse_tree[id].next_sibling();
+            TomlNode { doc: &self.doc, id }
         })
     }
 }

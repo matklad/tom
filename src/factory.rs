@@ -15,13 +15,13 @@ impl Factory {
 
     pub fn val_string(&self, val: &str) -> ast::Val {
         //TODO: escaping
-        let file = self.file(format!("foo = {:?}", val));
-        file.ast().entries().next().unwrap().val()
+        let doc = self.doc(format!("foo = {:?}", val));
+        doc.ast().entries().next().unwrap().val()
     }
 
     pub fn val_bool(&self, val: bool) -> ast::Val {
-        let file = self.file(format!("foo = {}", val));
-        file.ast().entries().next().unwrap().val()
+        let doc = self.doc(format!("foo = {}", val));
+        doc.ast().entries().next().unwrap().val()
     }
 
     pub fn val_dict(&self, entries: &mut Iterator<Item=ast::KeyVal>) -> ast::Val {
@@ -33,20 +33,20 @@ impl Factory {
             buff.push_str(e.node().text());
         }
         buff.push_str(" }");
-        let file = self.file(format!("foo = {}", buff));
-        file.ast().entries().next().unwrap().val()
+        let doc = self.doc(format!("foo = {}", buff));
+        doc.ast().entries().next().unwrap().val()
     }
 
     pub fn key_val(&self, key: &str, val: ast::Val) -> ast::KeyVal {
-        let file = self.file(format!("{} = {}", escaped_key(key), val.node().text()));
-        file.ast().entries().next().unwrap()
+        let doc = self.doc(format!("{} = {}", escaped_key(key), val.node().text()));
+        doc.ast().entries().next().unwrap()
     }
 
     pub fn table(&self) -> TableBuilder {
         TableBuilder::new(self)
     }
 
-    fn file(&self, text: String) -> &TomlDoc {
+    fn doc(&self, text: String) -> &TomlDoc {
         self.arena.alloc(TomlDoc::new(text))
     }
 }
@@ -99,8 +99,8 @@ impl<'f, 'e> TableBuilder<'f, 'e> {
             buff.push_str("\n");
             buff.push_str(e.node().text());
         }
-        let file = self.factory.file(buff);
-        file.ast().tables().next().unwrap()
+        let doc = self.factory.doc(buff);
+        doc.ast().tables().next().unwrap()
     }
 }
 

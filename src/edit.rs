@@ -6,7 +6,7 @@ use {TomlDoc, TomlNode, symbol::*};
 
 #[derive(Debug)]
 pub struct Edit<'f> {
-    file: &'f TomlDoc,
+    doc: &'f TomlDoc,
     ops: HashMap<TomlNode<'f>, Op<'f>>,
 }
 
@@ -62,11 +62,8 @@ struct ContentsChange<'f> {
 }
 
 impl<'f> Edit<'f> {
-    pub fn new(file: &'f TomlDoc) -> Edit {
-        Edit {
-            file,
-            ops: HashMap::new(),
-        }
+    pub fn new(doc: &'f TomlDoc) -> Edit {
+        Edit { doc, ops: HashMap::new() }
     }
 
     pub fn replace(
@@ -139,7 +136,7 @@ impl<'f> Edit<'f> {
     }
 
     pub fn finish(self) -> String {
-        let root = self.file.parse_tree();
+        let root = self.doc.parse_tree();
         let mut res = self.rendered(root);
         if !res.ends_with("\n") {
             res += "\n";
