@@ -2,13 +2,15 @@ use std::{
     collections::HashMap,
 };
 
-use {TomlDoc, TomlNode, symbol::*};
+use {TomlDoc, TomlNode};
 
 mod node_change;
+mod whitespace;
 
 use self::node_change::{
     Changes, MergedChild, ChildChangeOp,
 };
+use self::whitespace::{compute_ws, Location};
 
 #[derive(Debug)]
 pub struct Edit<'f> {
@@ -84,11 +86,7 @@ impl<'f> Edit<'f> {
 
     pub fn finish(self) -> String {
         let root = self.doc.parse_tree();
-        let mut res = self.rendered(root, 0);
-        if !res.ends_with("\n") {
-            res += "\n";
-        }
-        res
+        self.rendered(root, 0)
     }
 
     fn changes(&self, target: TomlNode<'f>) -> Option<&Changes<'f>> {
@@ -127,7 +125,9 @@ impl<'f> Edit<'f> {
                             match prev {
                                 Some((prev_old, prev)) => {
                                     if !prev_old {
-                                        buff += &compute_ws(prev, child)
+                                        buff += &compute_ws(
+                                            Location::Between(prev, child),
+                                        )
                                     }
                                 }
                                 _ => (),
@@ -142,7 +142,9 @@ impl<'f> Edit<'f> {
                         }
                         MergedChild::Inserted(new_child) => {
                             if let Some((_, prev)) = prev {
-                                buff += &compute_ws(prev, new_child);
+                                buff += &compute_ws(
+                                    Location::Between(prev, new_child),
+                                );
                             }
                             buff += &self.rendered(new_child, level + 1);
                             prev = Some((false, new_child));
@@ -152,14 +154,6 @@ impl<'f> Edit<'f> {
                 buff
             }
         }
-    }
-}
-
-fn compute_ws(left: TomlNode, right: TomlNode) -> String {
-    match (left.symbol(), right.symbol()) {
-        (KEY_VAL, KEY_VAL) | (TABLE_HEADER, KEY_VAL) => String::from("\n"),
-        (TABLE, TABLE) | (KEY_VAL, TABLE) => String::from("\n\n"),
-        _ => String::new(),
     }
 }
 

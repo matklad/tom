@@ -80,8 +80,7 @@ foo = "1.0.0"
 bar = "1.0.0"
 
 baz = "1.0.0"
-quux = "92"
-"#,
+quux = "92""#,
         |doc| {
             let mut edit = Edit::new(doc);
             edit.insert(quux, Position::end_of(doc.ast()));

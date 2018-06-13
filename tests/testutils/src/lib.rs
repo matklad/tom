@@ -101,7 +101,7 @@ pub fn assert_eq_text(expected: &str, actual: &str) {
     }
     if expected.trim() == actual.trim() {
         eprintln!("whitespace difference!");
-        eprintln!("expected, actual:\n{:?}\n{:?}", expected, actual);
+        eprintln!("expected:\n{:?}\nactual:\n{:?}\n", expected, actual);
         panic!("Comparison failed");
     }
     let changeset = Changeset::new(actual, expected, "\n");
