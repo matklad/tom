@@ -6,11 +6,11 @@ use {TomlDoc, TomlNode};
 
 mod node_change;
 mod whitespace;
+mod compose;
 
 use self::node_change::{
-    Changes, MergedChild, ChildChangeOp,
+    Changes, ChildChangeOp,
 };
-use self::whitespace::{compute_ws, Location, Edge};
 
 #[derive(Debug)]
 pub struct Edit<'f> {
@@ -86,84 +86,11 @@ impl<'f> Edit<'f> {
 
     pub fn finish(self) -> String {
         let root = self.doc.parse_tree();
-        self.rendered(root, 0)
-    }
-
-    fn changes(&self, target: TomlNode<'f>) -> Option<&Changes<'f>> {
-        self.ops.get(&target)
+        compose::compose(root, &self.ops)
     }
 
     fn changes_mut(&mut self, target: TomlNode<'f>) -> &mut Changes<'f> {
         self.ops.entry(target).or_insert_with(Default::default)
-    }
-}
-
-impl<'f> Edit<'f> {
-    fn rendered(&self, node: TomlNode<'f>, level: u16) -> String {
-        if level > 999 {
-            covered_by!("infinite_doc");
-            panic!("Infinite edit");
-        }
-        match self.changes(node) {
-            None => {
-                if node.is_leaf() {
-                    node.text().to_owned()
-                } else {
-                    let mut buff = String::new();
-                    for child in node.children() {
-                        buff += &self.rendered(child, level + 1);
-                    }
-                    buff
-                }
-            }
-            Some(changes) => {
-                let mut buff = String::new();
-                let mut prev: Option<(bool, TomlNode)> = None;
-                for m in changes.merge(node.children()) {
-                    match m {
-                        MergedChild::Old(child) => {
-                            match prev {
-                                Some((prev_old, prev)) => {
-                                    if !prev_old {
-                                        buff += &compute_ws(
-                                            Location::Between(prev, child),
-                                        )
-                                    }
-                                }
-                                _ => (),
-                            };
-                            buff += &self.rendered(child, level + 1);
-                            prev = Some((true, child));
-                        }
-                        MergedChild::Deleted(_) => (),
-                        MergedChild::Replaced(new_child) => {
-                            buff += &self.rendered(new_child, level + 1);
-                            prev = Some((false, new_child));
-                        }
-                        MergedChild::Inserted(new_child) => {
-                            buff += &match prev {
-                                Some((_, prev)) => compute_ws(
-                                    Location::Between(prev, new_child),
-                                ),
-                                None => compute_ws(
-                                    Location::OnEdge { child: new_child, parent: node, edge: Edge::Left }
-                                ),
-                            };
-                            buff += &self.rendered(new_child, level + 1);
-                            prev = Some((false, new_child));
-                        }
-                    }
-                }
-                match prev {
-                    Some((false, new_child)) =>
-                        buff += &compute_ws(
-                            Location::OnEdge { child: new_child, parent: node, edge: Edge::Right }
-                        ),
-                    _ => (),
-                }
-                buff
-            }
-        }
     }
 }
 
