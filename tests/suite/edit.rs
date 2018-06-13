@@ -96,6 +96,21 @@ quux = "92"
 }
 
 #[test]
+fn basic_deletion() {
+    check_edit(
+        "foo = true\nbar = false\nbaz = false\n",
+        "foo = true\n\nbaz = false\n",
+        |doc| {
+            let mut edit = Edit::new(doc);
+            let ast = doc.ast();
+            let bar = ast.entries().nth(1).unwrap();
+            edit.delete(bar);
+            edit.finish()
+        }
+    )
+}
+
+#[test]
 fn test_swap() {
     check_edit(
         "foo = true\nbar = false\n",
