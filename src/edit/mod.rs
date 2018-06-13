@@ -10,7 +10,7 @@ mod whitespace;
 use self::node_change::{
     Changes, MergedChild, ChildChangeOp,
 };
-use self::whitespace::{compute_ws, Location};
+use self::whitespace::{compute_ws, Location, Edge};
 
 #[derive(Debug)]
 pub struct Edit<'f> {
@@ -141,15 +141,25 @@ impl<'f> Edit<'f> {
                             prev = Some((false, new_child));
                         }
                         MergedChild::Inserted(new_child) => {
-                            if let Some((_, prev)) = prev {
-                                buff += &compute_ws(
+                            buff += &match prev {
+                                Some((_, prev)) => compute_ws(
                                     Location::Between(prev, new_child),
-                                );
-                            }
+                                ),
+                                None => compute_ws(
+                                    Location::OnEdge { child: new_child, parent: node, edge: Edge::Left }
+                                ),
+                            };
                             buff += &self.rendered(new_child, level + 1);
                             prev = Some((false, new_child));
                         }
                     }
+                }
+                match prev {
+                    Some((false, new_child)) =>
+                        buff += &compute_ws(
+                            Location::OnEdge { child: new_child, parent: node, edge: Edge::Right }
+                        ),
+                    _ => (),
                 }
                 buff
             }
