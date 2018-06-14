@@ -7,7 +7,7 @@ use {
 
 pub(crate) fn compose<'f>(root: TomlNode<'f>, ops: &HashMap<TomlNode<'f>, Changes>) -> String {
     let mut state = State::new(ops);
-    state.go(root);
+    state.go(root, 0);
     state.buff
 }
 
@@ -32,11 +32,16 @@ impl<'a, 'f> State<'a, 'f> {
         }
     }
 
-    fn go(&mut self, node: TomlNode<'f>) {
+    fn go(&mut self, node: TomlNode<'f>, level: u32) {
         if !self.has_changes(node) {
             self.buff.push_str(node.text());
             return;
         }
+        if level > 999 {
+            covered_by!("infinite_doc");
+            panic!("Infinite edit");
+        }
+
         let no_changes = Default::default();
         let changes = self.ops.get(&node)
             .unwrap_or_else(|| &no_changes);
@@ -54,12 +59,12 @@ impl<'a, 'f> State<'a, 'f> {
                         }
                         _ => (),
                     };
-                    self.go(child);
+                    self.go(child, level + 1);
                     prev = Some((true, child));
                 }
                 MergedChild::Deleted(_) => (),
                 MergedChild::Replaced(new_child) => {
-                    self.go(new_child);
+                    self.go(new_child, level + 1);
                     prev = Some((false, new_child));
                 }
                 MergedChild::Inserted(new_child) => {
@@ -72,7 +77,7 @@ impl<'a, 'f> State<'a, 'f> {
                         ),
                     };
                     self.buff.push_str(&ws);
-                    self.go(new_child);
+                    self.go(new_child, level + 1);
                     prev = Some((false, new_child));
                 }
             }
@@ -96,10 +101,7 @@ impl<'a, 'f> State<'a, 'f> {
             Entry::Occupied(entry) => return match entry.get() {
                 HasChanges::No => false,
                 HasChanges::Yes => true,
-                HasChanges::InProgress => {
-                    covered_by!("infinite_doc");
-                    panic!("Infinite edit");
-                }
+                HasChanges::InProgress => unreachable!("Cycle in the tree"),
             }
         }
         let result = self.ops.contains_key(&node) ||
