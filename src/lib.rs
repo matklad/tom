@@ -3,6 +3,7 @@ extern crate typed_arena;
 extern crate itertools;
 #[macro_use]
 extern crate uncover;
+extern crate m_lexer;
 
 use std::{fmt, ptr, hash};
 

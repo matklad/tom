@@ -2,6 +2,7 @@ use {TomlSymbol, WHITESPACE, DOC, ERROR};
 use parse_tree::{ParseTree, BottomUpBuilder};
 
 mod grammar;
+mod rd;
 
 pub trait Events {
     fn shift(&mut self, symbol: TomlSymbol, start: usize, end: usize);

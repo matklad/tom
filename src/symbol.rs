@@ -49,10 +49,14 @@ const SYMBOLS: &[SymbolInfo] = &[
     SymbolInfo(21, "MULTILINE_LITERAL_STRING"),
     SymbolInfo(22, "DATE_TIME"),
     SymbolInfo(23, "ERROR"),
+
+    SymbolInfo(24, "BARE_KEY_OR_NUMBER"),
+    SymbolInfo(25, "BARE_KEY_OR_DATE"),
+    SymbolInfo(26, "EOF"),
 ];
 
 pub const WHITESPACE: TomlSymbol               = TomlSymbol(Symbol(SYMBOLS[00].0));
-pub const DOC: TomlSymbol                     = TomlSymbol(Symbol(SYMBOLS[01].0));
+pub const DOC: TomlSymbol                      = TomlSymbol(Symbol(SYMBOLS[01].0));
 pub const KEY_VAL: TomlSymbol                  = TomlSymbol(Symbol(SYMBOLS[02].0));
 pub const ARRAY: TomlSymbol                    = TomlSymbol(Symbol(SYMBOLS[03].0));
 pub const DICT: TomlSymbol                     = TomlSymbol(Symbol(SYMBOLS[04].0));
@@ -75,3 +79,7 @@ pub const LITERAL_STRING: TomlSymbol           = TomlSymbol(Symbol(SYMBOLS[20].0
 pub const MULTILINE_LITERAL_STRING: TomlSymbol = TomlSymbol(Symbol(SYMBOLS[21].0));
 pub const DATE_TIME: TomlSymbol                = TomlSymbol(Symbol(SYMBOLS[22].0));
 pub const ERROR: TomlSymbol                    = TomlSymbol(Symbol(SYMBOLS[23].0));
+
+pub const BARE_KEY_OR_NUMBER: TomlSymbol       = TomlSymbol(Symbol(SYMBOLS[24].0));
+pub const BARE_KEY_OR_DATE: TomlSymbol         = TomlSymbol(Symbol(SYMBOLS[25].0));
+pub const EOF: TomlSymbol                      = TomlSymbol(Symbol(SYMBOLS[26].0));
