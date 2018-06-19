@@ -1,0 +1,28 @@
+DOC@[0; 26)
+  TABLE@[0; 2)
+    TABLE_HEADER@[0; 2)
+      L_BRACK@[0; 1) "["
+      R_BRACK@[1; 2) "]"
+  WHITESPACE@[2; 3)
+  TABLE@[3; 8)
+    TABLE_HEADER@[3; 8)
+      L_BRACK@[3; 4) "["
+      BARE_KEY@[4; 7) "foo"
+      R_BRACK@[7; 8) "]"
+  WHITESPACE@[8; 9)
+  TABLE@[9; 18)
+    TABLE_HEADER@[9; 18)
+      L_BRACK@[9; 10) "["
+      BARE_KEY@[10; 13) "foo"
+      DOT@[13; 14) "."
+      BARE_KEY@[14; 17) "bar"
+      R_BRACK@[17; 18) "]"
+  WHITESPACE@[18; 19)
+  TABLE@[19; 25)
+    TABLE_HEADER@[19; 25)
+      L_BRACK@[19; 20) "["
+      BARE_KEY@[20; 23) "foo"
+      DOT@[23; 24) "."
+      ERROR@[24; 25)
+        R_BRACK@[24; 25) "]"
+  WHITESPACE@[25; 26)

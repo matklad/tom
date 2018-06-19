@@ -51,16 +51,18 @@ fn get_tests() -> Result<()> {
 
     fn collect_tests(s: &str) -> Vec<String> {
         let mut res = vec![];
-        let prefix = "// ";
         let comment_blocks = s.lines()
             .map(str::trim_left)
-            .group_by(|line| line.starts_with(prefix));
+            .group_by(|line| line.starts_with("//"));
 
         'outer: for (is_comment, block) in comment_blocks.into_iter() {
             if !is_comment {
                 continue;
             }
-            let mut block = block.map(|line| &line[prefix.len()..]);
+            let mut block = block.map(|line| {
+                let prefix = if line.starts_with("// ") { "// " } else { "//" };
+                &line[prefix.len()..]
+            });
 
             match block.next() {
                 Some(line) if line.starts_with("test") => (),

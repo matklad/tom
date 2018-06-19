@@ -23,12 +23,17 @@ impl<'t, 's> Parser<'t, 's> {
         ::std::mem::forget(m)
     }
 
-    fn current(&self) -> TomlSymbol {
-        if self.pos == self.tokens.significant.len() {
+    fn at(&self, lookahead: usize) -> TomlSymbol {
+        let pos = self.pos + lookahead;
+        if pos >= self.tokens.significant.len() {
             return EOF;
         }
-        let pos = self.tokens.significant[self.pos];
+        let pos = self.tokens.significant[pos];
         self.tokens.raw_tokens[pos].symbol
+    }
+
+    fn current(&self) -> TomlSymbol {
+        self.at(0)
     }
 
     fn eat(&mut self, s: TomlSymbol) {
@@ -58,9 +63,11 @@ impl<'t, 's> Parser<'t, 's> {
     }
 
     fn bump_error(&mut self) {
-        let m = self.start(ERROR);
-        self.bump();
-        self.finish(m);
+        if self.current() != EOF {
+            let m = self.start(ERROR);
+            self.bump();
+            self.finish(m);
+        }
     }
 }
 
@@ -69,19 +76,45 @@ impl<'s, 't> Parser<'s, 't> {
         self.doc();
     }
 
+    // test
+    // key = "value"
+    //
+    // [table]
+    // a = 2
+    //
+    // [[array-table]]
+    // b = 3
     fn doc(&mut self) {
         let m = self.start(DOC);
+        self.entries();
         while self.current() != EOF {
             match self.current() {
-                // test
-                // foo = 92
-                | BARE_KEY | BARE_KEY_OR_NUMBER | BARE_KEY_OR_DATE
-                | BASIC_STRING | LITERAL_STRING
-                => self.key_val(),
+                L_BRACK => {
+                    if self.at(1) == L_BRACK {
+                        self.array_table()
+                    } else {
+                        self.table()
+                    }
+                }
                 _ => self.bump_error(),
             }
         }
+
         self.finish(m);
+    }
+
+    // test
+    // foo = 92
+    // 'bar' = 14
+    fn entries(&mut self) {
+        while self.current() != EOF && self.current() != L_BRACK {
+            match self.current() {
+                | BARE_KEY | BARE_KEY_OR_NUMBER | BARE_KEY_OR_DATE
+                | BASIC_STRING | LITERAL_STRING =>
+                    self.key_val(),
+                _ => self.bump_error(),
+            }
+        }
     }
 
     fn key_val(&mut self) {
@@ -105,7 +138,7 @@ impl<'s, 't> Parser<'s, 't> {
             // 'bar' = 92
             BASIC_STRING | LITERAL_STRING =>
                 self.bump(),
-            _ => unreachable!()
+            _ => self.bump_error(),
         }
     }
 
@@ -141,10 +174,12 @@ impl<'s, 't> Parser<'s, 't> {
             // test
             // a = [1, "foo"]
             L_BRACK => self.array(),
-            L_CURLY => unimplemented!("DICT"),
+            // test
+            // a = { "foo" = 1, bar = 2, }
+            L_CURLY => self.dict(),
             // test
             // foo = _
-            _ => self.bump_error(), // TODO: recover on [ and such
+            _ => self.bump_error(),
         }
     }
 
@@ -165,6 +200,82 @@ impl<'s, 't> Parser<'s, 't> {
         }
         self.eat(R_BRACK);
 
+        self.finish(m);
+    }
+
+    fn dict(&mut self) {
+        assert_eq!(self.current(), L_CURLY);
+        let m = self.start(DICT);
+        self.bump();
+        while self.current() != EOF && self.current() != R_CURLY {
+            self.key_val();
+            // test
+            // a = {}
+            // b = {foo=1}
+            // c = {foo=1,}
+            // d = {,}
+            if self.current() != R_CURLY {
+                self.eat(COMMA)
+            }
+        }
+        self.eat(R_CURLY);
+
+        self.finish(m);
+    }
+
+    // test
+    // [table]
+    // a = 1
+    // b = 2
+    fn table(&mut self) {
+        assert_eq!(self.current(), L_BRACK);
+        let m = self.start(TABLE);
+        self.table_header(false);
+        self.entries();
+        self.finish(m)
+    }
+
+    // test
+    // [[array-table]]
+    // a = 1
+    // b = 2
+    fn array_table(&mut self) {
+        assert!(self.at(0) == L_BRACK && self.at(1) == L_BRACK);
+        let m = self.start(ARRAY_TABLE);
+        self.table_header(true);
+        self.entries();
+        self.finish(m)
+    }
+
+    // test
+    // [[table . 'header']]
+    fn table_header(&mut self, array: bool) {
+        assert_eq!(self.current(), L_BRACK);
+        let m = self.start(TABLE_HEADER);
+        self.bump();
+        if array {
+            assert_eq!(self.current(), L_BRACK);
+            self.bump();
+        }
+
+        // test
+        // []
+        // [foo]
+        // [foo.bar]
+        // [foo.]
+        let mut first = true;
+        while self.current() != EOF && self.current() != R_BRACK {
+            if !first {
+                self.eat(DOT);
+            }
+            first = false;
+            self.key();
+        }
+
+        self.eat(R_BRACK);
+        if array {
+            self.eat(R_BRACK);
+        }
         self.finish(m);
     }
 }
