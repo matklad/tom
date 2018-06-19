@@ -138,11 +138,33 @@ impl<'s, 't> Parser<'s, 't> {
             //   world
             // '''
             LITERAL_STRING | MULTILINE_LITERAL_STRING => self.bump(),
-            L_BRACK => unimplemented!("ARRAY"),
+            // test
+            // a = [1, "foo"]
+            L_BRACK => self.array(),
             L_CURLY => unimplemented!("DICT"),
             // test
             // foo = _
             _ => self.bump_error(), // TODO: recover on [ and such
         }
+    }
+
+    fn array(&mut self) {
+        assert_eq!(self.current(), L_BRACK);
+        let m = self.start(ARRAY);
+        self.bump();
+        while self.current() != EOF && self.current() != R_BRACK {
+            self.val();
+            // test
+            // a = []
+            // b = [1]
+            // c = [1,]
+            // d = [,]
+            if self.current() != R_BRACK {
+                self.eat(COMMA)
+            }
+        }
+        self.eat(R_BRACK);
+
+        self.finish(m);
     }
 }

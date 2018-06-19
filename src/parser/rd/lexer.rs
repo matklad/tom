@@ -66,6 +66,7 @@ fn lexer() -> Lexer {
         .tokens(&[
             (t(symbol::EQ), r"="),
             (t(symbol::DOT), r"\."),
+            (t(symbol::COMMA), r","),
             (t(symbol::L_BRACK), r"\["),
             (t(symbol::R_BRACK), r"\]"),
             (t(symbol::L_CURLY), r"\{"),
