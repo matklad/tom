@@ -1,23 +1,79 @@
 extern crate heck;
-extern crate lalrpop;
+extern crate clap;
+extern crate itertools;
+extern crate failure;
 
+use itertools::Itertools;
+use clap::{App, SubCommand};
 use heck::ShoutySnakeCase;
 use std::fs;
 
-fn main() {
-    lalrpop::process_root().unwrap();
+type Result<T> = ::std::result::Result<T, failure::Error>;
 
-    let ast = gen_ast();
+fn main() -> Result<()> {
+    let matches = App::new("tasks")
+        .subcommand(SubCommand::with_name("gen-ast"))
+        .subcommand(SubCommand::with_name("gen-tests"))
+        .get_matches();
+    match matches.subcommand_name().unwrap() {
+        "gen-ast" => {
+            update(
+                "./src/ast/generated.rs",
+                &gen_ast(),
+            )?;
+        }
+        "gen-tests" => get_tests()?,
+        _ => unreachable!()
+    };
+    Ok(())
+}
 
-    let generated_ast = "src/ast/generated.rs";
-    match fs::read_to_string(generated_ast) {
-        Ok(ref old_ast) if old_ast == &ast => {
-            return;
+fn update(path: &str, contents: &str) -> Result<()> {
+    match fs::read_to_string(path) {
+        Ok(ref old_contents) if old_contents == contents => {
+            return Ok(());
         }
         _ => (),
     }
-    fs::write(generated_ast, &ast).unwrap();
+    fs::write(path, contents)?;
+    Ok(())
 }
+
+fn get_tests() -> Result<()> {
+    let src_dir = "./src/parser/rd/grammar.rs";
+    let grammar = fs::read_to_string(src_dir)?;
+    let tests = collect_tests(&grammar);
+    for (i, test) in tests.into_iter().enumerate() {
+        let path = format!("./tests/data/inline/test_{:02}.toml", i);
+        update(&path, &test)?;
+    }
+    return Ok(());
+
+    fn collect_tests(s: &str) -> Vec<String> {
+        let mut res = vec![];
+        let prefix = "// ";
+        let comment_blocks = s.lines()
+            .map(str::trim_left)
+            .group_by(|line| line.starts_with(prefix));
+
+        'outer: for (is_comment, block) in comment_blocks.into_iter() {
+            if !is_comment {
+                continue;
+            }
+            let mut block = block.map(|line| &line[prefix.len()..]);
+
+            match block.next() {
+                Some(line) if line.starts_with("test") => (),
+                _ => continue 'outer,
+            }
+            let text: String = itertools::join(block.chain(::std::iter::once("")), "\n");
+            assert!(!text.trim().is_empty() && text.ends_with("\n"));
+            res.push(text)
+        }
+        res
+    }
+}
+
 
 fn gen_ast() -> String {
     let mut buff = String::new();
@@ -67,11 +123,11 @@ fn gen_ast() -> String {
     for &symbol in wrappers
         .iter()
         .chain(multi_wrappers.iter().map(|&(ref w, _)| w))
-    {
-        ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
-        ln!("pub struct {}<'f>(TomlNode<'f>);", symbol);
-        ln!();
-    }
+        {
+            ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
+            ln!("pub struct {}<'f>(TomlNode<'f>);", symbol);
+            ln!();
+        }
     ln!();
 
     for &(ref symbol, ref variants) in enums.iter() {

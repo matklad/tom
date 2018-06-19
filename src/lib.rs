@@ -4,6 +4,10 @@ extern crate itertools;
 #[macro_use]
 extern crate uncover;
 extern crate m_lexer;
+#[macro_use]
+extern crate typed_index_derive;
+#[macro_use]
+extern crate lazy_static;
 
 use std::{fmt, ptr, hash};
 
@@ -34,7 +38,7 @@ pub struct TomlDoc {
 
 impl TomlDoc {
     pub fn new(text: String) -> TomlDoc {
-        let parse_tree = parser::parse(&text);
+        let parse_tree = parser::rd::parse(&text);
         TomlDoc { parse_tree, text }
     }
 

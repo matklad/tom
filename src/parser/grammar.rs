@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.15.2"
-// sha256: 4dd9afa68722b7d3e8a7b95bbd5e42b05e625438cc54f5d2527559e52e7849
+// sha256: f038f53398bea44038fa64f849c48a59fdc30b5fecd24e4d2a1c0de52ca59
 use super::Events;
 use *;
 #[allow(unused_extern_crates)]

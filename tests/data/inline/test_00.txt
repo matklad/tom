@@ -1,0 +1,8 @@
+DOC@[0; 9)
+  KEY_VAL@[0; 8)
+    BARE_KEY@[0; 3) "foo"
+    WHITESPACE@[3; 4)
+    EQ@[4; 5) "="
+    WHITESPACE@[5; 6)
+    NUMBER@[6; 8) "92"
+  WHITESPACE@[8; 9)

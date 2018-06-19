@@ -1,0 +1,22 @@
+DOC@[0; 33)
+  KEY_VAL@[0; 8)
+    BARE_KEY@[0; 3) "foo"
+    WHITESPACE@[3; 4)
+    EQ@[4; 5) "="
+    WHITESPACE@[5; 6)
+    NUMBER@[6; 8) "92"
+  WHITESPACE@[8; 9)
+  KEY_VAL@[9; 16)
+    BARE_KEY@[9; 11) "92"
+    WHITESPACE@[11; 12)
+    EQ@[12; 13) "="
+    WHITESPACE@[13; 14)
+    NUMBER@[14; 16) "92"
+  WHITESPACE@[16; 17)
+  KEY_VAL@[17; 32)
+    BARE_KEY@[17; 27) "1914-08-26"
+    WHITESPACE@[27; 28)
+    EQ@[28; 29) "="
+    WHITESPACE@[29; 30)
+    NUMBER@[30; 32) "92"
+  WHITESPACE@[32; 33)

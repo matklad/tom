@@ -1,0 +1,11 @@
+[package]
+name = "tasks"
+version = "0.1.0"
+authors = ["Aleksey Kladov <aleksey.kladov@gmail.com>"]
+publish = false
+
+[dependencies]
+heck = "0.1"
+clap = "2"
+itertools = "0.7"
+failure = "0.1"
