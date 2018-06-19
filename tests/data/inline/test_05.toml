@@ -1,5 +1,5 @@
-f = "hello\nworld"
-g = """
+a = "hello\nworld"
+b = """
   hello
   world
 """

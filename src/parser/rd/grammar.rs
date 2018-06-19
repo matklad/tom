@@ -125,22 +125,24 @@ impl<'s, 't> Parser<'s, 't> {
             BARE_KEY_OR_DATE | DATE_TIME =>
                 self.bump_remap(DATE_TIME),
             // test
-            // f = "hello\nworld"
-            // g = """
+            // a = "hello\nworld"
+            // b = """
             //   hello
             //   world
             // """
             BASIC_STRING | MULTILINE_BASIC_STRING => self.bump(),
             // test
-            // f = 'hello\nworld'
-            // g = '''
+            // a = 'hello\nworld'
+            // b = '''
             //   hello
             //   world
             // '''
             LITERAL_STRING | MULTILINE_LITERAL_STRING => self.bump(),
             L_BRACK => unimplemented!("ARRAY"),
             L_CURLY => unimplemented!("DICT"),
-            c => unreachable!("{:?} not in FIRST(val) ", c),
+            // test
+            // foo = _
+            _ => self.bump_error(), // TODO: recover on [ and such
         }
     }
 }
