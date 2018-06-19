@@ -8,7 +8,6 @@ members = ["tasks"]
 
 [dependencies]
 itertools = "0.7"
-lalrpop-util = "0.15"
 lazy_static = "1"
 m_lexer = "0.0.3"
 parse_tree = "0.0.6"
