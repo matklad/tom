@@ -1,5 +1,5 @@
 use itertools::{Itertools, EitherOrBoth, merge_join_by};
-use {TomlNode, Children};
+use {CstNode, Children};
 
 #[derive(Debug, Clone, Default)]
 pub(crate) struct Changes<'f> {
@@ -65,10 +65,10 @@ impl<'f> Changes<'f> {
 }
 
 pub(crate) enum MergedChild<'f> {
-    Old(TomlNode<'f>),
-    Deleted(TomlNode<'f>),
-    Replaced(TomlNode<'f>),
-    Inserted(TomlNode<'f>),
+    Old(CstNode<'f>),
+    Deleted(CstNode<'f>),
+    Replaced(CstNode<'f>),
+    Inserted(CstNode<'f>),
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -80,6 +80,6 @@ struct ChildChange<'f> {
 #[derive(Copy, Clone, Debug)]
 pub(crate) enum ChildChangeOp<'f> {
     Delete,
-    Replace(TomlNode<'f>),
-    Insert(TomlNode<'f>),
+    Replace(CstNode<'f>),
+    Insert(CstNode<'f>),
 }

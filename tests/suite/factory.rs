@@ -1,5 +1,5 @@
 use tom::{
-    Factory, TomlNode,
+    Factory, CstNode,
 };
 use testutils::assert_eq_text;
 use check_panics;
@@ -71,7 +71,7 @@ fn table_without_name() {
     });
 }
 
-fn check(f: impl for<'f> FnOnce(&'f Factory) -> TomlNode<'f>, expected: &str)
+fn check(f: impl for<'f> FnOnce(&'f Factory) -> CstNode<'f>, expected: &str)
 {
     let factory = Factory::new();
     let ast = f(&factory);

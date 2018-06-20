@@ -1,5 +1,5 @@
 use std::marker::PhantomData;
-use {Children, TomlNode};
+use {Children, CstNode};
 
 mod generated;
 pub use self::generated::*;
@@ -7,11 +7,11 @@ mod ext;
 pub use self::ext::*;
 
 pub trait AstNode<'f>: Copy {
-    fn cast(node: TomlNode<'f>) -> Option<Self>
+    fn cast(node: CstNode<'f>) -> Option<Self>
     where
         Self: Sized;
 
-    fn node(self) -> TomlNode<'f>;
+    fn node(self) -> CstNode<'f>;
 }
 
 pub struct AstChildren<'f, A: AstNode<'f>> {

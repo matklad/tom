@@ -1,11 +1,11 @@
 use {
-    TomlNode,
+    CstNode,
     ast,
 };
 
 pub(crate) struct Visitor<'f, 'c, C> {
     ctx: C,
-    callbacks: Vec<Box<FnMut(&mut C, TomlNode<'f>) + 'c>>,
+    callbacks: Vec<Box<FnMut(&mut C, CstNode<'f>) + 'c>>,
 }
 
 pub(crate) fn visitor<'f, 'c, C>(ctx: C) -> Visitor<'f, 'c, C> {
@@ -13,13 +13,13 @@ pub(crate) fn visitor<'f, 'c, C>(ctx: C) -> Visitor<'f, 'c, C> {
 }
 
 pub(crate) fn process<'f, 'c, C>(
-    node: TomlNode<'f>,
+    node: CstNode<'f>,
     mut v: Visitor<'f, 'c, C>,
 ) -> C {
     go(node, &mut v);
     return v.ctx;
 
-    fn go<'f, 'c, C>(node: TomlNode<'f>, v: &mut Visitor<'f, 'c, C>) {
+    fn go<'f, 'c, C>(node: CstNode<'f>, v: &mut Visitor<'f, 'c, C>) {
         v.do_visit(node);
         for child in node.children() {
             go(child, v);
@@ -32,7 +32,7 @@ impl<'f, 'c, C> Visitor<'f, 'c, C> {
         mut self,
         mut f: F,
     ) -> Self {
-        let cb: Box<FnMut(&mut C, TomlNode<'f>) + 'c> =
+        let cb: Box<FnMut(&mut C, CstNode<'f>) + 'c> =
             Box::new(move |c, node| {
                 match A::cast(node) {
                     None => (),
@@ -43,7 +43,7 @@ impl<'f, 'c, C> Visitor<'f, 'c, C> {
         self
     }
 
-    fn do_visit(&mut self, node: TomlNode<'f>) {
+    fn do_visit(&mut self, node: CstNode<'f>) {
         for cb in self.callbacks.iter_mut() {
             cb(&mut self.ctx, node);
         }

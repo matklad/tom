@@ -207,7 +207,7 @@ fn gen_ast() -> String {
 
     for n in descr.iter() {
         ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
-        ln!("pub struct {}<'f>(TomlNode<'f>);", n.name);
+        ln!("pub struct {}<'f>(CstNode<'f>);", n.name);
         ln!();
 
         if !n.kinds.is_empty() {
@@ -224,7 +224,7 @@ fn gen_ast() -> String {
         ln!();
         ln!("impl<'f> AstNode<'f> for {}<'f> {{", n.name);
         {
-            ln!("fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {{");
+            ln!("fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {{");
             {
                 ln!("match node.symbol() {{");
                 let symbols = if n.symbols.is_empty() {
@@ -240,21 +240,21 @@ fn gen_ast() -> String {
             }
             ln!("}}");
             ln!();
-            ln!("fn node(self) -> TomlNode<'f> {{ self.0 }}");
+            ln!("fn node(self) -> CstNode<'f> {{ self.0 }}");
         }
         ln!("}}");
         ln!();
 
-        ln!("impl<'f> From<{}<'f>> for TomlNode<'f> {{", n.name);
+        ln!("impl<'f> From<{}<'f>> for CstNode<'f> {{", n.name);
         {
-            ln!("fn from(ast: {}<'f>) -> TomlNode<'f> {{ ast.node() }}", n.name);
+            ln!("fn from(ast: {}<'f>) -> CstNode<'f> {{ ast.node() }}", n.name);
         }
         ln!("}}");
         ln!();
 
         ln!("impl<'f> {}<'f> {{", n.name);
         {
-            ln!("pub fn node(self) -> TomlNode<'f> {{ self.0 }}");
+            ln!("pub fn node(self) -> CstNode<'f> {{ self.0 }}");
             if !n.kinds.is_empty() || !n.methods.is_empty() {
                 ln!();
             }

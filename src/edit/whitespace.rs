@@ -1,13 +1,13 @@
 use {
-    TomlNode,
+    CstNode,
     symbol::*,
 };
 
 pub enum Location<'f> {
-    Between(TomlNode<'f>, TomlNode<'f>),
+    Between(CstNode<'f>, CstNode<'f>),
     OnEdge {
-        child: TomlNode<'f>,
-        parent: TomlNode<'f>,
+        child: CstNode<'f>,
+        parent: CstNode<'f>,
         edge: Edge,
     },
 }
@@ -27,7 +27,7 @@ pub fn compute_ws(loc: Location) -> String {
     }
 }
 
-fn ws_between(left: TomlNode, right: TomlNode) -> String {
+fn ws_between(left: CstNode, right: CstNode) -> String {
     match (left.symbol(), right.symbol()) {
         (ENTRY, ENTRY) | (TABLE_HEADER, ENTRY) => String::from("\n"),
         (TABLE, TABLE) | (ENTRY, TABLE) => String::from("\n\n"),
@@ -35,11 +35,11 @@ fn ws_between(left: TomlNode, right: TomlNode) -> String {
     }
 }
 
-fn ws_before(_: TomlNode, _: TomlNode) -> String {
+fn ws_before(_: CstNode, _: CstNode) -> String {
     String::new()
 }
 
-fn ws_after(child: TomlNode, parent: TomlNode) -> String {
+fn ws_after(child: CstNode, parent: CstNode) -> String {
     if parent.symbol() == DOC && child.symbol() != WHITESPACE {
         String::from("\n")
     } else {

@@ -2,7 +2,7 @@ use std::{
     collections::HashMap,
 };
 
-use {TomlDoc, TomlNode};
+use {TomlDoc, CstNode};
 
 mod node_change;
 mod whitespace;
@@ -15,29 +15,29 @@ use self::node_change::{
 #[derive(Debug)]
 pub struct Edit<'f> {
     doc: &'f TomlDoc,
-    ops: HashMap<TomlNode<'f>, Changes<'f>>,
+    ops: HashMap<CstNode<'f>, Changes<'f>>,
     smart_ws: bool,
 }
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum Position<'f> {
-    After(TomlNode<'f>),
-    Before(TomlNode<'f>),
-    StartOf(TomlNode<'f>),
-    EndOf(TomlNode<'f>),
+    After(CstNode<'f>),
+    Before(CstNode<'f>),
+    StartOf(CstNode<'f>),
+    EndOf(CstNode<'f>),
 }
 
 impl<'f> Position<'f> {
-    pub fn after(node: impl Into<TomlNode<'f>>) -> Position<'f> {
+    pub fn after(node: impl Into<CstNode<'f>>) -> Position<'f> {
         Position::After(node.into())
     }
-    pub fn before(node: impl Into<TomlNode<'f>>) -> Position<'f> {
+    pub fn before(node: impl Into<CstNode<'f>>) -> Position<'f> {
         Position::Before(node.into())
     }
-    pub fn start_of(node: impl Into<TomlNode<'f>>) -> Position<'f> {
+    pub fn start_of(node: impl Into<CstNode<'f>>) -> Position<'f> {
         Position::StartOf(node.into())
     }
-    pub fn end_of(node: impl Into<TomlNode<'f>>) -> Position<'f> {
+    pub fn end_of(node: impl Into<CstNode<'f>>) -> Position<'f> {
         Position::EndOf(node.into())
     }
 }
@@ -53,8 +53,8 @@ impl<'f> Edit<'f> {
 
     pub fn replace(
         &mut self,
-        node: impl Into<TomlNode<'f>>,
-        replacement: impl Into<TomlNode<'f>>,
+        node: impl Into<CstNode<'f>>,
+        replacement: impl Into<CstNode<'f>>,
     ) {
         let (parent, pos) = parent(node.into());
         self.changes_mut(parent).add_child_change(
@@ -64,7 +64,7 @@ impl<'f> Edit<'f> {
 
     pub fn insert(
         &mut self,
-        node: impl Into<TomlNode<'f>>,
+        node: impl Into<CstNode<'f>>,
         position: Position<'f>,
     ) {
         let (parent, pos) = match position {
@@ -83,23 +83,23 @@ impl<'f> Edit<'f> {
             .add_child_change(pos, ChildChangeOp::Insert(node.into()));
     }
 
-    pub fn delete(&mut self, node: impl Into<TomlNode<'f>>) {
+    pub fn delete(&mut self, node: impl Into<CstNode<'f>>) {
         let (parent, pos) = parent(node.into());
         self.changes_mut(parent)
             .add_child_change(pos, ChildChangeOp::Delete)
     }
 
     pub fn finish(self) -> String {
-        let root = self.doc.parse_tree();
+        let root = self.doc.cst();
         compose::compose(root, &self.ops, self.smart_ws)
     }
 
-    fn changes_mut(&mut self, target: TomlNode<'f>) -> &mut Changes<'f> {
+    fn changes_mut(&mut self, target: CstNode<'f>) -> &mut Changes<'f> {
         self.ops.entry(target).or_insert_with(Default::default)
     }
 }
 
-fn parent<'f>(child: TomlNode<'f>) -> (TomlNode<'f>, usize) {
+fn parent<'f>(child: CstNode<'f>) -> (CstNode<'f>, usize) {
     let parent = child.parent().unwrap();
     let position = parent.children().position(|it| it == child).unwrap();
     (parent, position)

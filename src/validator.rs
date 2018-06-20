@@ -1,12 +1,12 @@
 use {
-    TomlDoc, SyntaxError, TextRange, TomlNode,
+    TomlDoc, SyntaxError, TextRange, CstNode,
     ast,
     visitor
 };
 
 pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
     visitor::process(
-        doc.parse_tree(),
+        doc.cst(),
         visitor::visitor(Vec::new())
             .visit::<ast::Entry, _>(|errors, entry| {
                 if let Some(first_key) = entry.keys().next() {
@@ -49,7 +49,7 @@ fn check_table<'f>(
 
 fn check_new_line<'f>(
     errors: &mut Vec<SyntaxError>,
-    left: impl Into<TomlNode<'f>>, right: impl Into<TomlNode<'f>>,
+    left: impl Into<CstNode<'f>>, right: impl Into<CstNode<'f>>,
     new_line_required: bool,
     msg: &str
 ) {

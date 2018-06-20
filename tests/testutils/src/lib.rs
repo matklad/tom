@@ -28,19 +28,19 @@ pub fn dir_tests<F>(paths: &[&str], f: F)
 {
     for path in collect_tests(paths) {
         let input_code = read_text(&path);
-        let parse_tree = f(&input_code);
+        let cst = f(&input_code);
         let path = path.with_extension("txt");
         if !path.exists() {
             println!("\nfile: {}", path.display());
             println!("No .txt file with expected result, creating...\n");
-            println!("{}\n{}", input_code, parse_tree);
-            fs::write(&path, parse_tree).unwrap();
+            println!("{}\n{}", input_code, cst);
+            fs::write(&path, cst).unwrap();
             panic!("No expected result")
         }
         let expected = read_text(&path);
         let expected = expected.as_str();
-        let parse_tree = parse_tree.as_str();
-        assert_equal_text(expected, parse_tree, &path);
+        let cst = cst.as_str();
+        assert_equal_text(expected, cst, &path);
     }
 }
 

@@ -1,4 +1,4 @@
-use parse_tree::{TopDownBuilder, ParseTree};
+use cst::{TopDownBuilder, ParseTree};
 use {
     TomlSymbol, SyntaxError,
     symbol::{DOC, ENTRY, TABLE, COMMENT, WHITESPACE},

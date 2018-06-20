@@ -10,7 +10,7 @@ use std::{
 };
 
 use tom::{
-    TomlDoc, TomlNode,
+    TomlDoc, CstNode,
     ast::AstNode,
 };
 use testutils::{
@@ -28,18 +28,18 @@ fn toml(text: &str) -> TomlDoc {
 }
 
 fn find<'f, A: AstNode<'f>>(toml: &'f TomlDoc) -> A {
-    subtree(toml.parse_tree()).into_iter()
+    subtree(toml.cst()).into_iter()
         .filter_map(A::cast)
         .next()
         .unwrap()
 }
 
-fn subtree<'f>(node: TomlNode<'f>) -> Vec<TomlNode<'f>> {
+fn subtree<'f>(node: CstNode<'f>) -> Vec<CstNode<'f>> {
     let mut buff = Vec::new();
     go(node, &mut buff);
     return buff;
 
-    fn go<'f>(node: TomlNode<'f>, buff: &mut Vec<TomlNode<'f>>) {
+    fn go<'f>(node: CstNode<'f>, buff: &mut Vec<CstNode<'f>>) {
         buff.push(node);
         for child in node.children() {
             go(child, buff);

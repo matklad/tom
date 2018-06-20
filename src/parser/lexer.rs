@@ -1,4 +1,4 @@
-use parse_tree::Symbol;
+use cst::Symbol;
 use m_lexer::{LexerBuilder, Lexer, TokenKind};
 
 use {

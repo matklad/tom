@@ -2,22 +2,22 @@ use *;
 use ast::{AstNode, AstChildren};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Doc<'f>(TomlNode<'f>);
+pub struct Doc<'f>(CstNode<'f>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Table<'f>(TomlNode<'f>);
+pub struct Table<'f>(CstNode<'f>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct ArrayTable<'f>(TomlNode<'f>);
+pub struct ArrayTable<'f>(CstNode<'f>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct TableHeader<'f>(TomlNode<'f>);
+pub struct TableHeader<'f>(CstNode<'f>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Entry<'f>(TomlNode<'f>);
+pub struct Entry<'f>(CstNode<'f>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Key<'f>(TomlNode<'f>);
+pub struct Key<'f>(CstNode<'f>);
 
 pub enum KeyKind<'f> {
     StringLit(StringLit<'f>),
@@ -25,7 +25,7 @@ pub enum KeyKind<'f> {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Val<'f>(TomlNode<'f>);
+pub struct Val<'f>(CstNode<'f>);
 
 pub enum ValKind<'f> {
     Array(Array<'f>),
@@ -37,44 +37,44 @@ pub enum ValKind<'f> {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct StringLit<'f>(TomlNode<'f>);
+pub struct StringLit<'f>(CstNode<'f>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct BareKey<'f>(TomlNode<'f>);
+pub struct BareKey<'f>(CstNode<'f>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Array<'f>(TomlNode<'f>);
+pub struct Array<'f>(CstNode<'f>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Dict<'f>(TomlNode<'f>);
+pub struct Dict<'f>(CstNode<'f>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Number<'f>(TomlNode<'f>);
+pub struct Number<'f>(CstNode<'f>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Bool<'f>(TomlNode<'f>);
+pub struct Bool<'f>(CstNode<'f>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct DateTime<'f>(TomlNode<'f>);
+pub struct DateTime<'f>(CstNode<'f>);
 
 
 impl<'f> AstNode<'f> for Doc<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
             DOC => Some(Doc(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> TomlNode<'f> { self.0 }
+    fn node(self) -> CstNode<'f> { self.0 }
 }
 
-impl<'f> From<Doc<'f>> for TomlNode<'f> {
-    fn from(ast: Doc<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<Doc<'f>> for CstNode<'f> {
+    fn from(ast: Doc<'f>) -> CstNode<'f> { ast.node() }
 }
 
 impl<'f> Doc<'f> {
-    pub fn node(self) -> TomlNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn tables(self) -> AstChildren<'f, Table<'f>> {
         AstChildren::new(self.node().children())
@@ -88,22 +88,22 @@ impl<'f> Doc<'f> {
 }
 
 impl<'f> AstNode<'f> for Table<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
             TABLE => Some(Table(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> TomlNode<'f> { self.0 }
+    fn node(self) -> CstNode<'f> { self.0 }
 }
 
-impl<'f> From<Table<'f>> for TomlNode<'f> {
-    fn from(ast: Table<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<Table<'f>> for CstNode<'f> {
+    fn from(ast: Table<'f>) -> CstNode<'f> { ast.node() }
 }
 
 impl<'f> Table<'f> {
-    pub fn node(self) -> TomlNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
         AstChildren::new(self.node().children())
@@ -114,22 +114,22 @@ impl<'f> Table<'f> {
 }
 
 impl<'f> AstNode<'f> for ArrayTable<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
             ARRAY_TABLE => Some(ArrayTable(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> TomlNode<'f> { self.0 }
+    fn node(self) -> CstNode<'f> { self.0 }
 }
 
-impl<'f> From<ArrayTable<'f>> for TomlNode<'f> {
-    fn from(ast: ArrayTable<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<ArrayTable<'f>> for CstNode<'f> {
+    fn from(ast: ArrayTable<'f>) -> CstNode<'f> { ast.node() }
 }
 
 impl<'f> ArrayTable<'f> {
-    pub fn node(self) -> TomlNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
         AstChildren::new(self.node().children())
@@ -140,22 +140,22 @@ impl<'f> ArrayTable<'f> {
 }
 
 impl<'f> AstNode<'f> for TableHeader<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
             TABLE_HEADER => Some(TableHeader(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> TomlNode<'f> { self.0 }
+    fn node(self) -> CstNode<'f> { self.0 }
 }
 
-impl<'f> From<TableHeader<'f>> for TomlNode<'f> {
-    fn from(ast: TableHeader<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<TableHeader<'f>> for CstNode<'f> {
+    fn from(ast: TableHeader<'f>) -> CstNode<'f> { ast.node() }
 }
 
 impl<'f> TableHeader<'f> {
-    pub fn node(self) -> TomlNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn keys(self) -> AstChildren<'f, Key<'f>> {
         AstChildren::new(self.node().children())
@@ -163,22 +163,22 @@ impl<'f> TableHeader<'f> {
 }
 
 impl<'f> AstNode<'f> for Entry<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
             ENTRY => Some(Entry(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> TomlNode<'f> { self.0 }
+    fn node(self) -> CstNode<'f> { self.0 }
 }
 
-impl<'f> From<Entry<'f>> for TomlNode<'f> {
-    fn from(ast: Entry<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<Entry<'f>> for CstNode<'f> {
+    fn from(ast: Entry<'f>) -> CstNode<'f> { ast.node() }
 }
 
 impl<'f> Entry<'f> {
-    pub fn node(self) -> TomlNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn keys(self) -> AstChildren<'f, Key<'f>> {
         AstChildren::new(self.node().children())
@@ -189,22 +189,22 @@ impl<'f> Entry<'f> {
 }
 
 impl<'f> AstNode<'f> for Key<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
             KEY => Some(Key(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> TomlNode<'f> { self.0 }
+    fn node(self) -> CstNode<'f> { self.0 }
 }
 
-impl<'f> From<Key<'f>> for TomlNode<'f> {
-    fn from(ast: Key<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<Key<'f>> for CstNode<'f> {
+    fn from(ast: Key<'f>) -> CstNode<'f> { ast.node() }
 }
 
 impl<'f> Key<'f> {
-    pub fn node(self) -> TomlNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn kind(self) -> KeyKind<'f> {
         let node = self.node().children().next().unwrap();
@@ -220,22 +220,22 @@ impl<'f> Key<'f> {
 }
 
 impl<'f> AstNode<'f> for Val<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
             VAL => Some(Val(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> TomlNode<'f> { self.0 }
+    fn node(self) -> CstNode<'f> { self.0 }
 }
 
-impl<'f> From<Val<'f>> for TomlNode<'f> {
-    fn from(ast: Val<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<Val<'f>> for CstNode<'f> {
+    fn from(ast: Val<'f>) -> CstNode<'f> { ast.node() }
 }
 
 impl<'f> Val<'f> {
-    pub fn node(self) -> TomlNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn kind(self) -> ValKind<'f> {
         let node = self.node().children().next().unwrap();
@@ -263,7 +263,7 @@ impl<'f> Val<'f> {
 }
 
 impl<'f> AstNode<'f> for StringLit<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
             BASIC_STRING => Some(StringLit(node)),
             MULTILINE_BASIC_STRING => Some(StringLit(node)),
@@ -273,72 +273,72 @@ impl<'f> AstNode<'f> for StringLit<'f> {
         }
     }
 
-    fn node(self) -> TomlNode<'f> { self.0 }
+    fn node(self) -> CstNode<'f> { self.0 }
 }
 
-impl<'f> From<StringLit<'f>> for TomlNode<'f> {
-    fn from(ast: StringLit<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<StringLit<'f>> for CstNode<'f> {
+    fn from(ast: StringLit<'f>) -> CstNode<'f> { ast.node() }
 }
 
 impl<'f> StringLit<'f> {
-    pub fn node(self) -> TomlNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for BareKey<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
             BARE_KEY => Some(BareKey(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> TomlNode<'f> { self.0 }
+    fn node(self) -> CstNode<'f> { self.0 }
 }
 
-impl<'f> From<BareKey<'f>> for TomlNode<'f> {
-    fn from(ast: BareKey<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<BareKey<'f>> for CstNode<'f> {
+    fn from(ast: BareKey<'f>) -> CstNode<'f> { ast.node() }
 }
 
 impl<'f> BareKey<'f> {
-    pub fn node(self) -> TomlNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for Array<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
             ARRAY => Some(Array(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> TomlNode<'f> { self.0 }
+    fn node(self) -> CstNode<'f> { self.0 }
 }
 
-impl<'f> From<Array<'f>> for TomlNode<'f> {
-    fn from(ast: Array<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<Array<'f>> for CstNode<'f> {
+    fn from(ast: Array<'f>) -> CstNode<'f> { ast.node() }
 }
 
 impl<'f> Array<'f> {
-    pub fn node(self) -> TomlNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for Dict<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
             DICT => Some(Dict(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> TomlNode<'f> { self.0 }
+    fn node(self) -> CstNode<'f> { self.0 }
 }
 
-impl<'f> From<Dict<'f>> for TomlNode<'f> {
-    fn from(ast: Dict<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<Dict<'f>> for CstNode<'f> {
+    fn from(ast: Dict<'f>) -> CstNode<'f> { ast.node() }
 }
 
 impl<'f> Dict<'f> {
-    pub fn node(self) -> TomlNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
         AstChildren::new(self.node().children())
@@ -346,58 +346,58 @@ impl<'f> Dict<'f> {
 }
 
 impl<'f> AstNode<'f> for Number<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
             NUMBER => Some(Number(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> TomlNode<'f> { self.0 }
+    fn node(self) -> CstNode<'f> { self.0 }
 }
 
-impl<'f> From<Number<'f>> for TomlNode<'f> {
-    fn from(ast: Number<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<Number<'f>> for CstNode<'f> {
+    fn from(ast: Number<'f>) -> CstNode<'f> { ast.node() }
 }
 
 impl<'f> Number<'f> {
-    pub fn node(self) -> TomlNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for Bool<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
             BOOL => Some(Bool(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> TomlNode<'f> { self.0 }
+    fn node(self) -> CstNode<'f> { self.0 }
 }
 
-impl<'f> From<Bool<'f>> for TomlNode<'f> {
-    fn from(ast: Bool<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<Bool<'f>> for CstNode<'f> {
+    fn from(ast: Bool<'f>) -> CstNode<'f> { ast.node() }
 }
 
 impl<'f> Bool<'f> {
-    pub fn node(self) -> TomlNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for DateTime<'f> {
-    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
             DATE_TIME => Some(DateTime(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> TomlNode<'f> { self.0 }
+    fn node(self) -> CstNode<'f> { self.0 }
 }
 
-impl<'f> From<DateTime<'f>> for TomlNode<'f> {
-    fn from(ast: DateTime<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<DateTime<'f>> for CstNode<'f> {
+    fn from(ast: DateTime<'f>) -> CstNode<'f> { ast.node() }
 }
 
 impl<'f> DateTime<'f> {
-    pub fn node(self) -> TomlNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
 }

@@ -1,13 +1,13 @@
 use std::collections::hash_map::{HashMap, Entry};
 use {
-    TomlNode,
+    CstNode,
     edit::node_change::{Changes, MergedChild},
     edit::whitespace::{compute_ws, Location, Edge},
 };
 
 pub(crate) fn compose<'f>(
-    root: TomlNode<'f>,
-    ops: &HashMap<TomlNode<'f>, Changes>,
+    root: CstNode<'f>,
+    ops: &HashMap<CstNode<'f>, Changes>,
     smart_ws: bool,
 ) -> String {
     let mut state = State::new(ops, smart_ws);
@@ -22,14 +22,14 @@ enum HasChanges {
 }
 
 struct State<'a, 'f: 'a> {
-    ops: &'a HashMap<TomlNode<'f>, Changes<'f>>,
+    ops: &'a HashMap<CstNode<'f>, Changes<'f>>,
     smart_ws: bool,
     buff: String,
-    has_changes: HashMap<TomlNode<'f>, HasChanges>,
+    has_changes: HashMap<CstNode<'f>, HasChanges>,
 }
 
 impl<'a, 'f> State<'a, 'f> {
-    fn new(ops: &'a HashMap<TomlNode<'f>, Changes<'f>>, smart_ws: bool) -> Self {
+    fn new(ops: &'a HashMap<CstNode<'f>, Changes<'f>>, smart_ws: bool) -> Self {
         State {
             ops,
             smart_ws,
@@ -38,7 +38,7 @@ impl<'a, 'f> State<'a, 'f> {
         }
     }
 
-    fn go(&mut self, node: TomlNode<'f>, level: u32) {
+    fn go(&mut self, node: CstNode<'f>, level: u32) {
         if !self.has_changes(node) {
             self.buff.push_str(node.text());
             return;
@@ -51,7 +51,7 @@ impl<'a, 'f> State<'a, 'f> {
         let no_changes = Default::default();
         let changes = self.ops.get(&node)
             .unwrap_or_else(|| &no_changes);
-        let mut prev: Option<(bool, TomlNode)> = None;
+        let mut prev: Option<(bool, CstNode)> = None;
         for m in changes.merge(node.children()) {
             match m {
                 MergedChild::Old(child) => {
@@ -95,7 +95,7 @@ impl<'a, 'f> State<'a, 'f> {
         }
     }
 
-    fn has_changes(&mut self, node: TomlNode<'f>) -> bool {
+    fn has_changes(&mut self, node: CstNode<'f>) -> bool {
         match self.has_changes.entry(node) {
             Entry::Vacant(entry) => {
                 entry.insert(HasChanges::InProgress);

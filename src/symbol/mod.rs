@@ -1,4 +1,4 @@
-use parse_tree::Symbol;
+use cst::Symbol;
 use std::fmt;
 
 #[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]

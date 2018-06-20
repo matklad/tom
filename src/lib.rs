@@ -1,5 +1,5 @@
 extern crate text_unit;
-extern crate parse_tree;
+extern crate parse_tree as cst;
 extern crate typed_arena;
 extern crate itertools;
 #[macro_use]
@@ -12,7 +12,7 @@ extern crate lazy_static;
 
 use std::{fmt, ptr, hash};
 
-use parse_tree::{ParseTree, PtNode, PtNodeId};
+use cst::{ParseTree, PtNode, PtNodeId};
 
 use ast::AstNode;
 
@@ -35,15 +35,15 @@ pub use factory::Factory;
 
 #[derive(Clone)]
 pub struct TomlDoc {
-    parse_tree: ParseTree,
+    cst: ParseTree,
     parse_errors: Vec<SyntaxError>,
     text: String,
 }
 
 impl TomlDoc {
     pub fn new(text: String) -> TomlDoc {
-        let (parse_tree, errors) = parser::parse(&text);
-        TomlDoc { parse_tree, parse_errors: errors, text }
+        let (cst, errors) = parser::parse(&text);
+        TomlDoc { cst, parse_errors: errors, text }
     }
 
     pub fn errors(&self) -> Vec<SyntaxError> {
@@ -56,15 +56,15 @@ impl TomlDoc {
         &self.text
     }
 
-    pub fn parse_tree(&self) -> TomlNode {
-        TomlNode {
+    pub fn cst(&self) -> CstNode {
+        CstNode {
             doc: self,
-            id: self.parse_tree.root(),
+            id: self.cst.root(),
         }
     }
 
     pub fn ast(&self) -> ast::Doc {
-        ast::Doc::cast(self.parse_tree()).unwrap()
+        ast::Doc::cast(self.cst()).unwrap()
     }
 
     pub fn edit(&self) -> Edit {
@@ -73,7 +73,7 @@ impl TomlDoc {
 
     pub fn debug_dump(&self) -> String {
         let mut result = String::new();
-        go(self.parse_tree(), &mut result, 0);
+        go(self.cst(), &mut result, 0);
         let errors = self.errors();
         if !errors.is_empty() {
             result += "\n";
@@ -84,7 +84,7 @@ impl TomlDoc {
         }
         return result;
 
-        fn go(node: TomlNode, buff: &mut String, level: usize) {
+        fn go(node: CstNode, buff: &mut String, level: usize) {
             buff.push_str(&String::from("  ").repeat(level));
             buff.push_str(&format!("{:?}", node));
 
@@ -109,32 +109,32 @@ impl fmt::Debug for TomlDoc {
 }
 
 #[derive(Copy, Clone)]
-pub struct TomlNode<'f> {
+pub struct CstNode<'f> {
     doc: &'f TomlDoc,
     id: PtNodeId,
 }
 
-impl<'f> PartialEq<TomlNode<'f>> for TomlNode<'f> {
-    fn eq(&self, other: &TomlNode) -> bool {
+impl<'f> PartialEq<CstNode<'f>> for CstNode<'f> {
+    fn eq(&self, other: &CstNode) -> bool {
         self.id == other.id && ptr::eq(self.doc, other.doc)
     }
 }
 
-impl<'f> Eq for TomlNode<'f> {}
+impl<'f> Eq for CstNode<'f> {}
 
-impl<'f> hash::Hash for TomlNode<'f> {
+impl<'f> hash::Hash for CstNode<'f> {
     fn hash<H: hash::Hasher>(&self, state: &mut H) {
         self.id.hash(state)
     }
 }
 
-impl<'t> fmt::Debug for TomlNode<'t> {
+impl<'t> fmt::Debug for CstNode<'t> {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         write!(fmt, "{}@{:?}", self.symbol().name(), self.node().range())
     }
 }
 
-impl<'f> TomlNode<'f> {
+impl<'f> CstNode<'f> {
     pub fn doc(self) -> &'f TomlDoc {
         self.doc
     }
@@ -151,8 +151,8 @@ impl<'f> TomlNode<'f> {
         &self.doc.text[self.range()]
     }
 
-    pub fn parent(&self) -> Option<TomlNode<'f>> {
-        self.node().parent().map(|id| TomlNode {
+    pub fn parent(&self) -> Option<CstNode<'f>> {
+        self.node().parent().map(|id| CstNode {
             doc: self.doc,
             id,
         })
@@ -170,7 +170,7 @@ impl<'f> TomlNode<'f> {
     }
 
     fn node(&self) -> &PtNode {
-        &self.doc.parse_tree[self.id]
+        &self.doc.cst[self.id]
     }
 }
 
@@ -181,12 +181,12 @@ pub struct Children<'f> {
 }
 
 impl<'f> Iterator for Children<'f> {
-    type Item = TomlNode<'f>;
+    type Item = CstNode<'f>;
 
     fn next(&mut self) -> Option<<Self as Iterator>::Item> {
         self.id.map(|id| {
-            self.id = self.doc.parse_tree[id].next_sibling();
-            TomlNode { doc: &self.doc, id }
+            self.id = self.doc.cst[id].next_sibling();
+            CstNode { doc: &self.doc, id }
         })
     }
 }
