@@ -325,7 +325,7 @@ EOF
     ln!();
     for (i, s) in symbols.trim().lines().enumerate() {
         let name = format!("{}: TomlSymbol", s);
-        ln!(r#"pub const {:<20} = TomlSymbol(Symbol(SYMBOLS[{:02}].0));"#, name, i)
+        ln!(r#"pub const {:<42} = TomlSymbol(Symbol(SYMBOLS[{:02}].0));"#, name, i)
     }
     buff
 }
