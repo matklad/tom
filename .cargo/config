@@ -1,3 +1,4 @@
 [alias]
 gen-ast = ["run", "--package", "tasks", "--" , "gen-ast"]
+gen-symbols = ["run", "--package", "tasks", "--" , "gen-symbols"]
 gen-tests = ["run", "--package", "tasks", "--" , "gen-tests"]

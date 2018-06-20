@@ -13,6 +13,7 @@ type Result<T> = ::std::result::Result<T, failure::Error>;
 fn main() -> Result<()> {
     let matches = App::new("tasks")
         .subcommand(SubCommand::with_name("gen-ast"))
+        .subcommand(SubCommand::with_name("gen-symbols"))
         .subcommand(SubCommand::with_name("gen-tests"))
         .get_matches();
     match matches.subcommand_name().unwrap() {
@@ -20,6 +21,12 @@ fn main() -> Result<()> {
             update(
                 "./src/ast/generated.rs",
                 &gen_ast(),
+            )?;
+        }
+        "gen-symbols" => {
+            update(
+                "./src/symbol/generated.rs",
+                &gen_symbols(),
             )?;
         }
         "gen-tests" => get_tests()?,
@@ -240,6 +247,60 @@ fn gen_ast() -> String {
             ln!("    }}");
         }
         ln!("}}");
+    }
+    buff
+}
+
+fn gen_symbols() -> String {
+    let mut buff = String::new();
+    macro_rules! ln {
+        () => { buff.push_str("\n") };
+        ($($tt:tt)*) => {{
+            buff.push_str(&format!($($tt)*));
+            buff.push_str("\n");
+        }};
+    }
+    let symbols = "
+WHITESPACE
+DOC
+KEY_VAL
+ARRAY
+DICT
+TABLE_HEADER
+TABLE
+ARRAY_TABLE
+EQ
+DOT
+COMMA
+L_BRACK
+R_BRACK
+L_CURLY
+R_CURLY
+NUMBER
+BOOL
+BARE_KEY
+BASIC_STRING
+MULTILINE_BASIC_STRING
+LITERAL_STRING
+MULTILINE_LITERAL_STRING
+DATE_TIME
+ERROR
+BARE_KEY_OR_NUMBER
+BARE_KEY_OR_DATE
+EOF
+";
+
+    ln!("use super::{{SymbolInfo, TomlSymbol, Symbol}};");
+    ln!();
+    ln!("pub(crate) const SYMBOLS: &[SymbolInfo] = &[");
+    for (i, s) in symbols.trim().lines().enumerate() {
+        ln!(r#"    SymbolInfo({:02}, "{}"),"#, i, s)
+    }
+    ln!("];");
+    ln!();
+    for (i, s) in symbols.trim().lines().enumerate() {
+        let name = format!("{}: TomlSymbol", s);
+        ln!(r#"pub const {:<20} = TomlSymbol(Symbol(SYMBOLS[{:02}].0));"#, name, i)
     }
     buff
 }

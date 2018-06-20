@@ -6,7 +6,6 @@ mod grammar;
 
 pub(crate) fn parse(input: &str) -> ParseTree {
     let tokens = lexer::tokenize(input);
-    eprintln!("tokens = {:?}", tokens);
     let mut sink = EventSink::new(&tokens);
     {
         let mut parser = Parser {
