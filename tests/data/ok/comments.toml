@@ -1,0 +1,11 @@
+# file comment
+
+# comment on key-value
+key = "value"
+
+# table comment
+[table]
+foo = 92
+baz = 62 # inline key-value comment
+quux = ''#adj
+# trailing file comment

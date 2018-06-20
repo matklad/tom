@@ -1,30 +1,28 @@
 use parse_tree::Symbol;
-use m_lexer::{self, LexerBuilder, Lexer, TokenKind};
+use m_lexer::{LexerBuilder, Lexer, TokenKind};
 
 use {
-    TomlSymbol, TextUnit,
+    TomlSymbol, TextUnit, TextRange,
     symbol,
 };
 
 #[derive(Copy, Clone, Debug)]
 pub(crate) struct Token {
     pub symbol: TomlSymbol,
+    pub offset: TextUnit,
     pub len: TextUnit,
 }
 
 impl Token {
-    fn from_m_lexer(t: m_lexer::Token) -> Self {
-        Token {
-            symbol: TomlSymbol(Symbol(t.kind.0)),
-            len: TextUnit::from(t.len as u32),
-        }
-    }
-
     pub fn is_significant(self) -> bool {
         match self.symbol {
             symbol::WHITESPACE | symbol::COMMENT => false,
             _ => true,
         }
+    }
+
+    pub fn range(self) -> TextRange {
+        TextRange::from_len(self.offset, self.len)
     }
 }
 
@@ -39,10 +37,17 @@ pub(crate) struct Tokens {
 }
 
 pub(crate) fn tokenize(input: &str) -> Tokens {
-    let raw_tokens = LEXER.tokenize(input)
-        .into_iter()
-        .map(Token::from_m_lexer)
-        .collect::<Vec<_>>();
+    let mut raw_tokens = Vec::new();
+    let mut offset = TextUnit::from(0);
+    for t in LEXER.tokenize(input) {
+        let len = TextUnit::from(t.len as u32);
+        raw_tokens.push(Token {
+            symbol: TomlSymbol(Symbol(t.kind.0)),
+            offset,
+            len,
+        });
+        offset += len;
+    }
     let significant = raw_tokens.iter()
         .enumerate()
         .filter(|(_idx, tok)| tok.is_significant())

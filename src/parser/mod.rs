@@ -1,12 +1,12 @@
 use parse_tree::{TopDownBuilder, ParseTree};
-use {TomlSymbol, symbol::DOC};
+use {TomlSymbol, symbol::{DOC, KEY_VAL, TABLE, COMMENT, WHITESPACE}};
 
 mod lexer;
 mod grammar;
 
 pub(crate) fn parse(input: &str) -> ParseTree {
     let tokens = lexer::tokenize(input);
-    let mut sink = EventSink::new(&tokens);
+    let mut sink = EventSink::new(input, &tokens);
     {
         let mut parser = Parser {
             sink: &mut sink,
@@ -26,14 +26,16 @@ struct Parser<'s, 't: 's> {
 
 struct EventSink<'t> {
     pos: lexer::Pos,
+    text: &'t str,
     tokens: &'t lexer::Tokens,
     builder: TopDownBuilder,
 }
 
 impl<'t> EventSink<'t> {
-    fn new(tokens: &'t lexer::Tokens) -> Self {
+    fn new(text: &'t str, tokens: &'t lexer::Tokens) -> Self {
         EventSink {
             pos: lexer::Pos(0),
+            text,
             tokens,
             builder: TopDownBuilder::new(),
         }
@@ -67,11 +69,53 @@ impl<'t> EventSink<'t> {
     }
 
     fn leading_ws(&self, ws: &[lexer::Token], s: TomlSymbol) -> usize {
-        if s == DOC { ws.len() } else { 0 }
+        match s {
+            DOC => ws.len(),
+            KEY_VAL | TABLE => {
+                let mut adj_comments = 0;
+                for (i, token) in ws.iter().rev().enumerate() {
+                    match token.symbol {
+                        COMMENT => {
+                            adj_comments = i + 1;
+                        }
+                        WHITESPACE => {
+                            let text = &self.text[token.range()];
+                            if text.bytes().filter(|&b| b == b'\n').count() >= 2 {
+                                break
+                            }
+                        }
+                        c => unreachable!("not a ws: {:?}", c),
+                    }
+                }
+                adj_comments
+            }
+            _ => 0,
+        }
     }
 
     fn trailing_ws(&self, ws: &[lexer::Token], s: TomlSymbol) -> usize {
-        if s == DOC { ws.len() } else { 0 }
+        match s {
+            DOC => ws.len(),
+            KEY_VAL => {
+                let mut adj_comments = 0;
+                for (i, token) in ws.iter().enumerate() {
+                    match token.symbol {
+                        COMMENT => {
+                            adj_comments = i + 1;
+                        }
+                        WHITESPACE => {
+                            let text = &self.text[token.range()];
+                            if text.contains('\n') {
+                                break
+                            }
+                        }
+                        c => unreachable!("not a ws: {:?}", c),
+                    }
+                }
+                adj_comments
+            }
+            _ => 0,
+        }
     }
 
     fn whitespace(&self) -> &'t [lexer::Token] {
@@ -85,7 +129,7 @@ impl<'t> EventSink<'t> {
                 _ => break,
             }
         }
-        &self.tokens.raw_tokens[start.0 as usize .. end.0 as usize]
+        &self.tokens.raw_tokens[start.0 as usize..end.0 as usize]
     }
 
     fn bump(&mut self, s: Option<TomlSymbol>) {
@@ -96,4 +140,3 @@ impl<'t> EventSink<'t> {
         self.pos += 1;
     }
 }
-

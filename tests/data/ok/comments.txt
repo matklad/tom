@@ -1,0 +1,46 @@
+DOC@[0; 161)
+  COMMENT@[0; 14) "# file comment"
+  WHITESPACE@[14; 16)
+  KEY_VAL@[16; 52)
+    COMMENT@[16; 38) "# comment on key-value"
+    WHITESPACE@[38; 39)
+    BARE_KEY@[39; 42) "key"
+    WHITESPACE@[42; 43)
+    EQ@[43; 44) "="
+    WHITESPACE@[44; 45)
+    BASIC_STRING@[45; 52) "\"value\""
+  WHITESPACE@[52; 54)
+  TABLE@[54; 136)
+    COMMENT@[54; 69) "# table comment"
+    WHITESPACE@[69; 70)
+    TABLE_HEADER@[70; 77)
+      L_BRACK@[70; 71) "["
+      BARE_KEY@[71; 76) "table"
+      R_BRACK@[76; 77) "]"
+    WHITESPACE@[77; 78)
+    KEY_VAL@[78; 86)
+      BARE_KEY@[78; 81) "foo"
+      WHITESPACE@[81; 82)
+      EQ@[82; 83) "="
+      WHITESPACE@[83; 84)
+      NUMBER@[84; 86) "92"
+    WHITESPACE@[86; 87)
+    KEY_VAL@[87; 122)
+      BARE_KEY@[87; 90) "baz"
+      WHITESPACE@[90; 91)
+      EQ@[91; 92) "="
+      WHITESPACE@[92; 93)
+      NUMBER@[93; 95) "62"
+      WHITESPACE@[95; 96)
+      COMMENT@[96; 122) "# inline key-value comment"
+    WHITESPACE@[122; 123)
+    KEY_VAL@[123; 136)
+      BARE_KEY@[123; 127) "quux"
+      WHITESPACE@[127; 128)
+      EQ@[128; 129) "="
+      WHITESPACE@[129; 130)
+      LITERAL_STRING@[130; 132) "\'\'"
+      COMMENT@[132; 136) "#adj"
+  WHITESPACE@[136; 137)
+  COMMENT@[137; 160) "# trailing file comment"
+  WHITESPACE@[160; 161)
