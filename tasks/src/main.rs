@@ -85,18 +85,6 @@ fn get_tests() -> Result<()> {
 
 
 fn gen_ast() -> String {
-    let mut buff = String::new();
-    macro_rules! ln {
-        () => { buff.push_str("\n") };
-        ($($tt:tt)*) => {{
-            buff.push_str(&format!($($tt)*));
-            buff.push_str("\n");
-        }};
-    }
-
-    ln!("use *;");
-    ln!("use ast::{{AstNode, AstChildren}};");
-    ln!();
     let wrappers = &[
         "Doc",
         "BareKey",
@@ -128,6 +116,27 @@ fn gen_ast() -> String {
             &["Array", "Dict", "Number", "Bool", "DateTime", "StringLit"],
         ),
     ];
+    let methods: &[(&str, &[(&str, &str)])] = &[
+        (
+            "Doc",
+            &[("tables", "Table"), ("array_tables", "ArrayTable")],
+        ),
+        ("TableHeader", &[("keys", "Key")]),
+        ("KeyVal", &[("key", "Key"), ("val", "Val")]),
+    ];
+
+    let mut buff = String::new();
+    macro_rules! ln {
+        () => { buff.push_str("\n") };
+        ($($tt:tt)*) => {{
+            buff.push_str(&format!($($tt)*));
+            buff.push_str("\n");
+        }};
+    }
+
+    ln!("use *;");
+    ln!("use ast::{{AstNode, AstChildren}};");
+    ln!();
 
     for &symbol in wrappers
         .iter()
@@ -218,15 +227,6 @@ fn gen_ast() -> String {
         ln!("}}");
         ln!();
     }
-
-    let methods: &[(&str, &[(&str, &str)])] = &[
-        (
-            "Doc",
-            &[("tables", "Table"), ("array_tables", "ArrayTable")],
-        ),
-        ("TableHeader", &[("keys", "Key")]),
-        ("KeyVal", &[("key", "Key"), ("val", "Val")]),
-    ];
 
     for &(ref s, ref ms) in methods.iter() {
         ln!("impl<'f> {}<'f> {{", s);
