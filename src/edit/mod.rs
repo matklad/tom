@@ -16,6 +16,7 @@ use self::node_change::{
 pub struct Edit<'f> {
     doc: &'f TomlDoc,
     ops: HashMap<TomlNode<'f>, Changes<'f>>,
+    smart_ws: bool,
 }
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
@@ -43,7 +44,11 @@ impl<'f> Position<'f> {
 
 impl<'f> Edit<'f> {
     pub fn new(doc: &'f TomlDoc) -> Edit {
-        Edit { doc, ops: HashMap::new() }
+        Edit { doc, ops: HashMap::new(), smart_ws: true }
+    }
+
+    pub fn disable_smart_whitespace(&mut self) {
+        self.smart_ws = false;
     }
 
     pub fn replace(
@@ -86,7 +91,7 @@ impl<'f> Edit<'f> {
 
     pub fn finish(self) -> String {
         let root = self.doc.parse_tree();
-        compose::compose(root, &self.ops)
+        compose::compose(root, &self.ops, self.smart_ws)
     }
 
     fn changes_mut(&mut self, target: TomlNode<'f>) -> &mut Changes<'f> {

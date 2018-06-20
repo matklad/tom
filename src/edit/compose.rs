@@ -5,8 +5,12 @@ use {
     edit::whitespace::{compute_ws, Location, Edge},
 };
 
-pub(crate) fn compose<'f>(root: TomlNode<'f>, ops: &HashMap<TomlNode<'f>, Changes>) -> String {
-    let mut state = State::new(ops);
+pub(crate) fn compose<'f>(
+    root: TomlNode<'f>,
+    ops: &HashMap<TomlNode<'f>, Changes>,
+    smart_ws: bool,
+) -> String {
+    let mut state = State::new(ops, smart_ws);
     state.go(root, 0);
     state.buff
 }
@@ -19,14 +23,16 @@ enum HasChanges {
 
 struct State<'a, 'f: 'a> {
     ops: &'a HashMap<TomlNode<'f>, Changes<'f>>,
+    smart_ws: bool,
     buff: String,
     has_changes: HashMap<TomlNode<'f>, HasChanges>,
 }
 
 impl<'a, 'f> State<'a, 'f> {
-    fn new(ops: &'a HashMap<TomlNode<'f>, Changes<'f>>) -> Self {
+    fn new(ops: &'a HashMap<TomlNode<'f>, Changes<'f>>, smart_ws: bool) -> Self {
         State {
             ops,
+            smart_ws,
             buff: String::new(),
             has_changes: HashMap::new(),
         }
@@ -52,9 +58,7 @@ impl<'a, 'f> State<'a, 'f> {
                     match prev {
                         Some((prev_old, prev)) => {
                             if !prev_old {
-                                self.buff.push_str(
-                                    &compute_ws(Location::Between(prev, child))
-                                )
+                                self.adjust_ws(Location::Between(prev, child));
                             }
                         }
                         _ => (),
@@ -68,15 +72,14 @@ impl<'a, 'f> State<'a, 'f> {
                     prev = Some((false, new_child));
                 }
                 MergedChild::Inserted(new_child) => {
-                    let ws = &match prev {
-                        Some((_, prev)) => compute_ws(
+                    &match prev {
+                        Some((_, prev)) => self.adjust_ws(
                             Location::Between(prev, new_child),
                         ),
-                        None => compute_ws(
+                        None => self.adjust_ws(
                             Location::OnEdge { child: new_child, parent: node, edge: Edge::Left }
                         ),
                     };
-                    self.buff.push_str(&ws);
                     self.go(new_child, level + 1);
                     prev = Some((false, new_child));
                 }
@@ -84,10 +87,9 @@ impl<'a, 'f> State<'a, 'f> {
         }
         match prev {
             Some((false, new_child)) => {
-                let ws = &compute_ws(
+                self.adjust_ws(
                     Location::OnEdge { child: new_child, parent: node, edge: Edge::Right }
                 );
-                self.buff.push_str(&ws);
             }
             _ => (),
         }
@@ -108,8 +110,15 @@ impl<'a, 'f> State<'a, 'f> {
             node.children().any(|child| self.has_changes(child));
         self.has_changes.insert(
             node,
-            if result { HasChanges::Yes } else { HasChanges::No }
+            if result { HasChanges::Yes } else { HasChanges::No },
         );
         result
+    }
+
+    fn adjust_ws(&mut self, loc: Location) {
+        if self.smart_ws {
+            let ws = compute_ws(loc);
+            self.buff.push_str(&ws);
+        }
     }
 }
