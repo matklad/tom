@@ -66,3 +66,8 @@ fn test_parser_inline() {
 fn test_parser_ok() {
     testutils::dir_tests(&["ok"], |text| toml(text).debug_dump())
 }
+
+#[test]
+fn test_parser_validation() {
+    testutils::dir_tests(&["validation"], |text| toml(text).debug_dump())
+}

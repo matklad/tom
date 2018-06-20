@@ -1,0 +1,37 @@
+DOC@[0; 36)
+  TABLE@[0; 17)
+    TABLE_HEADER@[0; 7)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 6)
+        BARE_KEY@[1; 6) "table"
+      R_BRACK@[6; 7) "]"
+    WHITESPACE@[7; 8)
+    KEY_VAL@[8; 17)
+      KEY@[8; 11)
+        BARE_KEY@[8; 11) "foo"
+      WHITESPACE@[11; 12)
+      EQ@[12; 13) "="
+      WHITESPACE@[13; 15)
+      VAL@[15; 17)
+        NUMBER@[15; 17) "92"
+  WHITESPACE@[17; 19)
+  TABLE@[19; 35)
+    TABLE_HEADER@[19; 26)
+      L_BRACK@[19; 20) "["
+      KEY@[20; 25)
+        BARE_KEY@[20; 25) "table"
+      R_BRACK@[25; 26) "]"
+    WHITESPACE@[26; 27)
+    KEY_VAL@[27; 35)
+      KEY@[27; 30)
+        BARE_KEY@[27; 30) "bar"
+      WHITESPACE@[30; 31)
+      EQ@[31; 32) "="
+      WHITESPACE@[32; 33)
+      VAL@[33; 35)
+        NUMBER@[33; 35) "92"
+  WHITESPACE@[35; 36)
+
+error@[11; 15) " =\n ": newlines are forbidden in entries
+error@[26; 27) " ": newline is mandatory after table header
+error@[26; 27) " ": newline is mandatory after table header

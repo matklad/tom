@@ -68,3 +68,4 @@ error@[38; 39) "}": expected `=`
 error@[39; 40) "\n": expected a value
 error@[39; 40) "\n": expected `,`
 error@[39; 40) "\n": expected `}`
+error@[38; 40) "}\n": newlines are forbidden in entries

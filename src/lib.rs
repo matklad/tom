@@ -23,7 +23,9 @@ define_uncover_macros!(
 mod edit;
 mod factory;
 mod parser;
+mod validator;
 mod symbol;
+pub(crate) mod visitor;
 
 pub mod ast;
 pub use symbol::*;
@@ -34,18 +36,20 @@ pub use factory::Factory;
 #[derive(Clone)]
 pub struct TomlDoc {
     parse_tree: ParseTree,
-    errors: Vec<SyntaxError>,
+    parse_errors: Vec<SyntaxError>,
     text: String,
 }
 
 impl TomlDoc {
     pub fn new(text: String) -> TomlDoc {
         let (parse_tree, errors) = parser::parse(&text);
-        TomlDoc { parse_tree, errors, text }
+        TomlDoc { parse_tree, parse_errors: errors, text }
     }
 
     pub fn errors(&self) -> Vec<SyntaxError> {
-        self.errors.clone()
+        let mut res = self.parse_errors.clone();
+        res.extend(validator::validate(self));
+        res
     }
 
     pub fn text(&self) -> &str {
@@ -70,9 +74,10 @@ impl TomlDoc {
     pub fn debug_dump(&self) -> String {
         let mut result = String::new();
         go(self.parse_tree(), &mut result, 0);
-        if !self.errors.is_empty() {
+        let errors = self.errors();
+        if !errors.is_empty() {
             result += "\n";
-            for e in self.errors.iter() {
+            for e in errors.iter() {
                 let text = &self.text()[e.range];
                 result += &format!("error@{:?} {:?}: {}\n", e.range(), text, e.message());
             }
@@ -130,6 +135,10 @@ impl<'t> fmt::Debug for TomlNode<'t> {
 }
 
 impl<'f> TomlNode<'f> {
+    pub fn doc(self) -> &'f TomlDoc {
+        self.doc
+    }
+
     pub fn symbol(&self) -> TomlSymbol {
         TomlSymbol(self.node().symbol())
     }
