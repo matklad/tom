@@ -1,5 +1,5 @@
 use TomlDoc;
-use ast::{self, EntryOwner};
+use ast;
 use typed_arena::Arena;
 
 pub struct Factory {

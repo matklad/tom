@@ -124,10 +124,20 @@ enum Arity {
 }
 
 impl Method {
+    fn type_name(&self) -> String {
+        if self.name == "entries" {
+            "Entry".to_string()
+        } else if self.name.ends_with("s") {
+            self.name[..self.name.len() - 1].to_camel_case()
+        } else {
+            self.name.to_camel_case()
+        }
+    }
+
     fn ret_type(&self) -> String {
         match self.arity {
-            Arity::One => format!("{}<'f>", self.name.to_camel_case()),
-            Arity::Many => format!("AstChildren<'f, {}<'f>>", self.name[..self.name.len() - 1].to_camel_case()),
+            Arity::One => format!("{}<'f>", self.type_name()),
+            Arity::Many => format!("AstChildren<'f, {}<'f>>", self.type_name()),
         }
     }
 
@@ -153,9 +163,9 @@ fn descr() -> Vec<AstNode> {
     }
 
     vec![
-        n("Doc").methods(&["tables", "array_tables"]),
-        n("Table"),
-        n("ArrayTable"),
+        n("Doc").methods(&["tables", "array_tables", "entries"]),
+        n("Table").methods(&["entries", "table_header"]),
+        n("ArrayTable").methods(&["entries", "table_header"]),
         n("TableHeader").methods(&["keys"]),
         n("Entry").methods(&["keys", "val"]),
         n("Key").kinds(&["StringLit", "BareKey"]),
@@ -163,7 +173,7 @@ fn descr() -> Vec<AstNode> {
         n("StringLit").symbols(&["BASIC_STRING", "MULTILINE_BASIC_STRING", "LITERAL_STRING", "MULTILINE_LITERAL_STRING"]),
         n("BareKey"),
         n("Array"),
-        n("Dict"),
+        n("Dict").methods(&["entries"]),
         n("Number"),
         n("Bool"),
         n("DateTime"),

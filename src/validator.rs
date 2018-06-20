@@ -39,7 +39,7 @@ fn check_table<'f>(
     if let Some(entry) = table.entries().next() {
         check_new_line(
             errors,
-            table.header(), entry,
+            table.table_header(), entry,
             true,
             "newline is mandatory after table header",
         );

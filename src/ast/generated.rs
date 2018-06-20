@@ -82,6 +82,9 @@ impl<'f> Doc<'f> {
     pub fn array_tables(self) -> AstChildren<'f, ArrayTable<'f>> {
         AstChildren::new(self.node().children())
     }
+    pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
+        AstChildren::new(self.node().children())
+    }
 }
 
 impl<'f> AstNode<'f> for Table<'f> {
@@ -101,6 +104,13 @@ impl<'f> From<Table<'f>> for TomlNode<'f> {
 
 impl<'f> Table<'f> {
     pub fn node(self) -> TomlNode<'f> { self.0 }
+
+    pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
+        AstChildren::new(self.node().children())
+    }
+    pub fn table_header(self) -> TableHeader<'f> {
+        AstChildren::new(self.node().children()).next().unwrap()
+    }
 }
 
 impl<'f> AstNode<'f> for ArrayTable<'f> {
@@ -120,6 +130,13 @@ impl<'f> From<ArrayTable<'f>> for TomlNode<'f> {
 
 impl<'f> ArrayTable<'f> {
     pub fn node(self) -> TomlNode<'f> { self.0 }
+
+    pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
+        AstChildren::new(self.node().children())
+    }
+    pub fn table_header(self) -> TableHeader<'f> {
+        AstChildren::new(self.node().children()).next().unwrap()
+    }
 }
 
 impl<'f> AstNode<'f> for TableHeader<'f> {
@@ -322,6 +339,10 @@ impl<'f> From<Dict<'f>> for TomlNode<'f> {
 
 impl<'f> Dict<'f> {
     pub fn node(self) -> TomlNode<'f> { self.0 }
+
+    pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
+        AstChildren::new(self.node().children())
+    }
 }
 
 impl<'f> AstNode<'f> for Number<'f> {

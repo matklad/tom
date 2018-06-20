@@ -1,7 +1,7 @@
 use std::iter;
 use tom::{
     TomlDoc, Factory, Edit, Position,
-    ast::{self, TableHeaderOwner},
+    ast,
 };
 
 
@@ -70,7 +70,7 @@ impl<'f> CargoTomlManipulator<'f> {
     fn find_table(&self, name: &str) -> Option<ast::Table<'f>> {
         self.doc.tables()
             .find(|table| {
-                table.header().keys()
+                table.table_header().keys()
                     .map(|key| key.name())
                     .eq(iter::once(name))
             })

@@ -10,30 +10,16 @@ use ::{
 };
 
 pub trait EntryOwner<'f>: AstNode<'f> {
-    fn entries(self) -> AstChildren<'f, Entry<'f>> {
-        AstChildren::new(self.node().children())
-    }
+    fn entries(self) -> AstChildren<'f, Entry<'f>>;
 }
 
-impl<'f> EntryOwner<'f> for Dict<'f> {}
-
-impl<'f> EntryOwner<'f> for Table<'f> {}
-
-impl<'f> EntryOwner<'f> for ArrayTable<'f> {}
-
-impl<'f> EntryOwner<'f> for Doc<'f> {}
+pub trait KeyOwner<'f>: AstNode<'f> {
+    fn keys(self) -> AstChildren<'f, Key<'f>>;
+}
 
 pub trait TableHeaderOwner<'f>: AstNode<'f> {
-    fn header(self) -> TableHeader<'f> {
-        AstChildren::new(self.node().children())
-            .next()
-            .expect("Table without header")
-    }
+    fn table_header(self) -> TableHeader<'f>;
 }
-
-impl<'f> TableHeaderOwner<'f> for Table<'f> {}
-
-impl<'f> TableHeaderOwner<'f> for ArrayTable<'f> {}
 
 impl<'f> Key<'f> {
     pub fn name(self) -> Cow<'f, str> {
@@ -51,4 +37,36 @@ impl<'f> StringLit<'f> {
         let len = text.len();
         Cow::from(&text[1..len - 1])
     }
+}
+
+impl<'f> EntryOwner<'f> for Dict<'f> {
+    fn entries(self) -> AstChildren<'f, Entry<'f>> { self.entries() }
+}
+
+impl<'f> EntryOwner<'f> for Table<'f> {
+    fn entries(self) -> AstChildren<'f, Entry<'f>> { self.entries() }
+}
+
+impl<'f> EntryOwner<'f> for ArrayTable<'f> {
+    fn entries(self) -> AstChildren<'f, Entry<'f>> { self.entries() }
+}
+
+impl<'f> EntryOwner<'f> for Doc<'f> {
+    fn entries(self) -> AstChildren<'f, Entry<'f>> { self.entries() }
+}
+
+impl<'f> KeyOwner<'f> for TableHeader<'f> {
+    fn keys(self) -> AstChildren<'f, Key<'f>> { self.keys() }
+}
+
+impl<'f> KeyOwner<'f> for Entry<'f> {
+    fn keys(self) -> AstChildren<'f, Key<'f>> { self.keys() }
+}
+
+impl<'f> TableHeaderOwner<'f> for Table<'f> {
+    fn table_header(self) -> TableHeader<'f> { self.table_header() }
+}
+
+impl<'f> TableHeaderOwner<'f> for ArrayTable<'f> {
+    fn table_header(self) -> TableHeader<'f> { self.table_header() }
 }

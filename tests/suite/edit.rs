@@ -1,6 +1,6 @@
 use tom::{
     Edit, Factory,
-    ast::{self, EntryOwner},
+    ast,
 };
 use {toml, check_edit, check_panics};
 use tom::Position;
