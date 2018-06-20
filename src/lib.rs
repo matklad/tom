@@ -14,8 +14,6 @@ use std::{fmt, ptr, hash};
 
 use cst::{ParseTree, PtNode, PtNodeId};
 
-use ast::AstNode;
-
 define_uncover_macros!(
     enable_if(cfg!(debug_assertions))
 );

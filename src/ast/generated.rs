@@ -59,14 +59,8 @@ pub struct DateTime<'f>(CstNode<'f>);
 
 
 impl<'f> AstNode<'f> for Doc<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
-        match node.symbol() {
-            DOC => Some(Doc(node)),
-            _ => None,
-        }
-    }
-
-    fn node(self) -> CstNode<'f> { self.0 }
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn node(self) -> CstNode<'f> { self.node() }
 }
 
 impl<'f> From<Doc<'f>> for CstNode<'f> {
@@ -74,6 +68,13 @@ impl<'f> From<Doc<'f>> for CstNode<'f> {
 }
 
 impl<'f> Doc<'f> {
+    pub fn cast(node: CstNode<'f>) -> Option<Doc<'f>> {
+        match node.symbol() {
+            DOC => Some(Doc(node)),
+            _ => None,
+        }
+    }
+
     pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn tables(self) -> AstChildren<'f, Table<'f>> {
@@ -88,14 +89,8 @@ impl<'f> Doc<'f> {
 }
 
 impl<'f> AstNode<'f> for Table<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
-        match node.symbol() {
-            TABLE => Some(Table(node)),
-            _ => None,
-        }
-    }
-
-    fn node(self) -> CstNode<'f> { self.0 }
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn node(self) -> CstNode<'f> { self.node() }
 }
 
 impl<'f> From<Table<'f>> for CstNode<'f> {
@@ -103,6 +98,13 @@ impl<'f> From<Table<'f>> for CstNode<'f> {
 }
 
 impl<'f> Table<'f> {
+    pub fn cast(node: CstNode<'f>) -> Option<Table<'f>> {
+        match node.symbol() {
+            TABLE => Some(Table(node)),
+            _ => None,
+        }
+    }
+
     pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
@@ -114,14 +116,8 @@ impl<'f> Table<'f> {
 }
 
 impl<'f> AstNode<'f> for ArrayTable<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
-        match node.symbol() {
-            ARRAY_TABLE => Some(ArrayTable(node)),
-            _ => None,
-        }
-    }
-
-    fn node(self) -> CstNode<'f> { self.0 }
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn node(self) -> CstNode<'f> { self.node() }
 }
 
 impl<'f> From<ArrayTable<'f>> for CstNode<'f> {
@@ -129,6 +125,13 @@ impl<'f> From<ArrayTable<'f>> for CstNode<'f> {
 }
 
 impl<'f> ArrayTable<'f> {
+    pub fn cast(node: CstNode<'f>) -> Option<ArrayTable<'f>> {
+        match node.symbol() {
+            ARRAY_TABLE => Some(ArrayTable(node)),
+            _ => None,
+        }
+    }
+
     pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
@@ -140,14 +143,8 @@ impl<'f> ArrayTable<'f> {
 }
 
 impl<'f> AstNode<'f> for TableHeader<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
-        match node.symbol() {
-            TABLE_HEADER => Some(TableHeader(node)),
-            _ => None,
-        }
-    }
-
-    fn node(self) -> CstNode<'f> { self.0 }
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn node(self) -> CstNode<'f> { self.node() }
 }
 
 impl<'f> From<TableHeader<'f>> for CstNode<'f> {
@@ -155,6 +152,13 @@ impl<'f> From<TableHeader<'f>> for CstNode<'f> {
 }
 
 impl<'f> TableHeader<'f> {
+    pub fn cast(node: CstNode<'f>) -> Option<TableHeader<'f>> {
+        match node.symbol() {
+            TABLE_HEADER => Some(TableHeader(node)),
+            _ => None,
+        }
+    }
+
     pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn keys(self) -> AstChildren<'f, Key<'f>> {
@@ -163,14 +167,8 @@ impl<'f> TableHeader<'f> {
 }
 
 impl<'f> AstNode<'f> for Entry<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
-        match node.symbol() {
-            ENTRY => Some(Entry(node)),
-            _ => None,
-        }
-    }
-
-    fn node(self) -> CstNode<'f> { self.0 }
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn node(self) -> CstNode<'f> { self.node() }
 }
 
 impl<'f> From<Entry<'f>> for CstNode<'f> {
@@ -178,6 +176,13 @@ impl<'f> From<Entry<'f>> for CstNode<'f> {
 }
 
 impl<'f> Entry<'f> {
+    pub fn cast(node: CstNode<'f>) -> Option<Entry<'f>> {
+        match node.symbol() {
+            ENTRY => Some(Entry(node)),
+            _ => None,
+        }
+    }
+
     pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn keys(self) -> AstChildren<'f, Key<'f>> {
@@ -189,14 +194,8 @@ impl<'f> Entry<'f> {
 }
 
 impl<'f> AstNode<'f> for Key<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
-        match node.symbol() {
-            KEY => Some(Key(node)),
-            _ => None,
-        }
-    }
-
-    fn node(self) -> CstNode<'f> { self.0 }
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn node(self) -> CstNode<'f> { self.node() }
 }
 
 impl<'f> From<Key<'f>> for CstNode<'f> {
@@ -204,6 +203,13 @@ impl<'f> From<Key<'f>> for CstNode<'f> {
 }
 
 impl<'f> Key<'f> {
+    pub fn cast(node: CstNode<'f>) -> Option<Key<'f>> {
+        match node.symbol() {
+            KEY => Some(Key(node)),
+            _ => None,
+        }
+    }
+
     pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn kind(self) -> KeyKind<'f> {
@@ -220,14 +226,8 @@ impl<'f> Key<'f> {
 }
 
 impl<'f> AstNode<'f> for Val<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
-        match node.symbol() {
-            VAL => Some(Val(node)),
-            _ => None,
-        }
-    }
-
-    fn node(self) -> CstNode<'f> { self.0 }
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn node(self) -> CstNode<'f> { self.node() }
 }
 
 impl<'f> From<Val<'f>> for CstNode<'f> {
@@ -235,6 +235,13 @@ impl<'f> From<Val<'f>> for CstNode<'f> {
 }
 
 impl<'f> Val<'f> {
+    pub fn cast(node: CstNode<'f>) -> Option<Val<'f>> {
+        match node.symbol() {
+            VAL => Some(Val(node)),
+            _ => None,
+        }
+    }
+
     pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn kind(self) -> ValKind<'f> {
@@ -263,7 +270,16 @@ impl<'f> Val<'f> {
 }
 
 impl<'f> AstNode<'f> for StringLit<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn node(self) -> CstNode<'f> { self.node() }
+}
+
+impl<'f> From<StringLit<'f>> for CstNode<'f> {
+    fn from(ast: StringLit<'f>) -> CstNode<'f> { ast.node() }
+}
+
+impl<'f> StringLit<'f> {
+    pub fn cast(node: CstNode<'f>) -> Option<StringLit<'f>> {
         match node.symbol() {
             BASIC_STRING => Some(StringLit(node)),
             MULTILINE_BASIC_STRING => Some(StringLit(node)),
@@ -273,26 +289,12 @@ impl<'f> AstNode<'f> for StringLit<'f> {
         }
     }
 
-    fn node(self) -> CstNode<'f> { self.0 }
-}
-
-impl<'f> From<StringLit<'f>> for CstNode<'f> {
-    fn from(ast: StringLit<'f>) -> CstNode<'f> { ast.node() }
-}
-
-impl<'f> StringLit<'f> {
     pub fn node(self) -> CstNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for BareKey<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
-        match node.symbol() {
-            BARE_KEY => Some(BareKey(node)),
-            _ => None,
-        }
-    }
-
-    fn node(self) -> CstNode<'f> { self.0 }
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn node(self) -> CstNode<'f> { self.node() }
 }
 
 impl<'f> From<BareKey<'f>> for CstNode<'f> {
@@ -300,18 +302,19 @@ impl<'f> From<BareKey<'f>> for CstNode<'f> {
 }
 
 impl<'f> BareKey<'f> {
-    pub fn node(self) -> CstNode<'f> { self.0 }
-}
-
-impl<'f> AstNode<'f> for Array<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
+    pub fn cast(node: CstNode<'f>) -> Option<BareKey<'f>> {
         match node.symbol() {
-            ARRAY => Some(Array(node)),
+            BARE_KEY => Some(BareKey(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> CstNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
+}
+
+impl<'f> AstNode<'f> for Array<'f> {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn node(self) -> CstNode<'f> { self.node() }
 }
 
 impl<'f> From<Array<'f>> for CstNode<'f> {
@@ -319,18 +322,19 @@ impl<'f> From<Array<'f>> for CstNode<'f> {
 }
 
 impl<'f> Array<'f> {
-    pub fn node(self) -> CstNode<'f> { self.0 }
-}
-
-impl<'f> AstNode<'f> for Dict<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
+    pub fn cast(node: CstNode<'f>) -> Option<Array<'f>> {
         match node.symbol() {
-            DICT => Some(Dict(node)),
+            ARRAY => Some(Array(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> CstNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
+}
+
+impl<'f> AstNode<'f> for Dict<'f> {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn node(self) -> CstNode<'f> { self.node() }
 }
 
 impl<'f> From<Dict<'f>> for CstNode<'f> {
@@ -338,6 +342,13 @@ impl<'f> From<Dict<'f>> for CstNode<'f> {
 }
 
 impl<'f> Dict<'f> {
+    pub fn cast(node: CstNode<'f>) -> Option<Dict<'f>> {
+        match node.symbol() {
+            DICT => Some(Dict(node)),
+            _ => None,
+        }
+    }
+
     pub fn node(self) -> CstNode<'f> { self.0 }
 
     pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
@@ -346,14 +357,8 @@ impl<'f> Dict<'f> {
 }
 
 impl<'f> AstNode<'f> for Number<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
-        match node.symbol() {
-            NUMBER => Some(Number(node)),
-            _ => None,
-        }
-    }
-
-    fn node(self) -> CstNode<'f> { self.0 }
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn node(self) -> CstNode<'f> { self.node() }
 }
 
 impl<'f> From<Number<'f>> for CstNode<'f> {
@@ -361,18 +366,19 @@ impl<'f> From<Number<'f>> for CstNode<'f> {
 }
 
 impl<'f> Number<'f> {
-    pub fn node(self) -> CstNode<'f> { self.0 }
-}
-
-impl<'f> AstNode<'f> for Bool<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
+    pub fn cast(node: CstNode<'f>) -> Option<Number<'f>> {
         match node.symbol() {
-            BOOL => Some(Bool(node)),
+            NUMBER => Some(Number(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> CstNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
+}
+
+impl<'f> AstNode<'f> for Bool<'f> {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn node(self) -> CstNode<'f> { self.node() }
 }
 
 impl<'f> From<Bool<'f>> for CstNode<'f> {
@@ -380,18 +386,19 @@ impl<'f> From<Bool<'f>> for CstNode<'f> {
 }
 
 impl<'f> Bool<'f> {
-    pub fn node(self) -> CstNode<'f> { self.0 }
-}
-
-impl<'f> AstNode<'f> for DateTime<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {
+    pub fn cast(node: CstNode<'f>) -> Option<Bool<'f>> {
         match node.symbol() {
-            DATE_TIME => Some(DateTime(node)),
+            BOOL => Some(Bool(node)),
             _ => None,
         }
     }
 
-    fn node(self) -> CstNode<'f> { self.0 }
+    pub fn node(self) -> CstNode<'f> { self.0 }
+}
+
+impl<'f> AstNode<'f> for DateTime<'f> {
+    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn node(self) -> CstNode<'f> { self.node() }
 }
 
 impl<'f> From<DateTime<'f>> for CstNode<'f> {
@@ -399,5 +406,12 @@ impl<'f> From<DateTime<'f>> for CstNode<'f> {
 }
 
 impl<'f> DateTime<'f> {
+    pub fn cast(node: CstNode<'f>) -> Option<DateTime<'f>> {
+        match node.symbol() {
+            DATE_TIME => Some(DateTime(node)),
+            _ => None,
+        }
+    }
+
     pub fn node(self) -> CstNode<'f> { self.0 }
 }

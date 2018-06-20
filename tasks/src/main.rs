@@ -224,7 +224,22 @@ fn gen_ast() -> String {
         ln!();
         ln!("impl<'f> AstNode<'f> for {}<'f> {{", n.name);
         {
-            ln!("fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {{");
+            ln!("fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {{ Self::cast(node) }}");
+            ln!("fn node(self) -> CstNode<'f> {{ self.node() }}");
+        }
+        ln!("}}");
+        ln!();
+
+        ln!("impl<'f> From<{}<'f>> for CstNode<'f> {{", n.name);
+        {
+            ln!("fn from(ast: {}<'f>) -> CstNode<'f> {{ ast.node() }}", n.name);
+        }
+        ln!("}}");
+        ln!();
+
+        ln!("impl<'f> {}<'f> {{", n.name);
+        {
+            ln!("pub fn cast(node: CstNode<'f>) -> Option<{}<'f>> {{", n.name);
             {
                 ln!("match node.symbol() {{");
                 let symbols = if n.symbols.is_empty() {
@@ -240,20 +255,6 @@ fn gen_ast() -> String {
             }
             ln!("}}");
             ln!();
-            ln!("fn node(self) -> CstNode<'f> {{ self.0 }}");
-        }
-        ln!("}}");
-        ln!();
-
-        ln!("impl<'f> From<{}<'f>> for CstNode<'f> {{", n.name);
-        {
-            ln!("fn from(ast: {}<'f>) -> CstNode<'f> {{ ast.node() }}", n.name);
-        }
-        ln!("}}");
-        ln!();
-
-        ln!("impl<'f> {}<'f> {{", n.name);
-        {
             ln!("pub fn node(self) -> CstNode<'f> {{ self.0 }}");
             if !n.kinds.is_empty() || !n.methods.is_empty() {
                 ln!();
