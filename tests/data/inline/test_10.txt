@@ -1,13 +1,33 @@
-DOC@[0; 8)
-  ENTRY@[0; 7)
-    KEY@[0; 3)
-      BARE_KEY@[0; 3) "foo"
+DOC@[0; 28)
+  ENTRY@[0; 27)
+    KEY@[0; 1)
+      BARE_KEY@[0; 1) "a"
+    WHITESPACE@[1; 2)
+    EQ@[2; 3) "="
     WHITESPACE@[3; 4)
-    EQ@[4; 5) "="
-    WHITESPACE@[5; 6)
-    VAL@[6; 7)
-      ERROR@[6; 7)
-        BARE_KEY@[6; 7) "_"
-  WHITESPACE@[7; 8)
-
-error@[6; 7) "_": expected a value
+    VAL@[4; 27)
+      DICT@[4; 27)
+        L_CURLY@[4; 5) "{"
+        WHITESPACE@[5; 6)
+        ENTRY@[6; 15)
+          KEY@[6; 11)
+            BASIC_STRING@[6; 11) "\"foo\""
+          WHITESPACE@[11; 12)
+          EQ@[12; 13) "="
+          WHITESPACE@[13; 14)
+          VAL@[14; 15)
+            NUMBER@[14; 15) "1"
+        COMMA@[15; 16) ","
+        WHITESPACE@[16; 17)
+        ENTRY@[17; 24)
+          KEY@[17; 20)
+            BARE_KEY@[17; 20) "bar"
+          WHITESPACE@[20; 21)
+          EQ@[21; 22) "="
+          WHITESPACE@[22; 23)
+          VAL@[23; 24)
+            NUMBER@[23; 24) "2"
+        COMMA@[24; 25) ","
+        WHITESPACE@[25; 26)
+        R_CURLY@[26; 27) "}"
+  WHITESPACE@[27; 28)

@@ -1,5 +1,5 @@
-a = 'hello\nworld'
-b = '''
+a = "hello\nworld"
+b = """
   hello
   world
-'''
+"""

@@ -1,28 +1,22 @@
-DOC@[0; 33)
-  ENTRY@[0; 8)
+DOC@[0; 20)
+  ENTRY@[0; 7)
     KEY@[0; 3)
       BARE_KEY@[0; 3) "foo"
     WHITESPACE@[3; 4)
     EQ@[4; 5) "="
     WHITESPACE@[5; 6)
-    VAL@[6; 8)
-      NUMBER@[6; 8) "92"
-  WHITESPACE@[8; 9)
-  ENTRY@[9; 16)
-    KEY@[9; 11)
-      BARE_KEY@[9; 11) "92"
-    WHITESPACE@[11; 12)
-    EQ@[12; 13) "="
-    WHITESPACE@[13; 14)
-    VAL@[14; 16)
-      NUMBER@[14; 16) "92"
-  WHITESPACE@[16; 17)
-  ENTRY@[17; 32)
-    KEY@[17; 27)
-      BARE_KEY@[17; 27) "1914-08-26"
-    WHITESPACE@[27; 28)
-    EQ@[28; 29) "="
-    WHITESPACE@[29; 30)
-    VAL@[30; 32)
-      NUMBER@[30; 32) "92"
-  WHITESPACE@[32; 33)
+    VAL@[6; 7)
+      NUMBER@[6; 7) "1"
+  WHITESPACE@[7; 8)
+  ENTRY@[8; 19)
+    KEY@[8; 11)
+      BARE_KEY@[8; 11) "foo"
+    DOT@[11; 12) "."
+    KEY@[12; 15)
+      BARE_KEY@[12; 15) "bar"
+    WHITESPACE@[15; 16)
+    EQ@[16; 17) "="
+    WHITESPACE@[17; 18)
+    VAL@[18; 19)
+      NUMBER@[18; 19) "2"
+  WHITESPACE@[19; 20)
