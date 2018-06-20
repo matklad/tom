@@ -1,5 +1,5 @@
 DOC@[0; 22)
-  KEY_VAL@[0; 10)
+  ENTRY@[0; 10)
     KEY@[0; 5)
       BASIC_STRING@[0; 5) "\"foo\""
     WHITESPACE@[5; 6)
@@ -8,7 +8,7 @@ DOC@[0; 22)
     VAL@[8; 10)
       NUMBER@[8; 10) "92"
   WHITESPACE@[10; 11)
-  KEY_VAL@[11; 21)
+  ENTRY@[11; 21)
     KEY@[11; 16)
       LITERAL_STRING@[11; 16) "\'bar\'"
     WHITESPACE@[16; 17)

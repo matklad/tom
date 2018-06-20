@@ -8,13 +8,15 @@ pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
     visitor::process(
         doc.parse_tree(),
         visitor::visitor(Vec::new())
-            .visit::<ast::KeyVal, _>(|errors, kv| {
-                check_new_line(
-                    errors,
-                    kv.key(), kv.val(),
-                    false,
-                    "newlines are forbidden in entries",
-                );
+            .visit::<ast::Entry, _>(|errors, entry| {
+                if let Some(first_key) = entry.keys().next() {
+                    check_new_line(
+                        errors,
+                        first_key, entry.val(),
+                        false,
+                        "newlines are forbidden in entries",
+                    );
+                }
             })
             .visit::<ast::Dict, _>(|errors, d| {
                 check_new_line(
@@ -32,7 +34,7 @@ pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
 
 fn check_table<'f>(
     errors: &mut Vec<SyntaxError>,
-    table: impl ast::KeyValueOwner<'f> + ast::TableHeaderOwner<'f>
+    table: impl ast::EntryOwner<'f> + ast::TableHeaderOwner<'f>
 ) {
     if let Some(entry) = table.entries().next() {
         check_new_line(
@@ -53,6 +55,7 @@ fn check_new_line<'f>(
 ) {
     let left = left.into();
     let right = right.into();
+    // TODO: more precise
     let start = left.range().end();
     let end = right.range().start();
     let range = TextRange::from_to(start, end);

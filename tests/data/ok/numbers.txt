@@ -1,5 +1,5 @@
 DOC@[0; 215)
-  KEY_VAL@[0; 10)
+  ENTRY@[0; 10)
     KEY@[0; 4)
       BARE_KEY@[0; 4) "int1"
     WHITESPACE@[4; 5)
@@ -8,7 +8,7 @@ DOC@[0; 215)
     VAL@[7; 10)
       NUMBER@[7; 10) "+99"
   WHITESPACE@[10; 11)
-  KEY_VAL@[11; 20)
+  ENTRY@[11; 20)
     KEY@[11; 15)
       BARE_KEY@[11; 15) "int2"
     WHITESPACE@[15; 16)
@@ -17,7 +17,7 @@ DOC@[0; 215)
     VAL@[18; 20)
       NUMBER@[18; 20) "42"
   WHITESPACE@[20; 21)
-  KEY_VAL@[21; 29)
+  ENTRY@[21; 29)
     KEY@[21; 25)
       BARE_KEY@[21; 25) "int3"
     WHITESPACE@[25; 26)
@@ -26,7 +26,7 @@ DOC@[0; 215)
     VAL@[28; 29)
       NUMBER@[28; 29) "0"
   WHITESPACE@[29; 30)
-  KEY_VAL@[30; 40)
+  ENTRY@[30; 40)
     KEY@[30; 34)
       BARE_KEY@[30; 34) "int4"
     WHITESPACE@[34; 35)
@@ -35,7 +35,7 @@ DOC@[0; 215)
     VAL@[37; 40)
       NUMBER@[37; 40) "-17"
   WHITESPACE@[40; 41)
-  KEY_VAL@[41; 53)
+  ENTRY@[41; 53)
     KEY@[41; 45)
       BARE_KEY@[41; 45) "int5"
     WHITESPACE@[45; 46)
@@ -44,7 +44,7 @@ DOC@[0; 215)
     VAL@[48; 53)
       NUMBER@[48; 53) "1_000"
   WHITESPACE@[53; 54)
-  KEY_VAL@[54; 70)
+  ENTRY@[54; 70)
     KEY@[54; 58)
       BARE_KEY@[54; 58) "int6"
     WHITESPACE@[58; 59)
@@ -53,7 +53,7 @@ DOC@[0; 215)
     VAL@[61; 70)
       NUMBER@[61; 70) "5_349_221"
   WHITESPACE@[70; 71)
-  KEY_VAL@[71; 87)
+  ENTRY@[71; 87)
     KEY@[71; 75)
       BARE_KEY@[71; 75) "int7"
     WHITESPACE@[75; 76)
@@ -62,7 +62,7 @@ DOC@[0; 215)
     VAL@[78; 87)
       NUMBER@[78; 87) "1_2_3_4_5"
   WHITESPACE@[87; 89)
-  KEY_VAL@[89; 100)
+  ENTRY@[89; 100)
     KEY@[89; 93)
       BARE_KEY@[89; 93) "flt1"
     WHITESPACE@[93; 94)
@@ -71,7 +71,7 @@ DOC@[0; 215)
     VAL@[96; 100)
       NUMBER@[96; 100) "+1.0"
   WHITESPACE@[100; 101)
-  KEY_VAL@[101; 114)
+  ENTRY@[101; 114)
     KEY@[101; 105)
       BARE_KEY@[101; 105) "flt2"
     WHITESPACE@[105; 106)
@@ -80,7 +80,7 @@ DOC@[0; 215)
     VAL@[108; 114)
       NUMBER@[108; 114) "3.1415"
   WHITESPACE@[114; 115)
-  KEY_VAL@[115; 127)
+  ENTRY@[115; 127)
     KEY@[115; 119)
       BARE_KEY@[115; 119) "flt3"
     WHITESPACE@[119; 120)
@@ -89,7 +89,7 @@ DOC@[0; 215)
     VAL@[122; 127)
       NUMBER@[122; 127) "-0.01"
   WHITESPACE@[127; 128)
-  KEY_VAL@[128; 140)
+  ENTRY@[128; 140)
     KEY@[128; 132)
       BARE_KEY@[128; 132) "flt4"
     WHITESPACE@[132; 133)
@@ -98,7 +98,7 @@ DOC@[0; 215)
     VAL@[135; 140)
       NUMBER@[135; 140) "5e+22"
   WHITESPACE@[140; 141)
-  KEY_VAL@[141; 151)
+  ENTRY@[141; 151)
     KEY@[141; 145)
       BARE_KEY@[141; 145) "flt5"
     WHITESPACE@[145; 146)
@@ -107,7 +107,7 @@ DOC@[0; 215)
     VAL@[148; 151)
       NUMBER@[148; 151) "1e6"
   WHITESPACE@[151; 152)
-  KEY_VAL@[152; 164)
+  ENTRY@[152; 164)
     KEY@[152; 156)
       BARE_KEY@[152; 156) "flt6"
     WHITESPACE@[156; 157)
@@ -116,7 +116,7 @@ DOC@[0; 215)
     VAL@[159; 164)
       NUMBER@[159; 164) "-2E-2"
   WHITESPACE@[164; 165)
-  KEY_VAL@[165; 181)
+  ENTRY@[165; 181)
     KEY@[165; 169)
       BARE_KEY@[165; 169) "flt7"
     WHITESPACE@[169; 170)
@@ -125,7 +125,7 @@ DOC@[0; 215)
     VAL@[172; 181)
       NUMBER@[172; 181) "6.626e-34"
   WHITESPACE@[181; 182)
-  KEY_VAL@[182; 214)
+  ENTRY@[182; 214)
     KEY@[182; 186)
       BARE_KEY@[182; 186) "flt8"
     WHITESPACE@[186; 187)

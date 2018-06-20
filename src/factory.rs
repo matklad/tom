@@ -1,5 +1,5 @@
 use TomlDoc;
-use ast::{self, KeyValueOwner};
+use ast::{self, EntryOwner};
 use typed_arena::Arena;
 
 pub struct Factory {
@@ -15,14 +15,14 @@ impl Factory {
 
     pub fn val_string(&self, val: &str) -> ast::Val {
         //TODO: escaping
-        self.entry(format!("foo = {:?}", val)).val()
+        self.entry_raw(format!("foo = {:?}", val)).val()
     }
 
     pub fn val_bool(&self, val: bool) -> ast::Val {
-        self.entry(format!("foo = {}", val)).val()
+        self.entry_raw(format!("foo = {}", val)).val()
     }
 
-    pub fn val_dict(&self, entries: &mut Iterator<Item=ast::KeyVal>) -> ast::Val {
+    pub fn val_dict(&self, entries: &mut Iterator<Item=ast::Entry>) -> ast::Val {
         let mut buff = String::from("{");
         let mut first = true;
         for e in entries {
@@ -31,12 +31,12 @@ impl Factory {
             buff.push_str(e.node().text());
         }
         buff.push_str(" }");
-        self.entry(format!("foo = {}", buff)).val()
+        self.entry_raw(format!("foo = {}", buff)).val()
     }
 
-    pub fn key_val(&self, key: &str, val: ast::Val) -> ast::KeyVal {
+    pub fn entry(&self, key: &str, val: ast::Val) -> ast::Entry {
         let text = format!("{} = {}", escaped_key(key), val.node().text());
-        self.entry(text)
+        self.entry_raw(text)
     }
 
     pub fn table(&self) -> TableBuilder {
@@ -47,7 +47,7 @@ impl Factory {
         self.arena.alloc(TomlDoc::new(text))
     }
 
-    fn entry(&self, text: String) -> ast::KeyVal {
+    fn entry_raw(&self, text: String) -> ast::Entry {
         let doc = self.doc(text);
         doc.ast().entries().next().unwrap()
     }
@@ -56,7 +56,7 @@ impl Factory {
 pub struct TableBuilder<'f, 'e> {
     factory: &'f Factory,
     keys: Vec<String>,
-    entries: Vec<ast::KeyVal<'e>>,
+    entries: Vec<ast::Entry<'e>>,
 }
 
 impl<'f, 'e> TableBuilder<'f, 'e> {
@@ -83,7 +83,7 @@ impl<'f, 'e> TableBuilder<'f, 'e> {
         self
     }
 
-    pub fn with_entries(mut self, entries: impl Iterator<Item=ast::KeyVal<'e>>) -> Self {
+    pub fn with_entries(mut self, entries: impl Iterator<Item=ast::Entry<'e>>) -> Self {
         self.entries.extend(entries);
         self
     }

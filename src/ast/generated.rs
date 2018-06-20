@@ -14,7 +14,7 @@ pub struct ArrayTable<'f>(TomlNode<'f>);
 pub struct TableHeader<'f>(TomlNode<'f>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct KeyVal<'f>(TomlNode<'f>);
+pub struct Entry<'f>(TomlNode<'f>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Key<'f>(TomlNode<'f>);
@@ -145,10 +145,10 @@ impl<'f> TableHeader<'f> {
     }
 }
 
-impl<'f> AstNode<'f> for KeyVal<'f> {
+impl<'f> AstNode<'f> for Entry<'f> {
     fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {
         match node.symbol() {
-            KEY_VAL => Some(KeyVal(node)),
+            ENTRY => Some(Entry(node)),
             _ => None,
         }
     }
@@ -156,15 +156,15 @@ impl<'f> AstNode<'f> for KeyVal<'f> {
     fn node(self) -> TomlNode<'f> { self.0 }
 }
 
-impl<'f> From<KeyVal<'f>> for TomlNode<'f> {
-    fn from(ast: KeyVal<'f>) -> TomlNode<'f> { ast.node() }
+impl<'f> From<Entry<'f>> for TomlNode<'f> {
+    fn from(ast: Entry<'f>) -> TomlNode<'f> { ast.node() }
 }
 
-impl<'f> KeyVal<'f> {
+impl<'f> Entry<'f> {
     pub fn node(self) -> TomlNode<'f> { self.0 }
 
-    pub fn key(self) -> Key<'f> {
-        AstChildren::new(self.node().children()).next().unwrap()
+    pub fn keys(self) -> AstChildren<'f, Key<'f>> {
+        AstChildren::new(self.node().children())
     }
     pub fn val(self) -> Val<'f> {
         AstChildren::new(self.node().children()).next().unwrap()

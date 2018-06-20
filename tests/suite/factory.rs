@@ -5,11 +5,11 @@ use testutils::assert_eq_text;
 use check_panics;
 
 #[test]
-fn test_create_key_val_trivial() {
+fn test_create_entry_trivial() {
     check(
         |f| {
             let val = f.val_string("1.0");
-            f.key_val("foo", val)
+            f.entry("foo", val)
                 .node()
         },
         r#"foo = "1.0""#,
@@ -17,11 +17,11 @@ fn test_create_key_val_trivial() {
 }
 
 #[test]
-fn test_create_key_val_space_in_key() {
+fn test_create_entry_space_in_key() {
     check(
         |f| {
             let val = f.val_string("1.0");
-            f.key_val("foo bar", val)
+            f.entry("foo bar", val)
                 .node()
         },
         r#""foo bar" = "1.0""#,
@@ -33,9 +33,9 @@ fn create_table() {
     check(
         |f| {
             let va = f.val_string("1.0");
-            let a = f.key_val("foo", va);
+            let a = f.entry("foo", va);
             let vb = f.val_string("0.0.1");
-            let b = f.key_val("bar", vb);
+            let b = f.entry("bar", vb);
 
             f.table()
                 .with_names(vec!["target", "x86_64.json", "dependencies"].into_iter())

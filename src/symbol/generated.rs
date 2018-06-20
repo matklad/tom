@@ -4,7 +4,7 @@ pub(crate) const SYMBOLS: &[SymbolInfo] = &[
     SymbolInfo(00, "WHITESPACE"),
     SymbolInfo(01, "COMMENT"),
     SymbolInfo(02, "DOC"),
-    SymbolInfo(03, "KEY_VAL"),
+    SymbolInfo(03, "ENTRY"),
     SymbolInfo(04, "KEY"),
     SymbolInfo(05, "VAL"),
     SymbolInfo(06, "ARRAY"),
@@ -36,7 +36,7 @@ pub(crate) const SYMBOLS: &[SymbolInfo] = &[
 pub const WHITESPACE: TomlSymbol                     = TomlSymbol(Symbol(SYMBOLS[00].0));
 pub const COMMENT: TomlSymbol                        = TomlSymbol(Symbol(SYMBOLS[01].0));
 pub const DOC: TomlSymbol                            = TomlSymbol(Symbol(SYMBOLS[02].0));
-pub const KEY_VAL: TomlSymbol                        = TomlSymbol(Symbol(SYMBOLS[03].0));
+pub const ENTRY: TomlSymbol                          = TomlSymbol(Symbol(SYMBOLS[03].0));
 pub const KEY: TomlSymbol                            = TomlSymbol(Symbol(SYMBOLS[04].0));
 pub const VAL: TomlSymbol                            = TomlSymbol(Symbol(SYMBOLS[05].0));
 pub const ARRAY: TomlSymbol                          = TomlSymbol(Symbol(SYMBOLS[06].0));

@@ -1,7 +1,7 @@
 use parse_tree::{TopDownBuilder, ParseTree};
 use {
     TomlSymbol, SyntaxError,
-    symbol::{DOC, KEY_VAL, TABLE, COMMENT, WHITESPACE},
+    symbol::{DOC, ENTRY, TABLE, COMMENT, WHITESPACE},
 };
 
 mod lexer;
@@ -99,7 +99,7 @@ impl<'t> EventSink<'t> {
     fn leading_ws(&self, ws: &[lexer::Token], s: TomlSymbol) -> usize {
         match s {
             DOC => ws.len(),
-            KEY_VAL | TABLE => {
+            ENTRY | TABLE => {
                 let mut adj_comments = 0;
                 for (i, token) in ws.iter().rev().enumerate() {
                     match token.symbol {
@@ -124,7 +124,7 @@ impl<'t> EventSink<'t> {
     fn trailing_ws(&self, ws: &[lexer::Token], s: TomlSymbol) -> usize {
         match s {
             DOC => ws.len(),
-            KEY_VAL => {
+            ENTRY => {
                 let mut adj_comments = 0;
                 for (i, token) in ws.iter().enumerate() {
                     match token.symbol {

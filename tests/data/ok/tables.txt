@@ -13,7 +13,7 @@ DOC@[0; 218)
         BARE_KEY@[10; 17) "table-1"
       R_BRACK@[17; 18) "]"
     WHITESPACE@[18; 19)
-    KEY_VAL@[19; 39)
+    ENTRY@[19; 39)
       KEY@[19; 23)
         BARE_KEY@[19; 23) "key1"
       WHITESPACE@[23; 24)
@@ -22,7 +22,7 @@ DOC@[0; 218)
       VAL@[26; 39)
         BASIC_STRING@[26; 39) "\"some string\""
     WHITESPACE@[39; 40)
-    KEY_VAL@[40; 50)
+    ENTRY@[40; 50)
       KEY@[40; 44)
         BARE_KEY@[40; 44) "key2"
       WHITESPACE@[44; 45)
@@ -38,7 +38,7 @@ DOC@[0; 218)
         BARE_KEY@[53; 60) "table-2"
       R_BRACK@[60; 61) "]"
     WHITESPACE@[61; 62)
-    KEY_VAL@[62; 85)
+    ENTRY@[62; 85)
       KEY@[62; 66)
         BARE_KEY@[62; 66) "key1"
       WHITESPACE@[66; 67)
@@ -47,7 +47,7 @@ DOC@[0; 218)
       VAL@[69; 85)
         BASIC_STRING@[69; 85) "\"another string\""
     WHITESPACE@[85; 86)
-    KEY_VAL@[86; 96)
+    ENTRY@[86; 96)
       KEY@[86; 90)
         BARE_KEY@[86; 90) "key2"
       WHITESPACE@[90; 91)
@@ -66,7 +66,7 @@ DOC@[0; 218)
         BASIC_STRING@[103; 114) "\"tater.man\""
       R_BRACK@[114; 115) "]"
     WHITESPACE@[115; 116)
-    KEY_VAL@[116; 128)
+    ENTRY@[116; 128)
       KEY@[116; 120)
         BARE_KEY@[116; 120) "type"
       WHITESPACE@[120; 121)
@@ -167,7 +167,7 @@ DOC@[0; 218)
         BARE_KEY@[198; 199) "b"
       R_BRACK@[199; 200) "]"
     WHITESPACE@[200; 201)
-    KEY_VAL@[201; 206)
+    ENTRY@[201; 206)
       KEY@[201; 202)
         BARE_KEY@[201; 202) "c"
       WHITESPACE@[202; 203)
@@ -183,7 +183,7 @@ DOC@[0; 218)
         BARE_KEY@[209; 210) "a"
       R_BRACK@[210; 211) "]"
     WHITESPACE@[211; 212)
-    KEY_VAL@[212; 217)
+    ENTRY@[212; 217)
       KEY@[212; 213)
         BARE_KEY@[212; 213) "d"
       WHITESPACE@[213; 214)

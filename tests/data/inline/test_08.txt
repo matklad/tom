@@ -1,5 +1,5 @@
 DOC@[0; 15)
-  KEY_VAL@[0; 14)
+  ENTRY@[0; 14)
     KEY@[0; 1)
       BARE_KEY@[0; 1) "a"
     WHITESPACE@[1; 2)

@@ -8,7 +8,7 @@ DOC@[0; 28)
       R_BRACK@[13; 14) "]"
       R_BRACK@[14; 15) "]"
     WHITESPACE@[15; 16)
-    KEY_VAL@[16; 21)
+    ENTRY@[16; 21)
       KEY@[16; 17)
         BARE_KEY@[16; 17) "a"
       WHITESPACE@[17; 18)
@@ -17,7 +17,7 @@ DOC@[0; 28)
       VAL@[20; 21)
         NUMBER@[20; 21) "1"
     WHITESPACE@[21; 22)
-    KEY_VAL@[22; 27)
+    ENTRY@[22; 27)
       KEY@[22; 23)
         BARE_KEY@[22; 23) "b"
       WHITESPACE@[23; 24)

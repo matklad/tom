@@ -1,5 +1,5 @@
 DOC@[0; 75)
-  KEY_VAL@[0; 49)
+  ENTRY@[0; 49)
     KEY@[0; 4)
       BARE_KEY@[0; 4) "name"
     WHITESPACE@[4; 5)
@@ -9,7 +9,7 @@ DOC@[0; 75)
       DICT@[7; 49)
         L_CURLY@[7; 8) "{"
         WHITESPACE@[8; 9)
-        KEY_VAL@[9; 22)
+        ENTRY@[9; 22)
           KEY@[9; 14)
             BARE_KEY@[9; 14) "first"
           WHITESPACE@[14; 15)
@@ -19,7 +19,7 @@ DOC@[0; 75)
             BASIC_STRING@[17; 22) "\"Tom\""
         COMMA@[22; 23) ","
         WHITESPACE@[23; 24)
-        KEY_VAL@[24; 47)
+        ENTRY@[24; 47)
           KEY@[24; 28)
             BARE_KEY@[24; 28) "last"
           WHITESPACE@[28; 29)
@@ -30,7 +30,7 @@ DOC@[0; 75)
         WHITESPACE@[47; 48)
         R_CURLY@[48; 49) "}"
   WHITESPACE@[49; 50)
-  KEY_VAL@[50; 74)
+  ENTRY@[50; 74)
     KEY@[50; 55)
       BARE_KEY@[50; 55) "point"
     WHITESPACE@[55; 56)
@@ -40,7 +40,7 @@ DOC@[0; 75)
       DICT@[58; 74)
         L_CURLY@[58; 59) "{"
         WHITESPACE@[59; 60)
-        KEY_VAL@[60; 65)
+        ENTRY@[60; 65)
           KEY@[60; 61)
             BARE_KEY@[60; 61) "x"
           WHITESPACE@[61; 62)
@@ -50,7 +50,7 @@ DOC@[0; 75)
             NUMBER@[64; 65) "1"
         COMMA@[65; 66) ","
         WHITESPACE@[66; 67)
-        KEY_VAL@[67; 72)
+        ENTRY@[67; 72)
           KEY@[67; 68)
             BARE_KEY@[67; 68) "y"
           WHITESPACE@[68; 69)

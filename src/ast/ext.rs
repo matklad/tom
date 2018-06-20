@@ -5,23 +5,23 @@ use std::{
 use ::{
     ast::{
         AstNode, AstChildren,
-        KeyVal, Dict, Table, ArrayTable, TableHeader, Doc, Key, KeyKind, StringLit,
+        Entry, Dict, Table, ArrayTable, TableHeader, Doc, Key, KeyKind, StringLit,
     },
 };
 
-pub trait KeyValueOwner<'f>: AstNode<'f> {
-    fn entries(self) -> AstChildren<'f, KeyVal<'f>> {
+pub trait EntryOwner<'f>: AstNode<'f> {
+    fn entries(self) -> AstChildren<'f, Entry<'f>> {
         AstChildren::new(self.node().children())
     }
 }
 
-impl<'f> KeyValueOwner<'f> for Dict<'f> {}
+impl<'f> EntryOwner<'f> for Dict<'f> {}
 
-impl<'f> KeyValueOwner<'f> for Table<'f> {}
+impl<'f> EntryOwner<'f> for Table<'f> {}
 
-impl<'f> KeyValueOwner<'f> for ArrayTable<'f> {}
+impl<'f> EntryOwner<'f> for ArrayTable<'f> {}
 
-impl<'f> KeyValueOwner<'f> for Doc<'f> {}
+impl<'f> EntryOwner<'f> for Doc<'f> {}
 
 pub trait TableHeaderOwner<'f>: AstNode<'f> {
     fn header(self) -> TableHeader<'f> {

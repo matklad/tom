@@ -157,7 +157,7 @@ fn descr() -> Vec<AstNode> {
         n("Table"),
         n("ArrayTable"),
         n("TableHeader").methods(&["keys"]),
-        n("KeyVal").methods(&["key", "val"]),
+        n("Entry").methods(&["keys", "val"]),
         n("Key").kinds(&["StringLit", "BareKey"]),
         n("Val").kinds(&["Array", "Dict", "Number", "Bool", "DateTime", "StringLit"]),
         n("StringLit").symbols(&["BASIC_STRING", "MULTILINE_BASIC_STRING", "LITERAL_STRING", "MULTILINE_LITERAL_STRING"]),
@@ -286,7 +286,7 @@ fn gen_symbols() -> String {
 WHITESPACE
 COMMENT
 DOC
-KEY_VAL
+ENTRY
 KEY
 VAL
 ARRAY

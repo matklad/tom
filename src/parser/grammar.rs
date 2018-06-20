@@ -129,18 +129,36 @@ impl<'s, 't> Parser<'s, 't> {
             match self.current() {
                 | BARE_KEY | BARE_KEY_OR_NUMBER | BARE_KEY_OR_DATE
                 | BASIC_STRING | LITERAL_STRING =>
-                    self.key_val(),
+                    self.entry(),
                 _ => self.bump_error("expected a key"),
             }
         }
     }
 
-    fn key_val(&mut self) {
-        let m = self.start(KEY_VAL);
-        self.key();
+    fn entry(&mut self) {
+        let m = self.start(ENTRY);
+        self.keys();
         self.eat(EQ);
         self.val();
         self.finish(m);
+    }
+
+    // test
+    // foo = 1
+    // foo.bar = 2
+    fn keys(&mut self) {
+        // []
+        // [foo]
+        // [foo.bar]
+        // [foo.]
+        let mut first = true;
+        while self.current() != EOF && self.current() != R_BRACK && self.current() != EQ {
+            if !first {
+                self.eat(DOT);
+            }
+            first = false;
+            self.key();
+        }
     }
 
     fn key(&mut self) {
@@ -231,7 +249,7 @@ impl<'s, 't> Parser<'s, 't> {
         let m = self.start(DICT);
         self.bump();
         while self.current() != EOF && self.current() != R_CURLY {
-            self.key_val();
+            self.entry();
             // test
             // a = {}
             // b = {foo=1}
@@ -281,19 +299,7 @@ impl<'s, 't> Parser<'s, 't> {
             self.bump();
         }
 
-        // test
-        // []
-        // [foo]
-        // [foo.bar]
-        // [foo.]
-        let mut first = true;
-        while self.current() != EOF && self.current() != R_BRACK {
-            if !first {
-                self.eat(DOT);
-            }
-            first = false;
-            self.key();
-        }
+        self.keys();
 
         self.eat(R_BRACK);
         if array {

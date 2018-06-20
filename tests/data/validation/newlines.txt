@@ -1,5 +1,5 @@
 DOC@[0; 95)
-  KEY_VAL@[0; 31)
+  ENTRY@[0; 31)
     KEY@[0; 12)
       BARE_KEY@[0; 12) "inline-table"
     WHITESPACE@[12; 13)
@@ -9,7 +9,7 @@ DOC@[0; 95)
       DICT@[15; 31)
         L_CURLY@[15; 16) "{"
         WHITESPACE@[16; 21)
-        KEY_VAL@[21; 29)
+        ENTRY@[21; 29)
           KEY@[21; 24)
             BARE_KEY@[21; 24) "foo"
           WHITESPACE@[24; 25)
@@ -27,7 +27,7 @@ DOC@[0; 95)
         BARE_KEY@[34; 39) "table"
       R_BRACK@[39; 40) "]"
     WHITESPACE@[40; 41)
-    KEY_VAL@[41; 50)
+    ENTRY@[41; 50)
       KEY@[41; 44)
         BARE_KEY@[41; 44) "foo"
       WHITESPACE@[44; 45)
@@ -43,7 +43,7 @@ DOC@[0; 95)
         BARE_KEY@[53; 58) "table"
       R_BRACK@[58; 59) "]"
     WHITESPACE@[59; 60)
-    KEY_VAL@[60; 68)
+    ENTRY@[60; 68)
       KEY@[60; 63)
         BARE_KEY@[60; 63) "bar"
       WHITESPACE@[63; 64)
@@ -61,7 +61,7 @@ DOC@[0; 95)
       R_BRACK@[83; 84) "]"
       R_BRACK@[84; 85) "]"
     WHITESPACE@[85; 86)
-    KEY_VAL@[86; 94)
+    ENTRY@[86; 94)
       KEY@[86; 89)
         BARE_KEY@[86; 89) "bar"
       WHITESPACE@[89; 90)

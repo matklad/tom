@@ -1,5 +1,5 @@
 DOC@[0; 28)
-  KEY_VAL@[0; 27)
+  ENTRY@[0; 27)
     KEY@[0; 1)
       BARE_KEY@[0; 1) "a"
     WHITESPACE@[1; 2)
@@ -9,7 +9,7 @@ DOC@[0; 28)
       DICT@[4; 27)
         L_CURLY@[4; 5) "{"
         WHITESPACE@[5; 6)
-        KEY_VAL@[6; 15)
+        ENTRY@[6; 15)
           KEY@[6; 11)
             BASIC_STRING@[6; 11) "\"foo\""
           WHITESPACE@[11; 12)
@@ -19,7 +19,7 @@ DOC@[0; 28)
             NUMBER@[14; 15) "1"
         COMMA@[15; 16) ","
         WHITESPACE@[16; 17)
-        KEY_VAL@[17; 24)
+        ENTRY@[17; 24)
           KEY@[17; 20)
             BARE_KEY@[17; 20) "bar"
           WHITESPACE@[20; 21)

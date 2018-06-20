@@ -6,7 +6,7 @@ DOC@[0; 20)
         BARE_KEY@[1; 6) "table"
       R_BRACK@[6; 7) "]"
     WHITESPACE@[7; 8)
-    KEY_VAL@[8; 13)
+    ENTRY@[8; 13)
       KEY@[8; 9)
         BARE_KEY@[8; 9) "a"
       WHITESPACE@[9; 10)
@@ -15,7 +15,7 @@ DOC@[0; 20)
       VAL@[12; 13)
         NUMBER@[12; 13) "1"
     WHITESPACE@[13; 14)
-    KEY_VAL@[14; 19)
+    ENTRY@[14; 19)
       KEY@[14; 15)
         BARE_KEY@[14; 15) "b"
       WHITESPACE@[15; 16)

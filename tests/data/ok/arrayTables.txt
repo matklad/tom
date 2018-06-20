@@ -8,7 +8,7 @@ DOC@[0; 483)
       R_BRACK@[10; 11) "]"
       R_BRACK@[11; 12) "]"
     WHITESPACE@[12; 13)
-    KEY_VAL@[13; 28)
+    ENTRY@[13; 28)
       KEY@[13; 17)
         BARE_KEY@[13; 17) "name"
       WHITESPACE@[17; 18)
@@ -17,7 +17,7 @@ DOC@[0; 483)
       VAL@[20; 28)
         BASIC_STRING@[20; 28) "\"Hammer\""
     WHITESPACE@[28; 29)
-    KEY_VAL@[29; 44)
+    ENTRY@[29; 44)
       KEY@[29; 32)
         BARE_KEY@[29; 32) "sku"
       WHITESPACE@[32; 33)
@@ -44,7 +44,7 @@ DOC@[0; 483)
       R_BRACK@[70; 71) "]"
       R_BRACK@[71; 72) "]"
     WHITESPACE@[72; 73)
-    KEY_VAL@[73; 86)
+    ENTRY@[73; 86)
       KEY@[73; 77)
         BARE_KEY@[73; 77) "name"
       WHITESPACE@[77; 78)
@@ -53,7 +53,7 @@ DOC@[0; 483)
       VAL@[80; 86)
         BASIC_STRING@[80; 86) "\"Nail\""
     WHITESPACE@[86; 87)
-    KEY_VAL@[87; 102)
+    ENTRY@[87; 102)
       KEY@[87; 90)
         BARE_KEY@[87; 90) "sku"
       WHITESPACE@[90; 91)
@@ -62,7 +62,7 @@ DOC@[0; 483)
       VAL@[93; 102)
         NUMBER@[93; 102) "284758393"
     WHITESPACE@[102; 103)
-    KEY_VAL@[103; 117)
+    ENTRY@[103; 117)
       KEY@[103; 108)
         BARE_KEY@[103; 108) "color"
       WHITESPACE@[108; 109)
@@ -80,7 +80,7 @@ DOC@[0; 483)
       R_BRACK@[127; 128) "]"
       R_BRACK@[128; 129) "]"
     WHITESPACE@[129; 132)
-    KEY_VAL@[132; 146)
+    ENTRY@[132; 146)
       KEY@[132; 136)
         BARE_KEY@[132; 136) "name"
       WHITESPACE@[136; 137)
@@ -99,7 +99,7 @@ DOC@[0; 483)
         BARE_KEY@[157; 165) "physical"
       R_BRACK@[165; 166) "]"
     WHITESPACE@[166; 171)
-    KEY_VAL@[171; 184)
+    ENTRY@[171; 184)
       KEY@[171; 176)
         BARE_KEY@[171; 176) "color"
       WHITESPACE@[176; 177)
@@ -108,7 +108,7 @@ DOC@[0; 483)
       VAL@[179; 184)
         BASIC_STRING@[179; 184) "\"red\""
     WHITESPACE@[184; 189)
-    KEY_VAL@[189; 204)
+    ENTRY@[189; 204)
       KEY@[189; 194)
         BARE_KEY@[189; 194) "shape"
       WHITESPACE@[194; 195)
@@ -129,7 +129,7 @@ DOC@[0; 483)
       R_BRACK@[223; 224) "]"
       R_BRACK@[224; 225) "]"
     WHITESPACE@[225; 230)
-    KEY_VAL@[230; 252)
+    ENTRY@[230; 252)
       KEY@[230; 234)
         BARE_KEY@[230; 234) "name"
       WHITESPACE@[234; 235)
@@ -150,7 +150,7 @@ DOC@[0; 483)
       R_BRACK@[271; 272) "]"
       R_BRACK@[272; 273) "]"
     WHITESPACE@[273; 278)
-    KEY_VAL@[278; 299)
+    ENTRY@[278; 299)
       KEY@[278; 282)
         BARE_KEY@[278; 282) "name"
       WHITESPACE@[282; 283)
@@ -168,7 +168,7 @@ DOC@[0; 483)
       R_BRACK@[308; 309) "]"
       R_BRACK@[309; 310) "]"
     WHITESPACE@[310; 313)
-    KEY_VAL@[313; 328)
+    ENTRY@[313; 328)
       KEY@[313; 317)
         BARE_KEY@[313; 317) "name"
       WHITESPACE@[317; 318)
@@ -189,7 +189,7 @@ DOC@[0; 483)
       R_BRACK@[347; 348) "]"
       R_BRACK@[348; 349) "]"
     WHITESPACE@[349; 354)
-    KEY_VAL@[354; 371)
+    ENTRY@[354; 371)
       KEY@[354; 358)
         BARE_KEY@[354; 358) "name"
       WHITESPACE@[358; 359)
@@ -198,7 +198,7 @@ DOC@[0; 483)
       VAL@[361; 371)
         BASIC_STRING@[361; 371) "\"plantain\""
     WHITESPACE@[371; 374)
-    KEY_VAL@[374; 482)
+    ENTRY@[374; 482)
       KEY@[374; 380)
         BARE_KEY@[374; 380) "points"
       WHITESPACE@[380; 381)
@@ -212,7 +212,7 @@ DOC@[0; 483)
             DICT@[385; 408)
               L_CURLY@[385; 386) "{"
               WHITESPACE@[386; 387)
-              KEY_VAL@[387; 392)
+              ENTRY@[387; 392)
                 KEY@[387; 388)
                   BARE_KEY@[387; 388) "x"
                 WHITESPACE@[388; 389)
@@ -222,7 +222,7 @@ DOC@[0; 483)
                   NUMBER@[391; 392) "1"
               COMMA@[392; 393) ","
               WHITESPACE@[393; 394)
-              KEY_VAL@[394; 399)
+              ENTRY@[394; 399)
                 KEY@[394; 395)
                   BARE_KEY@[394; 395) "y"
                 WHITESPACE@[395; 396)
@@ -232,7 +232,7 @@ DOC@[0; 483)
                   NUMBER@[398; 399) "2"
               COMMA@[399; 400) ","
               WHITESPACE@[400; 401)
-              KEY_VAL@[401; 406)
+              ENTRY@[401; 406)
                 KEY@[401; 402)
                   BARE_KEY@[401; 402) "z"
                 WHITESPACE@[402; 403)
@@ -248,7 +248,7 @@ DOC@[0; 483)
             DICT@[421; 444)
               L_CURLY@[421; 422) "{"
               WHITESPACE@[422; 423)
-              KEY_VAL@[423; 428)
+              ENTRY@[423; 428)
                 KEY@[423; 424)
                   BARE_KEY@[423; 424) "x"
                 WHITESPACE@[424; 425)
@@ -258,7 +258,7 @@ DOC@[0; 483)
                   NUMBER@[427; 428) "7"
               COMMA@[428; 429) ","
               WHITESPACE@[429; 430)
-              KEY_VAL@[430; 435)
+              ENTRY@[430; 435)
                 KEY@[430; 431)
                   BARE_KEY@[430; 431) "y"
                 WHITESPACE@[431; 432)
@@ -268,7 +268,7 @@ DOC@[0; 483)
                   NUMBER@[434; 435) "8"
               COMMA@[435; 436) ","
               WHITESPACE@[436; 437)
-              KEY_VAL@[437; 442)
+              ENTRY@[437; 442)
                 KEY@[437; 438)
                   BARE_KEY@[437; 438) "z"
                 WHITESPACE@[438; 439)
@@ -284,7 +284,7 @@ DOC@[0; 483)
             DICT@[457; 480)
               L_CURLY@[457; 458) "{"
               WHITESPACE@[458; 459)
-              KEY_VAL@[459; 464)
+              ENTRY@[459; 464)
                 KEY@[459; 460)
                   BARE_KEY@[459; 460) "x"
                 WHITESPACE@[460; 461)
@@ -294,7 +294,7 @@ DOC@[0; 483)
                   NUMBER@[463; 464) "2"
               COMMA@[464; 465) ","
               WHITESPACE@[465; 466)
-              KEY_VAL@[466; 471)
+              ENTRY@[466; 471)
                 KEY@[466; 467)
                   BARE_KEY@[466; 467) "y"
                 WHITESPACE@[467; 468)
@@ -304,7 +304,7 @@ DOC@[0; 483)
                   NUMBER@[470; 471) "4"
               COMMA@[471; 472) ","
               WHITESPACE@[472; 473)
-              KEY_VAL@[473; 478)
+              ENTRY@[473; 478)
                 KEY@[473; 474)
                   BARE_KEY@[473; 474) "z"
                 WHITESPACE@[474; 475)

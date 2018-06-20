@@ -1,5 +1,5 @@
 DOC@[0; 47)
-  KEY_VAL@[0; 18)
+  ENTRY@[0; 18)
     KEY@[0; 1)
       BARE_KEY@[0; 1) "a"
     WHITESPACE@[1; 2)
@@ -8,7 +8,7 @@ DOC@[0; 47)
     VAL@[4; 18)
       BASIC_STRING@[4; 18) "\"hello\\nworld\""
   WHITESPACE@[18; 19)
-  KEY_VAL@[19; 46)
+  ENTRY@[19; 46)
     KEY@[19; 20)
       BARE_KEY@[19; 20) "b"
     WHITESPACE@[20; 21)

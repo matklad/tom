@@ -1,5 +1,5 @@
 DOC@[0; 245)
-  KEY_VAL@[0; 18)
+  ENTRY@[0; 18)
     KEY@[0; 4)
       BARE_KEY@[0; 4) "arr1"
     WHITESPACE@[4; 5)
@@ -22,7 +22,7 @@ DOC@[0; 245)
         WHITESPACE@[16; 17)
         R_BRACK@[17; 18) "]"
   WHITESPACE@[18; 19)
-  KEY_VAL@[19; 54)
+  ENTRY@[19; 54)
     KEY@[19; 23)
       BARE_KEY@[19; 23) "arr2"
     WHITESPACE@[23; 24)
@@ -45,7 +45,7 @@ DOC@[0; 245)
         WHITESPACE@[52; 53)
         R_BRACK@[53; 54) "]"
   WHITESPACE@[54; 55)
-  KEY_VAL@[55; 85)
+  ENTRY@[55; 85)
     KEY@[55; 59)
       BARE_KEY@[55; 59) "arr3"
     WHITESPACE@[59; 60)
@@ -86,7 +86,7 @@ DOC@[0; 245)
         WHITESPACE@[83; 84)
         R_BRACK@[84; 85) "]"
   WHITESPACE@[85; 86)
-  KEY_VAL@[86; 144)
+  ENTRY@[86; 144)
     KEY@[86; 90)
       BARE_KEY@[86; 90) "arr4"
     WHITESPACE@[90; 91)
@@ -112,7 +112,7 @@ DOC@[0; 245)
           MULTILINE_LITERAL_STRING@[133; 143) "\'\'\'type\'\'\'"
         R_BRACK@[143; 144) "]"
   WHITESPACE@[144; 145)
-  KEY_VAL@[145; 181)
+  ENTRY@[145; 181)
     KEY@[145; 149)
       BARE_KEY@[145; 149) "arr5"
     WHITESPACE@[149; 150)
@@ -153,7 +153,7 @@ DOC@[0; 245)
         WHITESPACE@[179; 180)
         R_BRACK@[180; 181) "]"
   WHITESPACE@[181; 183)
-  KEY_VAL@[183; 200)
+  ENTRY@[183; 200)
     KEY@[183; 187)
       BARE_KEY@[183; 187) "arr6"
     WHITESPACE@[187; 188)
@@ -172,7 +172,7 @@ DOC@[0; 245)
         WHITESPACE@[198; 199)
         R_BRACK@[199; 200) "]"
   WHITESPACE@[200; 202)
-  KEY_VAL@[202; 222)
+  ENTRY@[202; 222)
     KEY@[202; 206)
       BARE_KEY@[202; 206) "arr7"
     WHITESPACE@[206; 207)
@@ -195,7 +195,7 @@ DOC@[0; 245)
         WHITESPACE@[220; 221)
         R_BRACK@[221; 222) "]"
   WHITESPACE@[222; 224)
-  KEY_VAL@[224; 244)
+  ENTRY@[224; 244)
     KEY@[224; 228)
       BARE_KEY@[224; 228) "arr8"
     WHITESPACE@[228; 229)

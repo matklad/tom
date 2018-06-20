@@ -1,5 +1,5 @@
 DOC@[0; 19)
-  KEY_VAL@[0; 8)
+  ENTRY@[0; 8)
     KEY@[0; 1)
       BARE_KEY@[0; 1) "a"
     WHITESPACE@[1; 2)
@@ -8,7 +8,7 @@ DOC@[0; 19)
     VAL@[4; 8)
       BOOL@[4; 8) "true"
   WHITESPACE@[8; 9)
-  KEY_VAL@[9; 18)
+  ENTRY@[9; 18)
     KEY@[9; 10)
       BARE_KEY@[9; 10) "b"
     WHITESPACE@[10; 11)

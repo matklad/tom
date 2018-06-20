@@ -29,8 +29,8 @@ pub fn compute_ws(loc: Location) -> String {
 
 fn ws_between(left: TomlNode, right: TomlNode) -> String {
     match (left.symbol(), right.symbol()) {
-        (KEY_VAL, KEY_VAL) | (TABLE_HEADER, KEY_VAL) => String::from("\n"),
-        (TABLE, TABLE) | (KEY_VAL, TABLE) => String::from("\n\n"),
+        (ENTRY, ENTRY) | (TABLE_HEADER, ENTRY) => String::from("\n"),
+        (TABLE, TABLE) | (ENTRY, TABLE) => String::from("\n\n"),
         _ => String::new(),
     }
 }

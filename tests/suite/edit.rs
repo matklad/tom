@@ -1,6 +1,6 @@
 use tom::{
     Edit, Factory,
-    ast::{self, KeyValueOwner},
+    ast::{self, EntryOwner},
 };
 use {toml, check_edit, check_panics};
 use tom::Position;
@@ -18,7 +18,7 @@ baz = "1.0.0"
 "#;
 
     let f = Factory::new();
-    let quux = f.key_val("quux", f.val_string("92"));
+    let quux = f.entry("quux", f.val_string("92"));
 
     check_edit(
         before,
@@ -89,7 +89,7 @@ quux = "92"
         },
     );
 
-    fn foobarbaz(doc: &TomlDoc) -> (ast::KeyVal, ast::KeyVal, ast::KeyVal) {
+    fn foobarbaz(doc: &TomlDoc) -> (ast::Entry, ast::Entry, ast::Entry) {
         let entries: Vec<_> = doc.ast().entries().collect();
         (entries[0], entries[1], entries[2])
     }
@@ -106,7 +106,7 @@ baz = "1.0.0"
 "#;
 
     let f = Factory::new();
-    let quux = f.key_val("quux", f.val_string("92"));
+    let quux = f.entry("quux", f.val_string("92"));
 
     check_edit(
         before,
@@ -178,7 +178,7 @@ quux = "92""#,
         },
     );
 
-    fn foobarbaz(doc: &TomlDoc) -> (ast::KeyVal, ast::KeyVal, ast::KeyVal) {
+    fn foobarbaz(doc: &TomlDoc) -> (ast::Entry, ast::Entry, ast::Entry) {
         let entries: Vec<_> = doc.ast().entries().collect();
         (entries[0], entries[1], entries[2])
     }

@@ -1,5 +1,5 @@
 DOC@[0; 40)
-  KEY_VAL@[0; 6)
+  ENTRY@[0; 6)
     KEY@[0; 1)
       BARE_KEY@[0; 1) "a"
     WHITESPACE@[1; 2)
@@ -10,7 +10,7 @@ DOC@[0; 40)
         L_CURLY@[4; 5) "{"
         R_CURLY@[5; 6) "}"
   WHITESPACE@[6; 7)
-  KEY_VAL@[7; 18)
+  ENTRY@[7; 18)
     KEY@[7; 8)
       BARE_KEY@[7; 8) "b"
     WHITESPACE@[8; 9)
@@ -19,7 +19,7 @@ DOC@[0; 40)
     VAL@[11; 18)
       DICT@[11; 18)
         L_CURLY@[11; 12) "{"
-        KEY_VAL@[12; 17)
+        ENTRY@[12; 17)
           KEY@[12; 15)
             BARE_KEY@[12; 15) "foo"
           EQ@[15; 16) "="
@@ -27,7 +27,7 @@ DOC@[0; 40)
             NUMBER@[16; 17) "1"
         R_CURLY@[17; 18) "}"
   WHITESPACE@[18; 19)
-  KEY_VAL@[19; 31)
+  ENTRY@[19; 31)
     KEY@[19; 20)
       BARE_KEY@[19; 20) "c"
     WHITESPACE@[20; 21)
@@ -36,7 +36,7 @@ DOC@[0; 40)
     VAL@[23; 31)
       DICT@[23; 31)
         L_CURLY@[23; 24) "{"
-        KEY_VAL@[24; 29)
+        ENTRY@[24; 29)
           KEY@[24; 27)
             BARE_KEY@[24; 27) "foo"
           EQ@[27; 28) "="
@@ -45,7 +45,7 @@ DOC@[0; 40)
         COMMA@[29; 30) ","
         R_CURLY@[30; 31) "}"
   WHITESPACE@[31; 32)
-  KEY_VAL@[32; 40)
+  ENTRY@[32; 40)
     KEY@[32; 33)
       BARE_KEY@[32; 33) "d"
     WHITESPACE@[33; 34)
@@ -54,17 +54,20 @@ DOC@[0; 40)
     VAL@[36; 40)
       DICT@[36; 40)
         L_CURLY@[36; 37) "{"
-        KEY_VAL@[37; 40)
+        ENTRY@[37; 40)
           KEY@[37; 38)
             ERROR@[37; 38)
               COMMA@[37; 38) ","
           ERROR@[38; 39)
             R_CURLY@[38; 39) "}"
           WHITESPACE@[39; 40)
+          KEY@[40; 40)
           VAL@[40; 40)
 
 error@[37; 38) ",": expected a key
-error@[38; 39) "}": expected `=`
+error@[38; 39) "}": expected `.`
+error@[39; 40) "\n": expected a key
+error@[39; 40) "\n": expected `=`
 error@[39; 40) "\n": expected a value
 error@[39; 40) "\n": expected `,`
 error@[39; 40) "\n": expected `}`
