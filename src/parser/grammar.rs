@@ -126,6 +126,7 @@ impl<'s, 't> Parser<'s, 't> {
     }
 
     fn key(&mut self) {
+        let m = self.start(KEY);
         match self.current() {
             // test
             // foo = 92
@@ -140,9 +141,11 @@ impl<'s, 't> Parser<'s, 't> {
                 self.bump(),
             _ => self.bump_error(),
         }
+        self.finish(m);
     }
 
     fn val(&mut self) {
+        let m = self.start(VAL);
         match self.current() {
             // test
             // a = 92
@@ -181,6 +184,7 @@ impl<'s, 't> Parser<'s, 't> {
             // foo = _
             _ => self.bump_error(),
         }
+        self.finish(m);
     }
 
     fn array(&mut self) {
