@@ -1,6 +1,5 @@
 use tom::{
     Factory, TomlNode,
-    ast::AstNode,
 };
 use testutils::assert_eq_text;
 use check_panics;

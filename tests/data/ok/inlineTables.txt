@@ -1,51 +1,63 @@
 DOC@[0; 75)
   KEY_VAL@[0; 49)
-    BARE_KEY@[0; 4) "name"
+    KEY@[0; 4)
+      BARE_KEY@[0; 4) "name"
     WHITESPACE@[4; 5)
     EQ@[5; 6) "="
     WHITESPACE@[6; 7)
-    DICT@[7; 49)
-      L_CURLY@[7; 8) "{"
-      WHITESPACE@[8; 9)
-      KEY_VAL@[9; 22)
-        BARE_KEY@[9; 14) "first"
-        WHITESPACE@[14; 15)
-        EQ@[15; 16) "="
-        WHITESPACE@[16; 17)
-        BASIC_STRING@[17; 22) "\"Tom\""
-      COMMA@[22; 23) ","
-      WHITESPACE@[23; 24)
-      KEY_VAL@[24; 47)
-        BARE_KEY@[24; 28) "last"
-        WHITESPACE@[28; 29)
-        EQ@[29; 30) "="
-        WHITESPACE@[30; 31)
-        BASIC_STRING@[31; 47) "\"Preston-Werner\""
-      WHITESPACE@[47; 48)
-      R_CURLY@[48; 49) "}"
+    VAL@[7; 49)
+      DICT@[7; 49)
+        L_CURLY@[7; 8) "{"
+        WHITESPACE@[8; 9)
+        KEY_VAL@[9; 22)
+          KEY@[9; 14)
+            BARE_KEY@[9; 14) "first"
+          WHITESPACE@[14; 15)
+          EQ@[15; 16) "="
+          WHITESPACE@[16; 17)
+          VAL@[17; 22)
+            BASIC_STRING@[17; 22) "\"Tom\""
+        COMMA@[22; 23) ","
+        WHITESPACE@[23; 24)
+        KEY_VAL@[24; 47)
+          KEY@[24; 28)
+            BARE_KEY@[24; 28) "last"
+          WHITESPACE@[28; 29)
+          EQ@[29; 30) "="
+          WHITESPACE@[30; 31)
+          VAL@[31; 47)
+            BASIC_STRING@[31; 47) "\"Preston-Werner\""
+        WHITESPACE@[47; 48)
+        R_CURLY@[48; 49) "}"
   WHITESPACE@[49; 50)
   KEY_VAL@[50; 74)
-    BARE_KEY@[50; 55) "point"
+    KEY@[50; 55)
+      BARE_KEY@[50; 55) "point"
     WHITESPACE@[55; 56)
     EQ@[56; 57) "="
     WHITESPACE@[57; 58)
-    DICT@[58; 74)
-      L_CURLY@[58; 59) "{"
-      WHITESPACE@[59; 60)
-      KEY_VAL@[60; 65)
-        BARE_KEY@[60; 61) "x"
-        WHITESPACE@[61; 62)
-        EQ@[62; 63) "="
-        WHITESPACE@[63; 64)
-        NUMBER@[64; 65) "1"
-      COMMA@[65; 66) ","
-      WHITESPACE@[66; 67)
-      KEY_VAL@[67; 72)
-        BARE_KEY@[67; 68) "y"
-        WHITESPACE@[68; 69)
-        EQ@[69; 70) "="
-        WHITESPACE@[70; 71)
-        NUMBER@[71; 72) "2"
-      WHITESPACE@[72; 73)
-      R_CURLY@[73; 74) "}"
+    VAL@[58; 74)
+      DICT@[58; 74)
+        L_CURLY@[58; 59) "{"
+        WHITESPACE@[59; 60)
+        KEY_VAL@[60; 65)
+          KEY@[60; 61)
+            BARE_KEY@[60; 61) "x"
+          WHITESPACE@[61; 62)
+          EQ@[62; 63) "="
+          WHITESPACE@[63; 64)
+          VAL@[64; 65)
+            NUMBER@[64; 65) "1"
+        COMMA@[65; 66) ","
+        WHITESPACE@[66; 67)
+        KEY_VAL@[67; 72)
+          KEY@[67; 68)
+            BARE_KEY@[67; 68) "y"
+          WHITESPACE@[68; 69)
+          EQ@[69; 70) "="
+          WHITESPACE@[70; 71)
+          VAL@[71; 72)
+            NUMBER@[71; 72) "2"
+        WHITESPACE@[72; 73)
+        R_CURLY@[73; 74) "}"
   WHITESPACE@[74; 75)

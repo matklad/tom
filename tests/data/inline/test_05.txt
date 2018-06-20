@@ -1,15 +1,19 @@
 DOC@[0; 19)
   KEY_VAL@[0; 8)
-    BARE_KEY@[0; 1) "a"
+    KEY@[0; 1)
+      BARE_KEY@[0; 1) "a"
     WHITESPACE@[1; 2)
     EQ@[2; 3) "="
     WHITESPACE@[3; 4)
-    BOOL@[4; 8) "true"
+    VAL@[4; 8)
+      BOOL@[4; 8) "true"
   WHITESPACE@[8; 9)
   KEY_VAL@[9; 18)
-    BARE_KEY@[9; 10) "b"
+    KEY@[9; 10)
+      BARE_KEY@[9; 10) "b"
     WHITESPACE@[10; 11)
     EQ@[11; 12) "="
     WHITESPACE@[12; 13)
-    BOOL@[13; 18) "false"
+    VAL@[13; 18)
+      BOOL@[13; 18) "false"
   WHITESPACE@[18; 19)

@@ -5,7 +5,7 @@ extern crate failure;
 
 use itertools::Itertools;
 use clap::{App, SubCommand};
-use heck::ShoutySnakeCase;
+use heck::{ShoutySnakeCase, CamelCase};
 use std::fs;
 
 type Result<T> = ::std::result::Result<T, failure::Error>;
@@ -84,52 +84,109 @@ fn get_tests() -> Result<()> {
 }
 
 
-fn gen_ast() -> String {
-    let wrappers = &[
-        "Doc",
-        "BareKey",
-        "Array",
-        "Dict",
-        "Number",
-        "Bool",
-        "DateTime",
-        "KeyVal",
-        "Table",
-        "ArrayTable",
-        "TableHeader",
-    ];
-    let multi_wrappers = &[
-        (
-            "StringLit",
-            &[
-                "BASIC_STRING",
-                "MULTILINE_BASIC_STRING",
-                "LITERAL_STRING",
-                "MULTILINE_LITERAL_STRING",
-            ],
-        ),
-    ];
-    let enums: &[(&str, &[&str])] = &[
-        ("Key", &["StringLit", "BareKey"]),
-        (
-            "Val",
-            &["Array", "Dict", "Number", "Bool", "DateTime", "StringLit"],
-        ),
-    ];
-    let methods: &[(&str, &[(&str, &str)])] = &[
-        (
-            "Doc",
-            &[("tables", "Table"), ("array_tables", "ArrayTable")],
-        ),
-        ("TableHeader", &[("keys", "Key")]),
-        ("KeyVal", &[("key", "Key"), ("val", "Val")]),
-    ];
+struct AstNode {
+    name: &'static str,
+    symbols: Vec<&'static str>,
+    kinds: Vec<&'static str>,
+    methods: Vec<Method>,
+}
 
+impl AstNode {
+    fn methods(mut self, names: &[&'static str]) -> AstNode {
+        self.methods.extend(names.iter().map(|&name| {
+            Method {
+                name,
+                arity: if name.ends_with("s") { Arity::Many } else { Arity::One },
+            }
+        }));
+        self
+    }
+
+    fn kinds(mut self, names: &[&'static str]) -> AstNode {
+        self.kinds.extend(names.iter().map(|&name| name));
+        self
+    }
+
+    fn symbols(mut self, names: &[&'static str]) -> AstNode {
+        self.symbols.extend(names.iter().map(|&name| name));
+        self
+    }
+}
+
+
+struct Method {
+    name: &'static str,
+    arity: Arity,
+}
+enum Arity {
+    One,
+    Many,
+}
+
+impl Method {
+    fn ret_type(&self) -> String {
+        match self.arity {
+            Arity::One => format!("{}<'f>", self.name.to_camel_case()),
+            Arity::Many => format!("AstChildren<'f, {}<'f>>", self.name[..self.name.len() - 1].to_camel_case()),
+        }
+    }
+
+    fn body(&self) -> &'static str {
+        match self.arity {
+            Arity::One =>
+                "AstChildren::new(self.node().children()).next().unwrap()",
+            Arity::Many =>
+                "AstChildren::new(self.node().children())",
+        }
+    }
+}
+
+
+fn descr() -> Vec<AstNode> {
+    fn n(name: &'static str) -> AstNode {
+        AstNode {
+            name,
+            symbols: Vec::new(),
+            kinds: Vec::new(),
+            methods: Vec::new(),
+        }
+    }
+
+    vec![
+        n("Doc").methods(&["tables", "array_tables"]),
+        n("Table"),
+        n("ArrayTable"),
+        n("TableHeader").methods(&["keys"]),
+        n("KeyVal").methods(&["key", "val"]),
+        n("Key").kinds(&["StringLit", "BareKey"]),
+        n("Val").kinds(&["Array", "Dict", "Number", "Bool", "DateTime", "StringLit"]),
+        n("StringLit").symbols(&["BASIC_STRING", "MULTILINE_BASIC_STRING", "LITERAL_STRING", "MULTILINE_LITERAL_STRING"]),
+        n("BareKey"),
+        n("Array"),
+        n("Dict"),
+        n("Number"),
+        n("Bool"),
+        n("DateTime"),
+    ]
+}
+
+
+fn gen_ast() -> String {
+    let descr = descr();
     let mut buff = String::new();
+    let mut nesting = 0;
     macro_rules! ln {
         () => { buff.push_str("\n") };
         ($($tt:tt)*) => {{
-            buff.push_str(&format!($($tt)*));
+            let inner = format!($($tt)*);
+            let mut indent = String::new();
+
+            if inner == "}" { nesting -= 1; }
+            for _ in 0..nesting { indent += &"    " }
+            if inner.ends_with("{") { nesting += 1; }
+
+            buff.push_str(&indent);
+            buff.push_str(&inner);
             buff.push_str("\n");
         }};
     }
@@ -138,113 +195,78 @@ fn gen_ast() -> String {
     ln!("use ast::{{AstNode, AstChildren}};");
     ln!();
 
-    for &symbol in wrappers
-        .iter()
-        .chain(multi_wrappers.iter().map(|&(ref w, _)| w))
-        {
-            ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
-            ln!("pub struct {}<'f>(TomlNode<'f>);", symbol);
+    for n in descr.iter() {
+        ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
+        ln!("pub struct {}<'f>(TomlNode<'f>);", n.name);
+        ln!();
+
+        if !n.kinds.is_empty() {
+            ln!("pub enum {}Kind<'f> {{", n.name);
+            for k in n.kinds.iter() {
+                ln!("{}({}<'f>),", k, k);
+            }
+            ln!("}}");
             ln!();
         }
-    ln!();
+    }
 
-    for &(ref symbol, ref variants) in enums.iter() {
-        ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
-        ln!("pub enum {}<'f> {{", symbol);
-        for &v in variants.iter() {
-            ln!("    {}({}<'f>),", v, v);
+    for n in descr.iter() {
+        ln!();
+        ln!("impl<'f> AstNode<'f> for {}<'f> {{", n.name);
+        {
+            ln!("fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {{");
+            {
+                ln!("match node.symbol() {{");
+                let symbols = if n.symbols.is_empty() {
+                    vec![n.name.to_shouty_snake_case()]
+                } else {
+                    n.symbols.iter().map(|s| s.to_string()).collect()
+                };
+                for s in symbols {
+                    ln!("{} => Some({}(node)),", s, n.name);
+                }
+                ln!("_ => None,");
+                ln!("}}");
+            }
+            ln!("}}");
+            ln!();
+            ln!("fn node(self) -> TomlNode<'f> {{ self.0 }}");
         }
         ln!("}}");
         ln!();
-    }
 
-    for &symbol in wrappers.iter() {
-        ln!("impl<'f> AstNode<'f> for {}<'f> {{", symbol);
-        ln!("    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {{");
-        ln!(
-            "        if node.symbol() == {} {{ Some({}(node)) }} else {{ None }}",
-            symbol.to_shouty_snake_case(),
-            symbol
-        );
-        ln!("    }}");
-        ln!("    fn node(self) -> TomlNode<'f> {{ self.0 }}");
-
-        ln!("}}");
-        ln!();
-    }
-
-    for &(ref symbol, ref m) in multi_wrappers.iter() {
-        ln!("impl<'f> AstNode<'f> for {}<'f> {{", symbol);
-        ln!("    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {{");
-        ln!("        match node.symbol() {{");
-        for &s in m.iter() {
-            ln!(
-                "            {} => Some({}(node)),",
-                s.to_shouty_snake_case(),
-                symbol
-            );
+        ln!("impl<'f> From<{}<'f>> for TomlNode<'f> {{", n.name);
+        {
+            ln!("fn from(ast: {}<'f>) -> TomlNode<'f> {{ ast.node() }}", n.name);
         }
-        ln!("            _ => None,");
-        ln!("        }}");
-        ln!("    }}");
-        ln!("    fn node(self) -> TomlNode<'f> {{ self.0 }}");
-
         ln!("}}");
         ln!();
-    }
 
-    for &(ref symbol, ref variants) in enums.iter() {
-        ln!("impl<'f> AstNode<'f> for {}<'f> {{", symbol);
-        ln!("    fn cast(node: TomlNode<'f>) -> Option<Self> where Self: Sized {{");
-        for &v in variants.iter() {
-            ln!(
-                "        if let Some(n) = {}::cast(node) {{ return Some({}::{}(n)); }}",
-                v,
-                symbol,
-                v,
-            );
-        }
-        ln!("        None");
-        ln!("    }}");
-        ln!("    fn node(self) -> TomlNode<'f> {{");
-        ln!("        match self {{");
-        for &v in variants.iter() {
-            ln!("            {}::{}(n) => n.node(),", symbol, v);
-        }
-        ln!("        }}");
-        ln!("    }}");
-        ln!("}}");
-        ln!();
-    }
+        ln!("impl<'f> {}<'f> {{", n.name);
+        {
+            ln!("pub fn node(self) -> TomlNode<'f> {{ self.0 }}");
+            if !n.kinds.is_empty() || !n.methods.is_empty() {
+                ln!();
+            }
 
-    let all_symbols =
-        wrappers.iter()
-            .chain(multi_wrappers.iter().map(|(s, _)| s))
-            .chain(enums.iter().map(|(s, _)| s));
-    for symbol in all_symbols {
-        ln!("impl<'f> From<{}<'f>> for TomlNode<'f> {{", symbol);
-        ln!("    fn from(ast: {}<'f>) -> TomlNode<'f> {{ ast.node() }}", symbol);
-        ln!("}}");
-        ln!();
-    }
+            if !n.kinds.is_empty() {
+                ln!("pub fn kind(self) -> {}Kind<'f> {{", n.name);
+                ln!("let node = self.node().children().next().unwrap();");
+                for k in n.kinds.iter() {
+                    ln!("if let Some(node) = {}::cast(node) {{", k);
+                    ln!("return {}Kind::{}(node);", n.name, k);
+                    ln!("}}");
+                }
+                ln!("unreachable!()");
+                ln!("}}");
+                ln!();
+            }
 
-    for &(ref s, ref ms) in methods.iter() {
-        ln!("impl<'f> {}<'f> {{", s);
-        for &(ref acc, ref s) in ms.iter() {
-            let (ret, body) = if acc.ends_with("s") {
-                (
-                    format!("AstChildren<'f, {}<'f>>", s),
-                    "AstChildren::new(self.node().children())",
-                )
-            } else {
-                (
-                    format!("{}<'f>", s),
-                    "AstChildren::new(self.node().children()).next().unwrap()",
-                )
-            };
-            ln!("    pub fn {}(self) -> {} {{", acc, ret);
-            ln!("        {}", body);
-            ln!("    }}");
+            for m in n.methods.iter() {
+                ln!("pub fn {}(self) -> {} {{", m.name, m.ret_type());
+                ln!("{}", m.body());
+                ln!("}}");
+            }
         }
         ln!("}}");
     }

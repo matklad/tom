@@ -1,14 +1,18 @@
 DOC@[0; 15)
   KEY_VAL@[0; 14)
-    BARE_KEY@[0; 1) "a"
+    KEY@[0; 1)
+      BARE_KEY@[0; 1) "a"
     WHITESPACE@[1; 2)
     EQ@[2; 3) "="
     WHITESPACE@[3; 4)
-    ARRAY@[4; 14)
-      L_BRACK@[4; 5) "["
-      NUMBER@[5; 6) "1"
-      COMMA@[6; 7) ","
-      WHITESPACE@[7; 8)
-      BASIC_STRING@[8; 13) "\"foo\""
-      R_BRACK@[13; 14) "]"
+    VAL@[4; 14)
+      ARRAY@[4; 14)
+        L_BRACK@[4; 5) "["
+        VAL@[5; 6)
+          NUMBER@[5; 6) "1"
+        COMMA@[6; 7) ","
+        WHITESPACE@[7; 8)
+        VAL@[8; 13)
+          BASIC_STRING@[8; 13) "\"foo\""
+        R_BRACK@[13; 14) "]"
   WHITESPACE@[14; 15)

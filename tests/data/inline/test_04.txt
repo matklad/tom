@@ -1,15 +1,19 @@
 DOC@[0; 15)
   KEY_VAL@[0; 6)
-    BARE_KEY@[0; 1) "a"
+    KEY@[0; 1)
+      BARE_KEY@[0; 1) "a"
     WHITESPACE@[1; 2)
     EQ@[2; 3) "="
     WHITESPACE@[3; 4)
-    NUMBER@[4; 6) "92"
+    VAL@[4; 6)
+      NUMBER@[4; 6) "92"
   WHITESPACE@[6; 7)
   KEY_VAL@[7; 14)
-    BARE_KEY@[7; 8) "b"
+    KEY@[7; 8)
+      BARE_KEY@[7; 8) "b"
     WHITESPACE@[8; 9)
     EQ@[9; 10) "="
     WHITESPACE@[10; 11)
-    NUMBER@[11; 14) "8.5"
+    VAL@[11; 14)
+      NUMBER@[11; 14) "8.5"
   WHITESPACE@[14; 15)

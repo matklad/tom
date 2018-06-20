@@ -3,21 +3,26 @@ DOC@[0; 28)
     TABLE_HEADER@[0; 15)
       L_BRACK@[0; 1) "["
       L_BRACK@[1; 2) "["
-      BARE_KEY@[2; 13) "array-table"
+      KEY@[2; 13)
+        BARE_KEY@[2; 13) "array-table"
       R_BRACK@[13; 14) "]"
       R_BRACK@[14; 15) "]"
     WHITESPACE@[15; 16)
     KEY_VAL@[16; 21)
-      BARE_KEY@[16; 17) "a"
+      KEY@[16; 17)
+        BARE_KEY@[16; 17) "a"
       WHITESPACE@[17; 18)
       EQ@[18; 19) "="
       WHITESPACE@[19; 20)
-      NUMBER@[20; 21) "1"
+      VAL@[20; 21)
+        NUMBER@[20; 21) "1"
     WHITESPACE@[21; 22)
     KEY_VAL@[22; 27)
-      BARE_KEY@[22; 23) "b"
+      KEY@[22; 23)
+        BARE_KEY@[22; 23) "b"
       WHITESPACE@[23; 24)
       EQ@[24; 25) "="
       WHITESPACE@[25; 26)
-      NUMBER@[26; 27) "2"
+      VAL@[26; 27)
+        NUMBER@[26; 27) "2"
   WHITESPACE@[27; 28)

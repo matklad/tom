@@ -5,7 +5,7 @@ use std::{
 use ::{
     ast::{
         AstNode, AstChildren,
-        KeyVal, Dict, Table, ArrayTable, TableHeader, Doc, Key, StringLit,
+        KeyVal, Dict, Table, ArrayTable, TableHeader, Doc, Key, KeyKind, StringLit,
     },
 };
 
@@ -37,9 +37,9 @@ impl<'f> TableHeaderOwner<'f> for ArrayTable<'f> {}
 
 impl<'f> Key<'f> {
     pub fn name(self) -> Cow<'f, str> {
-        match self {
-            Key::BareKey(bare) => Cow::from(bare.node().text()),
-            Key::StringLit(lit) => lit.value(),
+        match self.kind() {
+            KeyKind::StringLit(lit) => lit.value(),
+            KeyKind::BareKey(key) => Cow::from(key.node().text()),
         }
     }
 }
