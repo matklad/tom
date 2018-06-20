@@ -22,7 +22,7 @@ impl Token {
 
     pub fn is_significant(self) -> bool {
         match self.symbol {
-            symbol::WHITESPACE => false,
+            symbol::WHITESPACE | symbol::COMMENT => false,
             _ => true,
         }
     }
@@ -74,6 +74,10 @@ fn lexer() -> Lexer {
             (
                 t(symbol::WHITESPACE),
                 r"\s+"
+            ),
+            (
+                t(symbol::COMMENT),
+                r"#.*"
             ),
             (
                 t(symbol::BARE_KEY_OR_NUMBER),

@@ -262,6 +262,7 @@ fn gen_symbols() -> String {
     }
     let symbols = "
 WHITESPACE
+COMMENT
 DOC
 KEY_VAL
 ARRAY
