@@ -38,7 +38,7 @@ pub struct TomlDoc {
 
 impl TomlDoc {
     pub fn new(text: String) -> TomlDoc {
-        let parse_tree = parser::rd::parse(&text);
+        let parse_tree = parser::parse(&text);
         TomlDoc { parse_tree, text }
     }
 

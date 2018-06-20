@@ -9,7 +9,7 @@ members = ["tasks"]
 [dependencies]
 itertools = "0.7"
 lazy_static = "1"
-m_lexer = "0.0.3"
+m_lexer = "0.0.4"
 parse_tree = "0.0.6"
 regex = "1"
 typed-arena = "1.3"

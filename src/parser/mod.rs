@@ -1,90 +1,100 @@
-//use {TomlSymbol, WHITESPACE, DOC, ERROR};
-//use parse_tree::{ParseTree, BottomUpBuilder};
+use parse_tree::{TopDownBuilder, ParseTree};
+use {TomlSymbol, symbol::DOC};
 
-//mod grammar;
-pub(crate) mod rd;
+mod lexer;
+mod grammar;
 
-//pub trait Events {
-//    fn shift(&mut self, symbol: TomlSymbol, start: usize, end: usize);
-//    fn reduce(&mut self, symbol: TomlSymbol, n_symbols: usize);
-//}
+pub(crate) fn parse(input: &str) -> ParseTree {
+    let tokens = lexer::tokenize(input);
+    eprintln!("tokens = {:?}", tokens);
+    let mut sink = EventSink::new(&tokens);
+    {
+        let mut parser = Parser {
+            sink: &mut sink,
+            tokens: &tokens,
+            pos: 0,
+        };
+        parser.parse();
+    }
+    sink.builder.finish()
+}
 
-//struct Builder {
-//    inner: BottomUpBuilder,
-//    stack: Vec<bool>,
-//    prev: usize,
-//    total: usize,
-//}
+struct Parser<'s, 't: 's> {
+    sink: &'s mut EventSink<'t>,
+    tokens: &'t lexer::Tokens,
+    pos: usize,
+}
 
-//impl Builder {
-//    fn new(total: usize) -> Builder {
-//        Builder {
-//            inner: BottomUpBuilder::new(),
-//            stack: Vec::new(),
-//            prev: 0,
-//            total,
-//        }
-//    }
-//
-//    fn finish(self) -> ParseTree {
-//        self.inner.finish()
-//    }
-//
-//    fn shift_ws(&mut self, current: usize) {
-//        let len = current - self.prev;
-//        if len != 0 {
-//            self.stack.push(true);
-//            self.inner.shift(WHITESPACE.0, (len as u32).into());
-//        }
-//    }
-//}
+struct EventSink<'t> {
+    pos: lexer::Pos,
+    tokens: &'t lexer::Tokens,
+    builder: TopDownBuilder,
+}
 
-//impl Events for Builder {
-//    fn shift(&mut self, symbol: TomlSymbol, start: usize, end: usize) {
-//        self.shift_ws(start);
-//        self.stack.push(false);
-//        self.prev = end;
-//        let len = end - start;
-//        self.inner.shift(symbol.0, (len as u32).into())
-//    }
-//
-//    fn reduce(&mut self, symbol: TomlSymbol, mut n_symbols: usize) {
-//        // trailing space
-//        if symbol == DOC {
-//            let total = self.total;
-//            self.shift_ws(total);
-//        }
-//        let mut to_reduce = 0;
-//        while n_symbols > 0 {
-//            let is_ws = self.stack.pop().unwrap();
-//            to_reduce += 1;
-//            if !is_ws {
-//                n_symbols -= 1;
-//            }
-//        }
-//        // leading space
-//        if symbol == DOC {
-//            while let Some(&is_ws) = self.stack.last() {
-//                if is_ws {
-//                    self.stack.pop().unwrap();
-//                    to_reduce += 1;
-//                }
-//            }
-//        }
-//        self.inner.reduce(symbol.0, to_reduce);
-//        self.stack.push(false);
-//    }
-//}
+impl<'t> EventSink<'t> {
+    fn new(tokens: &'t lexer::Tokens) -> Self {
+        EventSink {
+            pos: lexer::Pos(0),
+            tokens,
+            builder: TopDownBuilder::new(),
+        }
+    }
 
-//pub(crate) fn parse(text: &str) -> ParseTree {
-//    let p = grammar::DocParser::new();
-//    let mut builder = Builder::new(text.len());
-//    if p.parse(&mut builder, text).is_ok() {
-//        builder.finish()
-//    } else {
-//        let mut builder = Builder::new(text.len());
-//        builder.shift(ERROR, 0, text.len());
-//        builder.reduce(DOC, 1);
-//        builder.finish()
-//    }
-//}
+    fn start(&mut self, s: TomlSymbol) {
+//        eprintln!("start {:?} at {:?}", s, pos);
+        let ws = self.whitespace();
+        let n = self.leading_ws(ws, s);
+        for _ in 0..(ws.len() - n) {
+            self.bump(None)
+        }
+        self.builder.start_internal(s.0);
+    }
+
+    fn finish(&mut self, s: TomlSymbol) {
+//        eprintln!("finished {:?} at {:?}", s, self.last_consumed);
+        let ws = self.whitespace();
+        let n = self.trailing_ws(ws, s);
+        for _ in 0..n {
+            self.bump(None)
+        }
+        self.builder.finish_internal();
+    }
+
+    fn token(&mut self, pos: lexer::Pos, s: Option<TomlSymbol>) {
+        while self.pos < pos {
+            self.bump(None)
+        }
+        self.bump(s);
+    }
+
+    fn leading_ws(&self, ws: &[lexer::Token], s: TomlSymbol) -> usize {
+        if s == DOC { ws.len() } else { 0 }
+    }
+
+    fn trailing_ws(&self, ws: &[lexer::Token], s: TomlSymbol) -> usize {
+        if s == DOC { ws.len() } else { 0 }
+    }
+
+    fn whitespace(&self) -> &'t [lexer::Token] {
+        let start = self.pos;
+        let mut end = start;
+        loop {
+            match end.get(&self.tokens.raw_tokens) {
+                Some(token) if !token.is_significant() => {
+                    end += 1
+                }
+                _ => break,
+            }
+        }
+        &self.tokens.raw_tokens[start.0 as usize .. end.0 as usize]
+    }
+
+    fn bump(&mut self, s: Option<TomlSymbol>) {
+        let t = self.tokens.raw_tokens[self.pos];
+//        eprintln!("consumed {:?} at {:?}", t.symbol, self.pos);
+        let s = s.unwrap_or(t.symbol).0;
+        self.builder.leaf(s, t.len);
+        self.pos += 1;
+    }
+}
+
