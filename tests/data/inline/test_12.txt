@@ -62,3 +62,9 @@ DOC@[0; 40)
             R_CURLY@[38; 39) "}"
           WHITESPACE@[39; 40)
           VAL@[40; 40)
+
+error@[37; 38) ",": expected a key
+error@[38; 39) "}": expected `=`
+error@[39; 40) "\n": expected a value
+error@[39; 40) "\n": expected `,`
+error@[39; 40) "\n": expected `}`

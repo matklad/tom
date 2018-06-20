@@ -34,13 +34,18 @@ pub use factory::Factory;
 #[derive(Clone)]
 pub struct TomlDoc {
     parse_tree: ParseTree,
+    errors: Vec<SyntaxError>,
     text: String,
 }
 
 impl TomlDoc {
     pub fn new(text: String) -> TomlDoc {
-        let parse_tree = parser::parse(&text);
-        TomlDoc { parse_tree, text }
+        let (parse_tree, errors) = parser::parse(&text);
+        TomlDoc { parse_tree, errors, text }
+    }
+
+    pub fn errors(&self) -> Vec<SyntaxError> {
+        self.errors.clone()
     }
 
     pub fn text(&self) -> &str {
@@ -65,6 +70,13 @@ impl TomlDoc {
     pub fn debug_dump(&self) -> String {
         let mut result = String::new();
         go(self.parse_tree(), &mut result, 0);
+        if !self.errors.is_empty() {
+            result += "\n";
+            for e in self.errors.iter() {
+                let text = &self.text()[e.range];
+                result += &format!("error@{:?} {:?}: {}\n", e.range(), text, e.message());
+            }
+        }
         return result;
 
         fn go(node: TomlNode, buff: &mut String, level: usize) {
@@ -167,5 +179,21 @@ impl<'f> Iterator for Children<'f> {
             self.id = self.doc.parse_tree[id].next_sibling();
             TomlNode { doc: &self.doc, id }
         })
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct SyntaxError {
+    range: TextRange,
+    message: String,
+}
+
+impl SyntaxError {
+    pub fn range(&self) -> TextRange {
+        self.range
+    }
+
+    pub fn message(&self) -> &str {
+        self.message.as_str()
     }
 }

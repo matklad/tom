@@ -31,3 +31,6 @@ DOC@[0; 26)
         ERROR@[24; 25)
           R_BRACK@[24; 25) "]"
   WHITESPACE@[25; 26)
+
+error@[24; 25) "]": expected a key
+error@[25; 26) "\n": expected `]`

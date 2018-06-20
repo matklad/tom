@@ -1,4 +1,4 @@
-DOC@[0; 32)
+DOC@[0; 44)
   KEY_VAL@[0; 6)
     KEY@[0; 1)
       BARE_KEY@[0; 1) "a"
@@ -51,3 +51,22 @@ DOC@[0; 32)
             COMMA@[29; 30) ","
         R_BRACK@[30; 31) "]"
   WHITESPACE@[31; 32)
+  KEY_VAL@[32; 43)
+    KEY@[32; 33)
+      BARE_KEY@[32; 33) "e"
+    WHITESPACE@[33; 34)
+    EQ@[34; 35) "="
+    WHITESPACE@[35; 36)
+    VAL@[36; 43)
+      ARRAY@[36; 43)
+        L_BRACK@[36; 37) "["
+        VAL@[37; 38)
+          NUMBER@[37; 38) "1"
+        WHITESPACE@[38; 39)
+        ERROR@[39; 42)
+          BARE_KEY@[39; 42) "foo"
+        R_BRACK@[42; 43) "]"
+  WHITESPACE@[43; 44)
+
+error@[29; 30) ",": expected a value
+error@[39; 42) "foo": expected `,`

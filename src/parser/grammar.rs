@@ -23,6 +23,10 @@ impl<'t, 's> Parser<'t, 's> {
         ::std::mem::forget(m)
     }
 
+    fn error(&mut self, msg: &str) {
+        self.sink.error(msg);
+    }
+
     fn at(&self, lookahead: usize) -> TomlSymbol {
         let pos = self.pos + lookahead;
         if pos >= self.tokens.significant.len() {
@@ -37,10 +41,18 @@ impl<'t, 's> Parser<'t, 's> {
     }
 
     fn eat(&mut self, s: TomlSymbol) {
+        let msg = match s {
+            COMMA => "expected `,`",
+            EQ => "expected `=`",
+            DOT => "expected `.`",
+            R_BRACK => "expected `]`",
+            R_CURLY => "expected `}`",
+            _ => unimplemented!("msg for {:?}", s),
+        };
         if self.current() == s {
             self.bump()
         } else {
-            self.bump_error()
+            self.bump_error(msg)
         }
     }
 
@@ -62,9 +74,15 @@ impl<'t, 's> Parser<'t, 's> {
         self.pos += 1;
     }
 
-    fn bump_error(&mut self) {
+    fn bump_error(&mut self, msg: &str) {
+        if self.current() == EOF {
+            self.error(msg);
+            return;
+        }
+
         if self.current() != EOF {
             let m = self.start(ERROR);
+            self.error(msg);
             self.bump();
             self.finish(m);
         }
@@ -96,7 +114,7 @@ impl<'s, 't> Parser<'s, 't> {
                         self.table()
                     }
                 }
-                _ => self.bump_error(),
+                _ => self.bump_error("expected `[`"),
             }
         }
 
@@ -112,7 +130,7 @@ impl<'s, 't> Parser<'s, 't> {
                 | BARE_KEY | BARE_KEY_OR_NUMBER | BARE_KEY_OR_DATE
                 | BASIC_STRING | LITERAL_STRING =>
                     self.key_val(),
-                _ => self.bump_error(),
+                _ => self.bump_error("expected a key"),
             }
         }
     }
@@ -139,7 +157,7 @@ impl<'s, 't> Parser<'s, 't> {
             // 'bar' = 92
             BASIC_STRING | LITERAL_STRING =>
                 self.bump(),
-            _ => self.bump_error(),
+            _ => self.bump_error("expected a key"),
         }
         self.finish(m);
     }
@@ -182,7 +200,7 @@ impl<'s, 't> Parser<'s, 't> {
             L_CURLY => self.dict(),
             // test
             // foo = _
-            _ => self.bump_error(),
+            _ => self.bump_error("expected a value"),
         }
         self.finish(m);
     }
@@ -198,6 +216,7 @@ impl<'s, 't> Parser<'s, 't> {
             // b = [1]
             // c = [1,]
             // d = [,]
+            // e = [1 1]
             if self.current() != R_BRACK {
                 self.eat(COMMA)
             }

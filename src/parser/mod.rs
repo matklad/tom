@@ -1,10 +1,13 @@
 use parse_tree::{TopDownBuilder, ParseTree};
-use {TomlSymbol, symbol::{DOC, KEY_VAL, TABLE, COMMENT, WHITESPACE}};
+use {
+    TomlSymbol, SyntaxError,
+    symbol::{DOC, KEY_VAL, TABLE, COMMENT, WHITESPACE},
+};
 
 mod lexer;
 mod grammar;
 
-pub(crate) fn parse(input: &str) -> ParseTree {
+pub(crate) fn parse(input: &str) -> (ParseTree, Vec<SyntaxError>) {
     let tokens = lexer::tokenize(input);
     let mut sink = EventSink::new(input, &tokens);
     {
@@ -15,7 +18,7 @@ pub(crate) fn parse(input: &str) -> ParseTree {
         };
         parser.parse();
     }
-    sink.builder.finish()
+    (sink.builder.finish(), sink.errors)
 }
 
 struct Parser<'s, 't: 's> {
@@ -29,6 +32,7 @@ struct EventSink<'t> {
     text: &'t str,
     tokens: &'t lexer::Tokens,
     builder: TopDownBuilder,
+    errors: Vec<SyntaxError>,
 }
 
 impl<'t> EventSink<'t> {
@@ -38,6 +42,7 @@ impl<'t> EventSink<'t> {
             text,
             tokens,
             builder: TopDownBuilder::new(),
+            errors: Vec::new(),
         }
     }
 
@@ -66,6 +71,29 @@ impl<'t> EventSink<'t> {
             self.bump(None)
         }
         self.bump(s);
+    }
+
+    fn error(&mut self, message: impl Into<String>) {
+        let mut tok = &self.tokens.raw_tokens[self.pos - 1];
+        let mut pos = self.pos;
+        loop {
+            match pos.get(&self.tokens.raw_tokens) {
+                Some(t) if t.is_significant() => {
+                    tok = t;
+                    break;
+                }
+                Some(t) => {
+                    tok = t;
+                }
+                None => break,
+            }
+            pos += 1;
+        }
+
+        self.errors.push(SyntaxError {
+            range: tok.range(),
+            message: message.into(),
+        })
     }
 
     fn leading_ws(&self, ws: &[lexer::Token], s: TomlSymbol) -> usize {

@@ -9,3 +9,5 @@ DOC@[0; 8)
       ERROR@[6; 7)
         BARE_KEY@[6; 7) "_"
   WHITESPACE@[7; 8)
+
+error@[6; 7) "_": expected a value

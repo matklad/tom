@@ -47,7 +47,7 @@ fn update(path: &str, contents: &str) -> Result<()> {
 }
 
 fn get_tests() -> Result<()> {
-    let src_dir = "./src/parser/rd/grammar.rs";
+    let src_dir = "./src/parser/grammar.rs";
     let grammar = fs::read_to_string(src_dir)?;
     let tests = collect_tests(&grammar);
     for (i, test) in tests.into_iter().enumerate() {
