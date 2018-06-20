@@ -1,3 +1,4 @@
+extern crate text_unit;
 extern crate parse_tree;
 extern crate typed_arena;
 extern crate itertools;
@@ -26,7 +27,7 @@ mod symbol;
 
 pub mod ast;
 pub use symbol::*;
-pub use parse_tree::{TextRange, TextUnit};
+pub use text_unit::{TextRange, TextUnit};
 pub use edit::{Edit, Position};
 pub use factory::Factory;
 

@@ -22,7 +22,7 @@ impl Token {
     }
 
     pub fn range(self) -> TextRange {
-        TextRange::from_len(self.offset, self.len)
+        TextRange::offset_len(self.offset, self.len)
     }
 }
 
