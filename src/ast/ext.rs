@@ -18,7 +18,7 @@ pub trait KeyOwner<'f>: AstNode<'f> {
 }
 
 pub trait TableHeaderOwner<'f>: AstNode<'f> {
-    fn table_header(self) -> TableHeader<'f>;
+    fn header(self) -> TableHeader<'f>;
 }
 
 impl<'f> Key<'f> {
@@ -64,9 +64,9 @@ impl<'f> KeyOwner<'f> for Entry<'f> {
 }
 
 impl<'f> TableHeaderOwner<'f> for Table<'f> {
-    fn table_header(self) -> TableHeader<'f> { self.table_header() }
+    fn header(self) -> TableHeader<'f> { self.header() }
 }
 
 impl<'f> TableHeaderOwner<'f> for ArrayTable<'f> {
-    fn table_header(self) -> TableHeader<'f> { self.table_header() }
+    fn header(self) -> TableHeader<'f> { self.header() }
 }

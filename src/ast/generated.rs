@@ -107,11 +107,11 @@ impl<'f> Table<'f> {
 
     pub fn node(self) -> CstNode<'f> { self.0 }
 
+    pub fn header(self) -> TableHeader<'f> {
+        AstChildren::new(self.node().children()).next().unwrap()
+    }
     pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
         AstChildren::new(self.node().children())
-    }
-    pub fn table_header(self) -> TableHeader<'f> {
-        AstChildren::new(self.node().children()).next().unwrap()
     }
 }
 
@@ -134,11 +134,11 @@ impl<'f> ArrayTable<'f> {
 
     pub fn node(self) -> CstNode<'f> { self.0 }
 
+    pub fn header(self) -> TableHeader<'f> {
+        AstChildren::new(self.node().children()).next().unwrap()
+    }
     pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
         AstChildren::new(self.node().children())
-    }
-    pub fn table_header(self) -> TableHeader<'f> {
-        AstChildren::new(self.node().children()).next().unwrap()
     }
 }
 

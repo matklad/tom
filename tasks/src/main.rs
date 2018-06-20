@@ -94,11 +94,27 @@ struct AstNode {
 impl AstNode {
     fn methods(mut self, names: &[&'static str]) -> AstNode {
         self.methods.extend(names.iter().map(|&name| {
+            let type_name = if name.ends_with("s") {
+                &name[..name.len() - 1]
+            } else {
+                name
+            }.to_camel_case();
             Method {
                 name,
+                type_name,
                 arity: if name.ends_with("s") { Arity::Many } else { Arity::One },
             }
         }));
+        self
+    }
+
+    fn method(mut self, name: &'static str, type_name: &str) -> AstNode {
+        let method = Method {
+            name,
+            type_name: type_name.to_owned(),
+            arity: if name.ends_with("s") { Arity::Many } else { Arity::One },
+        };
+        self.methods.push(method);
         self
     }
 
@@ -116,6 +132,7 @@ impl AstNode {
 
 struct Method {
     name: &'static str,
+    type_name: String,
     arity: Arity,
 }
 enum Arity {
@@ -124,20 +141,10 @@ enum Arity {
 }
 
 impl Method {
-    fn type_name(&self) -> String {
-        if self.name == "entries" {
-            "Entry".to_string()
-        } else if self.name.ends_with("s") {
-            self.name[..self.name.len() - 1].to_camel_case()
-        } else {
-            self.name.to_camel_case()
-        }
-    }
-
     fn ret_type(&self) -> String {
         match self.arity {
-            Arity::One => format!("{}<'f>", self.type_name()),
-            Arity::Many => format!("AstChildren<'f, {}<'f>>", self.type_name()),
+            Arity::One => format!("{}<'f>", self.type_name),
+            Arity::Many => format!("AstChildren<'f, {}<'f>>", self.type_name),
         }
     }
 
@@ -163,9 +170,9 @@ fn descr() -> Vec<AstNode> {
     }
 
     vec![
-        n("Doc").methods(&["tables", "array_tables", "entries"]),
-        n("Table").methods(&["entries", "table_header"]),
-        n("ArrayTable").methods(&["entries", "table_header"]),
+        n("Doc").methods(&["tables", "array_tables"]).method("entries", "Entry"),
+        n("Table").method("header", "TableHeader").method("entries", "Entry"),
+        n("ArrayTable").method("header", "TableHeader").method("entries", "Entry"),
         n("TableHeader").methods(&["keys"]),
         n("Entry").methods(&["keys", "val"]),
         n("Key").kinds(&["StringLit", "BareKey"]),
@@ -173,7 +180,7 @@ fn descr() -> Vec<AstNode> {
         n("StringLit").symbols(&["BASIC_STRING", "MULTILINE_BASIC_STRING", "LITERAL_STRING", "MULTILINE_LITERAL_STRING"]),
         n("BareKey"),
         n("Array"),
-        n("Dict").methods(&["entries"]),
+        n("Dict").method("entries", "Entry"),
         n("Number"),
         n("Bool"),
         n("DateTime"),
