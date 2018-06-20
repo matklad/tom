@@ -1,8 +1,13 @@
 extern crate testutils;
 #[macro_use]
 extern crate tom;
+#[macro_use]
+extern crate lazy_static;
 
-use std::panic;
+use std::{
+    panic,
+    sync::Mutex,
+};
 
 use tom::{
     TomlDoc, TomlNode,
@@ -48,8 +53,12 @@ pub fn check_edit(before: &str, after: &str, edit: impl FnOnce(&TomlDoc) -> Stri
     assert_eq_text(after, &actual);
 }
 
+lazy_static! {
+    static ref LOCK: std::sync::Mutex<()> = Mutex::new(());
+}
 
 pub fn check_panics(f: impl FnOnce()) {
+    let _guard = LOCK.lock().unwrap();
     let old_hook = panic::take_hook();
     panic::set_hook(Box::new(|_| ()));
     let result = panic::catch_unwind(panic::AssertUnwindSafe(f));
