@@ -1,37 +1,77 @@
-DOC@[0; 36)
-  TABLE@[0; 17)
-    TABLE_HEADER@[0; 7)
-      L_BRACK@[0; 1) "["
-      KEY@[1; 6)
-        BARE_KEY@[1; 6) "table"
-      R_BRACK@[6; 7) "]"
-    WHITESPACE@[7; 8)
-    KEY_VAL@[8; 17)
-      KEY@[8; 11)
-        BARE_KEY@[8; 11) "foo"
-      WHITESPACE@[11; 12)
-      EQ@[12; 13) "="
-      WHITESPACE@[13; 15)
-      VAL@[15; 17)
-        NUMBER@[15; 17) "92"
-  WHITESPACE@[17; 19)
-  TABLE@[19; 35)
-    TABLE_HEADER@[19; 26)
-      L_BRACK@[19; 20) "["
-      KEY@[20; 25)
-        BARE_KEY@[20; 25) "table"
-      R_BRACK@[25; 26) "]"
-    WHITESPACE@[26; 27)
-    KEY_VAL@[27; 35)
-      KEY@[27; 30)
-        BARE_KEY@[27; 30) "bar"
-      WHITESPACE@[30; 31)
-      EQ@[31; 32) "="
-      WHITESPACE@[32; 33)
-      VAL@[33; 35)
-        NUMBER@[33; 35) "92"
-  WHITESPACE@[35; 36)
+DOC@[0; 95)
+  KEY_VAL@[0; 31)
+    KEY@[0; 12)
+      BARE_KEY@[0; 12) "inline-table"
+    WHITESPACE@[12; 13)
+    EQ@[13; 14) "="
+    WHITESPACE@[14; 15)
+    VAL@[15; 31)
+      DICT@[15; 31)
+        L_CURLY@[15; 16) "{"
+        WHITESPACE@[16; 21)
+        KEY_VAL@[21; 29)
+          KEY@[21; 24)
+            BARE_KEY@[21; 24) "foo"
+          WHITESPACE@[24; 25)
+          EQ@[25; 26) "="
+          WHITESPACE@[26; 27)
+          VAL@[27; 29)
+            NUMBER@[27; 29) "92"
+        WHITESPACE@[29; 30)
+        R_CURLY@[30; 31) "}"
+  WHITESPACE@[31; 33)
+  TABLE@[33; 50)
+    TABLE_HEADER@[33; 40)
+      L_BRACK@[33; 34) "["
+      KEY@[34; 39)
+        BARE_KEY@[34; 39) "table"
+      R_BRACK@[39; 40) "]"
+    WHITESPACE@[40; 41)
+    KEY_VAL@[41; 50)
+      KEY@[41; 44)
+        BARE_KEY@[41; 44) "foo"
+      WHITESPACE@[44; 45)
+      EQ@[45; 46) "="
+      WHITESPACE@[46; 48)
+      VAL@[48; 50)
+        NUMBER@[48; 50) "92"
+  WHITESPACE@[50; 52)
+  TABLE@[52; 68)
+    TABLE_HEADER@[52; 59)
+      L_BRACK@[52; 53) "["
+      KEY@[53; 58)
+        BARE_KEY@[53; 58) "table"
+      R_BRACK@[58; 59) "]"
+    WHITESPACE@[59; 60)
+    KEY_VAL@[60; 68)
+      KEY@[60; 63)
+        BARE_KEY@[60; 63) "bar"
+      WHITESPACE@[63; 64)
+      EQ@[64; 65) "="
+      WHITESPACE@[65; 66)
+      VAL@[66; 68)
+        NUMBER@[66; 68) "92"
+  WHITESPACE@[68; 70)
+  ARRAY_TABLE@[70; 94)
+    TABLE_HEADER@[70; 85)
+      L_BRACK@[70; 71) "["
+      L_BRACK@[71; 72) "["
+      KEY@[72; 83)
+        BARE_KEY@[72; 83) "array-table"
+      R_BRACK@[83; 84) "]"
+      R_BRACK@[84; 85) "]"
+    WHITESPACE@[85; 86)
+    KEY_VAL@[86; 94)
+      KEY@[86; 89)
+        BARE_KEY@[86; 89) "bar"
+      WHITESPACE@[89; 90)
+      EQ@[90; 91) "="
+      WHITESPACE@[91; 92)
+      VAL@[92; 94)
+        NUMBER@[92; 94) "92"
+  WHITESPACE@[94; 95)
 
-error@[11; 15) " =\n ": newlines are forbidden in entries
-error@[26; 27) " ": newline is mandatory after table header
-error@[26; 27) " ": newline is mandatory after table header
+error@[16; 30) "\n    foo = 92\n": newlines are forbidden in inline tables
+error@[44; 48) " =\n ": newlines are forbidden in entries
+error@[59; 60) " ": newline is mandatory after table header
+error@[85; 86) " ": newline is mandatory after table header

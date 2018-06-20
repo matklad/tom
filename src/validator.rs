@@ -1,6 +1,6 @@
 use {
     TomlDoc, SyntaxError, TextRange, TomlNode,
-    ast::*,
+    ast,
     visitor
 };
 
@@ -8,7 +8,7 @@ pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
     visitor::process(
         doc.parse_tree(),
         visitor::visitor(Vec::new())
-            .visit::<KeyVal, _>(|errors, kv| {
+            .visit::<ast::KeyVal, _>(|errors, kv| {
                 check_new_line(
                     errors,
                     kv.key(), kv.val(),
@@ -16,27 +16,32 @@ pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
                     "newlines are forbidden in entries",
                 );
             })
-            .visit::<Table, _>(|errors, table| {
-                if let Some(entry) = table.entries().next() {
-                    check_new_line(
-                        errors,
-                        table.header(), entry,
-                        true,
-                        "newline is mandatory after table header",
-                    );
-                }
+            .visit::<ast::Dict, _>(|errors, d| {
+                check_new_line(
+                    errors,
+                    d.node().children().next().unwrap(),
+                    d.node().children().last().unwrap(),
+                    false,
+                    "newlines are forbidden in inline tables"
+                )
             })
-            .visit::<Table, _>(|errors, table| {
-                if let Some(entry) = table.entries().next() {
-                    check_new_line(
-                        errors,
-                        table.header(), entry,
-                        true,
-                        "newline is mandatory after table header",
-                    );
-                }
-            })
+            .visit::<ast::Table, _>(check_table)
+            .visit::<ast::ArrayTable, _>(check_table)
     )
+}
+
+fn check_table<'f>(
+    errors: &mut Vec<SyntaxError>,
+    table: impl ast::KeyValueOwner<'f> + ast::TableHeaderOwner<'f>
+) {
+    if let Some(entry) = table.entries().next() {
+        check_new_line(
+            errors,
+            table.header(), entry,
+            true,
+            "newline is mandatory after table header",
+        );
+    }
 }
 
 
