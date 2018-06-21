@@ -22,7 +22,7 @@ mod edit;
 mod parser;
 mod validator;
 mod symbol;
-pub(crate) mod visitor;
+mod visitor;
 
 pub mod ast;
 pub use symbol::*;
