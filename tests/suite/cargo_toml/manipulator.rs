@@ -47,11 +47,10 @@ impl<'f> CargoTomlManipulator<'f> {
     }
 
     fn insert_empty_dependencies_table(&mut self) -> ast::Table<'f> {
-        let new_table =
-            self.factory
-                .table()
-                .with_name("dependencies")
-                .build();
+        let new_table = self.factory.table(
+            iter::once(self.factory.key("dependencies")),
+            iter::empty(),
+        );
 
         let position = match self.package_table() {
             None => Position::end_of(self.doc),

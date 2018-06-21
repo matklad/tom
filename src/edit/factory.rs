@@ -49,8 +49,20 @@ impl Factory {
         self.entry_raw(buff)
     }
 
-    pub fn table(&self) -> TableBuilder {
-        TableBuilder::new(self)
+    pub fn table<'a, 'b>(
+        &self,
+        keys: impl Iterator<Item=ast::Key<'a>>,
+        entries: impl Iterator<Item=ast::Entry<'b>>
+    ) -> ast::Table {
+        let mut buff = String::new();
+        buff.push('[');
+        join_to(&mut buff, keys, ".", "", "");
+        buff.push(']');
+        for entry in entries {
+            buff.push('\n');
+            buff.push_str(entry.cst().text());
+        }
+        self.doc(buff).ast().tables().next().unwrap()
     }
 
     fn doc(&self, text: String) -> &TomlDoc {
@@ -94,65 +106,6 @@ pub fn join_to<'a, A: Into<CstNode<'a>>>(
     }
     if !first {
         buff.push_str(after_last);
-    }
-}
-
-pub struct TableBuilder<'f, 'e> {
-    factory: &'f Factory,
-    keys: Vec<String>,
-    entries: Vec<ast::Entry<'e>>,
-}
-
-impl<'f, 'e> TableBuilder<'f, 'e> {
-    fn new(factory: &'f Factory) -> Self {
-        TableBuilder {
-            factory,
-            keys: Vec::new(),
-            entries: Vec::new(),
-        }
-    }
-
-    pub fn with_name(mut self, key: &str) -> Self {
-        if !self.keys.is_empty() {
-            covered_by!("table_with_two_names");
-            panic!("table header is already specified, can't reset to {:?}", key)
-        }
-        self.keys.push(key.to_owned());
-        self
-    }
-
-    pub fn with_names<'a>(mut self, keys: impl Iterator<Item=&'a str>) -> Self {
-        assert!(self.keys.is_empty());
-        self.keys.extend(keys.map(str::to_owned));
-        self
-    }
-
-    pub fn with_entries(mut self, entries: impl Iterator<Item=ast::Entry<'e>>) -> Self {
-        self.entries.extend(entries);
-        self
-    }
-
-    pub fn build(self) -> ast::Table<'f> {
-        if self.keys.is_empty() {
-            covered_by!("table_without_name");
-            panic!("");
-        }
-        let mut buff = String::from("[");
-        let mut first = true;
-        for key in self.keys {
-            if !first {
-                buff.push_str(".")
-            }
-            first = false;
-            buff.push_str(&escaped_key(&key));
-        }
-        buff.push_str("]");
-        for e in self.entries {
-            buff.push_str("\n");
-            buff.push_str(e.cst().text());
-        }
-        let doc = self.factory.doc(buff);
-        doc.ast().tables().next().unwrap()
     }
 }
 
