@@ -3,34 +3,31 @@ use std::{
 };
 
 use ::{
-    ast::{
-        AstNode, AstChildren,
-        Entry, Dict, Table, ArrayTable, TableHeader, Doc, Key, KeyKind, StringLit,
-    },
+    ast::{self, AstNode, AstChildren},
 };
 
 pub trait EntryOwner<'f>: AstNode<'f> {
-    fn entries(self) -> AstChildren<'f, Entry<'f>>;
+    fn entries(self) -> AstChildren<'f, ast::Entry<'f>>;
 }
 
 pub trait KeyOwner<'f>: AstNode<'f> {
-    fn keys(self) -> AstChildren<'f, Key<'f>>;
+    fn keys(self) -> AstChildren<'f, ast::Key<'f>>;
 }
 
 pub trait TableHeaderOwner<'f>: AstNode<'f> {
-    fn header(self) -> TableHeader<'f>;
+    fn header(self) -> ast::TableHeader<'f>;
 }
 
-impl<'f> Key<'f> {
+impl<'f> ast::Key<'f> {
     pub fn name(self) -> Cow<'f, str> {
         match self.kind() {
-            KeyKind::StringLit(lit) => lit.value(),
-            KeyKind::BareKey(key) => Cow::from(key.cst().text()),
+            ast::KeyKind::StringLit(lit) => lit.value(),
+            ast::KeyKind::BareKey(key) => Cow::from(key.cst().text()),
         }
     }
 }
 
-impl<'f> StringLit<'f> {
+impl<'f> ast::StringLit<'f> {
     pub fn value(self) -> Cow<'f, str> {
         //TODO: broken completely
         let text = self.cst().text();
@@ -39,34 +36,34 @@ impl<'f> StringLit<'f> {
     }
 }
 
-impl<'f> EntryOwner<'f> for Dict<'f> {
-    fn entries(self) -> AstChildren<'f, Entry<'f>> { self.entries() }
+impl<'f> EntryOwner<'f> for ast::Dict<'f> {
+    fn entries(self) -> AstChildren<'f, ast::Entry<'f>> { self.entries() }
 }
 
-impl<'f> EntryOwner<'f> for Table<'f> {
-    fn entries(self) -> AstChildren<'f, Entry<'f>> { self.entries() }
+impl<'f> EntryOwner<'f> for ast::Table<'f> {
+    fn entries(self) -> AstChildren<'f, ast::Entry<'f>> { self.entries() }
 }
 
-impl<'f> EntryOwner<'f> for ArrayTable<'f> {
-    fn entries(self) -> AstChildren<'f, Entry<'f>> { self.entries() }
+impl<'f> EntryOwner<'f> for ast::ArrayTable<'f> {
+    fn entries(self) -> AstChildren<'f, ast::Entry<'f>> { self.entries() }
 }
 
-impl<'f> EntryOwner<'f> for Doc<'f> {
-    fn entries(self) -> AstChildren<'f, Entry<'f>> { self.entries() }
+impl<'f> EntryOwner<'f> for ast::Doc<'f> {
+    fn entries(self) -> AstChildren<'f, ast::Entry<'f>> { self.entries() }
 }
 
-impl<'f> KeyOwner<'f> for TableHeader<'f> {
-    fn keys(self) -> AstChildren<'f, Key<'f>> { self.keys() }
+impl<'f> KeyOwner<'f> for ast::TableHeader<'f> {
+    fn keys(self) -> AstChildren<'f, ast::Key<'f>> { self.keys() }
 }
 
-impl<'f> KeyOwner<'f> for Entry<'f> {
-    fn keys(self) -> AstChildren<'f, Key<'f>> { self.keys() }
+impl<'f> KeyOwner<'f> for ast::Entry<'f> {
+    fn keys(self) -> AstChildren<'f, ast::Key<'f>> { self.keys() }
 }
 
-impl<'f> TableHeaderOwner<'f> for Table<'f> {
-    fn header(self) -> TableHeader<'f> { self.header() }
+impl<'f> TableHeaderOwner<'f> for ast::Table<'f> {
+    fn header(self) -> ast::TableHeader<'f> { self.header() }
 }
 
-impl<'f> TableHeaderOwner<'f> for ArrayTable<'f> {
-    fn header(self) -> TableHeader<'f> { self.header() }
+impl<'f> TableHeaderOwner<'f> for ast::ArrayTable<'f> {
+    fn header(self) -> ast::TableHeader<'f> { self.header() }
 }
