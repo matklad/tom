@@ -12,16 +12,26 @@ impl Factory {
         }
     }
 
-    pub fn val_string(&self, val: &str) -> ast::Value {
+    pub fn key(&self, name: &str) -> ast::Key {
+        self.entry_raw(format!("{} = 92", escaped_key(name)))
+            .keys().next().unwrap()
+    }
+
+    pub fn value_string(&self, val: &str) -> ast::Value {
         //TODO: escaping
         self.entry_raw(format!("foo = {:?}", val)).value()
     }
 
-    pub fn val_bool(&self, val: bool) -> ast::Value {
+    pub fn value_number(&self, val: i64) -> ast::Value {
+        //TODO: escaping
         self.entry_raw(format!("foo = {}", val)).value()
     }
 
-    pub fn val_dict(&self, entries: &mut Iterator<Item=ast::Entry>) -> ast::Value {
+    pub fn value_bool(&self, val: bool) -> ast::Value {
+        self.entry_raw(format!("foo = {}", val)).value()
+    }
+
+    pub fn value_dict<'a>(&self, entries: impl Iterator<Item=ast::Entry<'a>>) -> ast::Value {
         let mut buff = String::from("{");
         let mut first = true;
         for e in entries {
@@ -30,6 +40,18 @@ impl Factory {
             buff.push_str(e.cst().text());
         }
         buff.push_str(" }");
+        self.entry_raw(format!("foo = {}", buff)).value()
+    }
+
+    pub fn value_array<'a>(&self, entries: impl Iterator<Item=ast::Value<'a>>) -> ast::Value {
+        let mut buff = String::from("[");
+        let mut first = true;
+        for e in entries {
+            buff.push_str(if first { " " } else { ", " });
+            first = false;
+            buff.push_str(e.cst().text());
+        }
+        buff.push_str(" ]");
         self.entry_raw(format!("foo = {}", buff)).value()
     }
 

@@ -5,10 +5,10 @@ use testutils::assert_eq_text;
 use check_panics;
 
 #[test]
-fn test_create_entry_trivial() {
+fn create_entry_trivial() {
     check(
         |f| {
-            let val = f.val_string("1.0");
+            let val = f.value_string("1.0");
             f.entry("foo", val)
                 .cst()
         },
@@ -17,10 +17,10 @@ fn test_create_entry_trivial() {
 }
 
 #[test]
-fn test_create_entry_space_in_key() {
+fn create_entry_space_in_key() {
     check(
         |f| {
-            let val = f.val_string("1.0");
+            let val = f.value_string("1.0");
             f.entry("foo bar", val)
                 .cst()
         },
@@ -29,12 +29,40 @@ fn test_create_entry_space_in_key() {
 }
 
 #[test]
+fn create_dict() {
+    check(
+        |f| {
+            let va = f.value_string("1.0");
+            let a = f.entry("foo", va);
+            let vb = f.value_string("0.0.1");
+            let b = f.entry("bar", vb);
+            f.value_dict(vec![a, b].into_iter())
+                .cst()
+        },
+        r#"{ foo = "1.0", bar = "0.0.1" }"#,
+    );
+}
+
+#[test]
+fn create_array() {
+    check(
+        |f| {
+            let a = f.value_number(92);
+            let b = f.value_number(62);
+            f.value_array(vec![a, b].into_iter())
+                .cst()
+        },
+        "[ 92, 62 ]",
+    );
+}
+
+#[test]
 fn create_table() {
     check(
         |f| {
-            let va = f.val_string("1.0");
+            let va = f.value_string("1.0");
             let a = f.entry("foo", va);
-            let vb = f.val_string("0.0.1");
+            let vb = f.value_string("0.0.1");
             let b = f.entry("bar", vb);
 
             f.table()

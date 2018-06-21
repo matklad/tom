@@ -18,7 +18,7 @@ baz = "1.0.0"
 "#;
 
     let f = Factory::new();
-    let quux = f.entry("quux", f.val_string("92"));
+    let quux = f.entry("quux", f.value_string("92"));
 
     check_edit(
         before,
@@ -106,7 +106,7 @@ baz = "1.0.0"
 "#;
 
     let f = Factory::new();
-    let quux = f.entry("quux", f.val_string("92"));
+    let quux = f.entry("quux", f.value_string("92"));
 
     check_edit(
         before,

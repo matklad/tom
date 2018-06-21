@@ -30,7 +30,7 @@ impl<'f> CargoTomlManipulator<'f> {
         let table = self.dependencies_table();
         let dep = self.factory.entry(
             name,
-            self.factory.val_string(version),
+            self.factory.value_string(version),
         );
         self.edit.insert(dep, Position::end_of(table));
     }
