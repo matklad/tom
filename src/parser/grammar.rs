@@ -252,6 +252,8 @@ impl<'s, 't> Parser<'s, 't> {
         let m = self.start(DICT);
         self.bump();
         while self.current() != EOF && self.current() != R_CURLY {
+            // test
+            // a = { dotted.key = 92 }
             self.entry();
             // test
             // a = {}

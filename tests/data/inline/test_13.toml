@@ -1,4 +1,1 @@
-a = {}
-b = {foo=1}
-c = {foo=1,}
-d = {,}
+a = { dotted.key = 92 }

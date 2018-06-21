@@ -1,0 +1,15 @@
+DOC@[0; 21)
+  ARRAY_TABLE@[0; 20)
+    TABLE_HEADER@[0; 20)
+      L_BRACK@[0; 1) "["
+      L_BRACK@[1; 2) "["
+      KEY@[2; 7)
+        BARE_KEY@[2; 7) "table"
+      WHITESPACE@[7; 8)
+      DOT@[8; 9) "."
+      WHITESPACE@[9; 10)
+      KEY@[10; 18)
+        LITERAL_STRING@[10; 18) "\'header\'"
+      R_BRACK@[18; 19) "]"
+      R_BRACK@[19; 20) "]"
+  WHITESPACE@[20; 21)
