@@ -4,6 +4,7 @@ use std::{
 
 use {TomlDoc, CstNode};
 
+mod factory;
 mod node_change;
 mod whitespace;
 mod compose;
@@ -11,6 +12,7 @@ mod compose;
 use self::node_change::{
     Changes, ChildChangeOp,
 };
+pub use self::factory::Factory;
 
 #[derive(Debug)]
 pub struct Edit<'f> {

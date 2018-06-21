@@ -19,7 +19,6 @@ define_uncover_macros!(
 );
 
 mod edit;
-mod factory;
 mod parser;
 mod validator;
 mod symbol;
@@ -28,8 +27,7 @@ pub(crate) mod visitor;
 pub mod ast;
 pub use symbol::*;
 pub use text_unit::{TextRange, TextUnit};
-pub use edit::{Edit, Position};
-pub use factory::Factory;
+pub use edit::{Edit, Position, Factory};
 
 #[derive(Clone)]
 pub struct TomlDoc {
