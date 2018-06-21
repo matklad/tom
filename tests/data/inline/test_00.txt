@@ -5,7 +5,7 @@ DOC@[0; 52)
     WHITESPACE@[3; 4)
     EQ@[4; 5) "="
     WHITESPACE@[5; 6)
-    VAL@[6; 13)
+    VALUE@[6; 13)
       BASIC_STRING@[6; 13) "\"value\""
   WHITESPACE@[13; 15)
   TABLE@[15; 28)
@@ -21,7 +21,7 @@ DOC@[0; 52)
       WHITESPACE@[24; 25)
       EQ@[25; 26) "="
       WHITESPACE@[26; 27)
-      VAL@[27; 28)
+      VALUE@[27; 28)
         NUMBER@[27; 28) "2"
   WHITESPACE@[28; 30)
   ARRAY_TABLE@[30; 51)
@@ -39,6 +39,6 @@ DOC@[0; 52)
       WHITESPACE@[47; 48)
       EQ@[48; 49) "="
       WHITESPACE@[49; 50)
-      VAL@[50; 51)
+      VALUE@[50; 51)
         NUMBER@[50; 51) "3"
   WHITESPACE@[51; 52)

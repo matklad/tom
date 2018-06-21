@@ -5,7 +5,7 @@ DOC@[0; 15)
     WHITESPACE@[1; 2)
     EQ@[2; 3) "="
     WHITESPACE@[3; 4)
-    VAL@[4; 6)
+    VALUE@[4; 6)
       NUMBER@[4; 6) "92"
   WHITESPACE@[6; 7)
   ENTRY@[7; 14)
@@ -14,6 +14,6 @@ DOC@[0; 15)
     WHITESPACE@[8; 9)
     EQ@[9; 10) "="
     WHITESPACE@[10; 11)
-    VAL@[11; 14)
+    VALUE@[11; 14)
       NUMBER@[11; 14) "8.5"
   WHITESPACE@[14; 15)

@@ -180,7 +180,7 @@ pub mod symbols {
         DOC,
         ENTRY,
         KEY,
-        VAL,
+        VALUE,
         ARRAY,
         DICT,
         TABLE_HEADER,

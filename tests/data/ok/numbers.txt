@@ -5,7 +5,7 @@ DOC@[0; 215)
     WHITESPACE@[4; 5)
     EQ@[5; 6) "="
     WHITESPACE@[6; 7)
-    VAL@[7; 10)
+    VALUE@[7; 10)
       NUMBER@[7; 10) "+99"
   WHITESPACE@[10; 11)
   ENTRY@[11; 20)
@@ -14,7 +14,7 @@ DOC@[0; 215)
     WHITESPACE@[15; 16)
     EQ@[16; 17) "="
     WHITESPACE@[17; 18)
-    VAL@[18; 20)
+    VALUE@[18; 20)
       NUMBER@[18; 20) "42"
   WHITESPACE@[20; 21)
   ENTRY@[21; 29)
@@ -23,7 +23,7 @@ DOC@[0; 215)
     WHITESPACE@[25; 26)
     EQ@[26; 27) "="
     WHITESPACE@[27; 28)
-    VAL@[28; 29)
+    VALUE@[28; 29)
       NUMBER@[28; 29) "0"
   WHITESPACE@[29; 30)
   ENTRY@[30; 40)
@@ -32,7 +32,7 @@ DOC@[0; 215)
     WHITESPACE@[34; 35)
     EQ@[35; 36) "="
     WHITESPACE@[36; 37)
-    VAL@[37; 40)
+    VALUE@[37; 40)
       NUMBER@[37; 40) "-17"
   WHITESPACE@[40; 41)
   ENTRY@[41; 53)
@@ -41,7 +41,7 @@ DOC@[0; 215)
     WHITESPACE@[45; 46)
     EQ@[46; 47) "="
     WHITESPACE@[47; 48)
-    VAL@[48; 53)
+    VALUE@[48; 53)
       NUMBER@[48; 53) "1_000"
   WHITESPACE@[53; 54)
   ENTRY@[54; 70)
@@ -50,7 +50,7 @@ DOC@[0; 215)
     WHITESPACE@[58; 59)
     EQ@[59; 60) "="
     WHITESPACE@[60; 61)
-    VAL@[61; 70)
+    VALUE@[61; 70)
       NUMBER@[61; 70) "5_349_221"
   WHITESPACE@[70; 71)
   ENTRY@[71; 87)
@@ -59,7 +59,7 @@ DOC@[0; 215)
     WHITESPACE@[75; 76)
     EQ@[76; 77) "="
     WHITESPACE@[77; 78)
-    VAL@[78; 87)
+    VALUE@[78; 87)
       NUMBER@[78; 87) "1_2_3_4_5"
   WHITESPACE@[87; 89)
   ENTRY@[89; 100)
@@ -68,7 +68,7 @@ DOC@[0; 215)
     WHITESPACE@[93; 94)
     EQ@[94; 95) "="
     WHITESPACE@[95; 96)
-    VAL@[96; 100)
+    VALUE@[96; 100)
       NUMBER@[96; 100) "+1.0"
   WHITESPACE@[100; 101)
   ENTRY@[101; 114)
@@ -77,7 +77,7 @@ DOC@[0; 215)
     WHITESPACE@[105; 106)
     EQ@[106; 107) "="
     WHITESPACE@[107; 108)
-    VAL@[108; 114)
+    VALUE@[108; 114)
       NUMBER@[108; 114) "3.1415"
   WHITESPACE@[114; 115)
   ENTRY@[115; 127)
@@ -86,7 +86,7 @@ DOC@[0; 215)
     WHITESPACE@[119; 120)
     EQ@[120; 121) "="
     WHITESPACE@[121; 122)
-    VAL@[122; 127)
+    VALUE@[122; 127)
       NUMBER@[122; 127) "-0.01"
   WHITESPACE@[127; 128)
   ENTRY@[128; 140)
@@ -95,7 +95,7 @@ DOC@[0; 215)
     WHITESPACE@[132; 133)
     EQ@[133; 134) "="
     WHITESPACE@[134; 135)
-    VAL@[135; 140)
+    VALUE@[135; 140)
       NUMBER@[135; 140) "5e+22"
   WHITESPACE@[140; 141)
   ENTRY@[141; 151)
@@ -104,7 +104,7 @@ DOC@[0; 215)
     WHITESPACE@[145; 146)
     EQ@[146; 147) "="
     WHITESPACE@[147; 148)
-    VAL@[148; 151)
+    VALUE@[148; 151)
       NUMBER@[148; 151) "1e6"
   WHITESPACE@[151; 152)
   ENTRY@[152; 164)
@@ -113,7 +113,7 @@ DOC@[0; 215)
     WHITESPACE@[156; 157)
     EQ@[157; 158) "="
     WHITESPACE@[158; 159)
-    VAL@[159; 164)
+    VALUE@[159; 164)
       NUMBER@[159; 164) "-2E-2"
   WHITESPACE@[164; 165)
   ENTRY@[165; 181)
@@ -122,7 +122,7 @@ DOC@[0; 215)
     WHITESPACE@[169; 170)
     EQ@[170; 171) "="
     WHITESPACE@[171; 172)
-    VAL@[172; 181)
+    VALUE@[172; 181)
       NUMBER@[172; 181) "6.626e-34"
   WHITESPACE@[181; 182)
   ENTRY@[182; 214)
@@ -131,6 +131,6 @@ DOC@[0; 215)
     WHITESPACE@[186; 187)
     EQ@[187; 188) "="
     WHITESPACE@[188; 189)
-    VAL@[189; 214)
+    VALUE@[189; 214)
       NUMBER@[189; 214) "9_224_617.445_991_228_313"
   WHITESPACE@[214; 215)

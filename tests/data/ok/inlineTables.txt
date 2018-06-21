@@ -5,7 +5,7 @@ DOC@[0; 75)
     WHITESPACE@[4; 5)
     EQ@[5; 6) "="
     WHITESPACE@[6; 7)
-    VAL@[7; 49)
+    VALUE@[7; 49)
       DICT@[7; 49)
         L_CURLY@[7; 8) "{"
         WHITESPACE@[8; 9)
@@ -15,7 +15,7 @@ DOC@[0; 75)
           WHITESPACE@[14; 15)
           EQ@[15; 16) "="
           WHITESPACE@[16; 17)
-          VAL@[17; 22)
+          VALUE@[17; 22)
             BASIC_STRING@[17; 22) "\"Tom\""
         COMMA@[22; 23) ","
         WHITESPACE@[23; 24)
@@ -25,7 +25,7 @@ DOC@[0; 75)
           WHITESPACE@[28; 29)
           EQ@[29; 30) "="
           WHITESPACE@[30; 31)
-          VAL@[31; 47)
+          VALUE@[31; 47)
             BASIC_STRING@[31; 47) "\"Preston-Werner\""
         WHITESPACE@[47; 48)
         R_CURLY@[48; 49) "}"
@@ -36,7 +36,7 @@ DOC@[0; 75)
     WHITESPACE@[55; 56)
     EQ@[56; 57) "="
     WHITESPACE@[57; 58)
-    VAL@[58; 74)
+    VALUE@[58; 74)
       DICT@[58; 74)
         L_CURLY@[58; 59) "{"
         WHITESPACE@[59; 60)
@@ -46,7 +46,7 @@ DOC@[0; 75)
           WHITESPACE@[61; 62)
           EQ@[62; 63) "="
           WHITESPACE@[63; 64)
-          VAL@[64; 65)
+          VALUE@[64; 65)
             NUMBER@[64; 65) "1"
         COMMA@[65; 66) ","
         WHITESPACE@[66; 67)
@@ -56,7 +56,7 @@ DOC@[0; 75)
           WHITESPACE@[68; 69)
           EQ@[69; 70) "="
           WHITESPACE@[70; 71)
-          VAL@[71; 72)
+          VALUE@[71; 72)
             NUMBER@[71; 72) "2"
         WHITESPACE@[72; 73)
         R_CURLY@[73; 74) "}"

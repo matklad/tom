@@ -5,7 +5,7 @@ DOC@[0; 28)
     WHITESPACE@[1; 2)
     EQ@[2; 3) "="
     WHITESPACE@[3; 4)
-    VAL@[4; 27)
+    VALUE@[4; 27)
       DICT@[4; 27)
         L_CURLY@[4; 5) "{"
         WHITESPACE@[5; 6)
@@ -15,7 +15,7 @@ DOC@[0; 28)
           WHITESPACE@[11; 12)
           EQ@[12; 13) "="
           WHITESPACE@[13; 14)
-          VAL@[14; 15)
+          VALUE@[14; 15)
             NUMBER@[14; 15) "1"
         COMMA@[15; 16) ","
         WHITESPACE@[16; 17)
@@ -25,7 +25,7 @@ DOC@[0; 28)
           WHITESPACE@[20; 21)
           EQ@[21; 22) "="
           WHITESPACE@[22; 23)
-          VAL@[23; 24)
+          VALUE@[23; 24)
             NUMBER@[23; 24) "2"
         COMMA@[24; 25) ","
         WHITESPACE@[25; 26)

@@ -12,7 +12,7 @@ DOC@[0; 43)
       WHITESPACE@[11; 12)
       EQ@[12; 13) "="
       WHITESPACE@[13; 14)
-      VAL@[14; 16)
+      VALUE@[14; 16)
         NUMBER@[14; 16) "92"
   WHITESPACE@[16; 18)
   ARRAY_TABLE@[18; 42)
@@ -30,7 +30,7 @@ DOC@[0; 43)
       WHITESPACE@[37; 38)
       EQ@[38; 39) "="
       WHITESPACE@[39; 40)
-      VAL@[40; 42)
+      VALUE@[40; 42)
         NUMBER@[40; 42) "92"
   WHITESPACE@[42; 43)
 

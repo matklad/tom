@@ -28,9 +28,9 @@ pub enum KeyKind<'f> {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Val<'f>(CstNode<'f>);
+pub struct Value<'f>(CstNode<'f>);
 
-pub enum ValKind<'f> {
+pub enum ValueKind<'f> {
     Array(Array<'f>),
     Dict(Dict<'f>),
     Number(Number<'f>),
@@ -191,7 +191,7 @@ impl<'f> Entry<'f> {
     pub fn keys(self) -> AstChildren<'f, Key<'f>> {
         AstChildren::new(self.cst().children())
     }
-    pub fn val(self) -> Val<'f> {
+    pub fn value(self) -> Value<'f> {
         AstChildren::new(self.cst().children()).next().unwrap()
     }
 }
@@ -228,44 +228,44 @@ impl<'f> Key<'f> {
 
 }
 
-impl<'f> AstNode<'f> for Val<'f> {
+impl<'f> AstNode<'f> for Value<'f> {
     fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
     fn cst(self) -> CstNode<'f> { self.cst() }
 }
 
-impl<'f> From<Val<'f>> for CstNode<'f> {
-    fn from(ast: Val<'f>) -> CstNode<'f> { ast.cst() }
+impl<'f> From<Value<'f>> for CstNode<'f> {
+    fn from(ast: Value<'f>) -> CstNode<'f> { ast.cst() }
 }
 
-impl<'f> Val<'f> {
-    pub fn cast(node: CstNode<'f>) -> Option<Val<'f>> {
+impl<'f> Value<'f> {
+    pub fn cast(node: CstNode<'f>) -> Option<Value<'f>> {
         match node.symbol() {
-            VAL => Some(Val(node)),
+            VALUE => Some(Value(node)),
             _ => None,
         }
     }
 
     pub fn cst(self) -> CstNode<'f> { self.0 }
 
-    pub fn kind(self) -> ValKind<'f> {
+    pub fn kind(self) -> ValueKind<'f> {
         let node = self.cst().children().next().unwrap();
         if let Some(node) = Array::cast(node) {
-            return ValKind::Array(node);
+            return ValueKind::Array(node);
         }
         if let Some(node) = Dict::cast(node) {
-            return ValKind::Dict(node);
+            return ValueKind::Dict(node);
         }
         if let Some(node) = Number::cast(node) {
-            return ValKind::Number(node);
+            return ValueKind::Number(node);
         }
         if let Some(node) = Bool::cast(node) {
-            return ValKind::Bool(node);
+            return ValueKind::Bool(node);
         }
         if let Some(node) = DateTime::cast(node) {
-            return ValKind::DateTime(node);
+            return ValueKind::DateTime(node);
         }
         if let Some(node) = StringLit::cast(node) {
-            return ValKind::StringLit(node);
+            return ValueKind::StringLit(node);
         }
         unreachable!()
     }
@@ -334,11 +334,8 @@ impl<'f> Array<'f> {
 
     pub fn cst(self) -> CstNode<'f> { self.0 }
 
-    pub fn vals(self) -> AstChildren<'f, Val<'f>> {
+    pub fn values(self) -> AstChildren<'f, Value<'f>> {
         AstChildren::new(self.cst().children())
-    }
-    pub fn val(self) -> Val<'f> {
-        AstChildren::new(self.cst().children()).next().unwrap()
     }
 }
 

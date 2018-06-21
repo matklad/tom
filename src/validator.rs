@@ -12,7 +12,7 @@ pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
                 if let Some(first_key) = entry.keys().next() {
                     check_new_line(
                         errors,
-                        first_key, entry.val(),
+                        first_key, entry.value(),
                         Forbid,
                         "newlines are forbidden in entries",
                     );

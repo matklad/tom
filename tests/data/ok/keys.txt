@@ -5,7 +5,7 @@ DOC@[0; 211)
     WHITESPACE@[3; 4)
     EQ@[4; 5) "="
     WHITESPACE@[5; 6)
-    VAL@[6; 13)
+    VALUE@[6; 13)
       BASIC_STRING@[6; 13) "\"value\""
   WHITESPACE@[13; 14)
   ENTRY@[14; 32)
@@ -14,7 +14,7 @@ DOC@[0; 211)
     WHITESPACE@[22; 23)
     EQ@[23; 24) "="
     WHITESPACE@[24; 25)
-    VAL@[25; 32)
+    VALUE@[25; 32)
       BASIC_STRING@[25; 32) "\"value\""
   WHITESPACE@[32; 33)
   ENTRY@[33; 51)
@@ -23,7 +23,7 @@ DOC@[0; 211)
     WHITESPACE@[41; 42)
     EQ@[42; 43) "="
     WHITESPACE@[43; 44)
-    VAL@[44; 51)
+    VALUE@[44; 51)
       BASIC_STRING@[44; 51) "\"value\""
   WHITESPACE@[51; 52)
   ENTRY@[52; 66)
@@ -32,7 +32,7 @@ DOC@[0; 211)
     WHITESPACE@[56; 57)
     EQ@[57; 58) "="
     WHITESPACE@[58; 59)
-    VAL@[59; 66)
+    VALUE@[59; 66)
       BASIC_STRING@[59; 66) "\"value\""
   WHITESPACE@[66; 68)
   ENTRY@[68; 89)
@@ -41,7 +41,7 @@ DOC@[0; 211)
     WHITESPACE@[79; 80)
     EQ@[80; 81) "="
     WHITESPACE@[81; 82)
-    VAL@[82; 89)
+    VALUE@[82; 89)
       BASIC_STRING@[82; 89) "\"value\""
   WHITESPACE@[89; 90)
   ENTRY@[90; 120)
@@ -50,7 +50,7 @@ DOC@[0; 211)
     WHITESPACE@[110; 111)
     EQ@[111; 112) "="
     WHITESPACE@[112; 113)
-    VAL@[113; 120)
+    VALUE@[113; 120)
       BASIC_STRING@[113; 120) "\"value\""
   WHITESPACE@[120; 121)
   ENTRY@[121; 139)
@@ -59,7 +59,7 @@ DOC@[0; 211)
     WHITESPACE@[129; 130)
     EQ@[130; 131) "="
     WHITESPACE@[131; 132)
-    VAL@[132; 139)
+    VALUE@[132; 139)
       BASIC_STRING@[132; 139) "\"value\""
   WHITESPACE@[139; 140)
   ENTRY@[140; 156)
@@ -68,7 +68,7 @@ DOC@[0; 211)
     WHITESPACE@[146; 147)
     EQ@[147; 148) "="
     WHITESPACE@[148; 149)
-    VAL@[149; 156)
+    VALUE@[149; 156)
       BASIC_STRING@[149; 156) "\"value\""
   WHITESPACE@[156; 157)
   ENTRY@[157; 183)
@@ -77,7 +77,7 @@ DOC@[0; 211)
     WHITESPACE@[173; 174)
     EQ@[174; 175) "="
     WHITESPACE@[175; 176)
-    VAL@[176; 183)
+    VALUE@[176; 183)
       BASIC_STRING@[176; 183) "\"value\""
   WHITESPACE@[183; 185)
   ENTRY@[185; 197)
@@ -86,7 +86,7 @@ DOC@[0; 211)
     WHITESPACE@[187; 188)
     EQ@[188; 189) "="
     WHITESPACE@[189; 190)
-    VAL@[190; 197)
+    VALUE@[190; 197)
       BASIC_STRING@[190; 197) "\"value\""
   WHITESPACE@[197; 198)
   ENTRY@[198; 210)
@@ -95,6 +95,6 @@ DOC@[0; 211)
     WHITESPACE@[200; 201)
     EQ@[201; 202) "="
     WHITESPACE@[202; 203)
-    VAL@[203; 210)
+    VALUE@[203; 210)
       BASIC_STRING@[203; 210) "\"value\""
   WHITESPACE@[210; 211)

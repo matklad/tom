@@ -19,7 +19,7 @@ DOC@[0; 218)
       WHITESPACE@[23; 24)
       EQ@[24; 25) "="
       WHITESPACE@[25; 26)
-      VAL@[26; 39)
+      VALUE@[26; 39)
         BASIC_STRING@[26; 39) "\"some string\""
     WHITESPACE@[39; 40)
     ENTRY@[40; 50)
@@ -28,7 +28,7 @@ DOC@[0; 218)
       WHITESPACE@[44; 45)
       EQ@[45; 46) "="
       WHITESPACE@[46; 47)
-      VAL@[47; 50)
+      VALUE@[47; 50)
         NUMBER@[47; 50) "123"
   WHITESPACE@[50; 52)
   TABLE@[52; 96)
@@ -44,7 +44,7 @@ DOC@[0; 218)
       WHITESPACE@[66; 67)
       EQ@[67; 68) "="
       WHITESPACE@[68; 69)
-      VAL@[69; 85)
+      VALUE@[69; 85)
         BASIC_STRING@[69; 85) "\"another string\""
     WHITESPACE@[85; 86)
     ENTRY@[86; 96)
@@ -53,7 +53,7 @@ DOC@[0; 218)
       WHITESPACE@[90; 91)
       EQ@[91; 92) "="
       WHITESPACE@[92; 93)
-      VAL@[93; 96)
+      VALUE@[93; 96)
         NUMBER@[93; 96) "456"
   WHITESPACE@[96; 98)
   TABLE@[98; 128)
@@ -72,7 +72,7 @@ DOC@[0; 218)
       WHITESPACE@[120; 121)
       EQ@[121; 122) "="
       WHITESPACE@[122; 123)
-      VAL@[123; 128)
+      VALUE@[123; 128)
         BASIC_STRING@[123; 128) "\"pug\""
   WHITESPACE@[128; 130)
   TABLE@[130; 137)
@@ -173,7 +173,7 @@ DOC@[0; 218)
       WHITESPACE@[202; 203)
       EQ@[203; 204) "="
       WHITESPACE@[204; 205)
-      VAL@[205; 206)
+      VALUE@[205; 206)
         NUMBER@[205; 206) "1"
   WHITESPACE@[206; 208)
   TABLE@[208; 217)
@@ -189,6 +189,6 @@ DOC@[0; 218)
       WHITESPACE@[213; 214)
       EQ@[214; 215) "="
       WHITESPACE@[215; 216)
-      VAL@[216; 217)
+      VALUE@[216; 217)
         NUMBER@[216; 217) "2"
   WHITESPACE@[217; 218)

@@ -5,7 +5,7 @@ DOC@[0; 32)
     WHITESPACE@[12; 13)
     EQ@[13; 14) "="
     WHITESPACE@[14; 15)
-    VAL@[15; 31)
+    VALUE@[15; 31)
       DICT@[15; 31)
         L_CURLY@[15; 16) "{"
         WHITESPACE@[16; 21)
@@ -15,7 +15,7 @@ DOC@[0; 32)
           WHITESPACE@[24; 25)
           EQ@[25; 26) "="
           WHITESPACE@[26; 27)
-          VAL@[27; 29)
+          VALUE@[27; 29)
             NUMBER@[27; 29) "92"
         WHITESPACE@[29; 30)
         R_CURLY@[30; 31) "}"

@@ -29,7 +29,7 @@ DOC@[0; 45)
       WHITESPACE@[39; 40)
       EQ@[40; 41) "="
       WHITESPACE@[41; 42)
-      VAL@[42; 44)
+      VALUE@[42; 44)
         NUMBER@[42; 44) "92"
   WHITESPACE@[44; 45)
 

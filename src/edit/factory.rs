@@ -12,16 +12,16 @@ impl Factory {
         }
     }
 
-    pub fn val_string(&self, val: &str) -> ast::Val {
+    pub fn val_string(&self, val: &str) -> ast::Value {
         //TODO: escaping
-        self.entry_raw(format!("foo = {:?}", val)).val()
+        self.entry_raw(format!("foo = {:?}", val)).value()
     }
 
-    pub fn val_bool(&self, val: bool) -> ast::Val {
-        self.entry_raw(format!("foo = {}", val)).val()
+    pub fn val_bool(&self, val: bool) -> ast::Value {
+        self.entry_raw(format!("foo = {}", val)).value()
     }
 
-    pub fn val_dict(&self, entries: &mut Iterator<Item=ast::Entry>) -> ast::Val {
+    pub fn val_dict(&self, entries: &mut Iterator<Item=ast::Entry>) -> ast::Value {
         let mut buff = String::from("{");
         let mut first = true;
         for e in entries {
@@ -30,10 +30,10 @@ impl Factory {
             buff.push_str(e.cst().text());
         }
         buff.push_str(" }");
-        self.entry_raw(format!("foo = {}", buff)).val()
+        self.entry_raw(format!("foo = {}", buff)).value()
     }
 
-    pub fn entry(&self, key: &str, val: ast::Val) -> ast::Entry {
+    pub fn entry(&self, key: &str, val: ast::Value) -> ast::Entry {
         let text = format!("{} = {}", escaped_key(key), val.cst().text());
         self.entry_raw(text)
     }

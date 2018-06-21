@@ -184,7 +184,7 @@ impl<'s, 't> Parser<'s, 't> {
     }
 
     fn val(&mut self) {
-        let m = self.start(VAL);
+        let m = self.start(VALUE);
         match self.current() {
             // test
             // a = 92
