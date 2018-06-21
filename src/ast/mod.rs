@@ -11,7 +11,7 @@ pub trait AstNode<'f>: Copy {
     where
         Self: Sized;
 
-    fn node(self) -> CstNode<'f>;
+    fn cst(self) -> CstNode<'f>;
 }
 
 pub struct AstChildren<'f, A: AstNode<'f>> {

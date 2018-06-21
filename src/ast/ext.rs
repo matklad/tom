@@ -25,7 +25,7 @@ impl<'f> Key<'f> {
     pub fn name(self) -> Cow<'f, str> {
         match self.kind() {
             KeyKind::StringLit(lit) => lit.value(),
-            KeyKind::BareKey(key) => Cow::from(key.node().text()),
+            KeyKind::BareKey(key) => Cow::from(key.cst().text()),
         }
     }
 }
@@ -33,7 +33,7 @@ impl<'f> Key<'f> {
 impl<'f> StringLit<'f> {
     pub fn value(self) -> Cow<'f, str> {
         //TODO: broken completely
-        let text = self.node().text();
+        let text = self.cst().text();
         let len = text.len();
         Cow::from(&text[1..len - 1])
     }

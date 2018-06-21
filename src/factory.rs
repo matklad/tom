@@ -28,14 +28,14 @@ impl Factory {
         for e in entries {
             buff.push_str(if first { " " } else { ", " });
             first = false;
-            buff.push_str(e.node().text());
+            buff.push_str(e.cst().text());
         }
         buff.push_str(" }");
         self.entry_raw(format!("foo = {}", buff)).val()
     }
 
     pub fn entry(&self, key: &str, val: ast::Val) -> ast::Entry {
-        let text = format!("{} = {}", escaped_key(key), val.node().text());
+        let text = format!("{} = {}", escaped_key(key), val.cst().text());
         self.entry_raw(text)
     }
 
@@ -105,7 +105,7 @@ impl<'f, 'e> TableBuilder<'f, 'e> {
         buff.push_str("]");
         for e in self.entries {
             buff.push_str("\n");
-            buff.push_str(e.node().text());
+            buff.push_str(e.cst().text());
         }
         let doc = self.factory.doc(buff);
         doc.ast().tables().next().unwrap()

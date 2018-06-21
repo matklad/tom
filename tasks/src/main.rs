@@ -151,9 +151,9 @@ impl Method {
     fn body(&self) -> &'static str {
         match self.arity {
             Arity::One =>
-                "AstChildren::new(self.node().children()).next().unwrap()",
+                "AstChildren::new(self.cst().children()).next().unwrap()",
             Arity::Many =>
-                "AstChildren::new(self.node().children())",
+                "AstChildren::new(self.cst().children())",
         }
     }
 }
@@ -232,14 +232,14 @@ fn gen_ast() -> String {
         ln!("impl<'f> AstNode<'f> for {}<'f> {{", n.name);
         {
             ln!("fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {{ Self::cast(node) }}");
-            ln!("fn node(self) -> CstNode<'f> {{ self.node() }}");
+            ln!("fn cst(self) -> CstNode<'f> {{ self.cst() }}");
         }
         ln!("}}");
         ln!();
 
         ln!("impl<'f> From<{}<'f>> for CstNode<'f> {{", n.name);
         {
-            ln!("fn from(ast: {}<'f>) -> CstNode<'f> {{ ast.node() }}", n.name);
+            ln!("fn from(ast: {}<'f>) -> CstNode<'f> {{ ast.cst() }}", n.name);
         }
         ln!("}}");
         ln!();
@@ -262,14 +262,14 @@ fn gen_ast() -> String {
             }
             ln!("}}");
             ln!();
-            ln!("pub fn node(self) -> CstNode<'f> {{ self.0 }}");
+            ln!("pub fn cst(self) -> CstNode<'f> {{ self.0 }}");
             if !n.kinds.is_empty() || !n.methods.is_empty() {
                 ln!();
             }
 
             if !n.kinds.is_empty() {
                 ln!("pub fn kind(self) -> {}Kind<'f> {{", n.name);
-                ln!("let node = self.node().children().next().unwrap();");
+                ln!("let node = self.cst().children().next().unwrap();");
                 for k in n.kinds.iter() {
                     ln!("if let Some(node) = {}::cast(node) {{", k);
                     ln!("return {}Kind::{}(node);", n.name, k);

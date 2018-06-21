@@ -10,7 +10,7 @@ fn test_create_entry_trivial() {
         |f| {
             let val = f.val_string("1.0");
             f.entry("foo", val)
-                .node()
+                .cst()
         },
         r#"foo = "1.0""#,
     );
@@ -22,7 +22,7 @@ fn test_create_entry_space_in_key() {
         |f| {
             let val = f.val_string("1.0");
             f.entry("foo bar", val)
-                .node()
+                .cst()
         },
         r#""foo bar" = "1.0""#,
     );
@@ -41,7 +41,7 @@ fn create_table() {
                 .with_names(vec!["target", "x86_64.json", "dependencies"].into_iter())
                 .with_entries(vec![a, b].into_iter())
                 .build()
-                .node()
+                .cst()
         },
         r#"[target."x86_64.json".dependencies]
 foo = "1.0"
@@ -74,9 +74,9 @@ fn table_without_name() {
 fn check(f: impl for<'f> FnOnce(&'f Factory) -> CstNode<'f>, expected: &str)
 {
     let factory = Factory::new();
-    let ast = f(&factory);
+    let cst = f(&factory);
     assert_eq_text(
         expected,
-        ast.text(),
+        cst.text(),
     )
 }

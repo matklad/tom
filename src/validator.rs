@@ -21,8 +21,8 @@ pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
             .visit::<ast::Dict, _>(|errors, d| {
                 check_new_line(
                     errors,
-                    d.node().children().next().unwrap(),
-                    d.node().children().last().unwrap(),
+                    d.cst().children().next().unwrap(),
+                    d.cst().children().last().unwrap(),
                     Forbid,
                     "newlines are forbidden in inline tables"
                 )
@@ -37,7 +37,7 @@ fn check_table<'f>(
     table: impl ast::EntryOwner<'f> + ast::TableHeaderOwner<'f>
 ) {
     let header = table.header();
-    match (header.node().children().next(), header.node().children().last()) {
+    match (header.cst().children().next(), header.cst().children().last()) {
         (Some(first), Some(last)) => {
             check_new_line(
                 errors,

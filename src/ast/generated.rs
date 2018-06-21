@@ -60,11 +60,11 @@ pub struct DateTime<'f>(CstNode<'f>);
 
 impl<'f> AstNode<'f> for Doc<'f> {
     fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn node(self) -> CstNode<'f> { self.node() }
+    fn cst(self) -> CstNode<'f> { self.cst() }
 }
 
 impl<'f> From<Doc<'f>> for CstNode<'f> {
-    fn from(ast: Doc<'f>) -> CstNode<'f> { ast.node() }
+    fn from(ast: Doc<'f>) -> CstNode<'f> { ast.cst() }
 }
 
 impl<'f> Doc<'f> {
@@ -75,26 +75,26 @@ impl<'f> Doc<'f> {
         }
     }
 
-    pub fn node(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode<'f> { self.0 }
 
     pub fn tables(self) -> AstChildren<'f, Table<'f>> {
-        AstChildren::new(self.node().children())
+        AstChildren::new(self.cst().children())
     }
     pub fn array_tables(self) -> AstChildren<'f, ArrayTable<'f>> {
-        AstChildren::new(self.node().children())
+        AstChildren::new(self.cst().children())
     }
     pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
-        AstChildren::new(self.node().children())
+        AstChildren::new(self.cst().children())
     }
 }
 
 impl<'f> AstNode<'f> for Table<'f> {
     fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn node(self) -> CstNode<'f> { self.node() }
+    fn cst(self) -> CstNode<'f> { self.cst() }
 }
 
 impl<'f> From<Table<'f>> for CstNode<'f> {
-    fn from(ast: Table<'f>) -> CstNode<'f> { ast.node() }
+    fn from(ast: Table<'f>) -> CstNode<'f> { ast.cst() }
 }
 
 impl<'f> Table<'f> {
@@ -105,23 +105,23 @@ impl<'f> Table<'f> {
         }
     }
 
-    pub fn node(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode<'f> { self.0 }
 
     pub fn header(self) -> TableHeader<'f> {
-        AstChildren::new(self.node().children()).next().unwrap()
+        AstChildren::new(self.cst().children()).next().unwrap()
     }
     pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
-        AstChildren::new(self.node().children())
+        AstChildren::new(self.cst().children())
     }
 }
 
 impl<'f> AstNode<'f> for ArrayTable<'f> {
     fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn node(self) -> CstNode<'f> { self.node() }
+    fn cst(self) -> CstNode<'f> { self.cst() }
 }
 
 impl<'f> From<ArrayTable<'f>> for CstNode<'f> {
-    fn from(ast: ArrayTable<'f>) -> CstNode<'f> { ast.node() }
+    fn from(ast: ArrayTable<'f>) -> CstNode<'f> { ast.cst() }
 }
 
 impl<'f> ArrayTable<'f> {
@@ -132,23 +132,23 @@ impl<'f> ArrayTable<'f> {
         }
     }
 
-    pub fn node(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode<'f> { self.0 }
 
     pub fn header(self) -> TableHeader<'f> {
-        AstChildren::new(self.node().children()).next().unwrap()
+        AstChildren::new(self.cst().children()).next().unwrap()
     }
     pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
-        AstChildren::new(self.node().children())
+        AstChildren::new(self.cst().children())
     }
 }
 
 impl<'f> AstNode<'f> for TableHeader<'f> {
     fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn node(self) -> CstNode<'f> { self.node() }
+    fn cst(self) -> CstNode<'f> { self.cst() }
 }
 
 impl<'f> From<TableHeader<'f>> for CstNode<'f> {
-    fn from(ast: TableHeader<'f>) -> CstNode<'f> { ast.node() }
+    fn from(ast: TableHeader<'f>) -> CstNode<'f> { ast.cst() }
 }
 
 impl<'f> TableHeader<'f> {
@@ -159,20 +159,20 @@ impl<'f> TableHeader<'f> {
         }
     }
 
-    pub fn node(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode<'f> { self.0 }
 
     pub fn keys(self) -> AstChildren<'f, Key<'f>> {
-        AstChildren::new(self.node().children())
+        AstChildren::new(self.cst().children())
     }
 }
 
 impl<'f> AstNode<'f> for Entry<'f> {
     fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn node(self) -> CstNode<'f> { self.node() }
+    fn cst(self) -> CstNode<'f> { self.cst() }
 }
 
 impl<'f> From<Entry<'f>> for CstNode<'f> {
-    fn from(ast: Entry<'f>) -> CstNode<'f> { ast.node() }
+    fn from(ast: Entry<'f>) -> CstNode<'f> { ast.cst() }
 }
 
 impl<'f> Entry<'f> {
@@ -183,23 +183,23 @@ impl<'f> Entry<'f> {
         }
     }
 
-    pub fn node(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode<'f> { self.0 }
 
     pub fn keys(self) -> AstChildren<'f, Key<'f>> {
-        AstChildren::new(self.node().children())
+        AstChildren::new(self.cst().children())
     }
     pub fn val(self) -> Val<'f> {
-        AstChildren::new(self.node().children()).next().unwrap()
+        AstChildren::new(self.cst().children()).next().unwrap()
     }
 }
 
 impl<'f> AstNode<'f> for Key<'f> {
     fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn node(self) -> CstNode<'f> { self.node() }
+    fn cst(self) -> CstNode<'f> { self.cst() }
 }
 
 impl<'f> From<Key<'f>> for CstNode<'f> {
-    fn from(ast: Key<'f>) -> CstNode<'f> { ast.node() }
+    fn from(ast: Key<'f>) -> CstNode<'f> { ast.cst() }
 }
 
 impl<'f> Key<'f> {
@@ -210,10 +210,10 @@ impl<'f> Key<'f> {
         }
     }
 
-    pub fn node(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode<'f> { self.0 }
 
     pub fn kind(self) -> KeyKind<'f> {
-        let node = self.node().children().next().unwrap();
+        let node = self.cst().children().next().unwrap();
         if let Some(node) = StringLit::cast(node) {
             return KeyKind::StringLit(node);
         }
@@ -227,11 +227,11 @@ impl<'f> Key<'f> {
 
 impl<'f> AstNode<'f> for Val<'f> {
     fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn node(self) -> CstNode<'f> { self.node() }
+    fn cst(self) -> CstNode<'f> { self.cst() }
 }
 
 impl<'f> From<Val<'f>> for CstNode<'f> {
-    fn from(ast: Val<'f>) -> CstNode<'f> { ast.node() }
+    fn from(ast: Val<'f>) -> CstNode<'f> { ast.cst() }
 }
 
 impl<'f> Val<'f> {
@@ -242,10 +242,10 @@ impl<'f> Val<'f> {
         }
     }
 
-    pub fn node(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode<'f> { self.0 }
 
     pub fn kind(self) -> ValKind<'f> {
-        let node = self.node().children().next().unwrap();
+        let node = self.cst().children().next().unwrap();
         if let Some(node) = Array::cast(node) {
             return ValKind::Array(node);
         }
@@ -271,11 +271,11 @@ impl<'f> Val<'f> {
 
 impl<'f> AstNode<'f> for StringLit<'f> {
     fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn node(self) -> CstNode<'f> { self.node() }
+    fn cst(self) -> CstNode<'f> { self.cst() }
 }
 
 impl<'f> From<StringLit<'f>> for CstNode<'f> {
-    fn from(ast: StringLit<'f>) -> CstNode<'f> { ast.node() }
+    fn from(ast: StringLit<'f>) -> CstNode<'f> { ast.cst() }
 }
 
 impl<'f> StringLit<'f> {
@@ -289,16 +289,16 @@ impl<'f> StringLit<'f> {
         }
     }
 
-    pub fn node(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for BareKey<'f> {
     fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn node(self) -> CstNode<'f> { self.node() }
+    fn cst(self) -> CstNode<'f> { self.cst() }
 }
 
 impl<'f> From<BareKey<'f>> for CstNode<'f> {
-    fn from(ast: BareKey<'f>) -> CstNode<'f> { ast.node() }
+    fn from(ast: BareKey<'f>) -> CstNode<'f> { ast.cst() }
 }
 
 impl<'f> BareKey<'f> {
@@ -309,16 +309,16 @@ impl<'f> BareKey<'f> {
         }
     }
 
-    pub fn node(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for Array<'f> {
     fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn node(self) -> CstNode<'f> { self.node() }
+    fn cst(self) -> CstNode<'f> { self.cst() }
 }
 
 impl<'f> From<Array<'f>> for CstNode<'f> {
-    fn from(ast: Array<'f>) -> CstNode<'f> { ast.node() }
+    fn from(ast: Array<'f>) -> CstNode<'f> { ast.cst() }
 }
 
 impl<'f> Array<'f> {
@@ -329,16 +329,16 @@ impl<'f> Array<'f> {
         }
     }
 
-    pub fn node(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for Dict<'f> {
     fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn node(self) -> CstNode<'f> { self.node() }
+    fn cst(self) -> CstNode<'f> { self.cst() }
 }
 
 impl<'f> From<Dict<'f>> for CstNode<'f> {
-    fn from(ast: Dict<'f>) -> CstNode<'f> { ast.node() }
+    fn from(ast: Dict<'f>) -> CstNode<'f> { ast.cst() }
 }
 
 impl<'f> Dict<'f> {
@@ -349,20 +349,20 @@ impl<'f> Dict<'f> {
         }
     }
 
-    pub fn node(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode<'f> { self.0 }
 
     pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
-        AstChildren::new(self.node().children())
+        AstChildren::new(self.cst().children())
     }
 }
 
 impl<'f> AstNode<'f> for Number<'f> {
     fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn node(self) -> CstNode<'f> { self.node() }
+    fn cst(self) -> CstNode<'f> { self.cst() }
 }
 
 impl<'f> From<Number<'f>> for CstNode<'f> {
-    fn from(ast: Number<'f>) -> CstNode<'f> { ast.node() }
+    fn from(ast: Number<'f>) -> CstNode<'f> { ast.cst() }
 }
 
 impl<'f> Number<'f> {
@@ -373,16 +373,16 @@ impl<'f> Number<'f> {
         }
     }
 
-    pub fn node(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for Bool<'f> {
     fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn node(self) -> CstNode<'f> { self.node() }
+    fn cst(self) -> CstNode<'f> { self.cst() }
 }
 
 impl<'f> From<Bool<'f>> for CstNode<'f> {
-    fn from(ast: Bool<'f>) -> CstNode<'f> { ast.node() }
+    fn from(ast: Bool<'f>) -> CstNode<'f> { ast.cst() }
 }
 
 impl<'f> Bool<'f> {
@@ -393,16 +393,16 @@ impl<'f> Bool<'f> {
         }
     }
 
-    pub fn node(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode<'f> { self.0 }
 }
 
 impl<'f> AstNode<'f> for DateTime<'f> {
     fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn node(self) -> CstNode<'f> { self.node() }
+    fn cst(self) -> CstNode<'f> { self.cst() }
 }
 
 impl<'f> From<DateTime<'f>> for CstNode<'f> {
-    fn from(ast: DateTime<'f>) -> CstNode<'f> { ast.node() }
+    fn from(ast: DateTime<'f>) -> CstNode<'f> { ast.cst() }
 }
 
 impl<'f> DateTime<'f> {
@@ -413,5 +413,5 @@ impl<'f> DateTime<'f> {
         }
     }
 
-    pub fn node(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode<'f> { self.0 }
 }
