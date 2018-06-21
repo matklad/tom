@@ -1,0 +1,38 @@
+DOC@[0; 43)
+  TABLE@[0; 16)
+    TABLE_HEADER@[0; 7)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 6)
+        BARE_KEY@[1; 6) "table"
+      R_BRACK@[6; 7) "]"
+    WHITESPACE@[7; 8)
+    ENTRY@[8; 16)
+      KEY@[8; 11)
+        BARE_KEY@[8; 11) "bar"
+      WHITESPACE@[11; 12)
+      EQ@[12; 13) "="
+      WHITESPACE@[13; 14)
+      VAL@[14; 16)
+        NUMBER@[14; 16) "92"
+  WHITESPACE@[16; 18)
+  ARRAY_TABLE@[18; 42)
+    TABLE_HEADER@[18; 33)
+      L_BRACK@[18; 19) "["
+      L_BRACK@[19; 20) "["
+      KEY@[20; 31)
+        BARE_KEY@[20; 31) "array-table"
+      R_BRACK@[31; 32) "]"
+      R_BRACK@[32; 33) "]"
+    WHITESPACE@[33; 34)
+    ENTRY@[34; 42)
+      KEY@[34; 37)
+        BARE_KEY@[34; 37) "bar"
+      WHITESPACE@[37; 38)
+      EQ@[38; 39) "="
+      WHITESPACE@[39; 40)
+      VAL@[40; 42)
+        NUMBER@[40; 42) "92"
+  WHITESPACE@[42; 43)
+
+error@[0; 8) "[table] ": newline is mandatory after table header
+error@[18; 34) "[[array-table]] ": newline is mandatory after table header

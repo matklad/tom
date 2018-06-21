@@ -1,0 +1,24 @@
+DOC@[0; 32)
+  ENTRY@[0; 31)
+    KEY@[0; 12)
+      BARE_KEY@[0; 12) "inline-table"
+    WHITESPACE@[12; 13)
+    EQ@[13; 14) "="
+    WHITESPACE@[14; 15)
+    VAL@[15; 31)
+      DICT@[15; 31)
+        L_CURLY@[15; 16) "{"
+        WHITESPACE@[16; 21)
+        ENTRY@[21; 29)
+          KEY@[21; 24)
+            BARE_KEY@[21; 24) "foo"
+          WHITESPACE@[24; 25)
+          EQ@[25; 26) "="
+          WHITESPACE@[26; 27)
+          VAL@[27; 29)
+            NUMBER@[27; 29) "92"
+        WHITESPACE@[29; 30)
+        R_CURLY@[30; 31) "}"
+  WHITESPACE@[31; 32)
+
+error@[15; 30) "{\n    foo = 92\n": newlines are forbidden in inline tables

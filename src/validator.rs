@@ -13,7 +13,7 @@ pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
                     check_new_line(
                         errors,
                         first_key, entry.val(),
-                        false,
+                        Forbid,
                         "newlines are forbidden in entries",
                     );
                 }
@@ -23,7 +23,7 @@ pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
                     errors,
                     d.node().children().next().unwrap(),
                     d.node().children().last().unwrap(),
-                    false,
+                    Forbid,
                     "newlines are forbidden in inline tables"
                 )
             })
@@ -36,31 +36,49 @@ fn check_table<'f>(
     errors: &mut Vec<SyntaxError>,
     table: impl ast::EntryOwner<'f> + ast::TableHeaderOwner<'f>
 ) {
+    let header = table.header();
+    match (header.node().children().next(), header.node().children().last()) {
+        (Some(first), Some(last)) => {
+            check_new_line(
+                errors,
+                first, last,
+                Forbid,
+                "table header must fit into a single line",
+            )
+        },
+        _ => (),
+    }
     if let Some(entry) = table.entries().next() {
         check_new_line(
             errors,
-            table.header(), entry,
-            true,
+            header, entry,
+            Require,
             "newline is mandatory after table header",
         );
     }
 }
 
+#[derive(PartialOrd, PartialEq)]
+enum Requirement {
+    Forbid, Require,
+}
+use self::Requirement::*;
+
 
 fn check_new_line<'f>(
     errors: &mut Vec<SyntaxError>,
     left: impl Into<CstNode<'f>>, right: impl Into<CstNode<'f>>,
-    new_line_required: bool,
+    r: Requirement,
     msg: &str
 ) {
     let left = left.into();
     let right = right.into();
     // TODO: more precise
-    let start = left.range().end();
+    let start = left.range().start();
     let end = right.range().start();
     let range = TextRange::from_to(start, end);
     let text = &left.doc().text()[range];
-    if text.contains("\n") != new_line_required {
+    if text.contains("\n")  != (r == Require) {
         errors.push(SyntaxError {
             range,
             message: msg.into()

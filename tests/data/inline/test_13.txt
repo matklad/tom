@@ -71,4 +71,4 @@ error@[39; 40) "\n": expected `=`
 error@[39; 40) "\n": expected a value
 error@[39; 40) "\n": expected `,`
 error@[39; 40) "\n": expected `}`
-error@[38; 40) "}\n": newlines are forbidden in entries
+error@[37; 40) ",}\n": newlines are forbidden in entries
