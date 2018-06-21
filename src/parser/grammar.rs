@@ -1,6 +1,9 @@
-use super::Parser;
-use symbol::*;
-
+use {
+    TomlSymbol,
+    parser::Parser,
+    symbols::*,
+    symbol::EOF,
+};
 
 struct Mark(TomlSymbol);
 

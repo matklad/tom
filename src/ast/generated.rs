@@ -1,5 +1,8 @@
-use *;
-use ast::{AstNode, AstChildren};
+use {
+    CstNode,
+    ast::{AstNode, AstChildren},
+    symbols::*,
+};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Doc<'f>(CstNode<'f>);

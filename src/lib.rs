@@ -25,9 +25,9 @@ mod symbol;
 mod visitor;
 
 pub mod ast;
-pub use symbol::*;
 pub use text_unit::{TextRange, TextUnit};
 pub use edit::{Edit, Position, Factory};
+pub use symbol::TomlSymbol;
 
 #[derive(Clone)]
 pub struct TomlDoc {
@@ -168,6 +168,43 @@ impl<'f> CstNode<'f> {
     fn node(self) -> &'f PtNode {
         &self.doc.cst[self.id]
     }
+}
+
+pub mod symbols {
+    pub use symbol::{
+        ERROR,
+
+        WHITESPACE,
+        COMMENT,
+
+        DOC,
+        ENTRY,
+        KEY,
+        VAL,
+        ARRAY,
+        DICT,
+        TABLE_HEADER,
+        TABLE,
+        ARRAY_TABLE,
+
+        EQ,
+        DOT,
+        COMMA,
+        L_BRACK,
+        R_BRACK,
+        L_CURLY,
+        R_CURLY,
+        NUMBER,
+        BOOL,
+        BARE_KEY,
+        BASIC_STRING,
+        MULTILINE_BASIC_STRING,
+        LITERAL_STRING,
+        MULTILINE_LITERAL_STRING,
+        DATE_TIME,
+        BARE_KEY_OR_NUMBER,
+        BARE_KEY_OR_DATE,
+    };
 }
 
 #[derive(Clone)]

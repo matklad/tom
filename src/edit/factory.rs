@@ -1,6 +1,5 @@
-use TomlDoc;
-use ast;
 use typed_arena::Arena;
+use {TomlDoc, ast};
 
 pub struct Factory {
     arena: Arena<TomlDoc>,
