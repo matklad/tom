@@ -28,8 +28,9 @@ impl<'f> CargoTomlManipulator<'f> {
 
     pub fn add_dependency(&mut self, name: &str, version: &str) {
         let table = self.dependencies_table();
+        let key = self.factory.key(name);
         let dep = self.factory.entry(
-            name,
+            iter::once(key),
             self.factory.value_string(version),
         );
         self.edit.insert(dep, Position::end_of(table));

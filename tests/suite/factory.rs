@@ -1,41 +1,48 @@
+use std::iter;
 use tom::{
     Factory, CstNode,
+    ast,
 };
 use testutils::assert_eq_text;
 use check_panics;
 
 #[test]
-fn create_entry_trivial() {
+fn create_key_with_space() {
     check(
         |f| {
+            let key = f.key("foo bar");
+            key
+                .cst()
+        },
+        "\"foo bar\"",
+    );
+}
+
+#[test]
+fn create_entry() {
+    check(
+        |f| {
+            let key = f.key("foo");
             let val = f.value_string("1.0");
-            f.entry("foo", val)
+            f.entry(iter::once(key), val)
                 .cst()
         },
         r#"foo = "1.0""#,
     );
 }
 
-#[test]
-fn create_entry_space_in_key() {
-    check(
-        |f| {
-            let val = f.value_string("1.0");
-            f.entry("foo bar", val)
-                .cst()
-        },
-        r#""foo bar" = "1.0""#,
-    );
+fn simple_entry<'f>(f: &'f Factory, key: &str, val: &str) -> ast::Entry<'f> {
+    let key = f.key(key);
+    let val = f.value_string(val);
+    f.entry(iter::once(key), val)
 }
 
 #[test]
 fn create_dict() {
     check(
         |f| {
-            let va = f.value_string("1.0");
-            let a = f.entry("foo", va);
-            let vb = f.value_string("0.0.1");
-            let b = f.entry("bar", vb);
+            let a = simple_entry(f, "foo", "1.0");
+            let b = simple_entry(f, "bar", "0.0.1");
             f.value_dict(vec![a, b].into_iter())
                 .cst()
         },
@@ -60,10 +67,8 @@ fn create_array() {
 fn create_table() {
     check(
         |f| {
-            let va = f.value_string("1.0");
-            let a = f.entry("foo", va);
-            let vb = f.value_string("0.0.1");
-            let b = f.entry("bar", vb);
+            let a = simple_entry(f, "foo", "1.0");
+            let b = simple_entry(f, "bar", "0.0.1");
 
             f.table()
                 .with_names(vec!["target", "x86_64.json", "dependencies"].into_iter())

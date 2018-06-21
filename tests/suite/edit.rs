@@ -1,10 +1,9 @@
+use std::iter;
 use tom::{
-    Edit, Factory,
+    Edit, Factory, Position, TomlDoc,
     ast,
 };
 use {toml, check_edit, check_panics};
-use tom::Position;
-use tom::TomlDoc;
 
 
 #[test]
@@ -18,7 +17,10 @@ baz = "1.0.0"
 "#;
 
     let f = Factory::new();
-    let quux = f.entry("quux", f.value_string("92"));
+    let quux = f.entry(
+        iter::once(f.key("quux")),
+        f.value_string("92"),
+    );
 
     check_edit(
         before,
@@ -106,7 +108,10 @@ baz = "1.0.0"
 "#;
 
     let f = Factory::new();
-    let quux = f.entry("quux", f.value_string("92"));
+    let quux = f.entry(
+        iter::once(f.key("quux")),
+        f.value_string("92"),
+    );
 
     check_edit(
         before,
