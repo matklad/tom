@@ -137,37 +137,37 @@ impl<'f> CstNode<'f> {
         self.doc
     }
 
-    pub fn symbol(&self) -> TomlSymbol {
+    pub fn symbol(self) -> TomlSymbol {
         TomlSymbol(self.node().symbol())
     }
 
-    pub fn range(&self) -> TextRange {
+    pub fn range(self) -> TextRange {
         self.node().range()
     }
 
-    pub fn text(&self) -> &'f str {
+    pub fn text(self) -> &'f str {
         &self.doc.text[self.range()]
     }
 
-    pub fn parent(&self) -> Option<CstNode<'f>> {
+    pub fn parent(self) -> Option<CstNode<'f>> {
         self.node().parent().map(|id| CstNode {
             doc: self.doc,
             id,
         })
     }
 
-    pub fn children(&self) -> Children<'f> {
+    pub fn children(self) -> Children<'f> {
         Children {
             doc: self.doc,
             id: self.node().first_child(),
         }
     }
 
-    pub fn is_leaf(&self) -> bool {
+    pub fn is_leaf(self) -> bool {
         self.node().first_child().is_none()
     }
 
-    fn node(&self) -> &PtNode {
+    fn node(self) -> &'f PtNode {
         &self.doc.cst[self.id]
     }
 }
