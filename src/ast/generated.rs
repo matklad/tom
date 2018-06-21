@@ -333,6 +333,13 @@ impl<'f> Array<'f> {
     }
 
     pub fn cst(self) -> CstNode<'f> { self.0 }
+
+    pub fn vals(self) -> AstChildren<'f, Val<'f>> {
+        AstChildren::new(self.cst().children())
+    }
+    pub fn val(self) -> Val<'f> {
+        AstChildren::new(self.cst().children()).next().unwrap()
+    }
 }
 
 impl<'f> AstNode<'f> for Dict<'f> {

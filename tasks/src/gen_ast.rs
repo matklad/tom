@@ -20,7 +20,7 @@ fn descr() -> Vec<AstNode> {
         n("Val").kinds(&["Array", "Dict", "Number", "Bool", "DateTime", "StringLit"]),
         n("StringLit").symbols(&["BASIC_STRING", "MULTILINE_BASIC_STRING", "LITERAL_STRING", "MULTILINE_LITERAL_STRING"]),
         n("BareKey"),
-        n("Array"),
+        n("Array").methods(&["vals", "val"]),
         n("Dict").method("entries", "Entry"),
         n("Number"),
         n("Bool"),

@@ -36,6 +36,26 @@ impl<'f> ast::StringLit<'f> {
     }
 }
 
+impl<'f> ast::Bool<'f> {
+    pub fn value(self) -> bool {
+        self.cst().text() == "true"
+    }
+}
+
+impl<'f> ast::Number<'f> {
+    pub fn value(self) -> i64 {
+        unimplemented!()
+    }
+}
+
+impl<'f> ast::DateTime<'f> {
+    // chrono?
+    pub fn value(self) -> ::std::time::SystemTime {
+        unimplemented!()
+    }
+}
+
+
 impl<'f> EntryOwner<'f> for ast::Dict<'f> {
     fn entries(self) -> AstChildren<'f, ast::Entry<'f>> { self.entries() }
 }
