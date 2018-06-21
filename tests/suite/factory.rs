@@ -80,6 +80,22 @@ bar = "0.0.1""#,
     );
 }
 
+#[test]
+fn create_array_table() {
+    check(
+        |f| {
+            let a = simple_entry(f, "name", "foo");
+
+            f.array_table(
+                iter::once(f.key("bin")),
+                iter::once(a),
+            ).cst()
+        },
+        r#"[[bin]]
+name = "foo""#,
+    );
+}
+
 fn check(f: impl for<'f> FnOnce(&'f Factory) -> CstNode<'f>, expected: &str)
 {
     let factory = Factory::new();

@@ -12,6 +12,11 @@ impl Factory {
         }
     }
 
+    pub fn doc(&self, text: String) -> ast::Doc {
+        self.arena.alloc(TomlDoc::new(text))
+            .ast()
+    }
+
     pub fn key(&self, name: &str) -> ast::Key {
         self.entry_raw(format!("{} = 92", escaped_key(name)))
             .keys().next().unwrap()
@@ -54,24 +59,36 @@ impl Factory {
         keys: impl Iterator<Item=ast::Key<'a>>,
         entries: impl Iterator<Item=ast::Entry<'b>>
     ) -> ast::Table {
+        self.table_impl(keys, entries, "[", "]")
+    }
+
+    pub fn array_table<'a, 'b>(
+        &self,
+        keys: impl Iterator<Item=ast::Key<'a>>,
+        entries: impl Iterator<Item=ast::Entry<'b>>
+    ) -> ast::Table {
+        self.table_impl(keys, entries, "[[", "]]")
+    }
+
+    fn table_impl<'a, 'b>(
+        &self,
+        keys: impl Iterator<Item=ast::Key<'a>>,
+        entries: impl Iterator<Item=ast::Entry<'b>>,
+        left: &str, right: &str,
+    ) -> ast::Table {
         let mut buff = String::new();
-        buff.push('[');
+        buff.push_str(left);
         join_to(&mut buff, keys, ".", "", "");
-        buff.push(']');
+        buff.push_str(right);
         for entry in entries {
             buff.push('\n');
             buff.push_str(entry.cst().text());
         }
-        self.doc(buff).ast().tables().next().unwrap()
-    }
-
-    fn doc(&self, text: String) -> &TomlDoc {
-        self.arena.alloc(TomlDoc::new(text))
+        self.doc(buff).tables().next().unwrap()
     }
 
     fn entry_raw(&self, text: String) -> ast::Entry {
-        let doc = self.doc(text);
-        doc.ast().entries().next().unwrap()
+        self.doc(text).entries().next().unwrap()
     }
 }
 
