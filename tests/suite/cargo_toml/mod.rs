@@ -1,7 +1,7 @@
 mod manipulator;
 
 use tom::Factory;
-use self::manipulator::CargoTomlManipulator;
+use self::manipulator::{CargoTomlManipulator, Dependency, DependencySource};
 use check_edit;
 
 #[test]
@@ -88,6 +88,33 @@ pest = "1.0"
         |toml| {
             toml.add_dependency("regex", "1.0");
             toml.add_dependency("pest", "1.0");
+        },
+    );
+}
+
+
+#[test]
+fn updating_dependnecy() {
+    check_cargo_toml_edit(
+        r#"
+[package]
+name = "tom"
+
+[dependencies]
+"#,
+        r#"
+[package]
+name = "tom"
+
+[dependencies]
+regex = "1.0"
+"#,
+        |toml| {
+            toml.update_dependency(Dependency {
+                name: "regex".to_string(),
+                source: DependencySource::Version("1.0".to_string()),
+                optional: false,
+            })
         },
     );
 }
