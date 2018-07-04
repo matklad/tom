@@ -4,7 +4,7 @@ use tom::{
     ast, TomlDoc, Position::*
 };
 
-struct CargoToml(TomlDoc);
+pub struct CargoToml(TomlDoc);
 
 
 //enum DependencyNode<'f> {
@@ -13,20 +13,20 @@ struct CargoToml(TomlDoc);
 //    Dict(ast::Dict<'f>),
 //}
 //
-pub struct Dependency {
-    pub name: String,
-    pub source: DependencySource,
-    pub optional: bool,
-}
-
-pub enum DependencySource {
-    Version(String),
-    Git {
-        url: String,
-        version: Option<String>,
-        branch: Option<String>,
-    },
-}
+//pub struct Dependency {
+//    pub name: String,
+//    pub source: DependencySource,
+//    pub optional: bool,
+//}
+//
+//pub enum DependencySource {
+//    Version(String),
+//    Git {
+//        url: String,
+//        version: Option<String>,
+//        branch: Option<String>,
+//    },
+//}
 
 impl CargoToml {
     pub fn new(text: &str) -> CargoToml {

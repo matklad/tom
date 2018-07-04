@@ -120,7 +120,6 @@ impl TomlDoc {
     }
 
     pub fn new_value(&mut self, val: impl IntoValue) -> ast::Value {
-        use self::private::IntoValue;
         let res = self.new_entry_from_text(&format!("foo = {}", val.value_text())).value(self);
         self.detach(res);
         res
@@ -218,35 +217,34 @@ impl TomlDoc {
 }
 
 mod private {
-    pub trait IntoValue {
-        fn value_text(self) -> String;
+    pub trait Sealed {
     }
+    impl Sealed for bool {}
+    impl Sealed for i64 {}
+    impl<'a> Sealed for &'a str {}
+}
 
-    impl IntoValue for bool {
-        fn value_text(self) -> String {
-            if self { "true" } else { "false" }.to_owned()
-        }
+pub trait IntoValue: private::Sealed {
+    #[doc(hidden)]
+    fn value_text(self) -> String;
+}
+impl IntoValue for bool {
+    fn value_text(self) -> String {
+        if self { "true" } else { "false" }.to_owned()
     }
-
-    impl IntoValue for i64 {
-        fn value_text(self) -> String {
-            self.to_string()
-        }
-    }
-
-    impl<'a> IntoValue for &'a str {
-        fn value_text(self) -> String {
-            //TODO: escaping
-            format!("{:?}", self)
-        }
+}
+impl IntoValue for i64 {
+    fn value_text(self) -> String {
+        self.to_string()
     }
 }
 
-pub trait IntoValue: private::IntoValue {
+impl<'a> IntoValue for &'a str {
+    fn value_text(self) -> String {
+        //TODO: escaping
+        format!("{:?}", self)
+    }
 }
-impl IntoValue for bool {}
-impl IntoValue for i64 {}
-impl<'a> IntoValue for &'a str {}
 
 pub fn join<A: Into<CstNode>>(
     doc: &TomlDoc,

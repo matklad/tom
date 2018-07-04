@@ -1,9 +1,13 @@
+mod generated;
+
 use std::{
     fmt,
     num::NonZeroU8,
 };
 
 use Symbol;
+
+pub use self::generated::*;
 
 pub(crate) struct SymbolInfo(pub &'static str);
 
@@ -24,6 +28,4 @@ impl fmt::Debug for Symbol {
     }
 }
 
-mod generated;
-pub use self::generated::*;
 

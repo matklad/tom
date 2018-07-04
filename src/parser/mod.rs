@@ -1,12 +1,12 @@
+mod grammar;
+mod lexer;
+
 use {
     intern::Intern,
     symbol::{COMMENT, DOC, ENTRY, TABLE, WHITESPACE},
     tree::{NodeId, TreeData, InsertPos},
     Symbol, SyntaxError, Tree,
 };
-
-mod grammar;
-mod lexer;
 
 pub(crate) struct ParseTree {
     pub tree: Tree,

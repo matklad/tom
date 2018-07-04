@@ -2,32 +2,33 @@
 mod cargo_toml;
 
 //use self::manipulator::{CargoTomlManipulator, Dependency, DependencySource};
-use check_edit;
+use testutils::assert_eq_text;
+use self::cargo_toml::CargoToml;
 
-//#[test]
-//fn adding_dependency_to_table() {
-//    check_cargo_toml_edit(
-//        r#"
-//[package]
-//name = "tom"
-//
-//[dependencies]
-//lalrpop-util = "0.15"
-//regex = "0.2"
-//"#,
-//        r#"
-//[package]
-//name = "tom"
-//
-//[dependencies]
-//lalrpop-util = "0.15"
-//regex = "0.2"
-//pest = "1.0"
-//"#,
-//        |toml| toml.add_dependency("pest", "1.0"),
-//    );
-//}
-//
+#[test]
+fn adding_dependency_to_table() {
+    check_cargo_toml_edit(
+        r#"
+[package]
+name = "tom"
+
+[dependencies]
+lalrpop-util = "0.15"
+regex = "0.2"
+"#,
+        r#"
+[package]
+name = "tom"
+
+[dependencies]
+lalrpop-util = "0.15"
+regex = "0.2"
+pest = "1.0"
+"#,
+        |toml| toml.add_dependency("pest", "1.0"),
+    );
+}
+
 //#[test]
 //fn adding_dependency_no_table() {
 //    check_cargo_toml_edit(
@@ -119,17 +120,15 @@ use check_edit;
 //    );
 //}
 //
-//
-//fn check_cargo_toml_edit(
-//    before: &str,
-//    after: &str,
-//    edit: impl FnOnce(&mut CargoTomlManipulator),
-//) {
-//    check_edit(before, after, |doc| {
-//        let factory = Factory::new();
-//        let mut cargo_toml = CargoTomlManipulator::new(doc, &factory);
-//        edit(&mut cargo_toml);
-//        cargo_toml.finish()
-//    })
-//}
-//
+
+fn check_cargo_toml_edit(
+    before: &str,
+    after: &str,
+    edit: impl FnOnce(&mut CargoToml),
+) {
+    let mut cargo_toml = CargoToml::new(before);
+    edit(&mut cargo_toml);
+    let actual = cargo_toml.finish();
+    assert_eq_text(after, &actual);
+}
+
