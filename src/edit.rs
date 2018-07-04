@@ -119,22 +119,9 @@ impl TomlDoc {
         res
     }
 
-    pub fn new_value_string(&mut self, val: &str) -> ast::Value {
-        //TODO: escaping
-        let res = self.new_entry_from_text(&format!("foo = {:?}", val)).value(self);
-        self.detach(res);
-        res
-    }
-
-    pub fn new_value_number(&mut self, val: i64) -> ast::Value {
-        //TODO: escaping
-        let res = self.new_entry_from_text(&format!("foo = {}", val)).value(self);
-        self.detach(res);
-        res
-    }
-
-    pub fn new_value_bool(&mut self, val: bool) -> ast::Value {
-        let res = self.new_entry_from_text(&format!("foo = {}", val)).value(self);
+    pub fn new_value(&mut self, val: impl IntoValue) -> ast::Value {
+        use self::private::IntoValue;
+        let res = self.new_entry_from_text(&format!("foo = {}", val.value_text())).value(self);
         self.detach(res);
         res
     }
@@ -175,13 +162,25 @@ impl TomlDoc {
             .unwrap()
     }
 
+    pub fn new_table_from_text(&mut self, text: &str) -> ast::Table {
+        let doc = self.new_doc(text);
+        let res = doc.tables(self).next().unwrap();
+        self.detach(res);
+        res
+    }
+
     pub fn new_table(
         &mut self,
         keys: impl Iterator<Item=ast::Key>,
         entries: impl Iterator<Item=ast::Entry>,
     ) -> ast::Table {
-        let doc = self.table_impl(keys, entries, "[", "]");
-        let res = doc.tables(self).next().unwrap();
+        let text = self.table_text(keys, entries, "[", "]");
+        self.new_table_from_text(&text)
+    }
+
+    pub fn new_array_table_from_text(&mut self, text: &str) -> ast::ArrayTable {
+        let doc = self.new_doc(text);
+        let res = doc.array_tables(self).next().unwrap();
         self.detach(res);
         res
     }
@@ -191,18 +190,16 @@ impl TomlDoc {
         keys: impl Iterator<Item=ast::Key>,
         entries: impl Iterator<Item=ast::Entry>,
     ) -> ast::ArrayTable {
-        let doc = self.table_impl(keys, entries, "[[", "]]");
-        let res = doc.array_tables(self).next().unwrap();
-        self.detach(res);
-        res
+        let text = self.table_text(keys, entries, "[[", "]]");
+        self.new_array_table_from_text(&text)
     }
 
-    fn table_impl(
+    fn table_text(
         &mut self,
         keys: impl Iterator<Item=ast::Key>,
         entries: impl Iterator<Item=ast::Entry>,
         left: &str, right: &str,
-    ) -> ast::Doc {
+    ) -> String {
         let mut buff = String::new();
         buff.push_str(left);
         join_to(self, &mut buff, keys, ".", "", "");
@@ -211,7 +208,7 @@ impl TomlDoc {
             buff.push('\n');
             entry.cst().write_text(self, &mut buff);
         }
-        self.new_doc(&buff)
+        buff
     }
 
     fn new_ws(&mut self, ws: &str) -> CstNode {
@@ -219,6 +216,37 @@ impl TomlDoc {
         CstNode(self.tree.tree.new_leaf((WHITESPACE, idx)))
     }
 }
+
+mod private {
+    pub trait IntoValue {
+        fn value_text(self) -> String;
+    }
+
+    impl IntoValue for bool {
+        fn value_text(self) -> String {
+            if self { "true" } else { "false" }.to_owned()
+        }
+    }
+
+    impl IntoValue for i64 {
+        fn value_text(self) -> String {
+            self.to_string()
+        }
+    }
+
+    impl<'a> IntoValue for &'a str {
+        fn value_text(self) -> String {
+            //TODO: escaping
+            format!("{:?}", self)
+        }
+    }
+}
+
+pub trait IntoValue: private::IntoValue {
+}
+impl IntoValue for bool {}
+impl IntoValue for i64 {}
+impl<'a> IntoValue for &'a str {}
 
 pub fn join<A: Into<CstNode>>(
     doc: &TomlDoc,

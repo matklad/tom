@@ -5,9 +5,9 @@ extern crate tom;
 extern crate lazy_static;
 
 mod ast;
- mod factory;
- mod edit;
-// mod cargo_toml;
+mod factory;
+mod edit;
+mod cargo_toml;
 
 use std::{
     panic,
@@ -15,11 +15,9 @@ use std::{
 };
 
 use tom::{
-    TomlDoc, CstNode, AstNode
+    TomlDoc, CstNode, AstNode,
 };
-use testutils::{
-    assert_eq_text
-};
+use testutils::assert_eq_text;
 
 
 fn toml(text: &str) -> TomlDoc {
@@ -46,13 +44,13 @@ fn subtree(node: CstNode, doc: &TomlDoc) -> Vec<CstNode> {
     }
 }
 
- pub fn check_edit(before: &str, after: &str, edit: impl FnOnce(&mut TomlDoc)) {
-     let mut doc = TomlDoc::new(before);
-     doc.start_edit();
-     edit(&mut doc);
-     let actual = doc.cst().get_text(&doc);
-     assert_eq_text(after, &actual);
- }
+pub fn check_edit(before: &str, after: &str, edit: impl FnOnce(&mut TomlDoc)) {
+    let mut doc = TomlDoc::new(before);
+    doc.start_edit();
+    edit(&mut doc);
+    let actual = doc.cst().get_text(&doc);
+    assert_eq_text(after, &actual);
+}
 
 lazy_static! {
     static ref LOCK: std::sync::Mutex<()> = Mutex::new(());

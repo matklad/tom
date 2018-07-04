@@ -1,6 +1,6 @@
 use std::iter;
 use tom::{
-    TomlDoc, Factory, Edit, Position,
+    TomlDoc,
     ast,
 };
 

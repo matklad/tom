@@ -12,7 +12,7 @@ fn create_entry() {
     check(
         |doc| {
             let key = doc.new_key("foo");
-            let val = doc.new_value_string("1.0");
+            let val = doc.new_value("1.0");
             doc.new_entry(iter::once(key), val)
         },
         r#"foo = "1.0""#,
@@ -35,8 +35,8 @@ fn create_dict() {
 fn create_array() {
     check(
         |doc| {
-            let a = doc.new_value_number(92);
-            let b = doc.new_value_number(62);
+            let a = doc.new_value(92);
+            let b = doc.new_value(62);
             doc.new_value_array(vec![a, b].into_iter())
         },
         "[ 92, 62 ]",
