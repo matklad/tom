@@ -1,49 +1,31 @@
 use std::iter;
-use tom::{
-    Factory, CstNode,
-    ast,
-};
+use tom::{TomlDoc, CstNode};
 use testutils::assert_eq_text;
 
 #[test]
 fn create_key_with_space() {
-    check(
-        |f| {
-            let key = f.key("foo bar");
-            key
-                .cst()
-        },
-        "\"foo bar\"",
-    );
+    check(|doc| doc.new_key("foo bar"), "\"foo bar\"");
 }
 
 #[test]
 fn create_entry() {
     check(
-        |f| {
-            let key = f.key("foo");
-            let val = f.value_string("1.0");
-            f.entry(iter::once(key), val)
-                .cst()
+        |doc| {
+            let key = doc.new_key("foo");
+            let val = doc.new_value_string("1.0");
+            doc.new_entry(iter::once(key), val)
         },
         r#"foo = "1.0""#,
     );
 }
 
-fn simple_entry<'f>(f: &'f Factory, key: &str, val: &str) -> ast::Entry<'f> {
-    let key = f.key(key);
-    let val = f.value_string(val);
-    f.entry(iter::once(key), val)
-}
-
 #[test]
 fn create_dict() {
     check(
-        |f| {
-            let a = simple_entry(f, "foo", "1.0");
-            let b = simple_entry(f, "bar", "0.0.1");
-            f.value_dict(vec![a, b].into_iter())
-                .cst()
+        |doc| {
+            let a = doc.new_entry_from_text("foo = \"1.0\"");
+            let b = doc.new_entry_from_text("bar = \"0.0.1\"");
+            doc.new_value_dict(vec![a, b].into_iter())
         },
         r#"{ foo = "1.0", bar = "0.0.1" }"#,
     );
@@ -52,11 +34,10 @@ fn create_dict() {
 #[test]
 fn create_array() {
     check(
-        |f| {
-            let a = f.value_number(92);
-            let b = f.value_number(62);
-            f.value_array(vec![a, b].into_iter())
-                .cst()
+        |doc| {
+            let a = doc.new_value_number(92);
+            let b = doc.new_value_number(62);
+            doc.new_value_array(vec![a, b].into_iter())
         },
         "[ 92, 62 ]",
     );
@@ -65,14 +46,17 @@ fn create_array() {
 #[test]
 fn create_table() {
     check(
-        |f| {
-            let a = simple_entry(f, "foo", "1.0");
-            let b = simple_entry(f, "bar", "0.0.1");
-
-            f.table(
-                vec![f.key("target"), f.key("x86_64.json"), f.key("dependencies")].into_iter(),
+        |doc| {
+            let a = doc.new_entry_from_text("foo = \"1.0\"");
+            let b = doc.new_entry_from_text("bar = \"0.0.1\"");
+            let mut keys = Vec::new();
+            for key in "target x86_64.json dependencies".split_whitespace() {
+                keys.push(doc.new_key(key));
+            }
+            doc.new_table(
+                keys.into_iter(),
                 vec![a, b].into_iter(),
-            ).cst()
+            )
         },
         r#"[target."x86_64.json".dependencies]
 foo = "1.0"
@@ -83,11 +67,12 @@ bar = "0.0.1""#,
 #[test]
 fn create_array_table() {
     check(
-        |f| {
-            let a = simple_entry(f, "name", "foo");
+        |doc| {
+            let a = doc.new_entry_from_text("name = \"foo\"");
+            let key = doc.new_key("bin");
 
-            f.array_table(
-                iter::once(f.key("bin")),
+            doc.new_array_table(
+                iter::once(key),
                 iter::once(a),
             ).cst()
         },
@@ -96,12 +81,11 @@ name = "foo""#,
     );
 }
 
-fn check(f: impl for<'f> FnOnce(&'f Factory) -> CstNode<'f>, expected: &str)
+fn check<F: FnOnce(&mut TomlDoc) -> R, R: Into<CstNode>>(f: F, expected: &str)
 {
-    let factory = Factory::new();
-    let cst = f(&factory);
-    assert_eq_text(
-        expected,
-        cst.text(),
-    )
+    let mut doc = TomlDoc::new("");
+    doc.start_edit();
+    let cst = f(&mut doc).into();
+    let actual = cst.get_text(&doc);
+    assert_eq_text(expected, &actual)
 }

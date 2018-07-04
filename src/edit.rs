@@ -180,15 +180,21 @@ impl TomlDoc {
         keys: impl Iterator<Item=ast::Key>,
         entries: impl Iterator<Item=ast::Entry>,
     ) -> ast::Table {
-        self.table_impl(keys, entries, "[", "]")
+        let doc = self.table_impl(keys, entries, "[", "]");
+        let res = doc.tables(self).next().unwrap();
+        self.detach(res);
+        res
     }
 
     pub fn new_array_table(
         &mut self,
         keys: impl Iterator<Item=ast::Key>,
         entries: impl Iterator<Item=ast::Entry>,
-    ) -> ast::Table {
-        self.table_impl(keys, entries, "[[", "]]")
+    ) -> ast::ArrayTable {
+        let doc = self.table_impl(keys, entries, "[[", "]]");
+        let res = doc.array_tables(self).next().unwrap();
+        self.detach(res);
+        res
     }
 
     fn table_impl(
@@ -196,7 +202,7 @@ impl TomlDoc {
         keys: impl Iterator<Item=ast::Key>,
         entries: impl Iterator<Item=ast::Entry>,
         left: &str, right: &str,
-    ) -> ast::Table {
+    ) -> ast::Doc {
         let mut buff = String::new();
         buff.push_str(left);
         join_to(self, &mut buff, keys, ".", "", "");
@@ -205,9 +211,7 @@ impl TomlDoc {
             buff.push('\n');
             entry.cst().write_text(self, &mut buff);
         }
-        let res = self.new_doc(&buff).tables(self).next().unwrap();
-        self.detach(res);
-        res
+        self.new_doc(&buff)
     }
 
     fn new_ws(&mut self, ws: &str) -> CstNode {
