@@ -7,12 +7,14 @@ use {
 pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
     visitor::process(
         doc.cst(),
+        doc,
         visitor::visitor(Vec::new())
             .visit::<ast::Entry, _>(|errors, entry| {
-                if let Some(first_key) = entry.keys().next() {
+                if let Some(first_key) = entry.keys(doc).next() {
                     check_new_line(
+                        doc,
                         errors,
-                        first_key, entry.value(),
+                        first_key, entry.value(doc),
                         Forbid,
                         "newlines are forbidden in entries",
                     );
@@ -20,26 +22,29 @@ pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
             })
             .visit::<ast::Dict, _>(|errors, d| {
                 check_new_line(
+                    doc,
                     errors,
-                    d.cst().children().next().unwrap(),
-                    d.cst().children().last().unwrap(),
+                    d.cst().children(doc).first().unwrap(),
+                    d.cst().children(doc).last().unwrap(),
                     Forbid,
                     "newlines are forbidden in inline tables"
                 )
             })
-            .visit::<ast::Table, _>(check_table)
-            .visit::<ast::ArrayTable, _>(check_table)
+            .visit::<ast::Table, _>(|errors, table| check_table(doc, errors, table))
+            .visit::<ast::ArrayTable, _>(|errors, table| check_table(doc, errors, table))
     )
 }
 
 fn check_table<'f>(
+    doc: &TomlDoc,
     errors: &mut Vec<SyntaxError>,
-    table: impl ast::EntryOwner<'f> + ast::TableHeaderOwner<'f>
+    table: impl ast::EntryOwner + ast::TableHeaderOwner
 ) {
-    let header = table.header();
-    match (header.cst().children().next(), header.cst().children().last()) {
+    let header = table.header(doc);
+    match (header.cst().children(doc).first(), header.cst().children(doc).last()) {
         (Some(first), Some(last)) => {
             check_new_line(
+                doc,
                 errors,
                 first, last,
                 Forbid,
@@ -48,8 +53,9 @@ fn check_table<'f>(
         },
         _ => (),
     }
-    if let Some(entry) = table.entries().next() {
+    if let Some(entry) = table.entries(doc).next() {
         check_new_line(
+            doc,
             errors,
             header, entry,
             Require,
@@ -66,18 +72,19 @@ use self::Requirement::*;
 
 
 fn check_new_line<'f>(
+    doc: &TomlDoc,
     errors: &mut Vec<SyntaxError>,
-    left: impl Into<CstNode<'f>>, right: impl Into<CstNode<'f>>,
+    left: impl Into<CstNode>, right: impl Into<CstNode>,
     r: Requirement,
     msg: &str
 ) {
     let left = left.into();
     let right = right.into();
     // TODO: more precise
-    let start = left.range().start();
-    let end = right.range().start();
+    let start = left.range(doc).start();
+    let end = right.range(doc).start();
     let range = TextRange::from_to(start, end);
-    let text = &left.doc().text()[range];
+    let text = doc.get_text(range);
     if text.contains("\n")  != (r == Require) {
         errors.push(SyntaxError {
             range,

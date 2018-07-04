@@ -26,7 +26,7 @@ fn main() -> Result<()> {
         }
         "gen-symbols" => {
             update(
-                "./src/symbol/generated.rs",
+                "./src/symbols/generated.rs",
                 &gen_symbols(),
             )?;
         }
@@ -127,18 +127,18 @@ BARE_KEY_OR_DATE
 EOF
 ";
 
-    ln!("use super::{{SymbolInfo, TomlSymbol, Symbol}};");
+    ln!("use super::{{SymbolInfo, Symbol, NonZeroU8}};");
     ln!();
     ln!("pub(crate) const SYMBOLS: &[SymbolInfo] = &[");
-    for (i, s) in symbols.trim().lines().enumerate() {
-        ln!(r#"    SymbolInfo({:02}, "{}"),"#, i, s)
+    for s in symbols.trim().lines() {
+        ln!(r#"    SymbolInfo("{}"),"#, s)
     }
     ln!("];");
     ln!();
     for (i, s) in symbols.trim().lines().enumerate() {
-        let name = format!("{}: TomlSymbol", s);
+        let name = format!("{}: Symbol", s);
         let vis = if name == "EOF" { "(crate)" } else { "" };
-        ln!(r#"pub{} const {:<42} = TomlSymbol(Symbol(SYMBOLS[{:02}].0));"#, vis, name, i)
+        ln!(r#"pub{} const {:<42} = Symbol(unsafe {{ NonZeroU8::new_unchecked({} + 1) }});"#, vis, name, i)
     }
     buff
 }

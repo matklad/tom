@@ -1,13 +1,20 @@
-use cst::{TopDownBuilder, ParseTree};
 use {
-    TomlSymbol, SyntaxError,
-    symbol::{DOC, ENTRY, TABLE, COMMENT, WHITESPACE},
+    intern::Intern,
+    symbol::{COMMENT, DOC, ENTRY, TABLE, WHITESPACE},
+    tree::{NodeId, TreeData},
+    Symbol, SyntaxError, Tree,
 };
 
-mod lexer;
 mod grammar;
+mod lexer;
 
-pub(crate) fn parse(input: &str) -> (ParseTree, Vec<SyntaxError>) {
+pub(crate) struct ParseTree {
+    pub tree: Tree,
+    pub intern: Intern,
+    pub errors: Vec<SyntaxError>,
+}
+
+pub(crate) fn parse(input: &str) -> ParseTree {
     let tokens = lexer::tokenize(input);
     let mut sink = EventSink::new(input, &tokens);
     {
@@ -18,7 +25,8 @@ pub(crate) fn parse(input: &str) -> (ParseTree, Vec<SyntaxError>) {
         };
         parser.parse();
     }
-    (sink.builder.finish(), sink.errors)
+
+    sink.parse_tree
 }
 
 struct Parser<'s, 't: 's> {
@@ -31,42 +39,59 @@ struct EventSink<'t> {
     pos: lexer::Pos,
     text: &'t str,
     tokens: &'t lexer::Tokens,
-    builder: TopDownBuilder,
-    errors: Vec<SyntaxError>,
+    parse_tree: ParseTree,
+    stack: Vec<NodeId>,
 }
 
 impl<'t> EventSink<'t> {
     fn new(text: &'t str, tokens: &'t lexer::Tokens) -> Self {
+        let parse_tree = ParseTree {
+            tree: Tree::new(DOC),
+            intern: Intern::new(),
+            errors: Vec::new(),
+        };
+        let stack = vec![parse_tree.tree.root()];
+
         EventSink {
             pos: lexer::Pos(0),
             text,
             tokens,
-            builder: TopDownBuilder::new(),
-            errors: Vec::new(),
+            parse_tree,
+            stack,
         }
     }
 
-    fn start(&mut self, s: TomlSymbol) {
-//        eprintln!("start {:?} at {:?}", s, pos);
+    fn start(&mut self, s: Symbol) {
+        // eprintln!("start {:?} at {:?}", s, self.pos);
         let ws = self.whitespace();
         let n = self.leading_ws(ws, s);
         for _ in 0..(ws.len() - n) {
             self.bump(None)
         }
-        self.builder.start_internal(s.0);
+        if s != DOC {
+            let node = self.parse_tree.tree.new_internal(s);
+            let top = self.top();
+            top.append_child(&mut self.parse_tree.tree, node);
+
+            self.stack.push(node);
+        }
     }
 
-    fn finish(&mut self, s: TomlSymbol) {
-//        eprintln!("finished {:?} at {:?}", s, self.last_consumed);
+    fn finish(&mut self, s: Symbol) {
+        // eprintln!("finished {:?} at {:?}", s, self.pos);
         let ws = self.whitespace();
         let n = self.trailing_ws(ws, s);
         for _ in 0..n {
             self.bump(None)
         }
-        self.builder.finish_internal();
+        let node = self.stack.pop().unwrap();
+        match node.data(&self.parse_tree.tree) {
+            TreeData::Interior(&sym) => assert_eq!(sym, s),
+            _ => (),
+        }
     }
 
-    fn token(&mut self, pos: lexer::Pos, s: Option<TomlSymbol>) {
+    fn token(&mut self, pos: lexer::Pos, s: Option<Symbol>) {
         while self.pos < pos {
             self.bump(None)
         }
@@ -90,13 +115,13 @@ impl<'t> EventSink<'t> {
             pos += 1;
         }
 
-        self.errors.push(SyntaxError {
-            range: tok.range(),
+        self.parse_tree.errors.push(SyntaxError {
+            range: tok.range,
             message: message.into(),
         })
     }
 
-    fn leading_ws(&self, ws: &[lexer::Token], s: TomlSymbol) -> usize {
+    fn leading_ws(&self, ws: &[lexer::Token], s: Symbol) -> usize {
         match s {
             DOC => ws.len(),
             ENTRY | TABLE => {
@@ -107,9 +132,9 @@ impl<'t> EventSink<'t> {
                             adj_comments = i + 1;
                         }
                         WHITESPACE => {
-                            let text = &self.text[token.range()];
+                            let text = &self.text[token.range];
                             if text.bytes().filter(|&b| b == b'\n').count() >= 2 {
-                                break
+                                break;
                             }
                         }
                         c => unreachable!("not a ws: {:?}", c),
@@ -121,7 +146,7 @@ impl<'t> EventSink<'t> {
         }
     }
 
-    fn trailing_ws(&self, ws: &[lexer::Token], s: TomlSymbol) -> usize {
+    fn trailing_ws(&self, ws: &[lexer::Token], s: Symbol) -> usize {
         match s {
             DOC => ws.len(),
             ENTRY => {
@@ -132,9 +157,9 @@ impl<'t> EventSink<'t> {
                             adj_comments = i + 1;
                         }
                         WHITESPACE => {
-                            let text = &self.text[token.range()];
+                            let text = &self.text[token.range];
                             if text.contains('\n') {
-                                break
+                                break;
                             }
                         }
                         c => unreachable!("not a ws: {:?}", c),
@@ -151,20 +176,26 @@ impl<'t> EventSink<'t> {
         let mut end = start;
         loop {
             match end.get(&self.tokens.raw_tokens) {
-                Some(token) if !token.is_significant() => {
-                    end += 1
-                }
+                Some(token) if !token.is_significant() => end += 1,
                 _ => break,
             }
         }
         &self.tokens.raw_tokens[start.0 as usize..end.0 as usize]
     }
 
-    fn bump(&mut self, s: Option<TomlSymbol>) {
+    fn bump(&mut self, s: Option<Symbol>) {
         let t = self.tokens.raw_tokens[self.pos];
-//        eprintln!("consumed {:?} at {:?}", t.symbol, self.pos);
-        let s = s.unwrap_or(t.symbol).0;
-        self.builder.leaf(s, t.len);
+        //        eprintln!("consumed {:?} at {:?}", t.symbol, self.pos);
+        let s = s.unwrap_or(t.symbol);
+        let text = &self.text[t.range];
+        let intern_id = self.parse_tree.intern.intern(text);
+        let leaf = self.parse_tree.tree.new_leaf((s, intern_id));
+        let top = self.top();
+        top.append_child(&mut self.parse_tree.tree, leaf);
         self.pos += 1;
+    }
+
+    fn top(&self) -> NodeId {
+        *self.stack.last().unwrap()
     }
 }

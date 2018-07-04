@@ -4,54 +4,53 @@ extern crate tom;
 #[macro_use]
 extern crate lazy_static;
 
+mod ast;
+// mod factory;
+// mod edit;
+// mod cargo_toml;
+
 use std::{
     panic,
     sync::Mutex,
 };
 
 use tom::{
-    TomlDoc, CstNode,
-    ast::AstNode,
+    TomlDoc, CstNode, AstNode
 };
 use testutils::{
     assert_eq_text
 };
 
-mod ast;
-mod factory;
-mod edit;
-mod cargo_toml;
-
 
 fn toml(text: &str) -> TomlDoc {
-    TomlDoc::new(text.to_owned())
+    TomlDoc::new(text)
 }
 
-fn find<'f, A: AstNode<'f>>(toml: &'f TomlDoc) -> A {
-    subtree(toml.cst()).into_iter()
-        .filter_map(A::cast)
+fn find<A: AstNode>(doc: &TomlDoc) -> A {
+    subtree(doc.cst(), doc).into_iter()
+        .filter_map(|node| A::cast(node, doc))
         .next()
         .unwrap()
 }
 
-fn subtree<'f>(node: CstNode<'f>) -> Vec<CstNode<'f>> {
+fn subtree(node: CstNode, doc: &TomlDoc) -> Vec<CstNode> {
     let mut buff = Vec::new();
-    go(node, &mut buff);
+    go(node, doc, &mut buff);
     return buff;
 
-    fn go<'f>(node: CstNode<'f>, buff: &mut Vec<CstNode<'f>>) {
+    fn go(node: CstNode, doc: &TomlDoc, buff: &mut Vec<CstNode>) {
         buff.push(node);
-        for child in node.children() {
-            go(child, buff);
+        for child in node.children(doc) {
+            go(child, doc, buff);
         }
     }
 }
 
-pub fn check_edit(before: &str, after: &str, edit: impl FnOnce(&TomlDoc) -> String) {
-    let doc = TomlDoc::new(before.to_string());
-    let actual = edit(&doc);
-    assert_eq_text(after, &actual);
-}
+// pub fn check_edit(before: &str, after: &str, edit: impl FnOnce(&TomlDoc) -> String) {
+//     let doc = TomlDoc::new(before.to_string());
+//     let actual = edit(&doc);
+//     assert_eq_text(after, &actual);
+// }
 
 lazy_static! {
     static ref LOCK: std::sync::Mutex<()> = Mutex::new(());

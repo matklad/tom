@@ -1,11 +1,10 @@
 use {
-    TomlSymbol,
+    Symbol,
     parser::Parser,
-    symbols::*,
-    symbol::EOF,
+    symbol::*,
 };
 
-struct Mark(TomlSymbol);
+struct Mark(Symbol);
 
 impl Drop for Mark {
     fn drop(&mut self) {
@@ -16,7 +15,7 @@ impl Drop for Mark {
 }
 
 impl<'t, 's> Parser<'t, 's> {
-    fn start(&mut self, s: TomlSymbol) -> Mark {
+    fn start(&mut self, s: Symbol) -> Mark {
         self.sink.start(s);
         Mark(s)
     }
@@ -30,7 +29,7 @@ impl<'t, 's> Parser<'t, 's> {
         self.sink.error(msg);
     }
 
-    fn at(&self, lookahead: usize) -> TomlSymbol {
+    fn at(&self, lookahead: usize) -> Symbol {
         let pos = self.pos + lookahead;
         if pos >= self.tokens.significant.len() {
             return EOF;
@@ -39,11 +38,11 @@ impl<'t, 's> Parser<'t, 's> {
         self.tokens.raw_tokens[pos].symbol
     }
 
-    fn current(&self) -> TomlSymbol {
+    fn current(&self) -> Symbol {
         self.at(0)
     }
 
-    fn eat(&mut self, s: TomlSymbol) {
+    fn eat(&mut self, s: Symbol) {
         let msg = match s {
             COMMA => "expected `,`",
             EQ => "expected `=`",
@@ -68,7 +67,7 @@ impl<'t, 's> Parser<'t, 's> {
         self.pos += 1;
     }
 
-    fn bump_remap(&mut self, s: TomlSymbol) {
+    fn bump_remap(&mut self, s: Symbol) {
         if self.pos == self.tokens.significant.len() {
             panic!("bumping past EOF");
         }

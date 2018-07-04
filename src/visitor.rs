@@ -1,40 +1,40 @@
 use {
-    CstNode,
-    ast,
+    CstNode, TomlDoc, AstNode,
 };
 
-pub(crate) struct Visitor<'f, 'c, C> {
+pub(crate) struct Visitor<'c, C> {
     ctx: C,
-    callbacks: Vec<Box<FnMut(&mut C, CstNode<'f>) + 'c>>,
+    callbacks: Vec<Box<FnMut(&mut C, CstNode, &TomlDoc) + 'c>>,
 }
 
-pub(crate) fn visitor<'f, 'c, C>(ctx: C) -> Visitor<'f, 'c, C> {
+pub(crate) fn visitor<'c, C>(ctx: C) -> Visitor<'c, C> {
     Visitor { ctx, callbacks: Vec::new() }
 }
 
-pub(crate) fn process<'f, 'c, C>(
-    node: CstNode<'f>,
-    mut v: Visitor<'f, 'c, C>,
+pub(crate) fn process<'c, C>(
+    node: CstNode,
+    doc: &TomlDoc,
+    mut v: Visitor<'c, C>,
 ) -> C {
-    go(node, &mut v);
+    go(node, doc, &mut v);
     return v.ctx;
 
-    fn go<'f, 'c, C>(node: CstNode<'f>, v: &mut Visitor<'f, 'c, C>) {
-        v.do_visit(node);
-        for child in node.children() {
-            go(child, v);
+    fn go<'c, C>(node: CstNode, doc: &TomlDoc, v: &mut Visitor<'c, C>) {
+        v.do_visit(node, doc);
+        for child in node.children(doc) {
+            go(child, doc, v);
         }
     }
 }
 
-impl<'f, 'c, C> Visitor<'f, 'c, C> {
-    pub fn visit<A: ast::AstNode<'f>, F: FnMut(&mut C, A) + 'c>(
+impl<'c, C> Visitor<'c, C> {
+    pub fn visit<A: AstNode, F: FnMut(&mut C, A) + 'c>(
         mut self,
         mut f: F,
     ) -> Self {
-        let cb: Box<FnMut(&mut C, CstNode<'f>) + 'c> =
-            Box::new(move |c, node| {
-                match A::cast(node) {
+        let cb: Box<FnMut(&mut C, CstNode, &TomlDoc) + 'c> =
+            Box::new(move |c, node, doc| {
+                match A::cast(node, doc) {
                     None => (),
                     Some(a) => f(c, a),
                 }
@@ -43,9 +43,9 @@ impl<'f, 'c, C> Visitor<'f, 'c, C> {
         self
     }
 
-    fn do_visit(&mut self, node: CstNode<'f>) {
+    fn do_visit(&mut self, node: CstNode, doc: &TomlDoc) {
         for cb in self.callbacks.iter_mut() {
-            cb(&mut self.ctx, node);
+            cb(&mut self.ctx, node, doc);
         }
     }
 }

@@ -1,24 +1,24 @@
-use cst::Symbol;
-use std::fmt;
+use std::{
+    fmt,
+    num::NonZeroU8,
+};
 
-#[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
-pub struct TomlSymbol(pub(crate) Symbol);
+use Symbol;
 
-pub(crate) struct SymbolInfo(u16, &'static str);
+pub(crate) struct SymbolInfo(pub &'static str);
 
-impl TomlSymbol {
-    pub fn name(&self) -> &'static str {
-        self.info().1
+impl Symbol {
+    pub(crate) fn new(idx: u16) -> Symbol {
+        Symbol(NonZeroU8::new(idx as u8).unwrap())
     }
 
     pub(crate) fn info(&self) -> &SymbolInfo {
-        let idx = self.0;
-        let idx = idx.0 as usize;
+        let idx = (self.0.get() - 1) as usize;
         &generated::SYMBOLS[idx]
     }
 }
 
-impl fmt::Debug for TomlSymbol {
+impl fmt::Debug for Symbol {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         write!(f, "`{}", self.name())
     }
@@ -26,3 +26,4 @@ impl fmt::Debug for TomlSymbol {
 
 mod generated;
 pub use self::generated::*;
+

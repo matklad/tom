@@ -1,16 +1,14 @@
-use cst::Symbol;
 use m_lexer::{LexerBuilder, Lexer, TokenKind};
 
 use {
-    TomlSymbol, TextUnit, TextRange,
+    Symbol, TextUnit, TextRange,
     symbol,
 };
 
 #[derive(Copy, Clone, Debug)]
 pub(crate) struct Token {
-    pub symbol: TomlSymbol,
-    pub offset: TextUnit,
-    pub len: TextUnit,
+    pub symbol: Symbol,
+    pub range: TextRange,
 }
 
 impl Token {
@@ -19,10 +17,6 @@ impl Token {
             symbol::WHITESPACE | symbol::COMMENT => false,
             _ => true,
         }
-    }
-
-    pub fn range(self) -> TextRange {
-        TextRange::offset_len(self.offset, self.len)
     }
 }
 
@@ -42,9 +36,8 @@ pub(crate) fn tokenize(input: &str) -> Tokens {
     for t in LEXER.tokenize(input) {
         let len = TextUnit::from(t.len as u32);
         raw_tokens.push(Token {
-            symbol: TomlSymbol(Symbol(t.kind.0)),
-            offset,
-            len,
+            symbol: Symbol::new(t.kind.0),
+            range: TextRange::offset_len(offset, len),
         });
         offset += len;
     }
@@ -62,8 +55,8 @@ lazy_static! {
 
 
 fn lexer() -> Lexer {
-    fn t(s: TomlSymbol) -> TokenKind {
-        TokenKind((s.0).0)
+    fn t(s: Symbol) -> TokenKind {
+        TokenKind(s.0.get() as u16)
     }
 
     LexerBuilder::new()

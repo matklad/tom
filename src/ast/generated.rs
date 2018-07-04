@@ -1,226 +1,219 @@
 use {
-    CstNode,
-    ast::{AstNode, AstChildren},
-    symbols::*,
+    TomlDoc, CstNode, AstNode, AstChildren, NodeKind,
+    symbol::*,
 };
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Doc<'f>(CstNode<'f>);
+pub struct Doc(CstNode);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Table<'f>(CstNode<'f>);
+pub struct Table(CstNode);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct ArrayTable<'f>(CstNode<'f>);
+pub struct ArrayTable(CstNode);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct TableHeader<'f>(CstNode<'f>);
+pub struct TableHeader(CstNode);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Entry<'f>(CstNode<'f>);
+pub struct Entry(CstNode);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Key<'f>(CstNode<'f>);
+pub struct Key(CstNode);
 
-pub enum KeyKind<'f> {
-    StringLit(StringLit<'f>),
-    BareKey(BareKey<'f>),
+pub enum KeyKind {
+    StringLit(StringLit),
+    BareKey(BareKey),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Value<'f>(CstNode<'f>);
+pub struct Value(CstNode);
 
-pub enum ValueKind<'f> {
-    Array(Array<'f>),
-    Dict(Dict<'f>),
-    Number(Number<'f>),
-    Bool(Bool<'f>),
-    DateTime(DateTime<'f>),
-    StringLit(StringLit<'f>),
+pub enum ValueKind {
+    Array(Array),
+    Dict(Dict),
+    Number(Number),
+    Bool(Bool),
+    DateTime(DateTime),
+    StringLit(StringLit),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct StringLit<'f>(CstNode<'f>);
+pub struct StringLit(CstNode);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct BareKey<'f>(CstNode<'f>);
+pub struct BareKey(CstNode);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Array<'f>(CstNode<'f>);
+pub struct Array(CstNode);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Dict<'f>(CstNode<'f>);
+pub struct Dict(CstNode);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Number<'f>(CstNode<'f>);
+pub struct Number(CstNode);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Bool<'f>(CstNode<'f>);
+pub struct Bool(CstNode);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct DateTime<'f>(CstNode<'f>);
+pub struct DateTime(CstNode);
 
 
-impl<'f> AstNode<'f> for Doc<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn cst(self) -> CstNode<'f> { self.cst() }
+impl AstNode for Doc {
+    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
 }
 
-impl<'f> From<Doc<'f>> for CstNode<'f> {
-    fn from(ast: Doc<'f>) -> CstNode<'f> { ast.cst() }
+impl From<Doc> for CstNode {
+    fn from(ast: Doc) -> CstNode { ast.cst() }
 }
 
-impl<'f> Doc<'f> {
-    pub fn cast(node: CstNode<'f>) -> Option<Doc<'f>> {
-        match node.symbol() {
+impl Doc {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Doc> {
+        match node.symbol(doc) {
             DOC => Some(Doc(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode { self.0 }
 
-    pub fn tables(self) -> AstChildren<'f, Table<'f>> {
-        AstChildren::new(self.cst().children())
+    pub fn tables(self, doc: &TomlDoc) -> AstChildren<Table> {
+        AstChildren::new(self.cst(), doc)
     }
-    pub fn array_tables(self) -> AstChildren<'f, ArrayTable<'f>> {
-        AstChildren::new(self.cst().children())
+    pub fn array_tables(self, doc: &TomlDoc) -> AstChildren<ArrayTable> {
+        AstChildren::new(self.cst(), doc)
     }
-    pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
-        AstChildren::new(self.cst().children())
+    pub fn entries(self, doc: &TomlDoc) -> AstChildren<Entry> {
+        AstChildren::new(self.cst(), doc)
     }
 }
 
-impl<'f> AstNode<'f> for Table<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn cst(self) -> CstNode<'f> { self.cst() }
+impl AstNode for Table {
+    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
 }
 
-impl<'f> From<Table<'f>> for CstNode<'f> {
-    fn from(ast: Table<'f>) -> CstNode<'f> { ast.cst() }
+impl From<Table> for CstNode {
+    fn from(ast: Table) -> CstNode { ast.cst() }
 }
 
-impl<'f> Table<'f> {
-    pub fn cast(node: CstNode<'f>) -> Option<Table<'f>> {
-        match node.symbol() {
+impl Table {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Table> {
+        match node.symbol(doc) {
             TABLE => Some(Table(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode { self.0 }
 
-    pub fn header(self) -> TableHeader<'f> {
-        AstChildren::new(self.cst().children()).next().unwrap()
+    pub fn header(self, doc: &TomlDoc) -> TableHeader {
+        AstChildren::new(self.cst(), doc).next().unwrap()
     }
-    pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
-        AstChildren::new(self.cst().children())
+    pub fn entries(self, doc: &TomlDoc) -> AstChildren<Entry> {
+        AstChildren::new(self.cst(), doc)
     }
 }
 
-impl<'f> AstNode<'f> for ArrayTable<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn cst(self) -> CstNode<'f> { self.cst() }
+impl AstNode for ArrayTable {
+    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
 }
 
-impl<'f> From<ArrayTable<'f>> for CstNode<'f> {
-    fn from(ast: ArrayTable<'f>) -> CstNode<'f> { ast.cst() }
+impl From<ArrayTable> for CstNode {
+    fn from(ast: ArrayTable) -> CstNode { ast.cst() }
 }
 
-impl<'f> ArrayTable<'f> {
-    pub fn cast(node: CstNode<'f>) -> Option<ArrayTable<'f>> {
-        match node.symbol() {
+impl ArrayTable {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<ArrayTable> {
+        match node.symbol(doc) {
             ARRAY_TABLE => Some(ArrayTable(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode { self.0 }
 
-    pub fn header(self) -> TableHeader<'f> {
-        AstChildren::new(self.cst().children()).next().unwrap()
+    pub fn header(self, doc: &TomlDoc) -> TableHeader {
+        AstChildren::new(self.cst(), doc).next().unwrap()
     }
-    pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
-        AstChildren::new(self.cst().children())
+    pub fn entries(self, doc: &TomlDoc) -> AstChildren<Entry> {
+        AstChildren::new(self.cst(), doc)
     }
 }
 
-impl<'f> AstNode<'f> for TableHeader<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn cst(self) -> CstNode<'f> { self.cst() }
+impl AstNode for TableHeader {
+    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
 }
 
-impl<'f> From<TableHeader<'f>> for CstNode<'f> {
-    fn from(ast: TableHeader<'f>) -> CstNode<'f> { ast.cst() }
+impl From<TableHeader> for CstNode {
+    fn from(ast: TableHeader) -> CstNode { ast.cst() }
 }
 
-impl<'f> TableHeader<'f> {
-    pub fn cast(node: CstNode<'f>) -> Option<TableHeader<'f>> {
-        match node.symbol() {
+impl TableHeader {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<TableHeader> {
+        match node.symbol(doc) {
             TABLE_HEADER => Some(TableHeader(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode { self.0 }
 
-    pub fn keys(self) -> AstChildren<'f, Key<'f>> {
-        AstChildren::new(self.cst().children())
+    pub fn keys(self, doc: &TomlDoc) -> AstChildren<Key> {
+        AstChildren::new(self.cst(), doc)
     }
 }
 
-impl<'f> AstNode<'f> for Entry<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn cst(self) -> CstNode<'f> { self.cst() }
+impl AstNode for Entry {
+    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
 }
 
-impl<'f> From<Entry<'f>> for CstNode<'f> {
-    fn from(ast: Entry<'f>) -> CstNode<'f> { ast.cst() }
+impl From<Entry> for CstNode {
+    fn from(ast: Entry) -> CstNode { ast.cst() }
 }
 
-impl<'f> Entry<'f> {
-    pub fn cast(node: CstNode<'f>) -> Option<Entry<'f>> {
-        match node.symbol() {
+impl Entry {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Entry> {
+        match node.symbol(doc) {
             ENTRY => Some(Entry(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode { self.0 }
 
-    pub fn keys(self) -> AstChildren<'f, Key<'f>> {
-        AstChildren::new(self.cst().children())
+    pub fn keys(self, doc: &TomlDoc) -> AstChildren<Key> {
+        AstChildren::new(self.cst(), doc)
     }
-    pub fn value(self) -> Value<'f> {
-        AstChildren::new(self.cst().children()).next().unwrap()
+    pub fn value(self, doc: &TomlDoc) -> Value {
+        AstChildren::new(self.cst(), doc).next().unwrap()
     }
 }
 
-impl<'f> AstNode<'f> for Key<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn cst(self) -> CstNode<'f> { self.cst() }
+impl AstNode for Key {
+    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
 }
 
-impl<'f> From<Key<'f>> for CstNode<'f> {
-    fn from(ast: Key<'f>) -> CstNode<'f> { ast.cst() }
+impl From<Key> for CstNode {
+    fn from(ast: Key) -> CstNode { ast.cst() }
 }
 
-impl<'f> Key<'f> {
-    pub fn cast(node: CstNode<'f>) -> Option<Key<'f>> {
-        match node.symbol() {
+impl Key {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Key> {
+        match node.symbol(doc) {
             KEY => Some(Key(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode { self.0 }
 
-    pub fn kind(self) -> KeyKind<'f> {
-        let node = self.cst().children().next().unwrap();
-        if let Some(node) = StringLit::cast(node) {
+    pub fn kind(self, doc: &TomlDoc) -> KeyKind {
+        let node = self.cst().children(doc).first().unwrap();
+        if let Some(node) = StringLit::cast(node, doc) {
             return KeyKind::StringLit(node);
         }
-        if let Some(node) = BareKey::cast(node) {
+        if let Some(node) = BareKey::cast(node, doc) {
             return KeyKind::BareKey(node);
         }
         unreachable!()
@@ -228,43 +221,42 @@ impl<'f> Key<'f> {
 
 }
 
-impl<'f> AstNode<'f> for Value<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn cst(self) -> CstNode<'f> { self.cst() }
+impl AstNode for Value {
+    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
 }
 
-impl<'f> From<Value<'f>> for CstNode<'f> {
-    fn from(ast: Value<'f>) -> CstNode<'f> { ast.cst() }
+impl From<Value> for CstNode {
+    fn from(ast: Value) -> CstNode { ast.cst() }
 }
 
-impl<'f> Value<'f> {
-    pub fn cast(node: CstNode<'f>) -> Option<Value<'f>> {
-        match node.symbol() {
+impl Value {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Value> {
+        match node.symbol(doc) {
             VALUE => Some(Value(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode { self.0 }
 
-    pub fn kind(self) -> ValueKind<'f> {
-        let node = self.cst().children().next().unwrap();
-        if let Some(node) = Array::cast(node) {
+    pub fn kind(self, doc: &TomlDoc) -> ValueKind {
+        let node = self.cst().children(doc).first().unwrap();
+        if let Some(node) = Array::cast(node, doc) {
             return ValueKind::Array(node);
         }
-        if let Some(node) = Dict::cast(node) {
+        if let Some(node) = Dict::cast(node, doc) {
             return ValueKind::Dict(node);
         }
-        if let Some(node) = Number::cast(node) {
+        if let Some(node) = Number::cast(node, doc) {
             return ValueKind::Number(node);
         }
-        if let Some(node) = Bool::cast(node) {
+        if let Some(node) = Bool::cast(node, doc) {
             return ValueKind::Bool(node);
         }
-        if let Some(node) = DateTime::cast(node) {
+        if let Some(node) = DateTime::cast(node, doc) {
             return ValueKind::DateTime(node);
         }
-        if let Some(node) = StringLit::cast(node) {
+        if let Some(node) = StringLit::cast(node, doc) {
             return ValueKind::StringLit(node);
         }
         unreachable!()
@@ -272,18 +264,17 @@ impl<'f> Value<'f> {
 
 }
 
-impl<'f> AstNode<'f> for StringLit<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn cst(self) -> CstNode<'f> { self.cst() }
+impl AstNode for StringLit {
+    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
 }
 
-impl<'f> From<StringLit<'f>> for CstNode<'f> {
-    fn from(ast: StringLit<'f>) -> CstNode<'f> { ast.cst() }
+impl From<StringLit> for CstNode {
+    fn from(ast: StringLit) -> CstNode { ast.cst() }
 }
 
-impl<'f> StringLit<'f> {
-    pub fn cast(node: CstNode<'f>) -> Option<StringLit<'f>> {
-        match node.symbol() {
+impl StringLit {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<StringLit> {
+        match node.symbol(doc) {
             BASIC_STRING => Some(StringLit(node)),
             MULTILINE_BASIC_STRING => Some(StringLit(node)),
             LITERAL_STRING => Some(StringLit(node)),
@@ -292,133 +283,162 @@ impl<'f> StringLit<'f> {
         }
     }
 
-    pub fn cst(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode { self.0 }
+
+    pub fn text(self, doc: &TomlDoc) -> &str {
+        match self.cst().kind(doc) {
+            NodeKind::Leaf(text) => text,
+            NodeKind::Internal(_) => unreachable!(),
+        }
+    }
 }
 
-impl<'f> AstNode<'f> for BareKey<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn cst(self) -> CstNode<'f> { self.cst() }
+impl AstNode for BareKey {
+    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
 }
 
-impl<'f> From<BareKey<'f>> for CstNode<'f> {
-    fn from(ast: BareKey<'f>) -> CstNode<'f> { ast.cst() }
+impl From<BareKey> for CstNode {
+    fn from(ast: BareKey) -> CstNode { ast.cst() }
 }
 
-impl<'f> BareKey<'f> {
-    pub fn cast(node: CstNode<'f>) -> Option<BareKey<'f>> {
-        match node.symbol() {
+impl BareKey {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<BareKey> {
+        match node.symbol(doc) {
             BARE_KEY => Some(BareKey(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode { self.0 }
+
+    pub fn text(self, doc: &TomlDoc) -> &str {
+        match self.cst().kind(doc) {
+            NodeKind::Leaf(text) => text,
+            NodeKind::Internal(_) => unreachable!(),
+        }
+    }
 }
 
-impl<'f> AstNode<'f> for Array<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn cst(self) -> CstNode<'f> { self.cst() }
+impl AstNode for Array {
+    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
 }
 
-impl<'f> From<Array<'f>> for CstNode<'f> {
-    fn from(ast: Array<'f>) -> CstNode<'f> { ast.cst() }
+impl From<Array> for CstNode {
+    fn from(ast: Array) -> CstNode { ast.cst() }
 }
 
-impl<'f> Array<'f> {
-    pub fn cast(node: CstNode<'f>) -> Option<Array<'f>> {
-        match node.symbol() {
+impl Array {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Array> {
+        match node.symbol(doc) {
             ARRAY => Some(Array(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode { self.0 }
 
-    pub fn values(self) -> AstChildren<'f, Value<'f>> {
-        AstChildren::new(self.cst().children())
+    pub fn values(self, doc: &TomlDoc) -> AstChildren<Value> {
+        AstChildren::new(self.cst(), doc)
     }
 }
 
-impl<'f> AstNode<'f> for Dict<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn cst(self) -> CstNode<'f> { self.cst() }
+impl AstNode for Dict {
+    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
 }
 
-impl<'f> From<Dict<'f>> for CstNode<'f> {
-    fn from(ast: Dict<'f>) -> CstNode<'f> { ast.cst() }
+impl From<Dict> for CstNode {
+    fn from(ast: Dict) -> CstNode { ast.cst() }
 }
 
-impl<'f> Dict<'f> {
-    pub fn cast(node: CstNode<'f>) -> Option<Dict<'f>> {
-        match node.symbol() {
+impl Dict {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Dict> {
+        match node.symbol(doc) {
             DICT => Some(Dict(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode { self.0 }
 
-    pub fn entries(self) -> AstChildren<'f, Entry<'f>> {
-        AstChildren::new(self.cst().children())
+    pub fn entries(self, doc: &TomlDoc) -> AstChildren<Entry> {
+        AstChildren::new(self.cst(), doc)
     }
 }
 
-impl<'f> AstNode<'f> for Number<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn cst(self) -> CstNode<'f> { self.cst() }
+impl AstNode for Number {
+    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
 }
 
-impl<'f> From<Number<'f>> for CstNode<'f> {
-    fn from(ast: Number<'f>) -> CstNode<'f> { ast.cst() }
+impl From<Number> for CstNode {
+    fn from(ast: Number) -> CstNode { ast.cst() }
 }
 
-impl<'f> Number<'f> {
-    pub fn cast(node: CstNode<'f>) -> Option<Number<'f>> {
-        match node.symbol() {
+impl Number {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Number> {
+        match node.symbol(doc) {
             NUMBER => Some(Number(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode { self.0 }
+
+    pub fn text(self, doc: &TomlDoc) -> &str {
+        match self.cst().kind(doc) {
+            NodeKind::Leaf(text) => text,
+            NodeKind::Internal(_) => unreachable!(),
+        }
+    }
 }
 
-impl<'f> AstNode<'f> for Bool<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn cst(self) -> CstNode<'f> { self.cst() }
+impl AstNode for Bool {
+    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
 }
 
-impl<'f> From<Bool<'f>> for CstNode<'f> {
-    fn from(ast: Bool<'f>) -> CstNode<'f> { ast.cst() }
+impl From<Bool> for CstNode {
+    fn from(ast: Bool) -> CstNode { ast.cst() }
 }
 
-impl<'f> Bool<'f> {
-    pub fn cast(node: CstNode<'f>) -> Option<Bool<'f>> {
-        match node.symbol() {
+impl Bool {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Bool> {
+        match node.symbol(doc) {
             BOOL => Some(Bool(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode { self.0 }
+
+    pub fn text(self, doc: &TomlDoc) -> &str {
+        match self.cst().kind(doc) {
+            NodeKind::Leaf(text) => text,
+            NodeKind::Internal(_) => unreachable!(),
+        }
+    }
 }
 
-impl<'f> AstNode<'f> for DateTime<'f> {
-    fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn cst(self) -> CstNode<'f> { self.cst() }
+impl AstNode for DateTime {
+    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
 }
 
-impl<'f> From<DateTime<'f>> for CstNode<'f> {
-    fn from(ast: DateTime<'f>) -> CstNode<'f> { ast.cst() }
+impl From<DateTime> for CstNode {
+    fn from(ast: DateTime) -> CstNode { ast.cst() }
 }
 
-impl<'f> DateTime<'f> {
-    pub fn cast(node: CstNode<'f>) -> Option<DateTime<'f>> {
-        match node.symbol() {
+impl DateTime {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<DateTime> {
+        match node.symbol(doc) {
             DATE_TIME => Some(DateTime(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode<'f> { self.0 }
+    pub fn cst(self) -> CstNode { self.0 }
+
+    pub fn text(self, doc: &TomlDoc) -> &str {
+        match self.cst().kind(doc) {
+            NodeKind::Leaf(text) => text,
+            NodeKind::Internal(_) => unreachable!(),
+        }
+    }
 }

@@ -7,6 +7,7 @@ fn descr() -> Vec<AstNode> {
             symbols: Vec::new(),
             kinds: Vec::new(),
             methods: Vec::new(),
+            text: false,
         }
     }
 
@@ -18,13 +19,13 @@ fn descr() -> Vec<AstNode> {
         n("Entry").methods(&["keys", "value"]),
         n("Key").kinds(&["StringLit", "BareKey"]),
         n("Value").kinds(&["Array", "Dict", "Number", "Bool", "DateTime", "StringLit"]),
-        n("StringLit").symbols(&["BASIC_STRING", "MULTILINE_BASIC_STRING", "LITERAL_STRING", "MULTILINE_LITERAL_STRING"]),
-        n("BareKey"),
+        n("StringLit").symbols(&["BASIC_STRING", "MULTILINE_BASIC_STRING", "LITERAL_STRING", "MULTILINE_LITERAL_STRING"]).text(),
+        n("BareKey").text(),
         n("Array").methods(&["values"]),
         n("Dict").method("entries", "Entry"),
-        n("Number"),
-        n("Bool"),
-        n("DateTime"),
+        n("Number").text(),
+        n("Bool").text(),
+        n("DateTime").text(),
     ]
 }
 
@@ -33,6 +34,7 @@ struct AstNode {
     symbols: Vec<&'static str>,
     kinds: Vec<&'static str>,
     methods: Vec<Method>,
+    text: bool,
 }
 
 impl AstNode {
@@ -71,6 +73,11 @@ impl AstNode {
         self.symbols.extend(names.iter().map(|&name| name));
         self
     }
+
+    fn text(mut self) -> AstNode {
+        self.text = true;
+        self
+    }
 }
 
 struct Method {
@@ -87,17 +94,17 @@ enum Arity {
 impl Method {
     fn ret_type(&self) -> String {
         match self.arity {
-            Arity::One => format!("{}<'f>", self.type_name),
-            Arity::Many => format!("AstChildren<'f, {}<'f>>", self.type_name),
+            Arity::One => format!("{}", self.type_name),
+            Arity::Many => format!("AstChildren<{}>", self.type_name),
         }
     }
 
     fn body(&self) -> &'static str {
         match self.arity {
             Arity::One =>
-                "AstChildren::new(self.cst().children()).next().unwrap()",
+                "AstChildren::new(self.cst(), doc).next().unwrap()",
             Arity::Many =>
-                "AstChildren::new(self.cst().children())",
+                "AstChildren::new(self.cst(), doc)",
         }
     }
 }
@@ -122,21 +129,20 @@ pub fn gen_ast() -> String {
         }};
     }
     ln!("use {{");
-    ln!("CstNode,");
-    ln!("ast::{{AstNode, AstChildren}},");
-    ln!("symbols::*,");
+    ln!("TomlDoc, CstNode, AstNode, AstChildren, NodeKind,");
+    ln!("symbol::*,");
     ln!("}};");
     ln!();
 
     for n in descr.iter() {
         ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
-        ln!("pub struct {}<'f>(CstNode<'f>);", n.name);
+        ln!("pub struct {}(CstNode);", n.name);
         ln!();
 
         if !n.kinds.is_empty() {
-            ln!("pub enum {}Kind<'f> {{", n.name);
+            ln!("pub enum {}Kind {{", n.name);
             for k in n.kinds.iter() {
-                ln!("{}({}<'f>),", k, k);
+                ln!("{k}({k}),", k=k);
             }
             ln!("}}");
             ln!();
@@ -145,26 +151,25 @@ pub fn gen_ast() -> String {
 
     for n in descr.iter() {
         ln!();
-        ln!("impl<'f> AstNode<'f> for {}<'f> {{", n.name);
+        ln!("impl AstNode for {} {{", n.name);
         {
-            ln!("fn cast(node: CstNode<'f>) -> Option<Self> where Self: Sized {{ Self::cast(node) }}");
-            ln!("fn cst(self) -> CstNode<'f> {{ self.cst() }}");
+            ln!("fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized {{ Self::cast(node, doc) }}");
         }
         ln!("}}");
         ln!();
 
-        ln!("impl<'f> From<{}<'f>> for CstNode<'f> {{", n.name);
+        ln!("impl From<{}> for CstNode {{", n.name);
         {
-            ln!("fn from(ast: {}<'f>) -> CstNode<'f> {{ ast.cst() }}", n.name);
+            ln!("fn from(ast: {}) -> CstNode {{ ast.cst() }}", n.name);
         }
         ln!("}}");
         ln!();
 
-        ln!("impl<'f> {}<'f> {{", n.name);
+        ln!("impl {} {{", n.name);
         {
-            ln!("pub fn cast(node: CstNode<'f>) -> Option<{}<'f>> {{", n.name);
+            ln!("pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<{}> {{", n.name);
             {
-                ln!("match node.symbol() {{");
+                ln!("match node.symbol(doc) {{");
                 let symbols = if n.symbols.is_empty() {
                     vec![n.name.to_shouty_snake_case()]
                 } else {
@@ -178,16 +183,25 @@ pub fn gen_ast() -> String {
             }
             ln!("}}");
             ln!();
-            ln!("pub fn cst(self) -> CstNode<'f> {{ self.0 }}");
-            if !n.kinds.is_empty() || !n.methods.is_empty() {
+            ln!("pub fn cst(self) -> CstNode {{ self.0 }}");
+            if !n.kinds.is_empty() || !n.methods.is_empty() || n.text {
                 ln!();
             }
 
+            if n.text {
+                ln!("pub fn text(self, doc: &TomlDoc) -> &str {{");
+                ln!("match self.cst().kind(doc) {{");
+                ln!("NodeKind::Leaf(text) => text,");
+                ln!("NodeKind::Internal(_) => unreachable!(),");
+                ln!("}}");
+                ln!("}}");
+            }
+
             if !n.kinds.is_empty() {
-                ln!("pub fn kind(self) -> {}Kind<'f> {{", n.name);
-                ln!("let node = self.cst().children().next().unwrap();");
+                ln!("pub fn kind(self, doc: &TomlDoc) -> {}Kind {{", n.name);
+                ln!("let node = self.cst().children(doc).first().unwrap();");
                 for k in n.kinds.iter() {
-                    ln!("if let Some(node) = {}::cast(node) {{", k);
+                    ln!("if let Some(node) = {}::cast(node, doc) {{", k);
                     ln!("return {}Kind::{}(node);", n.name, k);
                     ln!("}}");
                 }
@@ -197,7 +211,7 @@ pub fn gen_ast() -> String {
             }
 
             for m in n.methods.iter() {
-                ln!("pub fn {}(self) -> {} {{", m.name, m.ret_type());
+                ln!("pub fn {}(self, doc: &TomlDoc) -> {} {{", m.name, m.ret_type());
                 ln!("{}", m.body());
                 ln!("}}");
             }

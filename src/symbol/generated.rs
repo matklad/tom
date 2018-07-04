@@ -1,65 +1,65 @@
-use super::{SymbolInfo, TomlSymbol, Symbol};
+use super::{SymbolInfo, Symbol, NonZeroU8};
 
 pub(crate) const SYMBOLS: &[SymbolInfo] = &[
-    SymbolInfo(00, "ERROR"),
-    SymbolInfo(01, "WHITESPACE"),
-    SymbolInfo(02, "COMMENT"),
-    SymbolInfo(03, "DOC"),
-    SymbolInfo(04, "ENTRY"),
-    SymbolInfo(05, "KEY"),
-    SymbolInfo(06, "VALUE"),
-    SymbolInfo(07, "ARRAY"),
-    SymbolInfo(08, "DICT"),
-    SymbolInfo(09, "TABLE_HEADER"),
-    SymbolInfo(10, "TABLE"),
-    SymbolInfo(11, "ARRAY_TABLE"),
-    SymbolInfo(12, "EQ"),
-    SymbolInfo(13, "DOT"),
-    SymbolInfo(14, "COMMA"),
-    SymbolInfo(15, "L_BRACK"),
-    SymbolInfo(16, "R_BRACK"),
-    SymbolInfo(17, "L_CURLY"),
-    SymbolInfo(18, "R_CURLY"),
-    SymbolInfo(19, "NUMBER"),
-    SymbolInfo(20, "BOOL"),
-    SymbolInfo(21, "BARE_KEY"),
-    SymbolInfo(22, "BASIC_STRING"),
-    SymbolInfo(23, "MULTILINE_BASIC_STRING"),
-    SymbolInfo(24, "LITERAL_STRING"),
-    SymbolInfo(25, "MULTILINE_LITERAL_STRING"),
-    SymbolInfo(26, "DATE_TIME"),
-    SymbolInfo(27, "BARE_KEY_OR_NUMBER"),
-    SymbolInfo(28, "BARE_KEY_OR_DATE"),
-    SymbolInfo(29, "EOF"),
+    SymbolInfo("ERROR"),
+    SymbolInfo("WHITESPACE"),
+    SymbolInfo("COMMENT"),
+    SymbolInfo("DOC"),
+    SymbolInfo("ENTRY"),
+    SymbolInfo("KEY"),
+    SymbolInfo("VALUE"),
+    SymbolInfo("ARRAY"),
+    SymbolInfo("DICT"),
+    SymbolInfo("TABLE_HEADER"),
+    SymbolInfo("TABLE"),
+    SymbolInfo("ARRAY_TABLE"),
+    SymbolInfo("EQ"),
+    SymbolInfo("DOT"),
+    SymbolInfo("COMMA"),
+    SymbolInfo("L_BRACK"),
+    SymbolInfo("R_BRACK"),
+    SymbolInfo("L_CURLY"),
+    SymbolInfo("R_CURLY"),
+    SymbolInfo("NUMBER"),
+    SymbolInfo("BOOL"),
+    SymbolInfo("BARE_KEY"),
+    SymbolInfo("BASIC_STRING"),
+    SymbolInfo("MULTILINE_BASIC_STRING"),
+    SymbolInfo("LITERAL_STRING"),
+    SymbolInfo("MULTILINE_LITERAL_STRING"),
+    SymbolInfo("DATE_TIME"),
+    SymbolInfo("BARE_KEY_OR_NUMBER"),
+    SymbolInfo("BARE_KEY_OR_DATE"),
+    SymbolInfo("EOF"),
 ];
 
-pub const ERROR: TomlSymbol                          = TomlSymbol(Symbol(SYMBOLS[00].0));
-pub const WHITESPACE: TomlSymbol                     = TomlSymbol(Symbol(SYMBOLS[01].0));
-pub const COMMENT: TomlSymbol                        = TomlSymbol(Symbol(SYMBOLS[02].0));
-pub const DOC: TomlSymbol                            = TomlSymbol(Symbol(SYMBOLS[03].0));
-pub const ENTRY: TomlSymbol                          = TomlSymbol(Symbol(SYMBOLS[04].0));
-pub const KEY: TomlSymbol                            = TomlSymbol(Symbol(SYMBOLS[05].0));
-pub const VALUE: TomlSymbol                            = TomlSymbol(Symbol(SYMBOLS[06].0));
-pub const ARRAY: TomlSymbol                          = TomlSymbol(Symbol(SYMBOLS[07].0));
-pub const DICT: TomlSymbol                           = TomlSymbol(Symbol(SYMBOLS[08].0));
-pub const TABLE_HEADER: TomlSymbol                   = TomlSymbol(Symbol(SYMBOLS[09].0));
-pub const TABLE: TomlSymbol                          = TomlSymbol(Symbol(SYMBOLS[10].0));
-pub const ARRAY_TABLE: TomlSymbol                    = TomlSymbol(Symbol(SYMBOLS[11].0));
-pub const EQ: TomlSymbol                             = TomlSymbol(Symbol(SYMBOLS[12].0));
-pub const DOT: TomlSymbol                            = TomlSymbol(Symbol(SYMBOLS[13].0));
-pub const COMMA: TomlSymbol                          = TomlSymbol(Symbol(SYMBOLS[14].0));
-pub const L_BRACK: TomlSymbol                        = TomlSymbol(Symbol(SYMBOLS[15].0));
-pub const R_BRACK: TomlSymbol                        = TomlSymbol(Symbol(SYMBOLS[16].0));
-pub const L_CURLY: TomlSymbol                        = TomlSymbol(Symbol(SYMBOLS[17].0));
-pub const R_CURLY: TomlSymbol                        = TomlSymbol(Symbol(SYMBOLS[18].0));
-pub const NUMBER: TomlSymbol                         = TomlSymbol(Symbol(SYMBOLS[19].0));
-pub const BOOL: TomlSymbol                           = TomlSymbol(Symbol(SYMBOLS[20].0));
-pub const BARE_KEY: TomlSymbol                       = TomlSymbol(Symbol(SYMBOLS[21].0));
-pub const BASIC_STRING: TomlSymbol                   = TomlSymbol(Symbol(SYMBOLS[22].0));
-pub const MULTILINE_BASIC_STRING: TomlSymbol         = TomlSymbol(Symbol(SYMBOLS[23].0));
-pub const LITERAL_STRING: TomlSymbol                 = TomlSymbol(Symbol(SYMBOLS[24].0));
-pub const MULTILINE_LITERAL_STRING: TomlSymbol       = TomlSymbol(Symbol(SYMBOLS[25].0));
-pub const DATE_TIME: TomlSymbol                      = TomlSymbol(Symbol(SYMBOLS[26].0));
-pub const BARE_KEY_OR_NUMBER: TomlSymbol             = TomlSymbol(Symbol(SYMBOLS[27].0));
-pub const BARE_KEY_OR_DATE: TomlSymbol               = TomlSymbol(Symbol(SYMBOLS[28].0));
-pub const EOF: TomlSymbol                            = TomlSymbol(Symbol(SYMBOLS[29].0));
+pub const ERROR: Symbol                              = Symbol(unsafe { NonZeroU8::new_unchecked(0 + 1) });
+pub const WHITESPACE: Symbol                         = Symbol(unsafe { NonZeroU8::new_unchecked(1 + 1) });
+pub const COMMENT: Symbol                            = Symbol(unsafe { NonZeroU8::new_unchecked(2 + 1) });
+pub const DOC: Symbol                                = Symbol(unsafe { NonZeroU8::new_unchecked(3 + 1) });
+pub const ENTRY: Symbol                              = Symbol(unsafe { NonZeroU8::new_unchecked(4 + 1) });
+pub const KEY: Symbol                                = Symbol(unsafe { NonZeroU8::new_unchecked(5 + 1) });
+pub const VALUE: Symbol                              = Symbol(unsafe { NonZeroU8::new_unchecked(6 + 1) });
+pub const ARRAY: Symbol                              = Symbol(unsafe { NonZeroU8::new_unchecked(7 + 1) });
+pub const DICT: Symbol                               = Symbol(unsafe { NonZeroU8::new_unchecked(8 + 1) });
+pub const TABLE_HEADER: Symbol                       = Symbol(unsafe { NonZeroU8::new_unchecked(9 + 1) });
+pub const TABLE: Symbol                              = Symbol(unsafe { NonZeroU8::new_unchecked(10 + 1) });
+pub const ARRAY_TABLE: Symbol                        = Symbol(unsafe { NonZeroU8::new_unchecked(11 + 1) });
+pub const EQ: Symbol                                 = Symbol(unsafe { NonZeroU8::new_unchecked(12 + 1) });
+pub const DOT: Symbol                                = Symbol(unsafe { NonZeroU8::new_unchecked(13 + 1) });
+pub const COMMA: Symbol                              = Symbol(unsafe { NonZeroU8::new_unchecked(14 + 1) });
+pub const L_BRACK: Symbol                            = Symbol(unsafe { NonZeroU8::new_unchecked(15 + 1) });
+pub const R_BRACK: Symbol                            = Symbol(unsafe { NonZeroU8::new_unchecked(16 + 1) });
+pub const L_CURLY: Symbol                            = Symbol(unsafe { NonZeroU8::new_unchecked(17 + 1) });
+pub const R_CURLY: Symbol                            = Symbol(unsafe { NonZeroU8::new_unchecked(18 + 1) });
+pub const NUMBER: Symbol                             = Symbol(unsafe { NonZeroU8::new_unchecked(19 + 1) });
+pub const BOOL: Symbol                               = Symbol(unsafe { NonZeroU8::new_unchecked(20 + 1) });
+pub const BARE_KEY: Symbol                           = Symbol(unsafe { NonZeroU8::new_unchecked(21 + 1) });
+pub const BASIC_STRING: Symbol                       = Symbol(unsafe { NonZeroU8::new_unchecked(22 + 1) });
+pub const MULTILINE_BASIC_STRING: Symbol             = Symbol(unsafe { NonZeroU8::new_unchecked(23 + 1) });
+pub const LITERAL_STRING: Symbol                     = Symbol(unsafe { NonZeroU8::new_unchecked(24 + 1) });
+pub const MULTILINE_LITERAL_STRING: Symbol           = Symbol(unsafe { NonZeroU8::new_unchecked(25 + 1) });
+pub const DATE_TIME: Symbol                          = Symbol(unsafe { NonZeroU8::new_unchecked(26 + 1) });
+pub const BARE_KEY_OR_NUMBER: Symbol                 = Symbol(unsafe { NonZeroU8::new_unchecked(27 + 1) });
+pub const BARE_KEY_OR_DATE: Symbol                   = Symbol(unsafe { NonZeroU8::new_unchecked(28 + 1) });
+pub const EOF: Symbol                                = Symbol(unsafe { NonZeroU8::new_unchecked(29 + 1) });
