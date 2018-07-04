@@ -5,6 +5,12 @@ extern crate text_unit;
 extern crate lazy_static;
 #[macro_use]
 extern crate typed_index_derive;
+#[macro_use]
+extern crate uncover;
+
+define_uncover_macros!(
+    enable_if(cfg!(debug_assertions))
+);
 
 pub mod ast;
 mod intern;
@@ -13,15 +19,18 @@ pub mod symbol;
 mod tree;
 mod visitor;
 mod validator;
+mod edit;
 
 use std::{marker::PhantomData, num::NonZeroU8, cmp};
 
 use {
     intern::{Intern, InternId},
+    parser::ParseTree,
     tree::{NodeId, TreeData},
 };
 
 pub use text_unit::{TextRange, TextUnit};
+pub use edit::Position;
 
 type ID = Symbol;
 type LD = (Symbol, InternId);
@@ -53,20 +62,30 @@ impl SyntaxError {
 }
 
 pub struct TomlDoc {
-    tree: Tree,
+    tree: ParseTree,
     data: Vec<NodeData>,
-    intern: Intern,
-    errors: Vec<SyntaxError>,
+    edit_in_progress: bool,
+    smart_ws: bool,
 }
 
 impl TomlDoc {
     pub fn new(text: &str) -> TomlDoc {
-        let pt = parser::parse(text);
+        let mut pt = ParseTree {
+            tree: Tree::new(symbol::DOC),
+            intern: Intern::new(),
+            errors: Vec::new(),
+        };
+        let root = pt.tree.root();
+        parser::parse(text, &mut pt, root);
         assemble(pt)
     }
 
     pub fn cst(&self) -> CstNode {
-        CstNode(self.tree.root())
+        CstNode(self.tree.tree.root())
+    }
+
+    pub fn ast(&self) -> ast::Doc {
+        ast::Doc::cast(self.cst(), self).unwrap()
     }
 
     pub fn debug_dump(&self) -> String {
@@ -74,12 +93,15 @@ impl TomlDoc {
         go(self.cst(), 0, &self, &mut result);
 
         let text = self.cst().get_text(self);
-        if !self.errors.is_empty() {
+        if !self.tree.errors.is_empty() && !self.edit_in_progress {
             result += "\n";
-            for e in self.errors.iter() {
+            for e in self.tree.errors.iter() {
                 let text = &text[e.range];
                 result += &format!("error@{:?} {:?}: {}\n", e.range(), text, e.message());
             }
+        }
+        if self.edit_in_progress {
+            result += "modified document, error info unavailable\n";
         }
         return result;
 
@@ -91,7 +113,7 @@ impl TomlDoc {
             match node.kind(doc) {
                 NodeKind::Leaf(text) => {
                     if !text.chars().all(char::is_whitespace) {
-                       buff.push_str(&format!(" {:?}", text));
+                        buff.push_str(&format!(" {:?}", text));
                     }
                 }
                 NodeKind::Internal(_) => (),
@@ -114,7 +136,7 @@ impl TomlDoc {
                 let range = intersect(node_range, range).unwrap();
                 let range = relative_range(node_range.start(), range);
                 buff.push_str(&text[range]);
-            }
+            },
         );
         return buff;
     }
@@ -130,20 +152,23 @@ pub enum NodeKind<'a> {
 
 impl CstNode {
     pub fn symbol(self, doc: &TomlDoc) -> Symbol {
-        *match self.0.data(&doc.tree) {
-            TreeData::Interior(s) => s,
+        *match self.0.data(&doc.tree.tree) {
+            TreeData::Internal(s) => s,
             TreeData::Leaf((s, _)) => s,
         }
     }
 
     pub fn range(self, doc: &TomlDoc) -> TextRange {
+        if doc.edit_in_progress {
+            panic!("range info is unavailable for modified documents")
+        }
         doc.data[self.0.to_idx()].range
     }
 
     pub fn kind(self, doc: &TomlDoc) -> NodeKind {
-        match self.0.data(&doc.tree) {
-            TreeData::Leaf((_, idx)) => NodeKind::Leaf(doc.intern.resolve(*idx)),
-            TreeData::Interior(_) => NodeKind::Internal(self.children(doc)),
+        match self.0.data(&doc.tree.tree) {
+            TreeData::Leaf((_, idx)) => NodeKind::Leaf(doc.tree.intern.resolve(*idx)),
+            TreeData::Internal(_) => NodeKind::Internal(self.children(doc)),
         }
     }
 
@@ -154,13 +179,29 @@ impl CstNode {
         }
     }
 
+    pub fn parent(self, doc: &TomlDoc) -> Option<CstNode> {
+        self.0.parent(&doc.tree.tree).map(CstNode)
+    }
+
     pub fn children(self, doc: &TomlDoc) -> Children {
-        Children(self.0.children(&doc.tree))
+        Children(self.0.children(&doc.tree.tree))
+    }
+
+    pub fn next_sibling(self, doc: &TomlDoc) -> Option<CstNode> {
+        self.0.next_sibling(&doc.tree.tree).map(CstNode)
+    }
+
+    pub fn prev_sibling(self, doc: &TomlDoc) -> Option<CstNode> {
+        self.0.prev_sibling(&doc.tree.tree).map(CstNode)
+    }
+
+    pub(crate) fn write_text(self, doc: &TomlDoc, buff: &mut String) {
+        process_leaves(self, doc, &mut |_| true, &mut |_, text| buff.push_str(text));
     }
 
     pub fn get_text(self, doc: &TomlDoc) -> String {
         let mut buff = String::new();
-        process_leaves(self, doc, &mut |_| true, &mut |_, text| buff.push_str(text));
+        self.write_text(doc, &mut buff);
         return buff;
     }
 
@@ -195,6 +236,7 @@ impl<'a> IntoIterator for Children<'a> {
 }
 
 pub struct ChildrenIter<'a>(tree::ChildrenIter<'a, ID, LD>);
+
 impl<'a> Iterator for ChildrenIter<'a> {
     type Item = CstNode;
     fn next(&mut self) -> Option<CstNode> {
@@ -203,6 +245,7 @@ impl<'a> Iterator for ChildrenIter<'a> {
 }
 
 pub struct RevChildrenIter<'a>(tree::RevChildrenIter<'a, ID, LD>);
+
 impl<'a> Iterator for RevChildrenIter<'a> {
     type Item = CstNode;
     fn next(&mut self) -> Option<CstNode> {
@@ -219,7 +262,8 @@ pub trait AstNode: Into<CstNode> + Clone + Copy {
 
 pub struct AstChildren<'a, A: AstNode> {
     inner: ChildrenIter<'a>,
-    doc: &'a TomlDoc, // TODO: get rid of,
+    doc: &'a TomlDoc,
+    // TODO: get rid of,
     phantom: PhantomData<A>,
 }
 
@@ -260,14 +304,13 @@ fn assemble(pt: parser::ParseTree) -> TomlDoc {
     ];
     go(pt.tree.root(), 0.into(), &mut data, &pt.tree, &pt.intern);
     let mut doc = TomlDoc {
-        tree: pt.tree,
+        tree: pt,
         data,
-        intern: pt.intern,
-        errors: pt.errors,
+        edit_in_progress: false,
+        smart_ws: true,
     };
     let validation_errors = validator::validate(&doc);
-    eprintln!("{:?}", validation_errors);
-    doc.errors.extend(validation_errors);
+    doc.tree.errors.extend(validation_errors);
     return doc;
 
     fn go(
@@ -282,7 +325,7 @@ fn assemble(pt: parser::ParseTree) -> TomlDoc {
             TreeData::Leaf(&(_, idx)) => {
                 len += (intern.resolve(idx).len() as u32).into();
             }
-            TreeData::Interior(_) => {
+            TreeData::Internal(_) => {
                 for child in node.children(tree) {
                     len += go(child, start_offset + len, data, tree, intern);
                 }
@@ -314,7 +357,7 @@ fn process_leaves(
     cb: &mut impl FnMut(CstNode, &str),
 ) {
     if !node_filter(node) {
-        return
+        return;
     }
     match node.kind(doc) {
         NodeKind::Leaf(text) => cb(node, text),

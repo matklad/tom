@@ -13,6 +13,10 @@ pub trait TableHeaderOwner: AstNode {
     fn header(self, doc: &TomlDoc) -> ast::TableHeader;
 }
 
+pub trait KeyOwner: AstNode {
+    fn keys(self, doc: &TomlDoc) -> AstChildren<ast::Key>;
+}
+
 impl ast::Key {
     pub fn name(self, doc: &TomlDoc) -> Cow<str> {
         match self.kind(doc) {
@@ -38,14 +42,14 @@ impl ast::Bool {
 }
 
 impl ast::Number {
-    pub fn value(self, doc: &TomlDoc) -> i64 {
+    pub fn value(self, _doc: &TomlDoc) -> i64 {
         unimplemented!()
     }
 }
 
 impl ast::DateTime {
     // chrono?
-    pub fn value(self, doc: &TomlDoc) -> ::std::time::SystemTime {
+    pub fn value(self, _doc: &TomlDoc) -> ::std::time::SystemTime {
         unimplemented!()
     }
 }
@@ -83,5 +87,17 @@ impl TableHeaderOwner for ast::Table {
 impl TableHeaderOwner for ast::ArrayTable {
     fn header(self, doc: &TomlDoc) -> ast::TableHeader {
         self.header(doc)
+    }
+}
+
+impl KeyOwner for ast::TableHeader {
+    fn keys(self, doc: &TomlDoc) -> AstChildren<ast::Key> {
+        self.keys(doc)
+    }
+}
+
+impl KeyOwner for ast::Entry {
+    fn keys(self, doc: &TomlDoc) -> AstChildren<ast::Key> {
+        self.keys(doc)
     }
 }

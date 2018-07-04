@@ -40,7 +40,7 @@ impl <ID, LD> Node<ID, LD> {
 }
 
 pub(crate) enum TreeData<ID, LD> {
-    Interior(ID),
+    Internal(ID),
     Leaf(LD),
 }
 
@@ -53,6 +53,10 @@ enum NodeKind<ID, LD> {
     Leaf {
         data: LD
     }
+}
+
+pub(crate) enum InsertPos {
+    First, Last, After(NodeId), Before(NodeId)
 }
 
 impl<ID, LD> Tree<ID, LD> {
@@ -76,6 +80,160 @@ impl<ID, LD> Tree<ID, LD> {
     }
 
     pub fn len(&self) -> usize { self.nodes.len() }
+
+    pub fn insert_child(&mut self, parent: NodeId, new_child: NodeId, insert_pos: InsertPos) {
+        assert!(new_child.parent(self).is_none());
+        //TODO: deal with potential cycles
+        self.get_mut(new_child).parent = Some(parent);
+        self.do_insert(parent, new_child, insert_pos);
+        parent.check_invariants(self);
+        new_child.check_invariants(self);
+    }
+
+    fn do_insert(&mut self, parent: NodeId, new_child: NodeId, insert_pos: InsertPos) {
+        let (prev, next_cyclic) = match insert_pos {
+            InsertPos::First => {
+                covered_by!("insert_first");
+                return self.do_insert_first(parent, new_child)
+            },
+            InsertPos::Last => {
+                let first_last =  {
+                    let children = parent.children(self);
+                    (children.first(), children.last())
+                };
+                match first_last {
+                    (Some(first), Some(last)) => {
+                        covered_by!("insert_last_with_children");
+                        (last, first)
+                    },
+                    _ => {
+                        covered_by!("insert_last_no_children");
+                        return self.do_insert_first(parent, new_child)
+                    },
+                }
+            }
+            InsertPos::After(prev) => {
+                covered_by!("insert_after");
+                assert_eq!(prev.parent(self), Some(parent));
+                (prev, prev.next_sibling_cyclic(self))
+            },
+            InsertPos::Before(next) => {
+                assert_eq!(next.parent(self), Some(parent));
+                match next.prev_sibling(self) {
+                    Some(prev) => {
+                        covered_by!("insert_before_between");
+                        (prev, next)
+                    },
+                    None => {
+                        covered_by!("insert_before_first");
+                        return self.do_insert_first(parent, new_child)
+                    },
+                }
+            }
+        };
+
+        self.get_mut(new_child).next_sibling = prev.next_sibling(self);
+        self.get_mut(new_child).prev_sibling_cyclic = prev;
+        self.get_mut(prev).next_sibling = Some(new_child);
+        self.get_mut(next_cyclic).prev_sibling_cyclic = new_child;
+    }
+
+    fn do_insert_first(&mut self, parent: NodeId, new_child: NodeId) {
+        let first_child = parent.children(self).first();
+        parent.set_fist_child(self, Some(new_child));
+        self.get_mut(new_child).next_sibling = first_child;
+        if let Some(first_child) = first_child {
+            covered_by!("insert_first_with_children");
+            self.get_mut(new_child).prev_sibling_cyclic = first_child.prev_sibling_cyclic(self);
+            self.get_mut(first_child).prev_sibling_cyclic = new_child;
+        } else {
+            covered_by!("insert_first_no_children");
+        }
+    }
+
+    pub fn detach(&mut self, node: NodeId) {
+        let parent = match node.parent(self) {
+            Some(parent) => parent,
+            None => panic!("can't detach node without parent"),
+        };
+        let next_sibling = node.next_sibling(self);
+        let prev_sibling = node.prev_sibling(self);
+        let next_sibling_cyclic = node.next_sibling_cyclic(self);
+        let prev_sibling_cyclic = node.prev_sibling_cyclic(self);
+
+        {
+            if parent.children(self).first() == Some(node) {
+                covered_by!("detach_first");
+                parent.set_fist_child(self, next_sibling);
+            }
+            if let Some(s) = prev_sibling {
+                covered_by!("detach_non_last");
+                self.get_mut(s).next_sibling = next_sibling;
+            }
+
+            if node == next_sibling_cyclic {
+                covered_by!("detach_single");
+                assert_eq!(node, prev_sibling_cyclic);
+            } else {
+                covered_by!("detach_mid");
+                assert_ne!(node, prev_sibling_cyclic);
+                self.get_mut(next_sibling_cyclic).prev_sibling_cyclic = prev_sibling_cyclic;
+            }
+
+            self.get_mut(node).parent = None;
+            self.get_mut(node).next_sibling = None;
+            self.get_mut(node).prev_sibling_cyclic = node;
+        }
+
+        node.check_invariants(self);
+        parent.check_invariants(self);
+        next_sibling_cyclic.check_invariants(self);
+        prev_sibling_cyclic.check_invariants(self);
+    }
+
+    pub fn replace(&mut self, node: NodeId, replacement: NodeId) {
+        assert!(replacement.parent(self).is_none());
+        //TODO: deal with potential cycles
+        let parent = match node.parent(self) {
+            Some(parent) => parent,
+            None => panic!("can't replace node without parent"),
+        };
+
+        let next_sibling = node.next_sibling(self);
+        let prev_sibling = node.prev_sibling(self);
+        let next_sibling_cyclic = node.next_sibling_cyclic(self);
+        let prev_sibling_cyclic = node.prev_sibling_cyclic(self);
+
+        {
+            if parent.children(self).first() == Some(node) {
+                parent.set_fist_child(self, Some(replacement));
+            }
+            if let Some(s) = prev_sibling {
+                self.get_mut(s).next_sibling = Some(replacement);
+            }
+
+            if node == next_sibling_cyclic {
+                assert_eq!(node, prev_sibling_cyclic);
+            } else {
+                assert_ne!(node, prev_sibling_cyclic);
+                self.get_mut(next_sibling_cyclic).prev_sibling_cyclic = replacement;
+            }
+
+            self.get_mut(replacement).parent = Some(parent);
+            self.get_mut(replacement).next_sibling = next_sibling;
+            self.get_mut(replacement).prev_sibling_cyclic = prev_sibling_cyclic;
+
+            self.get_mut(node).parent = None;
+            self.get_mut(node).next_sibling = None;
+            self.get_mut(node).prev_sibling_cyclic = node;
+        }
+
+        replacement.check_invariants(self);
+        node.check_invariants(self);
+        parent.check_invariants(self);
+        next_sibling_cyclic.check_invariants(self);
+        prev_sibling_cyclic.check_invariants(self);
+    }
 
     fn new_node(&mut self, mut node: Node<ID, LD>) -> NodeId {
         let id = NodeId::from_idx(self.nodes.len());
@@ -138,126 +296,9 @@ impl NodeId {
 
     pub fn data<ID, LD>(self, tree: &Tree<ID, LD>) -> TreeData<&ID, &LD> {
         match &tree.get(self).kind {
-            NodeKind::Interior { data, .. } => TreeData::Interior(data),
+            NodeKind::Interior { data, .. } => TreeData::Internal(data),
             NodeKind::Leaf { data } => TreeData::Leaf(data),
         }
-    }
-
-    pub fn is_leaf<ID, LD>(self, tree: &Tree<ID, LD>) -> bool {
-        match &tree.get(self).kind {
-           NodeKind::Interior { .. } => false,
-           NodeKind::Leaf { .. } => true,
-        }
-    }
-
-    pub fn detach<ID, LD>(self, tree: &mut Tree<ID, LD>) {
-        let parent = match self.parent(tree) {
-            Some(parent) => parent,
-            None => panic!("can't detach node without parent"),
-        };
-        let next_sibling = self.next_sibling(tree);
-        let prev_sibling = self.prev_sibling(tree);
-        let next_sibling_cyclic = self.next_sibling_cyclic(tree);
-        let prev_sibling_cyclic = self.prev_sibling_cyclic(tree);
-
-        {
-            if parent.children(tree).first() == Some(self) {
-                parent.set_fist_child(tree, next_sibling);
-            }
-            if let Some(s) = prev_sibling {
-                tree.get_mut(s).next_sibling = next_sibling;
-            }
-
-            if self == next_sibling_cyclic {
-                assert!(self == prev_sibling_cyclic);
-            } else {
-                assert!(self != prev_sibling_cyclic);
-                tree.get_mut(next_sibling_cyclic).prev_sibling_cyclic = prev_sibling_cyclic;
-            }
-
-            tree.get_mut(self).parent = None;
-            tree.get_mut(self).next_sibling = None;
-            tree.get_mut(self).prev_sibling_cyclic = self;
-        }
-
-        self.check_invariants(tree);
-        parent.check_invariants(tree);
-        next_sibling_cyclic.check_invariants(tree);
-        prev_sibling_cyclic.check_invariants(tree);
-    }
-
-    pub fn replace<ID, LD>(self, tree: &mut Tree<ID, LD>, replacement: Self) {
-        assert!(replacement.parent(tree).is_none());
-        let parent = match self.parent(tree) {
-            Some(parent) => parent,
-            None => panic!("can't replace node without parent"),
-        };
-
-        let next_sibling = self.next_sibling(tree);
-        let prev_sibling = self.prev_sibling(tree);
-        let next_sibling_cyclic = self.next_sibling_cyclic(tree);
-        let prev_sibling_cyclic = self.prev_sibling_cyclic(tree);
-
-        {
-            if parent.children(tree).first() == Some(self) {
-                parent.set_fist_child(tree, Some(replacement));
-            }
-            if let Some(s) = prev_sibling {
-                tree.get_mut(s).next_sibling = Some(replacement);
-            }
-
-            if self == next_sibling_cyclic {
-                assert!(self == prev_sibling_cyclic);
-            } else {
-                assert!(self != prev_sibling_cyclic);
-                tree.get_mut(next_sibling_cyclic).prev_sibling_cyclic = replacement;
-            }
-
-            tree.get_mut(replacement).next_sibling = next_sibling;
-            tree.get_mut(replacement).parent = Some(parent);
-        }
-
-        replacement.check_invariants(tree);
-        self.check_invariants(tree);
-        parent.check_invariants(tree);
-        next_sibling_cyclic.check_invariants(tree);
-        prev_sibling_cyclic.check_invariants(tree);
-    }
-
-    pub fn append_child<ID, LD>(self, tree: &mut Tree<ID, LD>, child: Self) {
-        assert!(child.parent(tree).is_none());
-        match self.children(tree).last() {
-            None => {
-                tree.get_mut(child).parent = Some(self);
-                self.set_fist_child(tree, Some(child));
-            }
-            Some(last) => {
-                last.append_sibling(tree, child);
-            }
-        }
-        self.check_invariants(tree);
-        child.check_invariants(tree);
-    }
-
-    pub fn append_sibling<ID, LD>(self, tree: &mut Tree<ID, LD>, sibling: Self) {
-        assert!(sibling.parent(tree).is_none());
-        let parent = match self.parent(tree) {
-            Some(parent) => parent,
-            None => panic!("can't append sibling to node without a parent"),
-        };
-        let next_sibling = self.next_sibling(tree);
-        let next_sibling_cyclic = self.next_sibling_cyclic(tree);
-
-        {
-            tree.get_mut(sibling).parent = Some(parent);
-            tree.get_mut(sibling).next_sibling = next_sibling;
-            tree.get_mut(sibling).prev_sibling_cyclic = self;
-
-            tree.get_mut(self).next_sibling = Some(sibling);
-            tree.get_mut(next_sibling_cyclic).prev_sibling_cyclic = sibling;
-        }
-        self.check_invariants(tree);
-        sibling.check_invariants(tree);
     }
 
     fn check_invariants<ID, LD>(self, tree: &Tree<ID, LD>) {
@@ -269,13 +310,13 @@ impl NodeId {
             Some(parent) => {
                 assert!(parent.children(tree).iter().any(|c| c == self));
                 if let Some(next) = self.next_sibling(tree) {
-                    assert!(
-                        next.prev_sibling(tree) == Some(self),
+                    assert_eq!(
+                        next.prev_sibling(tree), Some(self),
                         "me: {:?}, next: {:?}, next.prev: {:?}", self, next, next.prev_sibling(tree)
                     );
                 }
                 if let Some(prev) = self.prev_sibling(tree) {
-                    assert!(prev.next_sibling(tree) == Some(self));
+                    assert_eq!(prev.next_sibling(tree), Some(self));
                 }
             }
         }
@@ -358,7 +399,7 @@ impl<'a, ID: 'a, LD: 'a> Iterator for RevChildrenIter<'a, ID, LD> {
 
 #[cfg(test)]
 mod tests {
-    use super::NodeId;
+    use super::{NodeId, InsertPos, TreeData};
     type Tree = super::Tree<(), ()>;
 
     fn print(tree: &Tree) -> String {
@@ -369,8 +410,9 @@ mod tests {
         fn go(tree: &Tree, buff: &mut String, node: NodeId) {
             node.check_invariants(tree);
             buff.push_str(&node.0.to_string());
-            if node.is_leaf(tree) {
-                return;
+            match node.data(tree) {
+                TreeData::Leaf(_) => return,
+                TreeData::Internal(_) => (),
             }
             buff.push_str(" (");
             let mut first = true;
@@ -396,32 +438,81 @@ mod tests {
         let a = t.new_leaf(());
         let b = t.new_leaf(());
         let c = t.new_leaf(());
+        let d = t.new_leaf(());
 
-        root.append_child(&mut t, a);
-        check!("1 (2)");
+        {
+            covers!("insert_last_no_children");
+            t.insert_child(root, a, InsertPos::Last);
+            check!("1 (2)");
+        }
 
-        root.append_child(&mut t, b);
-        check!("1 (2 3)");
+        {
+            covers!("insert_last_with_children");
+            t.insert_child(root, c, InsertPos::Last);
+            check!("1 (2 4)");
+        }
 
-        root.append_child(&mut t, c);
+        {
+            covers!("insert_before_between");
+            t.insert_child(root, b, InsertPos::Before(c));
+            check!("1 (2 3 4)");
+        }
+
+        {
+            covers!("detach_mid");
+            covers!("detach_non_last");
+            t.detach(b);
+            check!("1 (2 4)");
+        }
+
+        {
+            covers!("detach_first");
+            t.detach(a);
+            check!("1 (4)");
+        }
+
+        {
+            covers!("detach_single");
+            t.detach(c);
+            check!("1 ()");
+        }
+
+        {
+            covers!("insert_first");
+            covers!("insert_first_no_children");
+            t.insert_child(root, c, InsertPos::First);
+            check!("1 (4)");
+        }
+
+        {
+            covers!("insert_before_first");
+            t.insert_child(root, a, InsertPos::Before(c));
+            check!("1 (2 4)");
+        }
+
+        {
+            covers!("insert_after");
+            t.insert_child(root, b, InsertPos::After(a));
+            check!("1 (2 3 4)");
+        }
+
+        {
+            covers!("insert_first_with_children");
+            t.insert_child(root, d, InsertPos::First);
+            check!("1 (5 2 3 4)");
+        }
+
+        t.detach(d);
         check!("1 (2 3 4)");
 
-        b.detach(&mut t);
-        check!("1 (2 4)");
+        t.replace(a, d);
+        check!("1 (5 3 4)");
 
-        a.detach(&mut t);
-        check!("1 (4)");
+        t.replace(b, a);
+        check!("1 (5 2 4)");
 
-        c.detach(&mut t);
-        check!("1 ()");
+        t.replace(c, b);
+        check!("1 (5 2 3)");
 
-        root.append_child(&mut t, a);
-        check!("1 (2)");
-
-        a.append_sibling(&mut t, c);
-        check!("1 (2 4)");
-
-        a.append_sibling(&mut t, b);
-        check!("1 (2 3 4)");
     }
 }

@@ -1,7 +1,7 @@
 use {
     intern::Intern,
     symbol::{COMMENT, DOC, ENTRY, TABLE, WHITESPACE},
-    tree::{NodeId, TreeData},
+    tree::{NodeId, TreeData, InsertPos},
     Symbol, SyntaxError, Tree,
 };
 
@@ -14,43 +14,34 @@ pub(crate) struct ParseTree {
     pub errors: Vec<SyntaxError>,
 }
 
-pub(crate) fn parse(input: &str) -> ParseTree {
+pub(crate) fn parse(input: &str, parse_tree: &mut ParseTree, root: NodeId) {
     let tokens = lexer::tokenize(input);
-    let mut sink = EventSink::new(input, &tokens);
-    {
-        let mut parser = Parser {
-            sink: &mut sink,
-            tokens: &tokens,
-            pos: 0,
-        };
-        parser.parse();
-    }
-
-    sink.parse_tree
+    let mut sink = EventSink::new(input, &tokens, parse_tree, root);
+    let mut parser = Parser {
+        sink: &mut sink,
+        tokens: &tokens,
+        pos: 0,
+    };
+    parser.parse();
 }
 
-struct Parser<'s, 't: 's> {
-    sink: &'s mut EventSink<'t>,
+struct Parser<'s, 't: 's, 'a: 's> {
+    sink: &'s mut EventSink<'t, 'a>,
     tokens: &'t lexer::Tokens,
     pos: usize,
 }
 
-struct EventSink<'t> {
+struct EventSink<'t, 'a> {
     pos: lexer::Pos,
     text: &'t str,
     tokens: &'t lexer::Tokens,
-    parse_tree: ParseTree,
+    parse_tree: &'a mut ParseTree,
     stack: Vec<NodeId>,
 }
 
-impl<'t> EventSink<'t> {
-    fn new(text: &'t str, tokens: &'t lexer::Tokens) -> Self {
-        let parse_tree = ParseTree {
-            tree: Tree::new(DOC),
-            intern: Intern::new(),
-            errors: Vec::new(),
-        };
-        let stack = vec![parse_tree.tree.root()];
+impl<'t, 'a> EventSink<'t, 'a> {
+    fn new(text: &'t str, tokens: &'t lexer::Tokens, parse_tree: &'a mut ParseTree, root: NodeId) -> Self {
+        let stack = vec![root];
 
         EventSink {
             pos: lexer::Pos(0),
@@ -71,7 +62,7 @@ impl<'t> EventSink<'t> {
         if s != DOC {
             let node = self.parse_tree.tree.new_internal(s);
             let top = self.top();
-            top.append_child(&mut self.parse_tree.tree, node);
+            self.parse_tree.tree.insert_child(top, node, InsertPos::Last);
 
             self.stack.push(node);
         }
@@ -86,7 +77,7 @@ impl<'t> EventSink<'t> {
         }
         let node = self.stack.pop().unwrap();
         match node.data(&self.parse_tree.tree) {
-            TreeData::Interior(&sym) => assert_eq!(sym, s),
+            TreeData::Internal(&sym) => assert_eq!(sym, s),
             _ => (),
         }
     }
@@ -191,7 +182,7 @@ impl<'t> EventSink<'t> {
         let intern_id = self.parse_tree.intern.intern(text);
         let leaf = self.parse_tree.tree.new_leaf((s, intern_id));
         let top = self.top();
-        top.append_child(&mut self.parse_tree.tree, leaf);
+        self.parse_tree.tree.insert_child(top, leaf, InsertPos::Last);
         self.pos += 1;
     }
 

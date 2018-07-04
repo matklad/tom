@@ -1,194 +1,135 @@
-use std::iter;
 use tom::{
-    Edit, Factory, Position, TomlDoc,
+    TomlDoc,
+    Position::*,
     ast,
 };
-use {toml, check_edit, check_panics};
+use {check_edit};
 
 
 #[test]
 fn basic_insertion() {
-    let before = r#"
+    do_check(r#"
+foo = "1.0.0"
+quux = "92"
+
+bar = "1.0.0"
+
+baz = "1.0.0"
+"#, |doc, quux, (foo, _, _)| doc.insert(quux, After(foo.into())));
+
+    do_check(r#"
+foo = "1.0.0"
+
+quux = "92"
+bar = "1.0.0"
+
+baz = "1.0.0"
+"#, |doc, quux, (_, bar, _)| doc.insert(quux, Before(bar.into())));
+
+    do_check(r#"quux = "92"
+foo = "1.0.0"
+
+bar = "1.0.0"
+
+baz = "1.0.0"
+"#, |doc, quux, _| {
+        let root = doc.ast();
+        doc.insert(quux, PrependTo(root.into()))
+    });
+
+    do_check(r#"
+foo = "1.0.0"
+
+bar = "1.0.0"
+
+baz = "1.0.0"
+quux = "92"
+"#, |doc, quux, _| {
+        let root = doc.ast();
+        doc.insert(quux, AppendTo(root.into()));
+    });
+
+    fn do_check(after: &str, f: impl Fn(
+        &mut TomlDoc,
+        ast::Entry,
+        (ast::Entry, ast::Entry, ast::Entry),
+    )) {
+        let before = r#"
 foo = "1.0.0"
 
 bar = "1.0.0"
 
 baz = "1.0.0"
 "#;
-
-    let f = Factory::new();
-    let quux = f.entry(
-        iter::once(f.key("quux")),
-        f.value_string("92"),
-    );
-
-    check_edit(
-        before,
-        r#"
-foo = "1.0.0"
-quux = "92"
-
-bar = "1.0.0"
-
-baz = "1.0.0"
-"#,
-        |doc| {
-            let mut edit = Edit::new(doc);
-            let (foo, _, _) = foobarbaz(doc);
-            edit.insert(quux, Position::after(foo));
-            edit.finish()
-        },
-    );
-
-    check_edit(
-        before,
-        r#"
-foo = "1.0.0"
-
-quux = "92"
-bar = "1.0.0"
-
-baz = "1.0.0"
-"#,
-        |doc| {
-            let mut edit = Edit::new(doc);
-            let (_, bar, _) = foobarbaz(doc);
-            edit.insert(quux, Position::before(bar));
-            edit.finish()
-        },
-    );
-
-    check_edit(
-        before,
-        r#"quux = "92"
-foo = "1.0.0"
-
-bar = "1.0.0"
-
-baz = "1.0.0"
-"#,
-        |doc| {
-            let mut edit = Edit::new(doc);
-            edit.insert(quux, Position::start_of(doc.ast()));
-            edit.finish()
-        },
-    );
-
-    check_edit(
-        before,
-        r#"
-foo = "1.0.0"
-
-bar = "1.0.0"
-
-baz = "1.0.0"
-quux = "92"
-"#,
-        |doc| {
-            let mut edit = Edit::new(doc);
-            edit.insert(quux, Position::end_of(doc.ast()));
-            edit.finish()
-        },
-    );
-
-    fn foobarbaz(doc: &TomlDoc) -> (ast::Entry, ast::Entry, ast::Entry) {
-        let entries: Vec<_> = doc.ast().entries().collect();
-        (entries[0], entries[1], entries[2])
+        check_edit(before, after, |doc| {
+            let quux = doc.new_entry_from_text("quux = \"92\"");
+            let entries: Vec<_> = doc.ast().entries(doc).collect();
+            f(doc, quux, (entries[0], entries[1], entries[2]));
+        })
     }
 }
 
 #[test]
 fn basic_insertion_no_ws() {
-    let before = r#"
+    covers!("basic_insertion_no_ws");
+    do_check(r#"
+foo = "1.0.0"quux = "92"
+
+bar = "1.0.0"
+
+baz = "1.0.0"
+"#, |doc, quux, (foo, _, _)| doc.insert(quux, After(foo.into())));
+
+    do_check(r#"
+foo = "1.0.0"
+
+quux = "92"bar = "1.0.0"
+
+baz = "1.0.0"
+"#, |doc, quux, (_, bar, _)| doc.insert(quux, Before(bar.into())));
+
+    do_check(r#"quux = "92"
+foo = "1.0.0"
+
+bar = "1.0.0"
+
+baz = "1.0.0"
+"#, |doc, quux, _| {
+        let root = doc.cst();
+        doc.insert(quux, PrependTo(root));
+    });
+
+    do_check(r#"
+foo = "1.0.0"
+
+bar = "1.0.0"
+
+baz = "1.0.0"
+quux = "92""#, |doc, quux, _| {
+        let root = doc.cst();
+        doc.insert(quux, AppendTo(root));
+    });
+
+    fn do_check(after: &str, f: impl Fn(
+        &mut TomlDoc,
+        ast::Entry,
+        (ast::Entry, ast::Entry, ast::Entry),
+    )) {
+        let before = r#"
 foo = "1.0.0"
 
 bar = "1.0.0"
 
 baz = "1.0.0"
 "#;
-
-    let f = Factory::new();
-    let quux = f.entry(
-        iter::once(f.key("quux")),
-        f.value_string("92"),
-    );
-
-    check_edit(
-        before,
-        r#"
-foo = "1.0.0"quux = "92"
-
-bar = "1.0.0"
-
-baz = "1.0.0"
-"#,
-        |doc| {
-            let mut edit = Edit::new(doc);
-            edit.disable_smart_whitespace();
-            let (foo, _, _) = foobarbaz(doc);
-            edit.insert(quux, Position::after(foo));
-            edit.finish()
-        },
-    );
-
-    check_edit(
-        before,
-        r#"
-foo = "1.0.0"
-
-quux = "92"bar = "1.0.0"
-
-baz = "1.0.0"
-"#,
-        |doc| {
-            let mut edit = Edit::new(doc);
-            edit.disable_smart_whitespace();
-            let (_, bar, _) = foobarbaz(doc);
-            edit.insert(quux, Position::before(bar));
-            edit.finish()
-        },
-    );
-
-    check_edit(
-        before,
-        r#"quux = "92"
-foo = "1.0.0"
-
-bar = "1.0.0"
-
-baz = "1.0.0"
-"#,
-        |doc| {
-            let mut edit = Edit::new(doc);
-            edit.disable_smart_whitespace();
-            edit.insert(quux, Position::start_of(doc.ast()));
-            edit.finish()
-        },
-    );
-
-    check_edit(
-        before,
-        r#"
-foo = "1.0.0"
-
-bar = "1.0.0"
-
-baz = "1.0.0"
-quux = "92""#,
-        |doc| {
-            let mut edit = Edit::new(doc);
-            edit.disable_smart_whitespace();
-            edit.insert(quux, Position::end_of(doc.ast()));
-            edit.finish()
-        },
-    );
-
-    fn foobarbaz(doc: &TomlDoc) -> (ast::Entry, ast::Entry, ast::Entry) {
-        let entries: Vec<_> = doc.ast().entries().collect();
-        (entries[0], entries[1], entries[2])
+        check_edit(before, after, |doc| {
+            doc.set_smart_ws(false);
+            let quux = doc.new_entry_from_text("quux = \"92\"");
+            let entries: Vec<_> = doc.ast().entries(doc).collect();
+            f(doc, quux, (entries[0], entries[1], entries[2]));
+        })
     }
 }
-
 
 #[test]
 fn basic_deletion() {
@@ -196,11 +137,9 @@ fn basic_deletion() {
         "foo = true\nbar = false\nbaz = false\n",
         "foo = true\n\nbaz = false\n",
         |doc| {
-            let mut edit = Edit::new(doc);
             let ast = doc.ast();
-            let bar = ast.entries().nth(1).unwrap();
-            edit.delete(bar);
-            edit.finish()
+            let bar = ast.entries(doc).nth(1).unwrap();
+            doc.detach(bar);
         }
     )
 }
@@ -211,23 +150,10 @@ fn test_swap() {
         "foo = true\nbar = false\n",
         "bar = false\nfoo = true\n",
         |doc| {
-            let mut edit = Edit::new(doc);
             let ast = doc.ast();
-            let foo = ast.entries().nth(0).unwrap();
-            let bar = ast.entries().nth(1).unwrap();
-            edit.replace(foo, bar);
-            edit.replace(bar, foo);
-            edit.finish()
+            let foo = ast.entries(doc).nth(0).unwrap();
+            let bar = ast.entries(doc).nth(1).unwrap();
+            doc.swap(foo, bar);
         },
     );
-}
-
-#[test]
-fn infinite_doc() {
-    covers!("infinite_doc");
-    let doc = toml("foo = false");
-    let entry = doc.ast().entries().next().unwrap();
-    let mut edit = Edit::new(&doc);
-    edit.insert(entry, Position::end_of(entry));
-    check_panics(|| drop(edit.finish()));
 }
