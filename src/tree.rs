@@ -107,22 +107,16 @@ impl<ID, LD> Tree<ID, LD> {
                 covered_by!("insert_first");
                 return self.do_insert_first(parent, new_child);
             }
-            InsertPos::Last => {
-                let first_last = {
-                    let children = parent.children(self);
-                    (children.first(), children.last())
-                };
-                match first_last {
-                    (Some(first), Some(last)) => {
-                        covered_by!("insert_last_with_children");
-                        (last, first)
-                    }
-                    _ => {
-                        covered_by!("insert_last_no_children");
-                        return self.do_insert_first(parent, new_child);
-                    }
+            InsertPos::Last => match (parent.first_child(self), parent.last_child(self)) {
+                (Some(first), Some(last)) => {
+                    covered_by!("insert_last_with_children");
+                    (last, first)
                 }
-            }
+                _ => {
+                    covered_by!("insert_last_no_children");
+                    return self.do_insert_first(parent, new_child);
+                }
+            },
             InsertPos::After(prev) => {
                 covered_by!("insert_after");
                 assert_eq!(prev.parent(self), Some(parent));
@@ -150,7 +144,7 @@ impl<ID, LD> Tree<ID, LD> {
     }
 
     fn do_insert_first(&mut self, parent: NodeId, new_child: NodeId) {
-        let first_child = parent.children(self).first();
+        let first_child = parent.first_child(self);
         parent.set_fist_child(self, Some(new_child));
         self.get_mut(new_child).next_sibling = first_child;
         if let Some(first_child) = first_child {
@@ -173,7 +167,7 @@ impl<ID, LD> Tree<ID, LD> {
         let prev_sibling_cyclic = node.prev_sibling_cyclic(self);
 
         {
-            if parent.children(self).first() == Some(node) {
+            if parent.first_child(self) == Some(node) {
                 covered_by!("detach_first");
                 parent.set_fist_child(self, next_sibling);
             }
@@ -216,7 +210,7 @@ impl<ID, LD> Tree<ID, LD> {
         let prev_sibling_cyclic = node.prev_sibling_cyclic(self);
 
         {
-            if parent.children(self).first() == Some(node) {
+            if parent.first_child(self) == Some(node) {
                 parent.set_fist_child(self, Some(replacement));
             }
             if let Some(s) = prev_sibling {
@@ -267,6 +261,18 @@ impl NodeId {
         tree.get(self).parent
     }
 
+    pub fn first_child<ID, LD>(self, tree: &Tree<ID, LD>) -> Option<NodeId> {
+        match tree.get(self).kind {
+            NodeKind::Interior { first_child, .. } => first_child,
+            NodeKind::Leaf { .. } => None,
+        }
+    }
+
+    pub fn last_child<ID, LD>(self, tree: &Tree<ID, LD>) -> Option<NodeId> {
+        let first = self.first_child(tree)?;
+        Some(tree.get(first).prev_sibling_cyclic)
+    }
+
     fn set_fist_child<ID, LD>(self, tree: &mut Tree<ID, LD>, first_child: Option<Self>) {
         match &mut tree.get_mut(self).kind {
             NodeKind::Interior {
@@ -285,7 +291,10 @@ impl NodeId {
             return self;
         }
         self.next_sibling(tree)
-            .unwrap_or_else(|| self.parent(tree).unwrap().children(tree).first().unwrap())
+            .unwrap_or_else(|| {
+                let parent = self.parent(tree).unwrap();
+                parent.first_child(tree).unwrap()
+            })
     }
 
     pub fn prev_sibling<ID, LD>(self, tree: &Tree<ID, LD>) -> Option<Self> {
@@ -301,10 +310,6 @@ impl NodeId {
         tree.get(self).prev_sibling_cyclic
     }
 
-    pub fn children<ID, LD>(self, tree: &Tree<ID, LD>) -> Children<ID, LD> {
-        Children { tree, node: self }
-    }
-
     pub fn data<ID, LD>(self, tree: &Tree<ID, LD>) -> TreeData<&ID, &LD> {
         match &tree.get(self).kind {
             NodeKind::Interior { data, .. } => TreeData::Internal(data),
@@ -313,13 +318,24 @@ impl NodeId {
     }
 
     fn check_invariants<ID, LD>(self, tree: &Tree<ID, LD>) {
-        match self.parent(tree) {
+        #[cfg(debug_assertions)]
+            match self.parent(tree) {
             None => {
                 assert!(self.next_sibling(tree).is_none());
                 assert!(self.prev_sibling(tree).is_none());
             }
             Some(parent) => {
-                assert!(parent.children(tree).iter().any(|c| c == self));
+                let mut is_child = false;
+                let mut curr = parent.first_child(tree);
+                while let Some(child) = curr {
+                    if child == self {
+                        is_child = true;
+                        break;
+                    }
+                    curr = child.next_sibling(tree);
+                }
+                assert!(is_child);
+
                 if let Some(next) = self.next_sibling(tree) {
                     assert_eq!(
                         next.prev_sibling(tree),
@@ -338,92 +354,10 @@ impl NodeId {
     }
 }
 
-pub(crate) struct Children<'a, ID: 'a, LD: 'a> {
-    tree: &'a Tree<ID, LD>,
-    node: NodeId,
-}
-
-impl<'a, ID: 'a, LD: 'a> Copy for Children<'a, ID, LD> {}
-
-impl<'a, ID: 'a, LD: 'a> Clone for Children<'a, ID, LD> {
-    fn clone(&self) -> Self {
-        *self
-    }
-}
-
-impl<'a, ID: 'a, LD: 'a> Children<'a, ID, LD> {
-    pub fn first(self) -> Option<NodeId> {
-        match self.node().kind {
-            NodeKind::Interior { first_child, .. } => first_child,
-            NodeKind::Leaf { .. } => None,
-        }
-    }
-
-    pub fn last(self) -> Option<NodeId> {
-        let first = self.first()?;
-        Some(self.tree.get(first).prev_sibling_cyclic)
-    }
-
-    pub fn iter(self) -> ChildrenIter<'a, ID, LD> {
-        ChildrenIter {
-            curr: self.first(),
-            tree: self.tree,
-        }
-    }
-
-    pub fn rev(self) -> RevChildrenIter<'a, ID, LD> {
-        RevChildrenIter {
-            curr: self.last(),
-            tree: self.tree,
-        }
-    }
-
-    fn node(self) -> &'a Node<ID, LD> {
-        self.tree.get(self.node)
-    }
-}
-
-impl<'a, ID: 'a, LD: 'a> IntoIterator for Children<'a, ID, LD> {
-    type Item = NodeId;
-    type IntoIter = ChildrenIter<'a, ID, LD>;
-    fn into_iter(self) -> Self::IntoIter {
-        self.iter()
-    }
-}
-
-pub(crate) struct ChildrenIter<'a, ID: 'a, LD: 'a> {
-    curr: Option<NodeId>,
-    tree: &'a Tree<ID, LD>,
-}
-
-impl<'a, ID: 'a, LD: 'a> Iterator for ChildrenIter<'a, ID, LD> {
-    type Item = NodeId;
-    fn next(&mut self) -> Option<NodeId> {
-        self.curr.map(|id| {
-            self.curr = id.next_sibling(self.tree);
-            id
-        })
-    }
-}
-
-pub(crate) struct RevChildrenIter<'a, ID: 'a, LD: 'a> {
-    curr: Option<NodeId>,
-    tree: &'a Tree<ID, LD>,
-}
-
-impl<'a, ID: 'a, LD: 'a> Iterator for RevChildrenIter<'a, ID, LD> {
-    type Item = NodeId;
-    fn next(&mut self) -> Option<NodeId> {
-        self.curr.map(|id| {
-            self.curr = id.prev_sibling(self.tree);
-            id
-        })
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::{InsertPos, NodeId, TreeData};
+
     type Tree = super::Tree<(), ()>;
 
     fn print(tree: &Tree) -> String {
@@ -440,12 +374,14 @@ mod tests {
             }
             buff.push_str(" (");
             let mut first = true;
-            for child in node.children(tree).iter() {
+            let mut curr = node.first_child(tree);
+            while let Some(child) = curr {
                 if !first {
                     buff.push_str(" ");
                 }
                 first = false;
                 go(tree, buff, child);
+                curr = child.next_sibling(tree);
             }
             buff.push_str(")");
         }

@@ -10,14 +10,16 @@ extern crate uncover;
 
 define_uncover_macros!(enable_if(cfg!(debug_assertions)));
 
-pub mod ast;
-mod edit;
 mod intern;
-mod parser;
-pub mod symbol;
 mod tree;
-mod validator;
+mod parser;
+mod cst;
 mod visitor;
+mod validator;
+mod edit;
+
+pub mod ast;
+pub mod symbol;
 
 use std::{cmp, marker::PhantomData, num::NonZeroU8};
 
@@ -29,6 +31,7 @@ use {
 
 pub use edit::{IntoValue, Position};
 pub use text_unit::{TextRange, TextUnit};
+pub use cst::{CstNode, CstNodeKind, CstChildren, CstChildrenIter, RevCstChildrenIter};
 
 type ID = Symbol;
 type LD = (Symbol, InternId);
@@ -86,7 +89,7 @@ impl TomlDoc {
         ast::Doc::cast(self.cst(), self).unwrap()
     }
 
-    pub fn debug_dump(&self) -> String {
+    pub fn debug(&self) -> String {
         let mut result = String::new();
         go(self.cst(), 0, &self, &mut result);
 
@@ -105,16 +108,17 @@ impl TomlDoc {
 
         fn go(node: CstNode, level: usize, doc: &TomlDoc, buff: &mut String) {
             buff.push_str(&String::from("  ").repeat(level));
+            //TODO: panics during edit :(
             let range = node.range(doc);
             let symbol = node.symbol(doc);
             buff.push_str(&format!("{}@{:?}", symbol.name(), range));
             match node.kind(doc) {
-                NodeKind::Leaf(text) => {
+                CstNodeKind::Leaf(text) => {
                     if !text.chars().all(char::is_whitespace) {
                         buff.push_str(&format!(" {:?}", text));
                     }
                 }
-                NodeKind::Internal(_) => (),
+                CstNodeKind::Internal(_) => (),
             }
             buff.push('\n');
             for child in node.children(&doc) {
@@ -124,8 +128,9 @@ impl TomlDoc {
     }
 
     pub fn get_text(&self, range: TextRange) -> String {
+        assert!(!self.edit_in_progress, "range info is unavailable during edit");
         let mut buff = String::new();
-        process_leaves(
+        cst::process_leaves(
             self.cst(),
             self,
             &mut |node| intersect(node.range(self), range).is_some(),
@@ -140,117 +145,6 @@ impl TomlDoc {
     }
 }
 
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
-pub struct CstNode(NodeId);
-
-pub enum NodeKind<'a> {
-    Leaf(&'a str),
-    Internal(Children<'a>),
-}
-
-impl CstNode {
-    pub fn symbol(self, doc: &TomlDoc) -> Symbol {
-        *match self.0.data(&doc.tree.tree) {
-            TreeData::Internal(s) => s,
-            TreeData::Leaf((s, _)) => s,
-        }
-    }
-
-    pub fn range(self, doc: &TomlDoc) -> TextRange {
-        if doc.edit_in_progress {
-            panic!("range info is unavailable for modified documents")
-        }
-        doc.data[self.0.to_idx()].range
-    }
-
-    pub fn kind(self, doc: &TomlDoc) -> NodeKind {
-        match self.0.data(&doc.tree.tree) {
-            TreeData::Leaf((_, idx)) => NodeKind::Leaf(doc.tree.intern.resolve(*idx)),
-            TreeData::Internal(_) => NodeKind::Internal(self.children(doc)),
-        }
-    }
-
-    pub fn is_leaf(self, doc: &TomlDoc) -> bool {
-        match self.kind(doc) {
-            NodeKind::Leaf(_) => true,
-            NodeKind::Internal(_) => false,
-        }
-    }
-
-    pub fn parent(self, doc: &TomlDoc) -> Option<CstNode> {
-        self.0.parent(&doc.tree.tree).map(CstNode)
-    }
-
-    pub fn children(self, doc: &TomlDoc) -> Children {
-        Children(self.0.children(&doc.tree.tree))
-    }
-
-    pub fn next_sibling(self, doc: &TomlDoc) -> Option<CstNode> {
-        self.0.next_sibling(&doc.tree.tree).map(CstNode)
-    }
-
-    pub fn prev_sibling(self, doc: &TomlDoc) -> Option<CstNode> {
-        self.0.prev_sibling(&doc.tree.tree).map(CstNode)
-    }
-
-    pub(crate) fn write_text(self, doc: &TomlDoc, buff: &mut String) {
-        process_leaves(self, doc, &mut |_| true, &mut |_, text| buff.push_str(text));
-    }
-
-    pub fn get_text(self, doc: &TomlDoc) -> String {
-        let mut buff = String::new();
-        self.write_text(doc, &mut buff);
-        return buff;
-    }
-
-    pub fn debug(self, doc: &TomlDoc) -> String {
-        format!("{}@{:?}", self.symbol(doc).name(), self.range(doc))
-    }
-}
-
-pub struct Children<'a>(tree::Children<'a, ID, LD>);
-
-impl<'a> Children<'a> {
-    pub fn first(self) -> Option<CstNode> {
-        self.0.first().map(CstNode)
-    }
-    pub fn last(self) -> Option<CstNode> {
-        self.0.last().map(CstNode)
-    }
-    pub fn iter(self) -> ChildrenIter<'a> {
-        ChildrenIter(self.0.iter())
-    }
-    pub fn rev(self) -> RevChildrenIter<'a> {
-        RevChildrenIter(self.0.rev())
-    }
-}
-
-impl<'a> IntoIterator for Children<'a> {
-    type Item = CstNode;
-    type IntoIter = ChildrenIter<'a>;
-    fn into_iter(self) -> Self::IntoIter {
-        self.iter()
-    }
-}
-
-pub struct ChildrenIter<'a>(tree::ChildrenIter<'a, ID, LD>);
-
-impl<'a> Iterator for ChildrenIter<'a> {
-    type Item = CstNode;
-    fn next(&mut self) -> Option<CstNode> {
-        self.0.next().map(CstNode)
-    }
-}
-
-pub struct RevChildrenIter<'a>(tree::RevChildrenIter<'a, ID, LD>);
-
-impl<'a> Iterator for RevChildrenIter<'a> {
-    type Item = CstNode;
-    fn next(&mut self) -> Option<CstNode> {
-        self.0.next().map(CstNode)
-    }
-}
-
 pub trait AstNode: Into<CstNode> + Clone + Copy {
     fn cst(self) -> CstNode {
         self.into()
@@ -259,9 +153,7 @@ pub trait AstNode: Into<CstNode> + Clone + Copy {
 }
 
 pub struct AstChildren<'a, A: AstNode> {
-    inner: ChildrenIter<'a>,
-    doc: &'a TomlDoc,
-    // TODO: get rid of,
+    inner: CstChildrenIter<'a>,
     phantom: PhantomData<A>,
 }
 
@@ -269,7 +161,6 @@ impl<'a, A: AstNode> AstChildren<'a, A> {
     fn new(node: CstNode, doc: &'a TomlDoc) -> Self {
         AstChildren {
             inner: node.children(doc).iter(),
-            doc,
             phantom: PhantomData,
         }
     }
@@ -280,7 +171,7 @@ impl<'a, A: AstNode> Iterator for AstChildren<'a, A> {
 
     fn next(&mut self) -> Option<Self::Item> {
         while let Some(node) = self.inner.next() {
-            if let Some(a) = A::cast(node, self.doc) {
+            if let Some(a) = A::cast(node, self.inner.doc) {
                 return Some(a);
             }
         }
@@ -324,8 +215,10 @@ fn assemble(pt: parser::ParseTree) -> TomlDoc {
                 len += (intern.resolve(idx).len() as u32).into();
             }
             TreeData::Internal(_) => {
-                for child in node.children(tree) {
+                let mut curr = node.first_child(tree);
+                while let Some(child) = curr {
                     len += go(child, start_offset + len, data, tree, intern);
+                    curr = child.next_sibling(tree);
                 }
             }
         }
@@ -348,21 +241,3 @@ fn relative_range(offset: TextUnit, range: TextRange) -> TextRange {
     TextRange::from_to(range.start() - offset, range.end() - offset)
 }
 
-fn process_leaves(
-    node: CstNode,
-    doc: &TomlDoc,
-    node_filter: &mut impl Fn(CstNode) -> bool,
-    cb: &mut impl FnMut(CstNode, &str),
-) {
-    if !node_filter(node) {
-        return;
-    }
-    match node.kind(doc) {
-        NodeKind::Leaf(text) => cb(node, text),
-        NodeKind::Internal(children) => {
-            for child in children {
-                process_leaves(child, doc, node_filter, cb);
-            }
-        }
-    }
-}

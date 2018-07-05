@@ -148,7 +148,7 @@ pub fn gen_ast() -> String {
         }};
     }
     ln!("use {{");
-    ln!("TomlDoc, CstNode, AstNode, AstChildren, NodeKind,");
+    ln!("TomlDoc, CstNode, AstNode, AstChildren, CstNodeKind,");
     ln!("symbol::*,");
     ln!("}};");
     ln!();
@@ -213,8 +213,8 @@ pub fn gen_ast() -> String {
             if n.text {
                 ln!("pub fn text(self, doc: &TomlDoc) -> &str {{");
                 ln!("match self.cst().kind(doc) {{");
-                ln!("NodeKind::Leaf(text) => text,");
-                ln!("NodeKind::Internal(_) => unreachable!(),");
+                ln!("CstNodeKind::Leaf(text) => text,");
+                ln!("CstNodeKind::Internal(_) => unreachable!(),");
                 ln!("}}");
                 ln!("}}");
             }
