@@ -29,9 +29,7 @@ pub use edit::{IntoValue, Position};
 pub use text_unit::{TextRange, TextUnit};
 pub use cst::{CstNode, CstNodeKind, CstChildren, CstChildrenIter, RevCstChildrenIter};
 
-type ID = Symbol;
-type LD = (Symbol, InternId);
-type Tree = tree::Tree<ID, LD>;
+type Tree = tree::Tree<Symbol, (Symbol, InternId)>;
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Symbol(NonZeroU8);
