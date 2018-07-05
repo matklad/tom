@@ -1,5 +1,5 @@
 use tom::ast;
-use ::{toml, find};
+use {find, toml};
 
 #[test]
 fn string_escaping_trivial() {
@@ -38,7 +38,6 @@ fn date_time_value() {
     let lit: ast::DateTime = find(&doc);
     assert_eq!(lit.value(&doc), ::std::time::UNIX_EPOCH);
 }
-
 
 #[test]
 #[ignore]

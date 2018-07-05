@@ -1,6 +1,4 @@
-use {
-    CstNode, TomlDoc, AstNode,
-};
+use {AstNode, CstNode, TomlDoc};
 
 pub(crate) struct Visitor<'c, C> {
     ctx: C,
@@ -8,14 +6,13 @@ pub(crate) struct Visitor<'c, C> {
 }
 
 pub(crate) fn visitor<'c, C>(ctx: C) -> Visitor<'c, C> {
-    Visitor { ctx, callbacks: Vec::new() }
+    Visitor {
+        ctx,
+        callbacks: Vec::new(),
+    }
 }
 
-pub(crate) fn process<'c, C>(
-    node: CstNode,
-    doc: &TomlDoc,
-    mut v: Visitor<'c, C>,
-) -> C {
+pub(crate) fn process<'c, C>(node: CstNode, doc: &TomlDoc, mut v: Visitor<'c, C>) -> C {
     go(node, doc, &mut v);
     return v.ctx;
 
@@ -28,16 +25,11 @@ pub(crate) fn process<'c, C>(
 }
 
 impl<'c, C> Visitor<'c, C> {
-    pub fn visit<A: AstNode, F: FnMut(&mut C, A) + 'c>(
-        mut self,
-        mut f: F,
-    ) -> Self {
+    pub fn visit<A: AstNode, F: FnMut(&mut C, A) + 'c>(mut self, mut f: F) -> Self {
         let cb: Box<FnMut(&mut C, CstNode, &TomlDoc) + 'c> =
-            Box::new(move |c, node, doc| {
-                match A::cast(node, doc) {
-                    None => (),
-                    Some(a) => f(c, a),
-                }
+            Box::new(move |c, node, doc| match A::cast(node, doc) {
+                None => (),
+                Some(a) => f(c, a),
             });
         self.callbacks.push(cb);
         self

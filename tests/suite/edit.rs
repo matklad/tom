@@ -1,59 +1,65 @@
-use tom::{
-    TomlDoc,
-    Position::*,
-    ast,
-};
-use {check_edit};
-
+use check_edit;
+use tom::{ast, Position::*, TomlDoc};
 
 #[test]
 fn basic_insertion() {
-    do_check(r#"
+    do_check(
+        r#"
 foo = "1.0.0"
 quux = "92"
 
 bar = "1.0.0"
 
 baz = "1.0.0"
-"#, |doc, quux, (foo, _, _)| doc.insert(quux, After(foo.into())));
+"#,
+        |doc, quux, (foo, _, _)| doc.insert(quux, After(foo.into())),
+    );
 
-    do_check(r#"
+    do_check(
+        r#"
 foo = "1.0.0"
 
 quux = "92"
 bar = "1.0.0"
 
 baz = "1.0.0"
-"#, |doc, quux, (_, bar, _)| doc.insert(quux, Before(bar.into())));
+"#,
+        |doc, quux, (_, bar, _)| doc.insert(quux, Before(bar.into())),
+    );
 
-    do_check(r#"quux = "92"
+    do_check(
+        r#"quux = "92"
 foo = "1.0.0"
 
 bar = "1.0.0"
 
 baz = "1.0.0"
-"#, |doc, quux, _| {
-        let root = doc.ast();
-        doc.insert(quux, PrependTo(root.into()))
-    });
+"#,
+        |doc, quux, _| {
+            let root = doc.ast();
+            doc.insert(quux, PrependTo(root.into()))
+        },
+    );
 
-    do_check(r#"
+    do_check(
+        r#"
 foo = "1.0.0"
 
 bar = "1.0.0"
 
 baz = "1.0.0"
 quux = "92"
-"#, |doc, quux, _| {
-        let root = doc.ast();
-        doc.insert(quux, AppendTo(root.into()));
-    });
+"#,
+        |doc, quux, _| {
+            let root = doc.ast();
+            doc.insert(quux, AppendTo(root.into()));
+        },
+    );
 
-    fn do_check(after: &str, f: impl Fn(
-        &mut TomlDoc,
-        ast::Entry,
-        (ast::Entry, ast::Entry, ast::Entry),
-    )) {
+    fn do_check(
+        after: &str,
+        f: impl Fn(&mut TomlDoc, ast::Entry, (ast::Entry, ast::Entry, ast::Entry)),
+    ) {
         let before = r#"
 foo = "1.0.0"
 
@@ -72,49 +78,60 @@ baz = "1.0.0"
 #[test]
 fn basic_insertion_no_ws() {
     covers!("basic_insertion_no_ws");
-    do_check(r#"
+    do_check(
+        r#"
 foo = "1.0.0"quux = "92"
 
 bar = "1.0.0"
 
 baz = "1.0.0"
-"#, |doc, quux, (foo, _, _)| doc.insert(quux, After(foo.into())));
+"#,
+        |doc, quux, (foo, _, _)| doc.insert(quux, After(foo.into())),
+    );
 
-    do_check(r#"
+    do_check(
+        r#"
 foo = "1.0.0"
 
 quux = "92"bar = "1.0.0"
 
 baz = "1.0.0"
-"#, |doc, quux, (_, bar, _)| doc.insert(quux, Before(bar.into())));
+"#,
+        |doc, quux, (_, bar, _)| doc.insert(quux, Before(bar.into())),
+    );
 
-    do_check(r#"quux = "92"
+    do_check(
+        r#"quux = "92"
 foo = "1.0.0"
 
 bar = "1.0.0"
 
 baz = "1.0.0"
-"#, |doc, quux, _| {
-        let root = doc.cst();
-        doc.insert(quux, PrependTo(root));
-    });
+"#,
+        |doc, quux, _| {
+            let root = doc.cst();
+            doc.insert(quux, PrependTo(root));
+        },
+    );
 
-    do_check(r#"
+    do_check(
+        r#"
 foo = "1.0.0"
 
 bar = "1.0.0"
 
 baz = "1.0.0"
-quux = "92""#, |doc, quux, _| {
-        let root = doc.cst();
-        doc.insert(quux, AppendTo(root));
-    });
+quux = "92""#,
+        |doc, quux, _| {
+            let root = doc.cst();
+            doc.insert(quux, AppendTo(root));
+        },
+    );
 
-    fn do_check(after: &str, f: impl Fn(
-        &mut TomlDoc,
-        ast::Entry,
-        (ast::Entry, ast::Entry, ast::Entry),
-    )) {
+    fn do_check(
+        after: &str,
+        f: impl Fn(&mut TomlDoc, ast::Entry, (ast::Entry, ast::Entry, ast::Entry)),
+    ) {
         let before = r#"
 foo = "1.0.0"
 
@@ -140,7 +157,7 @@ fn basic_deletion() {
             let ast = doc.ast();
             let bar = ast.entries(doc).nth(1).unwrap();
             doc.detach(bar);
-        }
+        },
     )
 }
 

@@ -1,7 +1,7 @@
 mod cargo_toml;
 
-use testutils::assert_eq_text;
 use self::cargo_toml::{CargoToml, Dependency, DependencySource};
+use testutils::assert_eq_text;
 
 #[test]
 fn adding_dependency_to_table() {
@@ -91,7 +91,6 @@ pest = "1.0"
     );
 }
 
-
 #[test]
 fn updating_dependency() {
     check_cargo_toml_edit(
@@ -174,7 +173,6 @@ git = "http://example.com"
         },
     );
 
-
     check_cargo_toml_edit(
         r#"
 [package]
@@ -202,18 +200,11 @@ regex = { git = "http://example.com", branch = "dev" }
             })
         },
     );
-
 }
 
-
-fn check_cargo_toml_edit(
-    before: &str,
-    after: &str,
-    edit: impl FnOnce(&mut CargoToml),
-) {
+fn check_cargo_toml_edit(before: &str, after: &str, edit: impl FnOnce(&mut CargoToml)) {
     let mut cargo_toml = CargoToml::new(before);
     edit(&mut cargo_toml);
     let actual = cargo_toml.finish();
     assert_eq_text(after, &actual);
 }
-

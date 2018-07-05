@@ -16,12 +16,14 @@ impl From<InternId> for usize {
 }
 
 pub(crate) struct Intern {
-    inner: StringInterner<InternId>
+    inner: StringInterner<InternId>,
 }
 
 impl Intern {
     pub fn new() -> Intern {
-        Intern { inner: StringInterner::new() }
+        Intern {
+            inner: StringInterner::new(),
+        }
     }
 
     pub fn intern(&mut self, val: &str) -> InternId {

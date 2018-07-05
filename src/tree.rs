@@ -1,19 +1,17 @@
-use std::{
-    num::NonZeroU32,
-};
-
+use std::num::NonZeroU32;
 
 #[derive(Debug)]
 pub(crate) struct Tree<ID, LD> {
-    nodes: Vec<Node<ID, LD>>
+    nodes: Vec<Node<ID, LD>>,
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 pub(crate) struct NodeId(NonZeroU32);
 
-
 impl NodeId {
-    pub(crate) fn to_idx(self) -> usize { (self.0.get() - 1) as usize }
+    pub(crate) fn to_idx(self) -> usize {
+        (self.0.get() - 1) as usize
+    }
     pub(crate) fn from_idx(idx: usize) -> Self {
         NodeId(NonZeroU32::new((idx + 1) as u32).unwrap())
     }
@@ -28,7 +26,7 @@ struct Node<ID, LD> {
     kind: NodeKind<ID, LD>,
 }
 
-impl <ID, LD> Node<ID, LD> {
+impl<ID, LD> Node<ID, LD> {
     fn new(kind: NodeKind<ID, LD>) -> Node<ID, LD> {
         Node {
             parent: None,
@@ -51,12 +49,15 @@ enum NodeKind<ID, LD> {
         data: ID,
     },
     Leaf {
-        data: LD
-    }
+        data: LD,
+    },
 }
 
 pub(crate) enum InsertPos {
-    First, Last, After(NodeId), Before(NodeId)
+    First,
+    Last,
+    After(NodeId),
+    Before(NodeId),
 }
 
 impl<ID, LD> Tree<ID, LD> {
@@ -65,8 +66,13 @@ impl<ID, LD> Tree<ID, LD> {
     }
 
     pub fn new(root_data: ID) -> Tree<ID, LD> {
-        let root = Node::new(NodeKind::Interior { first_child: None, data: root_data });
-        let mut tree = Tree { nodes: Vec::with_capacity(1) };
+        let root = Node::new(NodeKind::Interior {
+            first_child: None,
+            data: root_data,
+        });
+        let mut tree = Tree {
+            nodes: Vec::with_capacity(1),
+        };
         tree.new_node(root);
         tree
     }
@@ -76,10 +82,15 @@ impl<ID, LD> Tree<ID, LD> {
     }
 
     pub fn new_internal(&mut self, data: ID) -> NodeId {
-        self.new_node(Node::new(NodeKind::Interior { first_child: None, data }))
+        self.new_node(Node::new(NodeKind::Interior {
+            first_child: None,
+            data,
+        }))
     }
 
-    pub fn len(&self) -> usize { self.nodes.len() }
+    pub fn len(&self) -> usize {
+        self.nodes.len()
+    }
 
     pub fn insert_child(&mut self, parent: NodeId, new_child: NodeId, insert_pos: InsertPos) {
         assert!(new_child.parent(self).is_none());
@@ -94,10 +105,10 @@ impl<ID, LD> Tree<ID, LD> {
         let (prev, next_cyclic) = match insert_pos {
             InsertPos::First => {
                 covered_by!("insert_first");
-                return self.do_insert_first(parent, new_child)
-            },
+                return self.do_insert_first(parent, new_child);
+            }
             InsertPos::Last => {
-                let first_last =  {
+                let first_last = {
                     let children = parent.children(self);
                     (children.first(), children.last())
                 };
@@ -105,29 +116,29 @@ impl<ID, LD> Tree<ID, LD> {
                     (Some(first), Some(last)) => {
                         covered_by!("insert_last_with_children");
                         (last, first)
-                    },
+                    }
                     _ => {
                         covered_by!("insert_last_no_children");
-                        return self.do_insert_first(parent, new_child)
-                    },
+                        return self.do_insert_first(parent, new_child);
+                    }
                 }
             }
             InsertPos::After(prev) => {
                 covered_by!("insert_after");
                 assert_eq!(prev.parent(self), Some(parent));
                 (prev, prev.next_sibling_cyclic(self))
-            },
+            }
             InsertPos::Before(next) => {
                 assert_eq!(next.parent(self), Some(parent));
                 match next.prev_sibling(self) {
                     Some(prev) => {
                         covered_by!("insert_before_between");
                         (prev, next)
-                    },
+                    }
                     None => {
                         covered_by!("insert_before_first");
-                        return self.do_insert_first(parent, new_child)
-                    },
+                        return self.do_insert_first(parent, new_child);
+                    }
                 }
             }
         };
@@ -251,7 +262,6 @@ impl<ID, LD> Tree<ID, LD> {
     }
 }
 
-
 impl NodeId {
     pub fn parent<ID, LD>(self, tree: &Tree<ID, LD>) -> Option<Self> {
         tree.get(self).parent
@@ -259,7 +269,9 @@ impl NodeId {
 
     fn set_fist_child<ID, LD>(self, tree: &mut Tree<ID, LD>, first_child: Option<Self>) {
         match &mut tree.get_mut(self).kind {
-            NodeKind::Interior { first_child: slot, .. } => *slot = first_child,
+            NodeKind::Interior {
+                first_child: slot, ..
+            } => *slot = first_child,
             NodeKind::Leaf { .. } => panic!("can't set first_child on a leaf node"),
         }
     }
@@ -272,9 +284,8 @@ impl NodeId {
         if self.prev_sibling_cyclic(tree) == self {
             return self;
         }
-        self.next_sibling(tree).unwrap_or_else(|| {
-            self.parent(tree).unwrap().children(tree).first().unwrap()
-        })
+        self.next_sibling(tree)
+            .unwrap_or_else(|| self.parent(tree).unwrap().children(tree).first().unwrap())
     }
 
     pub fn prev_sibling<ID, LD>(self, tree: &Tree<ID, LD>) -> Option<Self> {
@@ -311,8 +322,12 @@ impl NodeId {
                 assert!(parent.children(tree).iter().any(|c| c == self));
                 if let Some(next) = self.next_sibling(tree) {
                     assert_eq!(
-                        next.prev_sibling(tree), Some(self),
-                        "me: {:?}, next: {:?}, next.prev: {:?}", self, next, next.prev_sibling(tree)
+                        next.prev_sibling(tree),
+                        Some(self),
+                        "me: {:?}, next: {:?}, next.prev: {:?}",
+                        self,
+                        next,
+                        next.prev_sibling(tree)
                     );
                 }
                 if let Some(prev) = self.prev_sibling(tree) {
@@ -328,11 +343,12 @@ pub(crate) struct Children<'a, ID: 'a, LD: 'a> {
     node: NodeId,
 }
 
-impl<'a, ID: 'a, LD: 'a> Copy for Children<'a, ID, LD> {
-}
+impl<'a, ID: 'a, LD: 'a> Copy for Children<'a, ID, LD> {}
 
 impl<'a, ID: 'a, LD: 'a> Clone for Children<'a, ID, LD> {
-    fn clone(&self) -> Self { *self }
+    fn clone(&self) -> Self {
+        *self
+    }
 }
 
 impl<'a, ID: 'a, LD: 'a> Children<'a, ID, LD> {
@@ -349,11 +365,17 @@ impl<'a, ID: 'a, LD: 'a> Children<'a, ID, LD> {
     }
 
     pub fn iter(self) -> ChildrenIter<'a, ID, LD> {
-        ChildrenIter { curr: self.first(), tree: self.tree }
+        ChildrenIter {
+            curr: self.first(),
+            tree: self.tree,
+        }
     }
 
     pub fn rev(self) -> RevChildrenIter<'a, ID, LD> {
-        RevChildrenIter { curr: self.last(), tree: self.tree }
+        RevChildrenIter {
+            curr: self.last(),
+            tree: self.tree,
+        }
     }
 
     fn node(self) -> &'a Node<ID, LD> {
@@ -364,12 +386,14 @@ impl<'a, ID: 'a, LD: 'a> Children<'a, ID, LD> {
 impl<'a, ID: 'a, LD: 'a> IntoIterator for Children<'a, ID, LD> {
     type Item = NodeId;
     type IntoIter = ChildrenIter<'a, ID, LD>;
-    fn into_iter(self) -> Self::IntoIter { self.iter() }
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter()
+    }
 }
 
 pub(crate) struct ChildrenIter<'a, ID: 'a, LD: 'a> {
     curr: Option<NodeId>,
-    tree: &'a Tree<ID, LD>
+    tree: &'a Tree<ID, LD>,
 }
 
 impl<'a, ID: 'a, LD: 'a> Iterator for ChildrenIter<'a, ID, LD> {
@@ -399,7 +423,7 @@ impl<'a, ID: 'a, LD: 'a> Iterator for RevChildrenIter<'a, ID, LD> {
 
 #[cfg(test)]
 mod tests {
-    use super::{NodeId, InsertPos, TreeData};
+    use super::{InsertPos, NodeId, TreeData};
     type Tree = super::Tree<(), ()>;
 
     fn print(tree: &Tree) -> String {
@@ -417,7 +441,9 @@ mod tests {
             buff.push_str(" (");
             let mut first = true;
             for child in node.children(tree).iter() {
-                if !first { buff.push_str(" "); }
+                if !first {
+                    buff.push_str(" ");
+                }
                 first = false;
                 go(tree, buff, child);
             }
@@ -430,7 +456,7 @@ mod tests {
         let mut t = Tree::new(());
         macro_rules! check {
             ($expr:expr) => {
-               assert_eq!(print(&t), $expr);
+                assert_eq!(print(&t), $expr);
             };
         }
         check!("1 ()");
@@ -513,6 +539,5 @@ mod tests {
 
         t.replace(c, b);
         check!("1 (5 2 3)");
-
     }
 }

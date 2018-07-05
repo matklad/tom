@@ -3,7 +3,7 @@ mod generated;
 use std::borrow::Cow;
 
 pub use self::generated::*;
-use {ast, AstChildren, AstNode, TomlDoc, Position::*, CstNode};
+use {ast, AstChildren, AstNode, CstNode, Position::*, TomlDoc};
 
 pub trait EntryOwner: AstNode {
     fn entries(self, doc: &TomlDoc) -> AstChildren<ast::Entry>;
@@ -75,7 +75,6 @@ impl EntryOwner for ast::Dict {
         }
     }
 }
-
 
 impl EntryOwner for ast::Table {
     fn entries(self, doc: &TomlDoc) -> AstChildren<ast::Entry> {

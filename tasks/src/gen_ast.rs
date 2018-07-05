@@ -1,4 +1,4 @@
-use heck::{ShoutySnakeCase, CamelCase};
+use heck::{CamelCase, ShoutySnakeCase};
 
 fn descr() -> Vec<AstNode> {
     fn n(name: &'static str) -> AstNode {
@@ -12,14 +12,27 @@ fn descr() -> Vec<AstNode> {
     }
 
     vec![
-        n("Doc").methods(&["tables", "array_tables"]).method("entries", "Entry"),
-        n("Table").method("header", "TableHeader").method("entries", "Entry"),
-        n("ArrayTable").method("header", "TableHeader").method("entries", "Entry"),
+        n("Doc")
+            .methods(&["tables", "array_tables"])
+            .method("entries", "Entry"),
+        n("Table")
+            .method("header", "TableHeader")
+            .method("entries", "Entry"),
+        n("ArrayTable")
+            .method("header", "TableHeader")
+            .method("entries", "Entry"),
         n("TableHeader").methods(&["keys"]),
         n("Entry").methods(&["keys", "value"]),
         n("Key").kinds(&["StringLit", "BareKey"]),
         n("Value").kinds(&["Array", "Dict", "Number", "Bool", "DateTime", "StringLit"]),
-        n("StringLit").symbols(&["BASIC_STRING", "MULTILINE_BASIC_STRING", "LITERAL_STRING", "MULTILINE_LITERAL_STRING"]).text(),
+        n("StringLit")
+            .symbols(&[
+                "BASIC_STRING",
+                "MULTILINE_BASIC_STRING",
+                "LITERAL_STRING",
+                "MULTILINE_LITERAL_STRING",
+            ])
+            .text(),
         n("BareKey").text(),
         n("Array").methods(&["values"]),
         n("Dict").method("entries", "Entry"),
@@ -48,7 +61,11 @@ impl AstNode {
             Method {
                 name,
                 type_name,
-                arity: if name.ends_with("s") { Arity::Many } else { Arity::One },
+                arity: if name.ends_with("s") {
+                    Arity::Many
+                } else {
+                    Arity::One
+                },
             }
         }));
         self
@@ -58,7 +75,11 @@ impl AstNode {
         let method = Method {
             name,
             type_name: type_name.to_owned(),
-            arity: if name.ends_with("s") { Arity::Many } else { Arity::One },
+            arity: if name.ends_with("s") {
+                Arity::Many
+            } else {
+                Arity::One
+            },
         };
         self.methods.push(method);
         self
@@ -101,10 +122,8 @@ impl Method {
 
     fn body(&self) -> &'static str {
         match self.arity {
-            Arity::One =>
-                "AstChildren::new(self.cst(), doc).next().unwrap()",
-            Arity::Many =>
-                "AstChildren::new(self.cst(), doc)",
+            Arity::One => "AstChildren::new(self.cst(), doc).next().unwrap()",
+            Arity::Many => "AstChildren::new(self.cst(), doc)",
         }
     }
 }
@@ -142,7 +161,7 @@ pub fn gen_ast() -> String {
         if !n.kinds.is_empty() {
             ln!("pub enum {}Kind {{", n.name);
             for k in n.kinds.iter() {
-                ln!("{k}({k}),", k=k);
+                ln!("{k}({k}),", k = k);
             }
             ln!("}}");
             ln!();
@@ -167,7 +186,10 @@ pub fn gen_ast() -> String {
 
         ln!("impl {} {{", n.name);
         {
-            ln!("pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<{}> {{", n.name);
+            ln!(
+                "pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<{}> {{",
+                n.name
+            );
             {
                 ln!("match node.symbol(doc) {{");
                 let symbols = if n.symbols.is_empty() {
@@ -211,7 +233,11 @@ pub fn gen_ast() -> String {
             }
 
             for m in n.methods.iter() {
-                ln!("pub fn {}(self, doc: &TomlDoc) -> {} {{", m.name, m.ret_type());
+                ln!(
+                    "pub fn {}(self, doc: &TomlDoc) -> {} {{",
+                    m.name,
+                    m.ret_type()
+                );
                 ln!("{}", m.body());
                 ln!("}}");
             }

@@ -5,27 +5,22 @@ extern crate tom;
 extern crate lazy_static;
 
 mod ast;
-mod factory;
-mod edit;
 mod cargo_toml;
+mod edit;
+mod factory;
 
-use std::{
-    panic,
-    sync::Mutex,
-};
+use std::{panic, sync::Mutex};
 
-use tom::{
-    TomlDoc, CstNode, AstNode,
-};
 use testutils::assert_eq_text;
-
+use tom::{AstNode, CstNode, TomlDoc};
 
 fn toml(text: &str) -> TomlDoc {
     TomlDoc::new(text)
 }
 
 fn find<A: AstNode>(doc: &TomlDoc) -> A {
-    subtree(doc.cst(), doc).into_iter()
+    subtree(doc.cst(), doc)
+        .into_iter()
         .filter_map(|node| A::cast(node, doc))
         .next()
         .unwrap()

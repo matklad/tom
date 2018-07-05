@@ -1,4 +1,4 @@
-use {TomlDoc, CstNode, tree::InsertPos, ast, symbol::*, parser};
+use {ast, parser, symbol::*, tree::InsertPos, CstNode, TomlDoc};
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum Position {
@@ -7,7 +7,6 @@ pub enum Position {
     AppendTo(CstNode),
     PrependTo(CstNode),
 }
-
 
 impl TomlDoc {
     pub fn start_edit(&mut self) {
@@ -20,7 +19,10 @@ impl TomlDoc {
         unimplemented!()
     }
     fn assert_edit(&self) {
-        assert!(self.edit_in_progress, "call .start_edit to enable editing operations")
+        assert!(
+            self.edit_in_progress,
+            "call .start_edit to enable editing operations"
+        )
     }
 
     pub fn insert(&mut self, what: impl Into<CstNode>, where_: Position) {
@@ -29,17 +31,25 @@ impl TomlDoc {
         match where_ {
             Position::After(sibling) => {
                 let parent = sibling.parent(self).unwrap();
-                self.tree.tree.insert_child(parent.0, new_node.0, InsertPos::After(sibling.0));
+                self.tree
+                    .tree
+                    .insert_child(parent.0, new_node.0, InsertPos::After(sibling.0));
             }
             Position::Before(sibling) => {
                 let parent = sibling.parent(self).unwrap();
-                self.tree.tree.insert_child(parent.0, new_node.0, InsertPos::Before(sibling.0));
+                self.tree
+                    .tree
+                    .insert_child(parent.0, new_node.0, InsertPos::Before(sibling.0));
             }
             Position::AppendTo(parent) => {
-                self.tree.tree.insert_child(parent.0, new_node.0, InsertPos::Last);
+                self.tree
+                    .tree
+                    .insert_child(parent.0, new_node.0, InsertPos::Last);
             }
             Position::PrependTo(parent) => {
-                self.tree.tree.insert_child(parent.0, new_node.0, InsertPos::First);
+                self.tree
+                    .tree
+                    .insert_child(parent.0, new_node.0, InsertPos::First);
             }
         };
         if self.smart_ws {
@@ -79,7 +89,9 @@ impl TomlDoc {
             };
             if !ws.is_empty() {
                 let ws = doc.new_whitespace(ws);
-                doc.tree.tree.insert_child(parent.0, ws.0, InsertPos::After(left.0));
+                doc.tree
+                    .tree
+                    .insert_child(parent.0, ws.0, InsertPos::After(left.0));
             }
         }
 
@@ -93,7 +105,9 @@ impl TomlDoc {
             };
             if !ws.is_empty() {
                 let ws = doc.new_whitespace(ws);
-                doc.tree.tree.insert_child(parent.0, ws.0, InsertPos::After(last_child.0));
+                doc.tree
+                    .tree
+                    .insert_child(parent.0, ws.0, InsertPos::After(last_child.0));
             }
         }
     }
@@ -112,16 +126,20 @@ impl TomlDoc {
         self.replace(tmp, node2);
     }
 
-
     pub fn new_key(&mut self, name: &str) -> ast::Key {
-        let res = self.new_entry_from_text(&format!("{} = 92", escaped_key(name)))
-            .keys(self).next().unwrap();
+        let res = self
+            .new_entry_from_text(&format!("{} = 92", escaped_key(name)))
+            .keys(self)
+            .next()
+            .unwrap();
         self.detach(res);
         res
     }
 
     pub fn new_value_from_text(&mut self, text: &str) -> ast::Value {
-        let res = self.new_entry_from_text(&format!("foo = {}", text)).value(self);
+        let res = self
+            .new_entry_from_text(&format!("foo = {}", text))
+            .value(self);
         self.detach(res);
         res
     }
@@ -130,21 +148,29 @@ impl TomlDoc {
         self.new_value_from_text(&val.value_text())
     }
 
-    pub fn new_value_dict(&mut self, entries: impl Iterator<Item=ast::Entry>) -> ast::Value {
+    pub fn new_value_dict(&mut self, entries: impl Iterator<Item = ast::Entry>) -> ast::Value {
         let buff = join(self, entries, '{', '}');
-        let res = self.new_entry_from_text(&format!("foo = {}", buff)).value(self);
+        let res = self
+            .new_entry_from_text(&format!("foo = {}", buff))
+            .value(self);
         self.detach(res);
         res
     }
 
-    pub fn new_value_array(&mut self, entries: impl Iterator<Item=ast::Value>) -> ast::Value {
+    pub fn new_value_array(&mut self, entries: impl Iterator<Item = ast::Value>) -> ast::Value {
         let buff = join(self, entries, '[', ']');
-        let res = self.new_entry_from_text(&format!("foo = {}", buff)).value(self);
+        let res = self
+            .new_entry_from_text(&format!("foo = {}", buff))
+            .value(self);
         self.detach(res);
         res
     }
 
-    pub fn new_entry(&mut self, keys: impl Iterator<Item=ast::Key>, value: ast::Value) -> ast::Entry {
+    pub fn new_entry(
+        &mut self,
+        keys: impl Iterator<Item = ast::Key>,
+        value: ast::Value,
+    ) -> ast::Entry {
         let mut buff = String::new();
         join_to(self, &mut buff, keys, ".", "", "");
         buff.push_str(" = ");
@@ -162,8 +188,7 @@ impl TomlDoc {
         self.assert_edit();
         let new_root = self.tree.tree.new_internal(DOC);
         parser::parse(text, &mut self.tree, new_root);
-        ast::Doc::cast(CstNode(new_root), self)
-            .unwrap()
+        ast::Doc::cast(CstNode(new_root), self).unwrap()
     }
 
     pub fn new_table_from_text(&mut self, text: &str) -> ast::Table {
@@ -175,8 +200,8 @@ impl TomlDoc {
 
     pub fn new_table(
         &mut self,
-        keys: impl Iterator<Item=ast::Key>,
-        entries: impl Iterator<Item=ast::Entry>,
+        keys: impl Iterator<Item = ast::Key>,
+        entries: impl Iterator<Item = ast::Entry>,
     ) -> ast::Table {
         let text = self.table_text(keys, entries, "[", "]");
         self.new_table_from_text(&text)
@@ -191,8 +216,8 @@ impl TomlDoc {
 
     pub fn new_array_table(
         &mut self,
-        keys: impl Iterator<Item=ast::Key>,
-        entries: impl Iterator<Item=ast::Entry>,
+        keys: impl Iterator<Item = ast::Key>,
+        entries: impl Iterator<Item = ast::Entry>,
     ) -> ast::ArrayTable {
         let text = self.table_text(keys, entries, "[[", "]]");
         self.new_array_table_from_text(&text)
@@ -210,9 +235,10 @@ impl TomlDoc {
 
     fn table_text(
         &mut self,
-        keys: impl Iterator<Item=ast::Key>,
-        entries: impl Iterator<Item=ast::Entry>,
-        left: &str, right: &str,
+        keys: impl Iterator<Item = ast::Key>,
+        entries: impl Iterator<Item = ast::Entry>,
+        left: &str,
+        right: &str,
     ) -> String {
         let mut buff = String::new();
         buff.push_str(left);
@@ -227,8 +253,7 @@ impl TomlDoc {
 }
 
 mod private {
-    pub trait Sealed {
-    }
+    pub trait Sealed {}
     impl Sealed for bool {}
     impl Sealed for i64 {}
     impl<'a> Sealed for &'a str {}
@@ -258,8 +283,9 @@ impl<'a> IntoValue for &'a str {
 
 pub fn join<A: Into<CstNode>>(
     doc: &TomlDoc,
-    items: impl Iterator<Item=A>,
-    left: char, right: char,
+    items: impl Iterator<Item = A>,
+    left: char,
+    right: char,
 ) -> String {
     let mut buff = String::new();
     buff.push(left);
@@ -272,9 +298,10 @@ pub fn join<A: Into<CstNode>>(
 pub fn join_to<A: Into<CstNode>>(
     doc: &TomlDoc,
     buff: &mut String,
-    items: impl Iterator<Item=A>,
+    items: impl Iterator<Item = A>,
     sep: &str,
-    before_first: &str, after_last: &str,
+    before_first: &str,
+    after_last: &str,
 ) {
     let mut first = true;
     for item in items {
@@ -294,11 +321,12 @@ pub fn join_to<A: Into<CstNode>>(
 }
 
 fn escaped_key(key: &str) -> String {
-    if key.chars()
+    if key
+        .chars()
         .all(|c| c.is_alphanumeric() || c == '_' || c == '-')
-        {
-            key.to_string()
-        } else {
+    {
+        key.to_string()
+    } else {
         format!("{:?}", key)
     }
 }

@@ -1,8 +1,4 @@
-use {
-    Symbol,
-    parser::Parser,
-    symbol::*,
-};
+use {parser::Parser, symbol::*, Symbol};
 
 struct Mark(Symbol);
 
@@ -129,9 +125,8 @@ impl<'s, 't, 'a> Parser<'s, 't, 'a> {
     fn entries(&mut self) {
         while self.current() != EOF && self.current() != L_BRACK {
             match self.current() {
-                | BARE_KEY | BARE_KEY_OR_NUMBER | BARE_KEY_OR_DATE
-                | BASIC_STRING | LITERAL_STRING =>
-                    self.entry(),
+                | BARE_KEY | BARE_KEY_OR_NUMBER | BARE_KEY_OR_DATE | BASIC_STRING
+                | LITERAL_STRING => self.entry(),
                 _ => self.bump_error("expected a key"),
             }
         }
@@ -170,13 +165,11 @@ impl<'s, 't, 'a> Parser<'s, 't, 'a> {
             // foo = 92
             // 92 = 92
             // 1914-08-26 = 92
-            BARE_KEY | BARE_KEY_OR_NUMBER | BARE_KEY_OR_DATE =>
-                self.bump_remap(BARE_KEY),
+            BARE_KEY | BARE_KEY_OR_NUMBER | BARE_KEY_OR_DATE => self.bump_remap(BARE_KEY),
             // test
             // "foo" = 92
             // 'bar' = 92
-            BASIC_STRING | LITERAL_STRING =>
-                self.bump(),
+            BASIC_STRING | LITERAL_STRING => self.bump(),
             _ => self.bump_error("expected a key"),
         }
         self.finish(m);
@@ -188,16 +181,14 @@ impl<'s, 't, 'a> Parser<'s, 't, 'a> {
             // test
             // a = 92
             // b = 8.5
-            BARE_KEY_OR_NUMBER | NUMBER =>
-                self.bump_remap(NUMBER),
+            BARE_KEY_OR_NUMBER | NUMBER => self.bump_remap(NUMBER),
             // test
             // a = true
             // b = false
             BOOL => self.bump(),
             // a = 1914-08-26
             // b = 1979-05-27T07:32:00-08:00
-            BARE_KEY_OR_DATE | DATE_TIME =>
-                self.bump_remap(DATE_TIME),
+            BARE_KEY_OR_DATE | DATE_TIME => self.bump_remap(DATE_TIME),
             // test
             // a = "hello\nworld"
             // b = """

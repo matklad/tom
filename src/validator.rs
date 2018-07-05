@@ -1,8 +1,4 @@
-use {
-    TomlDoc, SyntaxError, TextRange, CstNode,
-    ast,
-    visitor
-};
+use {ast, visitor, CstNode, SyntaxError, TextRange, TomlDoc};
 
 pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
     visitor::process(
@@ -14,7 +10,8 @@ pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
                     check_new_line(
                         doc,
                         errors,
-                        first_key, entry.value(doc),
+                        first_key,
+                        entry.value(doc),
                         Forbid,
                         "newlines are forbidden in entries",
                     );
@@ -27,37 +24,40 @@ pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
                     d.cst().children(doc).first().unwrap(),
                     d.cst().children(doc).last().unwrap(),
                     Forbid,
-                    "newlines are forbidden in inline tables"
+                    "newlines are forbidden in inline tables",
                 )
             })
             .visit::<ast::Table, _>(|errors, table| check_table(doc, errors, table))
-            .visit::<ast::ArrayTable, _>(|errors, table| check_table(doc, errors, table))
+            .visit::<ast::ArrayTable, _>(|errors, table| check_table(doc, errors, table)),
     )
 }
 
 fn check_table<'f>(
     doc: &TomlDoc,
     errors: &mut Vec<SyntaxError>,
-    table: impl ast::EntryOwner + ast::TableHeaderOwner
+    table: impl ast::EntryOwner + ast::TableHeaderOwner,
 ) {
     let header = table.header(doc);
-    match (header.cst().children(doc).first(), header.cst().children(doc).last()) {
-        (Some(first), Some(last)) => {
-            check_new_line(
-                doc,
-                errors,
-                first, last,
-                Forbid,
-                "table header must fit into a single line",
-            )
-        },
+    match (
+        header.cst().children(doc).first(),
+        header.cst().children(doc).last(),
+    ) {
+        (Some(first), Some(last)) => check_new_line(
+            doc,
+            errors,
+            first,
+            last,
+            Forbid,
+            "table header must fit into a single line",
+        ),
         _ => (),
     }
     if let Some(entry) = table.entries(doc).next() {
         check_new_line(
             doc,
             errors,
-            header, entry,
+            header,
+            entry,
             Require,
             "newline is mandatory after table header",
         );
@@ -66,17 +66,18 @@ fn check_table<'f>(
 
 #[derive(PartialOrd, PartialEq)]
 enum Requirement {
-    Forbid, Require,
+    Forbid,
+    Require,
 }
 use self::Requirement::*;
-
 
 fn check_new_line<'f>(
     doc: &TomlDoc,
     errors: &mut Vec<SyntaxError>,
-    left: impl Into<CstNode>, right: impl Into<CstNode>,
+    left: impl Into<CstNode>,
+    right: impl Into<CstNode>,
     r: Requirement,
-    msg: &str
+    msg: &str,
 ) {
     let left = left.into();
     let right = right.into();
@@ -85,10 +86,10 @@ fn check_new_line<'f>(
     let end = right.range(doc).start();
     let range = TextRange::from_to(start, end);
     let text = doc.get_text(range);
-    if text.contains("\n")  != (r == Require) {
+    if text.contains("\n") != (r == Require) {
         errors.push(SyntaxError {
             range,
-            message: msg.into()
+            message: msg.into(),
         });
     }
 }

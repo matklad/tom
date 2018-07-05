@@ -4,7 +4,7 @@ mod lexer;
 use {
     intern::Intern,
     symbol::{COMMENT, DOC, ENTRY, TABLE, WHITESPACE},
-    tree::{NodeId, TreeData, InsertPos},
+    tree::{InsertPos, NodeId, TreeData},
     Symbol, SyntaxError, Tree,
 };
 
@@ -40,7 +40,12 @@ struct EventSink<'t, 'a> {
 }
 
 impl<'t, 'a> EventSink<'t, 'a> {
-    fn new(text: &'t str, tokens: &'t lexer::Tokens, parse_tree: &'a mut ParseTree, root: NodeId) -> Self {
+    fn new(
+        text: &'t str,
+        tokens: &'t lexer::Tokens,
+        parse_tree: &'a mut ParseTree,
+        root: NodeId,
+    ) -> Self {
         let stack = vec![root];
 
         EventSink {
@@ -62,7 +67,9 @@ impl<'t, 'a> EventSink<'t, 'a> {
         if s != DOC {
             let node = self.parse_tree.tree.new_internal(s);
             let top = self.top();
-            self.parse_tree.tree.insert_child(top, node, InsertPos::Last);
+            self.parse_tree
+                .tree
+                .insert_child(top, node, InsertPos::Last);
 
             self.stack.push(node);
         }
@@ -182,7 +189,9 @@ impl<'t, 'a> EventSink<'t, 'a> {
         let intern_id = self.parse_tree.intern.intern(text);
         let leaf = self.parse_tree.tree.new_leaf((s, intern_id));
         let top = self.top();
-        self.parse_tree.tree.insert_child(top, leaf, InsertPos::Last);
+        self.parse_tree
+            .tree
+            .insert_child(top, leaf, InsertPos::Last);
         self.pos += 1;
     }
 

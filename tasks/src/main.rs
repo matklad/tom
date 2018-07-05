@@ -1,10 +1,10 @@
-extern crate heck;
 extern crate clap;
-extern crate itertools;
 extern crate failure;
+extern crate heck;
+extern crate itertools;
 
-use itertools::Itertools;
 use clap::{App, SubCommand};
+use itertools::Itertools;
 use std::fs;
 
 type Result<T> = ::std::result::Result<T, failure::Error>;
@@ -19,19 +19,13 @@ fn main() -> Result<()> {
         .get_matches();
     match matches.subcommand_name().unwrap() {
         "gen-ast" => {
-            update(
-                "./src/ast/generated.rs",
-                &gen_ast::gen_ast(),
-            )?;
+            update("./src/ast/generated.rs", &gen_ast::gen_ast())?;
         }
         "gen-symbols" => {
-            update(
-                "./src/symbols/generated.rs",
-                &gen_symbols(),
-            )?;
+            update("./src/symbols/generated.rs", &gen_symbols())?;
         }
         "gen-tests" => get_tests()?,
-        _ => unreachable!()
+        _ => unreachable!(),
     };
     Ok(())
 }
@@ -59,7 +53,8 @@ fn get_tests() -> Result<()> {
 
     fn collect_tests(s: &str) -> Vec<String> {
         let mut res = vec![];
-        let comment_blocks = s.lines()
+        let comment_blocks = s
+            .lines()
             .map(str::trim_left)
             .group_by(|line| line.starts_with("//"));
 
@@ -83,7 +78,6 @@ fn get_tests() -> Result<()> {
         res
     }
 }
-
 
 fn gen_symbols() -> String {
     let mut buff = String::new();
@@ -138,7 +132,12 @@ EOF
     for (i, s) in symbols.trim().lines().enumerate() {
         let name = format!("{}: Symbol", s);
         let vis = if name == "EOF" { "(crate)" } else { "" };
-        ln!(r#"pub{} const {:<42} = Symbol(unsafe {{ NonZeroU8::new_unchecked({} + 1) }});"#, vis, name, i)
+        ln!(
+            r#"pub{} const {:<42} = Symbol(unsafe {{ NonZeroU8::new_unchecked({} + 1) }});"#,
+            vis,
+            name,
+            i
+        )
     }
     buff
 }

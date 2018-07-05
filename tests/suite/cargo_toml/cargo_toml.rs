@@ -1,11 +1,8 @@
 use std::iter;
 
-use tom::{
-    ast, TomlDoc, Position::*, IntoValue
-};
+use tom::{ast, IntoValue, Position::*, TomlDoc};
 
 pub struct CargoToml(TomlDoc);
-
 
 enum DependencyNode {
     Vers(ast::StringLit),
@@ -80,7 +77,7 @@ impl CargoToml {
         match entry.value(&self.0).kind(&self.0) {
             ast::ValueKind::Dict(d) => DependencyNode::Dict(d),
             ast::ValueKind::StringLit(l) => DependencyNode::Vers(l),
-            _ => panic!("invalid dependency")
+            _ => panic!("invalid dependency"),
         }
     }
 
@@ -93,7 +90,7 @@ impl CargoToml {
                         self.0.replace(v, new_vers);
                         return;
                     }
-                    _ => ()
+                    _ => (),
                 };
                 let old_value = v.cst().parent(&self.0).unwrap();
                 let empty = self.0.new_value_from_text("{}");
@@ -108,17 +105,16 @@ impl CargoToml {
         }
     }
 
-    fn merge_into(
-        &mut self,
-        table: impl ast::EntryOwner,
-        dep: Dependency,
-    ) {
-
+    fn merge_into(&mut self, table: impl ast::EntryOwner, dep: Dependency) {
         match &dep.source {
             DependencySource::Version(version) => {
                 update_entry(&mut self.0, table, "version", version.as_str());
             }
-            DependencySource::Git { url, version, branch } => {
+            DependencySource::Git {
+                url,
+                version,
+                branch,
+            } => {
                 update_entry(&mut self.0, table, "git", url.as_str());
 
                 if let Some(branch) = branch {
@@ -141,10 +137,17 @@ impl CargoToml {
 }
 
 fn find_entry(doc: &TomlDoc, table: impl ast::EntryOwner, key: &str) -> Option<ast::Entry> {
-    table.entries(doc).find(|&entry| compare_keys(doc, entry, &[key]))
+    table
+        .entries(doc)
+        .find(|&entry| compare_keys(doc, entry, &[key]))
 }
 
-fn update_entry(doc: &mut TomlDoc, table: impl ast::EntryOwner, key: &str, new_value: impl IntoValue) {
+fn update_entry(
+    doc: &mut TomlDoc,
+    table: impl ast::EntryOwner,
+    key: &str,
+    new_value: impl IntoValue,
+) {
     match find_entry(doc, table, key) {
         Some(entry) => {
             let old_value = entry.value(doc);
@@ -165,7 +168,9 @@ fn new_entry(doc: &mut TomlDoc, key: &str, value: impl IntoValue) -> ast::Entry 
 }
 
 fn find_table(doc: &TomlDoc, keys: &[&str]) -> Option<ast::Table> {
-    doc.ast().tables(doc).find(|t| compare_keys(doc, t.header(doc), keys))
+    doc.ast()
+        .tables(doc)
+        .find(|t| compare_keys(doc, t.header(doc), keys))
 }
 
 fn compare_keys(doc: &TomlDoc, el: impl ast::KeyOwner, keys: &[&str]) -> bool {

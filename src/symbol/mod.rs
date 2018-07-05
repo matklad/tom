@@ -1,9 +1,6 @@
 mod generated;
 
-use std::{
-    fmt,
-    num::NonZeroU8,
-};
+use std::{fmt, num::NonZeroU8};
 
 use Symbol;
 
@@ -27,5 +24,3 @@ impl fmt::Debug for Symbol {
         write!(f, "`{}", self.name())
     }
 }
-
-

@@ -1,9 +1,6 @@
-use m_lexer::{LexerBuilder, Lexer, TokenKind};
+use m_lexer::{Lexer, LexerBuilder, TokenKind};
 
-use {
-    Symbol, TextUnit, TextRange,
-    symbol,
-};
+use {symbol, Symbol, TextRange, TextUnit};
 
 #[derive(Copy, Clone, Debug)]
 pub(crate) struct Token {
@@ -41,18 +38,21 @@ pub(crate) fn tokenize(input: &str) -> Tokens {
         });
         offset += len;
     }
-    let significant = raw_tokens.iter()
+    let significant = raw_tokens
+        .iter()
         .enumerate()
         .filter(|(_idx, tok)| tok.is_significant())
         .map(|(idx, _tok)| Pos(idx as u32))
         .collect();
-    Tokens { raw_tokens, significant }
+    Tokens {
+        raw_tokens,
+        significant,
+    }
 }
 
 lazy_static! {
     static ref LEXER: Lexer = lexer();
 }
-
 
 fn lexer() -> Lexer {
     fn t(s: Symbol) -> TokenKind {
@@ -69,44 +69,39 @@ fn lexer() -> Lexer {
             (t(symbol::R_BRACK), r"\]"),
             (t(symbol::L_CURLY), r"\{"),
             (t(symbol::R_CURLY), r"\}"),
+            (t(symbol::WHITESPACE), r"\s+"),
+            (t(symbol::COMMENT), r"#.*"),
+            (t(symbol::BARE_KEY_OR_NUMBER), r"[0-9]+"),
             (
-                t(symbol::WHITESPACE),
-                r"\s+"
-            ),
-            (
-                t(symbol::COMMENT),
-                r"#.*"
-            ),
-            (
-                t(symbol::BARE_KEY_OR_NUMBER),
-                r"[0-9]+",
-            ), (
                 t(symbol::BARE_KEY_OR_DATE),
                 r"[0-9]{4}-[0-9]{2}-[0-9]{2}[Zz]?",
-            ), (
+            ),
+            (
                 t(symbol::BASIC_STRING),
                 r#"(?x)
                     " ([^\r\n"\\] | \\.)* "
                 "#,
-            ), (
+            ),
+            (
                 t(symbol::MULTILINE_BASIC_STRING),
                 r#"(?x)
                     """ ([^"] | \\. | "[^"] | ""[^"])* """
                 "#,
-            ), (
+            ),
+            (
                 t(symbol::LITERAL_STRING),
                 r#"(?x)
                     ' ([^\r\n'] | \\.)* '
                 "#,
-            ), (
+            ),
+            (
                 t(symbol::MULTILINE_LITERAL_STRING),
                 r#"(?x)
                     ''' ([^'] | \\. | '[^'] | ''[^'])* '''
                 "#,
-            ), (
-                t(symbol::BOOL),
-                r"(false|true)",
-            ), (
+            ),
+            (t(symbol::BOOL), r"(false|true)"),
+            (
                 t(symbol::NUMBER),
                 r"(?x)
                     [-+]?
@@ -114,17 +109,16 @@ fn lexer() -> Lexer {
                     (\.[0-9](_?[0-9])*)?
                     ([eE][-+]?[1-9](_?[0-9])*)?
                 ",
-            ), (
+            ),
+            (
                 t(symbol::DATE_TIME),
                 r"(?x)
                     ( [0-9]{4}-[0-9]{2}-[0-9]{2} ([Tt]([0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?))?
                     | ([0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?))
                     ([Zz]|[+-][0-9]{2}:[0-9]{2})?
                 ",
-            ), (
-                t(symbol::BARE_KEY),
-                r"[0-9_\-a-zA-Z]+",
-            )
+            ),
+            (t(symbol::BARE_KEY), r"[0-9_\-a-zA-Z]+"),
         ])
         .build()
 }

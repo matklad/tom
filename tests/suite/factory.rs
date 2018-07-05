@@ -1,6 +1,6 @@
 use std::iter;
-use tom::{TomlDoc, CstNode};
 use testutils::assert_eq_text;
+use tom::{CstNode, TomlDoc};
 
 #[test]
 fn create_key_with_space() {
@@ -53,10 +53,7 @@ fn create_table() {
             for key in "target x86_64.json dependencies".split_whitespace() {
                 keys.push(doc.new_key(key));
             }
-            doc.new_table(
-                keys.into_iter(),
-                vec![a, b].into_iter(),
-            )
+            doc.new_table(keys.into_iter(), vec![a, b].into_iter())
         },
         r#"[target."x86_64.json".dependencies]
 foo = "1.0"
@@ -71,18 +68,14 @@ fn create_array_table() {
             let a = doc.new_entry_from_text("name = \"foo\"");
             let key = doc.new_key("bin");
 
-            doc.new_array_table(
-                iter::once(key),
-                iter::once(a),
-            ).cst()
+            doc.new_array_table(iter::once(key), iter::once(a)).cst()
         },
         r#"[[bin]]
 name = "foo""#,
     );
 }
 
-fn check<F: FnOnce(&mut TomlDoc) -> R, R: Into<CstNode>>(f: F, expected: &str)
-{
+fn check<F: FnOnce(&mut TomlDoc) -> R, R: Into<CstNode>>(f: F, expected: &str) {
     let mut doc = TomlDoc::new("");
     doc.start_edit();
     let cst = f(&mut doc).into();

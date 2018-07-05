@@ -8,20 +8,18 @@ extern crate typed_index_derive;
 #[macro_use]
 extern crate uncover;
 
-define_uncover_macros!(
-    enable_if(cfg!(debug_assertions))
-);
+define_uncover_macros!(enable_if(cfg!(debug_assertions)));
 
 pub mod ast;
+mod edit;
 mod intern;
 mod parser;
 pub mod symbol;
 mod tree;
-mod visitor;
 mod validator;
-mod edit;
+mod visitor;
 
-use std::{marker::PhantomData, num::NonZeroU8, cmp};
+use std::{cmp, marker::PhantomData, num::NonZeroU8};
 
 use {
     intern::{Intern, InternId},
@@ -29,8 +27,8 @@ use {
     tree::{NodeId, TreeData},
 };
 
+pub use edit::{IntoValue, Position};
 pub use text_unit::{TextRange, TextUnit};
-pub use edit::{Position, IntoValue};
 
 type ID = Symbol;
 type LD = (Symbol, InternId);

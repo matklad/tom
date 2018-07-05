@@ -1,8 +1,8 @@
 extern crate difference;
 
 use std::{
-    path::{Path, PathBuf},
     fs::{self, read_dir},
+    path::{Path, PathBuf},
 };
 
 use difference::Changeset;
@@ -23,8 +23,8 @@ fn read_text(path: &Path) -> String {
 }
 
 pub fn dir_tests<F>(paths: &[&str], f: F)
-    where
-        F: Fn(&str) -> String,
+where
+    F: Fn(&str) -> String,
 {
     for path in collect_tests(paths) {
         let input_code = read_text(&path);
@@ -107,7 +107,8 @@ pub fn assert_eq_text(expected: &str, actual: &str) {
     let changeset = Changeset::new(actual, expected, "\n");
     if expected.lines().count() < 20 {
         let line = "--------------------------";
-        eprintln!("
+        eprintln!(
+            "
 Expected:
 {line}
 {expected}
@@ -119,10 +120,11 @@ Actual:
 Diff:
 {diff}
 ",
-                  line = line,
-                  expected = expected,
-                  actual = actual,
-                  diff = changeset);
+            line = line,
+            expected = expected,
+            actual = actual,
+            diff = changeset
+        );
         panic!("Comparison failed")
     } else {
         print!("{}", changeset);
