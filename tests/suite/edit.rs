@@ -1,5 +1,5 @@
 use check_edit;
-use tom::{ast, Position::*, TomlDoc};
+use tom::{ast, Position::*, TomlDoc, TextRange};
 
 #[test]
 fn basic_insertion() {
@@ -173,4 +173,35 @@ fn test_swap() {
             doc.swap(foo, bar);
         },
     );
+}
+
+#[test]
+fn recalculates_ranges() {
+    let mut doc = TomlDoc::new("foo = 92");
+    let foo = doc.ast().entries(&doc).next().unwrap();
+    assert_eq!(foo.cst().range(&doc), TextRange::from_to(0.into(), 8.into()));
+
+    doc.start_edit();
+    let bar = doc.new_entry_from_text("bar = 62");
+    let root = doc.cst();
+    doc.insert(bar, PrependTo(root));
+    doc.finish_edit_no_reparse();
+    assert_eq!(foo.cst().range(&doc), TextRange::from_to(9.into(), 17.into()));
+}
+
+#[test]
+fn edit_full_reparse() {
+    let mut doc = TomlDoc::new("");
+    assert!(doc.errors().is_empty());
+
+    doc.start_edit();
+    let val = doc.new_value_from_text("92");
+    let root = doc.cst();
+    doc.insert(val, PrependTo(root));
+    doc.finish_edit_no_reparse();
+    assert!(doc.errors().is_empty());
+
+    doc.start_edit();
+    doc.finish_edit_full_reparse();
+    assert!(!doc.errors().is_empty());
 }

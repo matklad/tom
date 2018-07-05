@@ -15,8 +15,13 @@ impl TomlDoc {
     pub fn set_smart_ws(&mut self, smart: bool) {
         self.smart_ws = smart;
     }
-    pub fn finish_edit(&mut self) {
-        unimplemented!()
+    pub fn finish_edit_no_reparse(&mut self) {
+        self.recalculate_ranges();
+        self.edit_in_progress = false;
+    }
+    pub fn finish_edit_full_reparse(&mut self) {
+        let text = self.cst().get_text(self);
+        *self = TomlDoc::new(&text);
     }
     fn assert_edit(&self) {
         assert!(

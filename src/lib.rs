@@ -21,12 +21,11 @@ mod edit;
 pub mod ast;
 pub mod symbol;
 
-use std::{cmp, marker::PhantomData, num::NonZeroU8};
+use std::{cmp, marker::PhantomData, num::NonZeroU8, mem};
 
 use {
     intern::{Intern, InternId},
     parser::ParseTree,
-    tree::{NodeId, TreeData},
 };
 
 pub use edit::{IntoValue, Position};
@@ -78,7 +77,18 @@ impl TomlDoc {
         };
         let root = pt.tree.root();
         parser::parse(text, &mut pt, root);
-        assemble(pt)
+        let mut doc = TomlDoc {
+            tree: pt,
+            data: Vec::new(),
+            edit_in_progress: false,
+            smart_ws: true,
+        };
+        doc.recalculate_ranges();
+
+        let validation_errors = validator::validate(&doc);
+        doc.tree.errors.extend(validation_errors);
+
+        doc
     }
 
     pub fn cst(&self) -> CstNode {
@@ -87,6 +97,27 @@ impl TomlDoc {
 
     pub fn ast(&self) -> ast::Doc {
         ast::Doc::cast(self.cst(), self).unwrap()
+    }
+
+    pub fn get_text(&self, range: TextRange) -> String {
+        assert!(!self.edit_in_progress, "range info is unavailable during edit");
+        let mut buff = String::new();
+        cst::process_leaves(
+            self.cst(),
+            self,
+            &mut |node| intersect(node.range(self), range).is_some(),
+            &mut |leaf, text| {
+                let node_range = leaf.range(self);
+                let range = intersect(node_range, range).unwrap();
+                let range = relative_range(node_range.start(), range);
+                buff.push_str(&text[range]);
+            },
+        );
+        return buff;
+    }
+
+    pub fn errors(&self) -> Vec<SyntaxError> {
+        self.tree.errors.clone()
     }
 
     pub fn debug(&self) -> String {
@@ -127,21 +158,35 @@ impl TomlDoc {
         }
     }
 
-    pub fn get_text(&self, range: TextRange) -> String {
-        assert!(!self.edit_in_progress, "range info is unavailable during edit");
-        let mut buff = String::new();
-        cst::process_leaves(
-            self.cst(),
-            self,
-            &mut |node| intersect(node.range(self), range).is_some(),
-            &mut |leaf, text| {
-                let node_range = leaf.range(self);
-                let range = intersect(node_range, range).unwrap();
-                let range = relative_range(node_range.start(), range);
-                buff.push_str(&text[range]);
-            },
-        );
-        return buff;
+    fn recalculate_ranges(&mut self) {
+        let mut data = mem::replace(&mut self.data, Vec::new());
+        let node_data = NodeData {
+            range: TextRange::offset_len(0.into(), 0.into())
+        };
+        data.resize(self.tree.tree.len(), node_data);
+        go(self, self.cst(), 0.into(), &mut data);
+        self.data = data;
+
+        fn go(
+            doc: &TomlDoc,
+            node: CstNode,
+            start_offset: TextUnit,
+            data: &mut Vec<NodeData>,
+        ) -> TextUnit {
+            let mut len: TextUnit = 0.into();
+            match node.kind(doc) {
+                CstNodeKind::Leaf(text) => {
+                    len += (text.len() as u32).into();
+                },
+                CstNodeKind::Internal(children) => {
+                    for child in children {
+                        len += go(doc, child, start_offset + len, data);
+                    }
+                },
+            }
+            data[node.0.to_idx()].range = TextRange::offset_len(start_offset, len);
+            len
+        }
     }
 }
 
@@ -182,49 +227,6 @@ impl<'a, A: AstNode> Iterator for AstChildren<'a, A> {
 #[derive(Clone, Copy)]
 struct NodeData {
     range: TextRange,
-}
-
-fn assemble(pt: parser::ParseTree) -> TomlDoc {
-    let mut data = vec![
-        NodeData {
-            range: TextRange::offset_len(0.into(), 0.into())
-        };
-        pt.tree.len()
-    ];
-    go(pt.tree.root(), 0.into(), &mut data, &pt.tree, &pt.intern);
-    let mut doc = TomlDoc {
-        tree: pt,
-        data,
-        edit_in_progress: false,
-        smart_ws: true,
-    };
-    let validation_errors = validator::validate(&doc);
-    doc.tree.errors.extend(validation_errors);
-    return doc;
-
-    fn go(
-        node: NodeId,
-        start_offset: TextUnit,
-        data: &mut Vec<NodeData>,
-        tree: &Tree,
-        intern: &Intern,
-    ) -> TextUnit {
-        let mut len: TextUnit = 0.into();
-        match node.data(tree) {
-            TreeData::Leaf(&(_, idx)) => {
-                len += (intern.resolve(idx).len() as u32).into();
-            }
-            TreeData::Internal(_) => {
-                let mut curr = node.first_child(tree);
-                while let Some(child) = curr {
-                    len += go(child, start_offset + len, data, tree, intern);
-                    curr = child.next_sibling(tree);
-                }
-            }
-        }
-        data[node.to_idx()].range = TextRange::offset_len(start_offset, len);
-        len
-    }
 }
 
 fn intersect(r1: TextRange, r2: TextRange) -> Option<TextRange> {
