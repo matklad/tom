@@ -1,34 +1,7 @@
-mod cargo_toml;
-
-use self::cargo_toml::{CargoToml, Dependency, DependencySource};
-use testutils::assert_eq_text;
+use {CargoToml, Dependency, DependencySource};
 
 #[test]
-fn adding_dependency_to_table() {
-    check_cargo_toml_edit(
-        r#"
-[package]
-name = "tom"
-
-[dependencies]
-lalrpop-util = "0.15"
-regex = "0.2"
-"#,
-        r#"
-[package]
-name = "tom"
-
-[dependencies]
-lalrpop-util = "0.15"
-regex = "0.2"
-pest = "1.0"
-"#,
-        |toml| toml.add_dependency("pest", "1.0"),
-    );
-}
-
-#[test]
-fn adding_dependency_no_table() {
+fn updating_dependency_no_table() {
     check_cargo_toml_edit(
         r#"
 [package]
@@ -38,57 +11,45 @@ name = "tom"
 [package]
 name = "tom"
 
-[dependencies]
-pest = "1.0"
-"#,
-        |toml| toml.add_dependency("pest", "1.0"),
-    );
-}
-
-#[test]
-fn adding_dependency_no_table_bin_section() {
-    check_cargo_toml_edit(
-        r#"
-[package]
-name = "tom"
-
-[bin]
-name = "baz"
-"#,
-        r#"
-[package]
-name = "tom"
-
-[dependencies]
-pest = "1.0"
-
-[bin]
-name = "baz"
-"#,
-        |toml| toml.add_dependency("pest", "1.0"),
-    )
-}
-
-#[test]
-fn adding_two_dependencies() {
-    check_cargo_toml_edit(
-        r#"
-[package]
-name = "tom"
-[dependencies]
-"#,
-        r#"
-[package]
-name = "tom"
 [dependencies]
 regex = "1.0"
-pest = "1.0"
 "#,
         |toml| {
-            toml.add_dependency("regex", "1.0");
-            toml.add_dependency("pest", "1.0");
+            toml.update_dependency(&Dependency {
+                name: "regex".to_string(),
+                source: DependencySource::Version("1.0".to_string()),
+                optional: false,
+            }).unwrap();
         },
     );
+
+    check_cargo_toml_edit(
+        r#"
+[package]
+name = "tom"
+
+[bin]
+name = "bar"
+"#,
+        r#"
+[package]
+name = "tom"
+
+[dependencies]
+regex = "1.0"
+
+[bin]
+name = "bar"
+"#,
+        |toml| {
+            toml.update_dependency(&Dependency {
+                name: "regex".to_string(),
+                source: DependencySource::Version("1.0".to_string()),
+                optional: false,
+            }).unwrap();
+        },
+    );
+
 }
 
 #[test]
@@ -108,11 +69,11 @@ name = "tom"
 regex = "1.0"
 "#,
         |toml| {
-            toml.update_dependency(Dependency {
+            toml.update_dependency(&Dependency {
                 name: "regex".to_string(),
                 source: DependencySource::Version("1.0".to_string()),
                 optional: false,
-            })
+            }).unwrap();
         },
     );
 
@@ -132,7 +93,7 @@ name = "tom"
 regex = { git = "http://example.com" }
 "#,
         |toml| {
-            toml.update_dependency(Dependency {
+            toml.update_dependency(&Dependency {
                 name: "regex".to_string(),
                 source: DependencySource::Git {
                     url: "http://example.com".to_string(),
@@ -140,7 +101,7 @@ regex = { git = "http://example.com" }
                     branch: None,
                 },
                 optional: false,
-            })
+            }).unwrap();
         },
     );
 
@@ -161,7 +122,7 @@ version = "1.0"
 git = "http://example.com"
 "#,
         |toml| {
-            toml.update_dependency(Dependency {
+            toml.update_dependency(&Dependency {
                 name: "regex".to_string(),
                 source: DependencySource::Git {
                     url: "http://example.com".to_string(),
@@ -169,7 +130,7 @@ git = "http://example.com"
                     branch: None,
                 },
                 optional: false,
-            })
+            }).unwrap();
         },
     );
 
@@ -189,7 +150,7 @@ name = "tom"
 regex = { git = "http://example.com", branch = "dev" }
 "#,
         |toml| {
-            toml.update_dependency(Dependency {
+            toml.update_dependency(&Dependency {
                 name: "regex".to_string(),
                 source: DependencySource::Git {
                     url: "http://example.com".to_string(),
@@ -197,14 +158,14 @@ regex = { git = "http://example.com", branch = "dev" }
                     branch: Some("dev".to_string()),
                 },
                 optional: false,
-            })
+            }).unwrap();
         },
     );
 }
 
 fn check_cargo_toml_edit(before: &str, after: &str, edit: impl FnOnce(&mut CargoToml)) {
-    let mut cargo_toml = CargoToml::new(before);
+    let mut cargo_toml = CargoToml::new(before).unwrap();
     edit(&mut cargo_toml);
-    let actual = cargo_toml.finish();
-    assert_eq_text(after, &actual);
+    let actual = cargo_toml.text();
+    assert_eq!(after, &actual);
 }

@@ -5,7 +5,6 @@ extern crate tom;
 extern crate lazy_static;
 
 mod ast;
-mod cargo_toml;
 mod edit;
 mod factory;
 
