@@ -17,14 +17,10 @@ impl Token {
     }
 }
 
-#[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq, TypedIndex)]
-#[typed_index(Token)]
-pub(crate) struct Pos(pub u32);
-
 #[derive(Debug)]
 pub(crate) struct Tokens {
     pub raw_tokens: Vec<Token>,
-    pub significant: Vec<Pos>,
+    pub significant: Vec<usize>,
 }
 
 pub(crate) fn tokenize(input: &str) -> Tokens {
@@ -42,7 +38,7 @@ pub(crate) fn tokenize(input: &str) -> Tokens {
         .iter()
         .enumerate()
         .filter(|(_idx, tok)| tok.is_significant())
-        .map(|(idx, _tok)| Pos(idx as u32))
+        .map(|(idx, _tok)| idx)
         .collect();
     Tokens {
         raw_tokens,

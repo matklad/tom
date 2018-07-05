@@ -5,7 +5,7 @@ use {
     TomlDoc,
     symbol::{COMMENT, DOC, ENTRY, TABLE, WHITESPACE},
     tree::{InsertPos, NodeId, TreeData},
-    Symbol, SyntaxError
+    Symbol, SyntaxError,
 };
 
 pub(crate) fn parse(input: &str, doc: &mut TomlDoc, root: NodeId) {
@@ -26,7 +26,7 @@ struct Parser<'s, 't: 's, 'a: 's> {
 }
 
 struct EventSink<'t, 'a> {
-    pos: lexer::Pos,
+    pos: usize,
     text: &'t str,
     tokens: &'t lexer::Tokens,
     doc: &'a mut TomlDoc,
@@ -38,7 +38,7 @@ impl<'t, 'a> EventSink<'t, 'a> {
         let stack = vec![root];
 
         EventSink {
-            pos: lexer::Pos(0),
+            pos: 0,
             text,
             tokens,
             doc,
@@ -76,7 +76,7 @@ impl<'t, 'a> EventSink<'t, 'a> {
         }
     }
 
-    fn token(&mut self, pos: lexer::Pos, s: Option<Symbol>) {
+    fn token(&mut self, pos: usize, s: Option<Symbol>) {
         while self.pos < pos {
             self.bump(None)
         }
@@ -87,7 +87,7 @@ impl<'t, 'a> EventSink<'t, 'a> {
         let mut tok = &self.tokens.raw_tokens[self.pos - 1];
         let mut pos = self.pos;
         loop {
-            match pos.get(&self.tokens.raw_tokens) {
+            match &self.tokens.raw_tokens.get(pos) {
                 Some(t) if t.is_significant() => {
                     tok = t;
                     break;
@@ -160,12 +160,12 @@ impl<'t, 'a> EventSink<'t, 'a> {
         let start = self.pos;
         let mut end = start;
         loop {
-            match end.get(&self.tokens.raw_tokens) {
+            match &self.tokens.raw_tokens.get(end) {
                 Some(token) if !token.is_significant() => end += 1,
                 _ => break,
             }
         }
-        &self.tokens.raw_tokens[start.0 as usize..end.0 as usize]
+        &self.tokens.raw_tokens[start..end]
     }
 
     fn bump(&mut self, s: Option<Symbol>) {

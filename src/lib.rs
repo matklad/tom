@@ -4,8 +4,6 @@ extern crate text_unit;
 #[macro_use]
 extern crate lazy_static;
 #[macro_use]
-extern crate typed_index_derive;
-#[macro_use]
 extern crate uncover;
 
 define_uncover_macros!(enable_if(cfg!(debug_assertions)));
