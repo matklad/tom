@@ -30,7 +30,7 @@ use {
 };
 
 pub use text_unit::{TextRange, TextUnit};
-pub use edit::Position;
+pub use edit::{Position, IntoValue};
 
 type ID = Symbol;
 type LD = (Symbol, InternId);

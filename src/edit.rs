@@ -72,12 +72,13 @@ impl TomlDoc {
 
         fn fix_ws_between(doc: &mut TomlDoc, parent: CstNode, left: CstNode, right: CstNode) {
             let ws = match (left.symbol(doc), right.symbol(doc)) {
+                (ENTRY, R_CURLY) | (L_CURLY, ENTRY) | (COMMA, ENTRY) => " ",
                 (ENTRY, ENTRY) | (TABLE_HEADER, ENTRY) => "\n",
                 (TABLE, TABLE) | (ENTRY, TABLE) => "\n\n",
                 _ => "",
             };
             if !ws.is_empty() {
-                let ws = doc.new_ws(ws);
+                let ws = doc.new_whitespace(ws);
                 doc.tree.tree.insert_child(parent.0, ws.0, InsertPos::After(left.0));
             }
         }
@@ -91,7 +92,7 @@ impl TomlDoc {
                 ""
             };
             if !ws.is_empty() {
-                let ws = doc.new_ws(ws);
+                let ws = doc.new_whitespace(ws);
                 doc.tree.tree.insert_child(parent.0, ws.0, InsertPos::After(last_child.0));
             }
         }
@@ -105,7 +106,7 @@ impl TomlDoc {
     pub fn swap(&mut self, node1: impl Into<CstNode>, node2: impl Into<CstNode>) {
         let node1 = node1.into();
         let node2 = node2.into();
-        let tmp = self.new_ws("");
+        let tmp = self.new_whitespace("");
         self.replace(node1, tmp);
         self.replace(node2, node1);
         self.replace(tmp, node2);
@@ -119,10 +120,14 @@ impl TomlDoc {
         res
     }
 
-    pub fn new_value(&mut self, val: impl IntoValue) -> ast::Value {
-        let res = self.new_entry_from_text(&format!("foo = {}", val.value_text())).value(self);
+    pub fn new_value_from_text(&mut self, text: &str) -> ast::Value {
+        let res = self.new_entry_from_text(&format!("foo = {}", text)).value(self);
         self.detach(res);
         res
+    }
+
+    pub fn new_value(&mut self, val: impl IntoValue) -> ast::Value {
+        self.new_value_from_text(&val.value_text())
     }
 
     pub fn new_value_dict(&mut self, entries: impl Iterator<Item=ast::Entry>) -> ast::Value {
@@ -193,6 +198,16 @@ impl TomlDoc {
         self.new_array_table_from_text(&text)
     }
 
+    pub fn new_whitespace(&mut self, ws: &str) -> CstNode {
+        let idx = self.tree.intern.intern(ws);
+        CstNode(self.tree.tree.new_leaf((WHITESPACE, idx)))
+    }
+
+    pub fn new_comma(&mut self) -> CstNode {
+        let idx = self.tree.intern.intern(",");
+        CstNode(self.tree.tree.new_leaf((COMMA, idx)))
+    }
+
     fn table_text(
         &mut self,
         keys: impl Iterator<Item=ast::Key>,
@@ -208,11 +223,6 @@ impl TomlDoc {
             entry.cst().write_text(self, &mut buff);
         }
         buff
-    }
-
-    fn new_ws(&mut self, ws: &str) -> CstNode {
-        let idx = self.tree.intern.intern(ws);
-        CstNode(self.tree.tree.new_leaf((WHITESPACE, idx)))
     }
 }
 

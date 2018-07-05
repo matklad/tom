@@ -3,10 +3,11 @@ mod generated;
 use std::borrow::Cow;
 
 pub use self::generated::*;
-use {ast, AstChildren, AstNode, TomlDoc};
+use {ast, AstChildren, AstNode, TomlDoc, Position::*, CstNode};
 
 pub trait EntryOwner: AstNode {
     fn entries(self, doc: &TomlDoc) -> AstChildren<ast::Entry>;
+    fn append_entry(self, doc: &mut TomlDoc, entry: ast::Entry);
 }
 
 pub trait TableHeaderOwner: AstNode {
@@ -58,11 +59,30 @@ impl EntryOwner for ast::Dict {
     fn entries(self, doc: &TomlDoc) -> AstChildren<ast::Entry> {
         self.entries(doc)
     }
+
+    fn append_entry(self, doc: &mut TomlDoc, entry: Entry) {
+        match self.entries(doc).last() {
+            Some(old_entry) => {
+                let comma = doc.new_comma();
+                doc.insert(comma, After(old_entry.into()));
+                doc.insert(entry, After(comma));
+            }
+            None => {
+                let l_curly = self.cst().children(doc).first().unwrap();
+                doc.insert(entry, After(l_curly));
+                return;
+            }
+        }
+    }
 }
+
 
 impl EntryOwner for ast::Table {
     fn entries(self, doc: &TomlDoc) -> AstChildren<ast::Entry> {
         self.entries(doc)
+    }
+    fn append_entry(self, doc: &mut TomlDoc, entry: Entry) {
+        append_table_entry(doc, self.cst(), entry)
     }
 }
 
@@ -70,11 +90,25 @@ impl EntryOwner for ast::ArrayTable {
     fn entries(self, doc: &TomlDoc) -> AstChildren<ast::Entry> {
         self.entries(doc)
     }
+    fn append_entry(self, doc: &mut TomlDoc, entry: Entry) {
+        append_table_entry(doc, self.cst(), entry)
+    }
+}
+
+fn append_table_entry(doc: &mut TomlDoc, table: CstNode, entry: Entry) {
+    doc.insert(entry, AppendTo(table));
 }
 
 impl EntryOwner for ast::Doc {
     fn entries(self, doc: &TomlDoc) -> AstChildren<ast::Entry> {
         self.entries(doc)
+    }
+
+    fn append_entry(self, doc: &mut TomlDoc, entry: Entry) {
+        match self.entries(doc).last() {
+            Some(old_entry) => doc.insert(entry, After(old_entry.into())),
+            None => doc.insert(entry, PrependTo(self.into())),
+        }
     }
 }
 
