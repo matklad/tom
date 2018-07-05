@@ -1,17 +1,18 @@
 use string_interner::StringInterner;
+use std::num::NonZeroU32;
 
-#[derive(Clone, Copy, PartialOrd, Ord, PartialEq, Eq)]
-pub(crate) struct InternId(u32);
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+pub(crate) struct InternId(NonZeroU32);
 
 impl From<usize> for InternId {
     fn from(s: usize) -> InternId {
-        InternId(s as u32)
+        InternId(NonZeroU32::new((s + 1) as u32).unwrap())
     }
 }
 
 impl From<InternId> for usize {
     fn from(id: InternId) -> usize {
-        id.0 as usize
+        (id.0.get() as usize) - 1
     }
 }
 

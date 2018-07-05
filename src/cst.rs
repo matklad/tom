@@ -13,7 +13,7 @@ pub enum CstNodeKind<'a> {
 
 impl CstNode {
     pub fn symbol(self, doc: &TomlDoc) -> Symbol {
-        *match self.0.data(&doc.tree.tree) {
+        *match self.0.data(&doc.tree) {
             TreeData::Internal(s) => s,
             TreeData::Leaf((s, _)) => s,
         }
@@ -25,8 +25,8 @@ impl CstNode {
     }
 
     pub fn kind(self, doc: &TomlDoc) -> CstNodeKind {
-        match self.0.data(&doc.tree.tree) {
-            TreeData::Leaf((_, idx)) => CstNodeKind::Leaf(doc.tree.intern.resolve(*idx)),
+        match self.0.data(&doc.tree) {
+            TreeData::Leaf((_, idx)) => CstNodeKind::Leaf(doc.intern.resolve(*idx)),
             TreeData::Internal(_) => CstNodeKind::Internal(self.children(doc)),
         }
     }
@@ -39,7 +39,7 @@ impl CstNode {
     }
 
     pub fn parent(self, doc: &TomlDoc) -> Option<CstNode> {
-        self.0.parent(&doc.tree.tree).map(CstNode)
+        self.0.parent(&doc.tree).map(CstNode)
     }
 
     pub fn children(self, doc: &TomlDoc) -> CstChildren {
@@ -47,11 +47,11 @@ impl CstNode {
     }
 
     pub fn next_sibling(self, doc: &TomlDoc) -> Option<CstNode> {
-        self.0.next_sibling(&doc.tree.tree).map(CstNode)
+        self.0.next_sibling(&doc.tree).map(CstNode)
     }
 
     pub fn prev_sibling(self, doc: &TomlDoc) -> Option<CstNode> {
-        self.0.prev_sibling(&doc.tree.tree).map(CstNode)
+        self.0.prev_sibling(&doc.tree).map(CstNode)
     }
 
     pub fn get_text(self, doc: &TomlDoc) -> String {
@@ -81,10 +81,10 @@ pub struct CstChildren<'a> {
 
 impl<'a> CstChildren<'a> {
     pub fn first(self) -> Option<CstNode> {
-        self.node.0.first_child(&self.doc.tree.tree).map(CstNode)
+        self.node.0.first_child(&self.doc.tree).map(CstNode)
     }
     pub fn last(self) -> Option<CstNode> {
-        self.node.0.last_child(&self.doc.tree.tree).map(CstNode)
+        self.node.0.last_child(&self.doc.tree).map(CstNode)
     }
     pub fn iter(self) -> CstChildrenIter<'a> {
         CstChildrenIter { doc: self.doc, curr: self.first() }

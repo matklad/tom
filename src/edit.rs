@@ -37,23 +37,19 @@ impl TomlDoc {
             Position::After(sibling) => {
                 let parent = sibling.parent(self).unwrap();
                 self.tree
-                    .tree
                     .insert_child(parent.0, new_node.0, InsertPos::After(sibling.0));
             }
             Position::Before(sibling) => {
                 let parent = sibling.parent(self).unwrap();
                 self.tree
-                    .tree
                     .insert_child(parent.0, new_node.0, InsertPos::Before(sibling.0));
             }
             Position::AppendTo(parent) => {
                 self.tree
-                    .tree
                     .insert_child(parent.0, new_node.0, InsertPos::Last);
             }
             Position::PrependTo(parent) => {
                 self.tree
-                    .tree
                     .insert_child(parent.0, new_node.0, InsertPos::First);
             }
         };
@@ -67,7 +63,7 @@ impl TomlDoc {
     pub fn replace(&mut self, what: impl Into<CstNode>, replacement: impl Into<CstNode>) {
         let what = what.into();
         let replacement = replacement.into();
-        self.tree.tree.replace(what.0, replacement.0);
+        self.tree.replace(what.0, replacement.0);
     }
 
     fn fix_ws(&mut self, new_node: CstNode) {
@@ -95,7 +91,6 @@ impl TomlDoc {
             if !ws.is_empty() {
                 let ws = doc.new_whitespace(ws);
                 doc.tree
-                    .tree
                     .insert_child(parent.0, ws.0, InsertPos::After(left.0));
             }
         }
@@ -111,7 +106,6 @@ impl TomlDoc {
             if !ws.is_empty() {
                 let ws = doc.new_whitespace(ws);
                 doc.tree
-                    .tree
                     .insert_child(parent.0, ws.0, InsertPos::After(last_child.0));
             }
         }
@@ -119,7 +113,7 @@ impl TomlDoc {
 
     pub fn detach(&mut self, what: impl Into<CstNode>) {
         self.assert_edit();
-        self.tree.tree.detach(what.into().0);
+        self.tree.detach(what.into().0);
     }
 
     pub fn swap(&mut self, node1: impl Into<CstNode>, node2: impl Into<CstNode>) {
@@ -191,8 +185,8 @@ impl TomlDoc {
 
     pub fn new_doc(&mut self, text: &str) -> ast::Doc {
         self.assert_edit();
-        let new_root = self.tree.tree.new_internal(DOC);
-        parser::parse(text, &mut self.tree, new_root);
+        let new_root = self.tree.new_internal(DOC);
+        parser::parse(text, self, new_root);
         ast::Doc::cast(CstNode(new_root), self).unwrap()
     }
 
@@ -229,13 +223,13 @@ impl TomlDoc {
     }
 
     pub fn new_whitespace(&mut self, ws: &str) -> CstNode {
-        let idx = self.tree.intern.intern(ws);
-        CstNode(self.tree.tree.new_leaf((WHITESPACE, idx)))
+        let idx = self.intern.intern(ws);
+        CstNode(self.tree.new_leaf((WHITESPACE, idx)))
     }
 
     pub fn new_comma(&mut self) -> CstNode {
-        let idx = self.tree.intern.intern(",");
-        CstNode(self.tree.tree.new_leaf((COMMA, idx)))
+        let idx = self.intern.intern(",");
+        CstNode(self.tree.new_leaf((COMMA, idx)))
     }
 
     fn table_text(

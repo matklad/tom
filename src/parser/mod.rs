@@ -2,21 +2,15 @@ mod grammar;
 mod lexer;
 
 use {
-    intern::Intern,
+    TomlDoc,
     symbol::{COMMENT, DOC, ENTRY, TABLE, WHITESPACE},
     tree::{InsertPos, NodeId, TreeData},
-    Symbol, SyntaxError, Tree,
+    Symbol, SyntaxError
 };
 
-pub(crate) struct ParseTree {
-    pub tree: Tree,
-    pub intern: Intern,
-    pub errors: Vec<SyntaxError>,
-}
-
-pub(crate) fn parse(input: &str, parse_tree: &mut ParseTree, root: NodeId) {
+pub(crate) fn parse(input: &str, doc: &mut TomlDoc, root: NodeId) {
     let tokens = lexer::tokenize(input);
-    let mut sink = EventSink::new(input, &tokens, parse_tree, root);
+    let mut sink = EventSink::new(input, &tokens, doc, root);
     let mut parser = Parser {
         sink: &mut sink,
         tokens: &tokens,
@@ -35,7 +29,7 @@ struct EventSink<'t, 'a> {
     pos: lexer::Pos,
     text: &'t str,
     tokens: &'t lexer::Tokens,
-    parse_tree: &'a mut ParseTree,
+    doc: &'a mut TomlDoc,
     stack: Vec<NodeId>,
 }
 
@@ -43,7 +37,7 @@ impl<'t, 'a> EventSink<'t, 'a> {
     fn new(
         text: &'t str,
         tokens: &'t lexer::Tokens,
-        parse_tree: &'a mut ParseTree,
+        doc: &'a mut TomlDoc,
         root: NodeId,
     ) -> Self {
         let stack = vec![root];
@@ -52,7 +46,7 @@ impl<'t, 'a> EventSink<'t, 'a> {
             pos: lexer::Pos(0),
             text,
             tokens,
-            parse_tree,
+            doc,
             stack,
         }
     }
@@ -65,9 +59,9 @@ impl<'t, 'a> EventSink<'t, 'a> {
             self.bump(None)
         }
         if s != DOC {
-            let node = self.parse_tree.tree.new_internal(s);
+            let node = self.doc.tree.new_internal(s);
             let top = self.top();
-            self.parse_tree
+            self.doc
                 .tree
                 .insert_child(top, node, InsertPos::Last);
 
@@ -83,7 +77,7 @@ impl<'t, 'a> EventSink<'t, 'a> {
             self.bump(None)
         }
         let node = self.stack.pop().unwrap();
-        match node.data(&self.parse_tree.tree) {
+        match node.data(&self.doc.tree) {
             TreeData::Internal(&sym) => assert_eq!(sym, s),
             _ => (),
         }
@@ -113,7 +107,7 @@ impl<'t, 'a> EventSink<'t, 'a> {
             pos += 1;
         }
 
-        self.parse_tree.errors.push(SyntaxError {
+        self.doc.errors.push(SyntaxError {
             range: tok.range,
             message: message.into(),
         })
@@ -186,10 +180,10 @@ impl<'t, 'a> EventSink<'t, 'a> {
         //        eprintln!("consumed {:?} at {:?}", t.symbol, self.pos);
         let s = s.unwrap_or(t.symbol);
         let text = &self.text[t.range];
-        let intern_id = self.parse_tree.intern.intern(text);
-        let leaf = self.parse_tree.tree.new_leaf((s, intern_id));
+        let intern_id = self.doc.intern.intern(text);
+        let leaf = self.doc.tree.new_leaf((s, intern_id));
         let top = self.top();
-        self.parse_tree
+        self.doc
             .tree
             .insert_child(top, leaf, InsertPos::Last);
         self.pos += 1;

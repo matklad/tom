@@ -23,10 +23,7 @@ pub mod symbol;
 
 use std::{cmp, marker::PhantomData, num::NonZeroU8, mem};
 
-use {
-    intern::{Intern, InternId},
-    parser::ParseTree,
-};
+use intern::{Intern, InternId};
 
 pub use edit::{IntoValue, Position};
 pub use text_unit::{TextRange, TextUnit};
@@ -62,7 +59,9 @@ impl SyntaxError {
 }
 
 pub struct TomlDoc {
-    tree: ParseTree,
+    tree: Tree,
+    intern: Intern,
+    errors: Vec<SyntaxError>,
     data: Vec<NodeData>,
     edit_in_progress: bool,
     smart_ws: bool,
@@ -70,29 +69,26 @@ pub struct TomlDoc {
 
 impl TomlDoc {
     pub fn new(text: &str) -> TomlDoc {
-        let mut pt = ParseTree {
+        let mut doc = TomlDoc {
             tree: Tree::new(symbol::DOC),
             intern: Intern::new(),
             errors: Vec::new(),
-        };
-        let root = pt.tree.root();
-        parser::parse(text, &mut pt, root);
-        let mut doc = TomlDoc {
-            tree: pt,
             data: Vec::new(),
             edit_in_progress: false,
             smart_ws: true,
         };
+        let root = doc.tree.root();
+        parser::parse(text, &mut doc, root);
         doc.recalculate_ranges();
 
         let validation_errors = validator::validate(&doc);
-        doc.tree.errors.extend(validation_errors);
+        doc.errors.extend(validation_errors);
 
         doc
     }
 
     pub fn cst(&self) -> CstNode {
-        CstNode(self.tree.tree.root())
+        CstNode(self.tree.root())
     }
 
     pub fn ast(&self) -> ast::Doc {
@@ -117,7 +113,7 @@ impl TomlDoc {
     }
 
     pub fn errors(&self) -> Vec<SyntaxError> {
-        self.tree.errors.clone()
+        self.errors.clone()
     }
 
     pub fn debug(&self) -> String {
@@ -125,9 +121,9 @@ impl TomlDoc {
         go(self.cst(), 0, &self, &mut result);
 
         let text = self.cst().get_text(self);
-        if !self.tree.errors.is_empty() && !self.edit_in_progress {
+        if !self.errors.is_empty() && !self.edit_in_progress {
             result += "\n";
-            for e in self.tree.errors.iter() {
+            for e in self.errors.iter() {
                 let text = &text[e.range];
                 result += &format!("error@{:?} {:?}: {}\n", e.range(), text, e.message());
             }
@@ -163,7 +159,7 @@ impl TomlDoc {
         let node_data = NodeData {
             range: TextRange::offset_len(0.into(), 0.into())
         };
-        data.resize(self.tree.tree.len(), node_data);
+        data.resize(self.tree.len(), node_data);
         go(self, self.cst(), 0.into(), &mut data);
         self.data = data;
 
