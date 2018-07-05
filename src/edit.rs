@@ -30,12 +30,6 @@ impl TomlDoc {
         let text = self.cst().get_text(self);
         *self = TomlDoc::new(&text);
     }
-    fn assert_edit(&self) {
-        assert!(
-            self.edit_in_progress,
-            "call .start_edit to enable editing operations"
-        )
-    }
 
     pub fn insert(&mut self, what: impl Into<CstNode>, where_: Position) {
         self.assert_edit();
@@ -71,51 +65,6 @@ impl TomlDoc {
         let what = what.into();
         let replacement = replacement.into();
         self.tree.replace(what.0, replacement.0);
-    }
-
-    fn fix_ws(&mut self, new_node: CstNode) {
-        let parent = new_node.parent(self).unwrap();
-
-        if let Some(prev) = new_node.prev_sibling(self) {
-            fix_ws_between(self, parent, prev, new_node);
-        } else {
-            fix_ws_before(self, parent, new_node);
-        }
-
-        if let Some(next) = new_node.next_sibling(self) {
-            fix_ws_between(self, parent, new_node, next);
-        } else {
-            fix_ws_after(self, parent, new_node);
-        }
-
-        fn fix_ws_between(doc: &mut TomlDoc, parent: CstNode, left: CstNode, right: CstNode) {
-            let ws = match (left.symbol(doc), right.symbol(doc)) {
-                (ENTRY, R_CURLY) | (L_CURLY, ENTRY) | (COMMA, ENTRY) => " ",
-                (ENTRY, ENTRY) | (TABLE_HEADER, ENTRY) => "\n",
-                (TABLE, TABLE) | (ENTRY, TABLE) => "\n\n",
-                _ => "",
-            };
-            if !ws.is_empty() {
-                let ws = doc.new_whitespace(ws);
-                doc.tree
-                    .insert_child(parent.0, ws.0, InsertPos::After(left.0));
-            }
-        }
-
-        fn fix_ws_before(_doc: &mut TomlDoc, _parent: CstNode, _last_child: CstNode) {}
-
-        fn fix_ws_after(doc: &mut TomlDoc, parent: CstNode, last_child: CstNode) {
-            let ws = if parent.symbol(doc) == DOC && last_child.symbol(doc) != WHITESPACE {
-                "\n"
-            } else {
-                ""
-            };
-            if !ws.is_empty() {
-                let ws = doc.new_whitespace(ws);
-                doc.tree
-                    .insert_child(parent.0, ws.0, InsertPos::After(last_child.0));
-            }
-        }
     }
 
     pub fn detach(&mut self, what: impl Into<CstNode>) {
@@ -172,6 +121,12 @@ impl TomlDoc {
         res
     }
 
+    pub fn new_entry_from_text(&mut self, text: &str) -> ast::Entry {
+        let entry = self.new_doc_from_text(text).entries(self).next().unwrap();
+        self.detach(entry);
+        entry
+    }
+
     pub fn new_entry(
         &mut self,
         keys: impl Iterator<Item = ast::Key>,
@@ -184,13 +139,7 @@ impl TomlDoc {
         self.new_entry_from_text(&buff)
     }
 
-    pub fn new_entry_from_text(&mut self, text: &str) -> ast::Entry {
-        let entry = self.new_doc(text).entries(self).next().unwrap();
-        self.detach(entry);
-        entry
-    }
-
-    pub fn new_doc(&mut self, text: &str) -> ast::Doc {
+    pub fn new_doc_from_text(&mut self, text: &str) -> ast::Doc {
         self.assert_edit();
         let new_root = self.tree.new_internal(DOC);
         parser::parse(text, self, new_root);
@@ -198,7 +147,7 @@ impl TomlDoc {
     }
 
     pub fn new_table_from_text(&mut self, text: &str) -> ast::Table {
-        let doc = self.new_doc(text);
+        let doc = self.new_doc_from_text(text);
         let res = doc.tables(self).next().unwrap();
         self.detach(res);
         res
@@ -214,7 +163,7 @@ impl TomlDoc {
     }
 
     pub fn new_array_table_from_text(&mut self, text: &str) -> ast::ArrayTable {
-        let doc = self.new_doc(text);
+        let doc = self.new_doc_from_text(text);
         let res = doc.array_tables(self).next().unwrap();
         self.detach(res);
         res
@@ -237,6 +186,58 @@ impl TomlDoc {
     pub fn new_comma(&mut self) -> CstNode {
         let idx = self.intern.intern(",");
         CstNode(self.tree.new_leaf((COMMA, idx)))
+    }
+
+    fn assert_edit(&self) {
+        assert!(
+            self.edit_in_progress,
+            "call .start_edit to enable editing operations"
+        )
+    }
+
+    fn fix_ws(&mut self, new_node: CstNode) {
+        let parent = new_node.parent(self).unwrap();
+
+        if let Some(prev) = new_node.prev_sibling(self) {
+            fix_ws_between(self, parent, prev, new_node);
+        } else {
+            fix_ws_before(self, parent, new_node);
+        }
+
+        if let Some(next) = new_node.next_sibling(self) {
+            fix_ws_between(self, parent, new_node, next);
+        } else {
+            fix_ws_after(self, parent, new_node);
+        }
+
+        fn fix_ws_between(doc: &mut TomlDoc, parent: CstNode, left: CstNode, right: CstNode) {
+            let ws = match (left.symbol(doc), right.symbol(doc)) {
+                (ENTRY, R_CURLY) | (L_CURLY, ENTRY) | (COMMA, ENTRY) => " ",
+                (ENTRY, ENTRY) | (TABLE_HEADER, ENTRY) => "\n",
+                (TABLE, TABLE) | (ENTRY, TABLE) => "\n\n",
+                _ => "",
+            };
+            if !ws.is_empty() {
+                let ws = doc.new_whitespace(ws);
+                doc.tree
+                    .insert_child(parent.0, ws.0, InsertPos::After(left.0));
+            }
+        }
+
+        fn fix_ws_before(_doc: &mut TomlDoc, _parent: CstNode, _last_child: CstNode) {}
+
+        fn fix_ws_after(doc: &mut TomlDoc, parent: CstNode, last_child: CstNode) {
+            let ws = if parent.symbol(doc) == DOC && last_child.symbol(doc) != WHITESPACE {
+                "\n"
+            } else {
+                ""
+            };
+            if !ws.is_empty() {
+                let ws = doc.new_whitespace(ws);
+                doc.tree
+                    .insert_child(parent.0, ws.0, InsertPos::After(last_child.0));
+            }
+        }
     }
 
     fn table_text(
@@ -292,7 +293,7 @@ impl<'a> IntoValue for &'a str {
     }
 }
 
-pub fn join<A: Into<CstNode>>(
+fn join<A: Into<CstNode>>(
     doc: &TomlDoc,
     items: impl Iterator<Item = A>,
     left: char,
@@ -306,7 +307,7 @@ pub fn join<A: Into<CstNode>>(
     buff
 }
 
-pub fn join_to<A: Into<CstNode>>(
+fn join_to<A: Into<CstNode>>(
     doc: &TomlDoc,
     buff: &mut String,
     items: impl Iterator<Item = A>,

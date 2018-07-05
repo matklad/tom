@@ -2,8 +2,8 @@ mod generated;
 
 use std::borrow::Cow;
 
+use {ast, AstChildren, AstNode, Position::*, TomlDoc};
 pub use self::generated::*;
-use {ast, AstChildren, AstNode, CstNode, Position::*, TomlDoc};
 
 pub trait EntryOwner: AstNode {
     fn entries(self, doc: &TomlDoc) -> AstChildren<ast::Entry>;
@@ -81,7 +81,7 @@ impl EntryOwner for ast::Table {
         self.entries(doc)
     }
     fn append_entry(self, doc: &mut TomlDoc, entry: Entry) {
-        append_table_entry(doc, self.cst(), entry)
+        doc.insert(entry, AppendTo(self.cst()));
     }
 }
 
@@ -90,12 +90,8 @@ impl EntryOwner for ast::ArrayTable {
         self.entries(doc)
     }
     fn append_entry(self, doc: &mut TomlDoc, entry: Entry) {
-        append_table_entry(doc, self.cst(), entry)
+        doc.insert(entry, AppendTo(self.cst()));
     }
-}
-
-fn append_table_entry(doc: &mut TomlDoc, table: CstNode, entry: Entry) {
-    doc.insert(entry, AppendTo(table));
 }
 
 impl EntryOwner for ast::Doc {
