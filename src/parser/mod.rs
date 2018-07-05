@@ -34,12 +34,7 @@ struct EventSink<'t, 'a> {
 }
 
 impl<'t, 'a> EventSink<'t, 'a> {
-    fn new(
-        text: &'t str,
-        tokens: &'t lexer::Tokens,
-        doc: &'a mut TomlDoc,
-        root: NodeId,
-    ) -> Self {
+    fn new(text: &'t str, tokens: &'t lexer::Tokens, doc: &'a mut TomlDoc, root: NodeId) -> Self {
         let stack = vec![root];
 
         EventSink {
@@ -61,9 +56,7 @@ impl<'t, 'a> EventSink<'t, 'a> {
         if s != DOC {
             let node = self.doc.tree.new_internal(s);
             let top = self.top();
-            self.doc
-                .tree
-                .insert_child(top, node, InsertPos::Last);
+            self.doc.tree.insert_child(top, node, InsertPos::Last);
 
             self.stack.push(node);
         }
@@ -183,9 +176,7 @@ impl<'t, 'a> EventSink<'t, 'a> {
         let intern_id = self.doc.intern.intern(text);
         let leaf = self.doc.tree.new_leaf((s, intern_id));
         let top = self.top();
-        self.doc
-            .tree
-            .insert_child(top, leaf, InsertPos::Last);
+        self.doc.tree.insert_child(top, leaf, InsertPos::Last);
         self.pos += 1;
     }
 

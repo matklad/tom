@@ -22,7 +22,7 @@ fn main() -> Result<()> {
             update("./src/ast/generated.rs", &gen_ast::gen_ast())?;
         }
         "gen-symbols" => {
-            update("./src/symbols/generated.rs", &gen_symbols())?;
+            update("./src/symbol/generated.rs", &gen_symbols())?;
         }
         "gen-tests" => get_tests()?,
         _ => unreachable!(),

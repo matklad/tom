@@ -1,5 +1,8 @@
+use std::cmp;
+
 use {
-    TomlDoc, Symbol, TextRange,
+    TomlDoc, Symbol, TextUnit, TextRange,
+    chunked_text::{ChunkedText},
     tree::{NodeId, TreeData},
 };
 
@@ -20,7 +23,10 @@ impl CstNode {
     }
 
     pub fn range(self, doc: &TomlDoc) -> TextRange {
-        assert!(!doc.edit_in_progress, "range info is unavailable during edit");
+        assert!(
+            !doc.edit_in_progress,
+            "range info is unavailable during edit"
+        );
         doc.data[self.0.to_idx()].range
     }
 
@@ -55,9 +61,97 @@ impl CstNode {
     }
 
     pub fn get_text(self, doc: &TomlDoc) -> String {
-        let mut buff = String::new();
-        self.write_text(doc, &mut buff);
-        return buff;
+        self.chunked_text(doc).to_string()
+    }
+
+    pub(crate) fn chunked_text<'a>(self, doc: &'a TomlDoc) -> impl ChunkedText + 'a {
+        struct Chunks<'a> {
+            root: CstNode,
+            doc: &'a TomlDoc,
+        }
+
+        impl<'a> Chunks<'a> {
+            fn go<F: FnMut(&str) -> Result<(), T>, T>(
+                &self,
+                node: CstNode,
+                f: &mut F,
+            ) -> Result<(), T> {
+                match node.kind(self.doc) {
+                    CstNodeKind::Leaf(text) => f(text)?,
+                    CstNodeKind::Internal(children) => {
+                        for child in children {
+                            self.go(child, f)?;
+                        }
+                    }
+                }
+                Ok(())
+            }
+        }
+
+        impl<'a> ChunkedText for Chunks<'a> {
+            fn for_each_chunk<F: FnMut(&str) -> Result<(), T>, T>(
+                &self,
+                mut f: F,
+            ) -> Result<(), T> {
+                self.go(self.root, &mut f)
+            }
+        }
+
+        Chunks { root: self, doc }
+    }
+
+    pub(crate) fn chunked_substring<'a>(
+        self,
+        doc: &'a TomlDoc,
+        range: TextRange,
+    ) -> impl ChunkedText + 'a {
+        assert!(
+            !doc.edit_in_progress,
+            "range info is unavailable during edit"
+        );
+
+        struct Chunks<'a> {
+            root: CstNode,
+            doc: &'a TomlDoc,
+            range: TextRange,
+        }
+
+        impl<'a> Chunks<'a> {
+            fn go<F: FnMut(&str) -> Result<(), T>, T>(
+                &self,
+                node: CstNode,
+                f: &mut F,
+            ) -> Result<(), T> {
+                let node_range = node.range(self.doc);
+                let rel_range = match intersect(self.range, node_range) {
+                    None => return Ok(()),
+                    Some(range) => relative_range(node_range.start(), range),
+                };
+                match node.kind(self.doc) {
+                    CstNodeKind::Leaf(text) => f(&text[rel_range])?,
+                    CstNodeKind::Internal(children) => {
+                        for child in children {
+                            self.go(child, f)?;
+                        }
+                    }
+                }
+                Ok(())
+            }
+        }
+
+        impl<'a> ChunkedText for Chunks<'a> {
+            fn for_each_chunk<F: FnMut(&str) -> Result<(), T>, T>(
+                &self,
+                mut f: F,
+            ) -> Result<(), T> {
+                self.go(self.root, &mut f)
+            }
+        }
+        Chunks {
+            root: self,
+            doc,
+            range,
+        }
     }
 
     pub fn debug(self, doc: &TomlDoc) -> String {
@@ -66,10 +160,6 @@ impl CstNode {
         } else {
             format!("{}@{:?}", self.symbol(doc).name(), self.range(doc))
         }
-    }
-
-    pub(crate) fn write_text(self, doc: &TomlDoc, buff: &mut String) {
-        process_leaves(self, doc, &mut |_| true, &mut |_, text| buff.push_str(text));
     }
 }
 
@@ -87,10 +177,16 @@ impl<'a> CstChildren<'a> {
         self.node.0.last_child(&self.doc.tree).map(CstNode)
     }
     pub fn iter(self) -> CstChildrenIter<'a> {
-        CstChildrenIter { doc: self.doc, curr: self.first() }
+        CstChildrenIter {
+            doc: self.doc,
+            curr: self.first(),
+        }
     }
     pub fn rev(self) -> RevCstChildrenIter<'a> {
-        RevCstChildrenIter { doc: self.doc, curr: self.last() }
+        RevCstChildrenIter {
+            doc: self.doc,
+            curr: self.last(),
+        }
     }
 }
 
@@ -134,21 +230,16 @@ impl<'a> Iterator for RevCstChildrenIter<'a> {
     }
 }
 
-pub(crate) fn process_leaves(
-    node: CstNode,
-    doc: &TomlDoc,
-    node_filter: &mut impl Fn(CstNode) -> bool,
-    cb: &mut impl FnMut(CstNode, &str),
-) {
-    if !node_filter(node) {
-        return;
+fn intersect(r1: TextRange, r2: TextRange) -> Option<TextRange> {
+    let start = cmp::max(r1.start(), r2.start());
+    let end = cmp::min(r1.end(), r2.end());
+    if end > start {
+        Some(TextRange::from_to(start, end))
+    } else {
+        None
     }
-    match node.kind(doc) {
-        CstNodeKind::Leaf(text) => cb(node, text),
-        CstNodeKind::Internal(children) => {
-            for child in children {
-                process_leaves(child, doc, node_filter, cb);
-            }
-        }
-    }
+}
+
+fn relative_range(offset: TextUnit, range: TextRange) -> TextRange {
+    TextRange::from_to(range.start() - offset, range.end() - offset)
 }

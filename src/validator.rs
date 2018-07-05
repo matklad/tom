@@ -1,4 +1,9 @@
-use {ast, visitor, CstNode, SyntaxError, TextRange, TomlDoc};
+use {
+    CstNode, SyntaxError, TextRange, TomlDoc,
+    ast,
+    visitor,
+    chunked_text::ChunkedText,
+};
 
 pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
     visitor::process(
@@ -81,12 +86,14 @@ fn check_new_line<'f>(
 ) {
     let left = left.into();
     let right = right.into();
+    assert_eq!(left.parent(doc), right.parent(doc));
+    let parent = left.parent(doc).unwrap();
     // TODO: more precise
     let start = left.range(doc).start();
     let end = right.range(doc).start();
     let range = TextRange::from_to(start, end);
-    let text = doc.get_text(range);
-    if text.contains("\n") != (r == Require) {
+    let has_newline = parent.chunked_substring(doc, range).contains_char('\n');
+    if has_newline != (r == Require) {
         errors.push(SyntaxError {
             range,
             message: msg.into(),

@@ -179,14 +179,20 @@ fn test_swap() {
 fn recalculates_ranges() {
     let mut doc = TomlDoc::new("foo = 92");
     let foo = doc.ast().entries(&doc).next().unwrap();
-    assert_eq!(foo.cst().range(&doc), TextRange::from_to(0.into(), 8.into()));
+    assert_eq!(
+        foo.cst().range(&doc),
+        TextRange::from_to(0.into(), 8.into())
+    );
 
     doc.start_edit();
     let bar = doc.new_entry_from_text("bar = 62");
     let root = doc.cst();
     doc.insert(bar, PrependTo(root));
     doc.finish_edit_no_reparse();
-    assert_eq!(foo.cst().range(&doc), TextRange::from_to(9.into(), 17.into()));
+    assert_eq!(
+        foo.cst().range(&doc),
+        TextRange::from_to(9.into(), 17.into())
+    );
 }
 
 #[test]

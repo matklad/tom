@@ -10,6 +10,7 @@ extern crate uncover;
 
 define_uncover_macros!(enable_if(cfg!(debug_assertions)));
 
+mod chunked_text;
 mod intern;
 mod tree;
 mod parser;
@@ -21,7 +22,11 @@ mod edit;
 pub mod ast;
 pub mod symbol;
 
-use std::{cmp, marker::PhantomData, num::NonZeroU8, mem};
+use std::{
+    mem,
+    marker::PhantomData,
+    num::NonZeroU8
+};
 
 use intern::{Intern, InternId};
 
@@ -93,23 +98,6 @@ impl TomlDoc {
         ast::Doc::cast(self.cst(), self).unwrap()
     }
 
-    pub fn get_text(&self, range: TextRange) -> String {
-        assert!(!self.edit_in_progress, "range info is unavailable during edit");
-        let mut buff = String::new();
-        cst::process_leaves(
-            self.cst(),
-            self,
-            &mut |node| intersect(node.range(self), range).is_some(),
-            &mut |leaf, text| {
-                let node_range = leaf.range(self);
-                let range = intersect(node_range, range).unwrap();
-                let range = relative_range(node_range.start(), range);
-                buff.push_str(&text[range]);
-            },
-        );
-        return buff;
-    }
-
     pub fn errors(&self) -> Vec<SyntaxError> {
         self.errors.clone()
     }
@@ -155,7 +143,7 @@ impl TomlDoc {
     fn recalculate_ranges(&mut self) {
         let mut data = mem::replace(&mut self.data, Vec::new());
         let node_data = NodeData {
-            range: TextRange::offset_len(0.into(), 0.into())
+            range: TextRange::offset_len(0.into(), 0.into()),
         };
         data.resize(self.tree.len(), node_data);
         go(self, self.cst(), 0.into(), &mut data);
@@ -171,12 +159,12 @@ impl TomlDoc {
             match node.kind(doc) {
                 CstNodeKind::Leaf(text) => {
                     len += (text.len() as u32).into();
-                },
+                }
                 CstNodeKind::Internal(children) => {
                     for child in children {
                         len += go(doc, child, start_offset + len, data);
                     }
-                },
+                }
             }
             data[node.0.to_idx()].range = TextRange::offset_len(start_offset, len);
             len
@@ -222,18 +210,3 @@ impl<'a, A: AstNode> Iterator for AstChildren<'a, A> {
 struct NodeData {
     range: TextRange,
 }
-
-fn intersect(r1: TextRange, r2: TextRange) -> Option<TextRange> {
-    let start = cmp::max(r1.start(), r2.start());
-    let end = cmp::min(r1.end(), r2.end());
-    if end > start {
-        Some(TextRange::from_to(start, end))
-    } else {
-        None
-    }
-}
-
-fn relative_range(offset: TextUnit, range: TextRange) -> TextRange {
-    TextRange::from_to(range.start() - offset, range.end() - offset)
-}
-

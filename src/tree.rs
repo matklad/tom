@@ -290,11 +290,10 @@ impl NodeId {
         if self.prev_sibling_cyclic(tree) == self {
             return self;
         }
-        self.next_sibling(tree)
-            .unwrap_or_else(|| {
-                let parent = self.parent(tree).unwrap();
-                parent.first_child(tree).unwrap()
-            })
+        self.next_sibling(tree).unwrap_or_else(|| {
+            let parent = self.parent(tree).unwrap();
+            parent.first_child(tree).unwrap()
+        })
     }
 
     pub fn prev_sibling<ID, LD>(self, tree: &Tree<ID, LD>) -> Option<Self> {
@@ -319,7 +318,7 @@ impl NodeId {
 
     fn check_invariants<ID, LD>(self, tree: &Tree<ID, LD>) {
         #[cfg(debug_assertions)]
-            match self.parent(tree) {
+        match self.parent(tree) {
             None => {
                 assert!(self.next_sibling(tree).is_none());
                 assert!(self.prev_sibling(tree).is_none());

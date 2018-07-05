@@ -1,4 +1,11 @@
-use {ast, parser, symbol::*, tree::InsertPos, CstNode, TomlDoc};
+use {
+    CstNode, TomlDoc,
+    ast,
+    parser,
+    chunked_text::ChunkedText,
+    tree::InsertPos,
+    symbol::*,
+};
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum Position {
@@ -173,7 +180,7 @@ impl TomlDoc {
         let mut buff = String::new();
         join_to(self, &mut buff, keys, ".", "", "");
         buff.push_str(" = ");
-        value.cst().write_text(self, &mut buff);
+        value.cst().chunked_text(self).write_to(&mut buff);
         self.new_entry_from_text(&buff)
     }
 
@@ -245,7 +252,7 @@ impl TomlDoc {
         buff.push_str(right);
         for entry in entries {
             buff.push('\n');
-            entry.cst().write_text(self, &mut buff);
+            entry.cst().chunked_text(self).write_to(&mut buff);
         }
         buff
     }
@@ -253,8 +260,11 @@ impl TomlDoc {
 
 mod private {
     pub trait Sealed {}
+
     impl Sealed for bool {}
+
     impl Sealed for i64 {}
+
     impl<'a> Sealed for &'a str {}
 }
 
@@ -262,11 +272,13 @@ pub trait IntoValue: private::Sealed {
     #[doc(hidden)]
     fn value_text(self) -> String;
 }
+
 impl IntoValue for bool {
     fn value_text(self) -> String {
         if self { "true" } else { "false" }.to_owned()
     }
 }
+
 impl IntoValue for i64 {
     fn value_text(self) -> String {
         self.to_string()
@@ -312,7 +324,7 @@ pub fn join_to<A: Into<CstNode>>(
             buff.push_str(sep);
         }
         first = false;
-        item.into().write_text(doc, buff);
+        item.into().chunked_text(doc).write_to(buff);
     }
     if !first {
         buff.push_str(after_last);
