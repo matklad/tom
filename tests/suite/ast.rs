@@ -1,5 +1,5 @@
 use tom::ast;
-use {find, toml};
+use ::{find, toml};
 
 #[test]
 fn string_escaping_trivial() {

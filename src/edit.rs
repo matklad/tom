@@ -1,3 +1,4 @@
+use std::{mem};
 use {
     CstNode, TomlDoc,
     ast,
@@ -23,7 +24,9 @@ impl TomlDoc {
         self.smart_ws = smart;
     }
     pub fn finish_edit_no_reparse(&mut self) {
-        self.recalculate_ranges();
+        let mut data = mem::replace(&mut self.data, Vec::new());
+        self.recalculate_ranges(&mut data);
+        self.data = data;
         self.edit_in_progress = false;
     }
     pub fn finish_edit_full_reparse(&mut self) {

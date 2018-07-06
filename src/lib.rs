@@ -21,7 +21,6 @@ pub mod ast;
 pub mod symbol;
 
 use std::{
-    mem,
     marker::PhantomData,
     num::NonZeroU8
 };
@@ -80,7 +79,9 @@ impl TomlDoc {
         };
         let root = doc.tree.root();
         parser::parse(text, &mut doc, root);
-        doc.recalculate_ranges();
+        let mut data = Vec::new();
+        doc.recalculate_ranges(&mut data);
+        doc.data = data;
 
         let validation_errors = validator::validate(&doc);
         doc.errors.extend(validation_errors);
@@ -101,26 +102,35 @@ impl TomlDoc {
     }
 
     pub fn debug(&self) -> String {
-        let mut result = String::new();
-        go(self.cst(), 0, &self, &mut result);
+        let mut store;
+        let data = if self.edit_in_progress {
+            store = Vec::new();
+            self.recalculate_ranges(&mut store);
+            &store
+        } else {
+            &self.data
+        };
+
+        let mut buff = String::new();
+        if self.edit_in_progress {
+            buff += "*modified*\n";
+        }
+        go(self.cst(), 0, &self, &data, &mut buff,);
 
         let text = self.cst().get_text(self);
         if !self.errors.is_empty() && !self.edit_in_progress {
-            result += "\n";
+            buff += "\n";
             for e in self.errors.iter() {
                 let text = &text[e.range];
-                result += &format!("error@{:?} {:?}: {}\n", e.range(), text, e.message());
+                buff += &format!("error@{:?} {:?}: {}\n", e.range(), text, e.message());
             }
         }
-        if self.edit_in_progress {
-            result += "modified document, error info unavailable\n";
-        }
-        return result;
+        return buff;
 
-        fn go(node: CstNode, level: usize, doc: &TomlDoc, buff: &mut String) {
+        fn go(node: CstNode, level: usize, doc: &TomlDoc, data: &[NodeData], buff: &mut String) {
             buff.push_str(&String::from("  ").repeat(level));
             //TODO: panics during edit :(
-            let range = node.range(doc);
+            let range = data[node.0.to_idx()].range;
             let symbol = node.symbol(doc);
             buff.push_str(&format!("{}@{:?}", symbol.name(), range));
             match node.kind(doc) {
@@ -133,19 +143,17 @@ impl TomlDoc {
             }
             buff.push('\n');
             for child in node.children(&doc) {
-                go(child, level + 1, doc, buff)
+                go(child, level + 1, doc, data, buff)
             }
         }
     }
 
-    fn recalculate_ranges(&mut self) {
-        let mut data = mem::replace(&mut self.data, Vec::new());
+    fn recalculate_ranges(&self, data: &mut Vec<NodeData>) {
         let node_data = NodeData {
             range: TextRange::offset_len(0.into(), 0.into()),
         };
         data.resize(self.tree.len(), node_data);
-        go(self, self.cst(), 0.into(), &mut data);
-        self.data = data;
+        go(self, self.cst(), 0.into(), data);
 
         fn go(
             doc: &TomlDoc,

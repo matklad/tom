@@ -1,5 +1,37 @@
-use check_edit;
 use tom::{ast, Position::*, TomlDoc, TextRange};
+use testutils::assert_eq_text;
+use ::{check_edit, toml};
+
+
+#[test]
+fn debug_dump_works_during_edit() {
+    let mut toml = toml(r#"
+foo = "1.0.0"
+"#);
+    toml.start_edit();
+    let v = toml.new_value(92);
+    let root = toml.cst();
+    toml.insert(v, AppendTo(root));
+    assert_eq_text(
+        r#"
+*modified*
+DOC@[0; 18)
+  WHITESPACE@[0; 1)
+  ENTRY@[1; 14)
+    KEY@[1; 4)
+      BARE_KEY@[1; 4) "foo"
+    WHITESPACE@[4; 5)
+    EQ@[5; 6) "="
+    WHITESPACE@[6; 7)
+    VALUE@[7; 14)
+      BASIC_STRING@[7; 14) "\"1.0.0\""
+  WHITESPACE@[14; 15)
+  VALUE@[15; 17)
+    NUMBER@[15; 17) "92"
+  WHITESPACE@[17; 18)"#.trim(),
+        toml.debug().trim(),
+    );
+}
 
 #[test]
 fn basic_insertion() {

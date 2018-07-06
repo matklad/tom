@@ -8,10 +8,26 @@ mod ast;
 mod edit;
 mod factory;
 
-use std::{panic, sync::Mutex};
-
+use std::{
+    panic, sync::Mutex
+};
 use testutils::assert_eq_text;
 use tom::{AstNode, CstNode, TomlDoc};
+
+#[test]
+fn test_parser_inline() {
+    testutils::dir_tests(&["inline"], |text| toml(text).debug())
+}
+
+#[test]
+fn test_parser_ok() {
+    testutils::dir_tests(&["ok"], |text| toml(text).debug())
+}
+
+#[test]
+fn test_parser_validation() {
+    testutils::dir_tests(&["validation"], |text| toml(text).debug())
+}
 
 fn toml(text: &str) -> TomlDoc {
     TomlDoc::new(text)
@@ -57,19 +73,4 @@ pub fn check_panics(f: impl FnOnce()) {
     let result = panic::catch_unwind(panic::AssertUnwindSafe(f));
     panic::set_hook(old_hook);
     assert!(result.is_err());
-}
-
-#[test]
-fn test_parser_inline() {
-    testutils::dir_tests(&["inline"], |text| toml(text).debug())
-}
-
-#[test]
-fn test_parser_ok() {
-    testutils::dir_tests(&["ok"], |text| toml(text).debug())
-}
-
-#[test]
-fn test_parser_validation() {
-    testutils::dir_tests(&["validation"], |text| toml(text).debug())
 }
