@@ -25,6 +25,11 @@ fn test_parser_ok() {
 }
 
 #[test]
+fn test_parser_err() {
+    testutils::dir_tests(&["err"], |text| toml(text).debug())
+}
+
+#[test]
 fn test_parser_validation() {
     testutils::dir_tests(&["validation"], |text| toml(text).debug())
 }

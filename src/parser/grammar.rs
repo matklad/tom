@@ -73,16 +73,17 @@ impl<'t, 's, 'a> Parser<'t, 's, 'a> {
     }
 
     fn bump_error(&mut self, msg: &str) {
-        if self.current() == EOF {
-            self.error(msg);
-            return;
-        }
-
-        if self.current() != EOF {
-            let m = self.start(ERROR);
-            self.error(msg);
-            self.bump();
-            self.finish(m);
+        match self.current() {
+            EOF => {
+                self.error(msg);
+                return;
+            }
+            _ => {
+                let m = self.start(ERROR);
+                self.error(msg);
+                self.bump();
+                self.finish(m);
+            }
         }
     }
 }

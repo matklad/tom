@@ -2,7 +2,7 @@ mod grammar;
 mod lexer;
 
 use {
-    TomlDoc,
+    TomlDoc, TextRange,
     symbol::{COMMENT, DOC, ENTRY, TABLE, WHITESPACE},
     tree::{InsertPos, NodeId, TreeData},
     Symbol, SyntaxError,
@@ -84,8 +84,19 @@ impl<'t, 'a> EventSink<'t, 'a> {
     }
 
     fn error(&mut self, message: impl Into<String>) {
-        let mut tok = &self.tokens.raw_tokens[self.pos - 1];
+        if self.tokens.raw_tokens.is_empty() {
+            self.doc.errors.push(SyntaxError {
+                range: TextRange::from_to(0.into(), 0.into()),
+                message: message.into(),
+            });
+            return;
+        }
+
         let mut pos = self.pos;
+        if pos == self.tokens.raw_tokens.len() {
+            pos -= 1;
+        }
+        let mut tok = &self.tokens.raw_tokens[pos];
         loop {
             match &self.tokens.raw_tokens.get(pos) {
                 Some(t) if t.is_significant() => {

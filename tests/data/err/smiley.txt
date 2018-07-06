@@ -1,0 +1,19 @@
+DOC@[0; 10)
+  ERROR@[0; 1)
+    ERROR@[0; 1) ":"
+  ENTRY@[1; 9)
+    KEY@[1; 2)
+      BARE_KEY@[1; 2) "-"
+    ERROR@[2; 3)
+      ERROR@[2; 3) ")"
+    WHITESPACE@[3; 4)
+    KEY@[4; 7)
+      BARE_KEY@[4; 7) "foo"
+    EQ@[7; 8) "="
+    VALUE@[8; 9)
+      NUMBER@[8; 9) "1"
+  WHITESPACE@[9; 10)
+
+error@[0; 1) ":": expected a key
+error@[2; 3) ")": expected `.`
+error@[1; 8) "-)\nfoo=": newlines are forbidden in entries
