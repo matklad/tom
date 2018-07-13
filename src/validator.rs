@@ -1,8 +1,7 @@
 use {
-    CstNode, SyntaxError, TextRange, TomlDoc,
+    CstNode, SyntaxError, TextRange, TomlDoc, ChunkedText,
     ast,
     visitor,
-    chunked_text::ChunkedText,
 };
 
 pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {

@@ -1,9 +1,8 @@
 use std::{mem};
 use {
-    CstNode, TomlDoc,
+    CstNode, TomlDoc, ChunkedText,
     ast,
     parser,
-    chunked_text::ChunkedText,
     tree::InsertPos,
     symbol::*,
 };
@@ -71,8 +70,18 @@ impl TomlDoc {
     }
 
     pub fn detach(&mut self, what: impl Into<CstNode>) {
+        let what = what.into();
         self.assert_edit();
-        self.tree.detach(what.into().0);
+        let siblings = (what.prev_sibling(self), what.next_sibling(&self));
+        self.tree.detach(what.0);
+        match siblings {
+            (Some(left), Some(right)) => {
+                if self.smart_ws && left.symbol(self) == WHITESPACE && right.symbol(self) == WHITESPACE {
+                    self.tree.detach(right.0);
+                }
+            }
+            _ => (),
+        }
     }
 
     pub fn swap(&mut self, node1: impl Into<CstNode>, node2: impl Into<CstNode>) {
@@ -122,6 +131,13 @@ impl TomlDoc {
             .value(self);
         self.detach(res);
         res
+    }
+
+    pub fn new_dict_from_text(&mut self, text: &str) -> ast::Dict {
+        match self.new_value_from_text(text).kind(self) {
+            ast::ValueKind::Dict(d) => d,
+            _ => panic!("not a valid dict: {:?}", text),
+        }
     }
 
     pub fn new_entry_from_text(&mut self, text: &str) -> ast::Entry {

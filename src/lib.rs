@@ -30,6 +30,7 @@ use intern::{Intern, InternId};
 pub use edit::{IntoValue, Position};
 pub use text_unit::{TextRange, TextUnit};
 pub use cst::{CstNode, CstNodeKind, CstChildren, CstChildrenIter, RevCstChildrenIter};
+pub(crate) use chunked_text::ChunkedText;
 
 type Tree = tree::Tree<Symbol, (Symbol, InternId)>;
 

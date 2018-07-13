@@ -184,7 +184,7 @@ baz = "1.0.0"
 fn basic_deletion() {
     check_edit(
         "foo = true\nbar = false\nbaz = false\n",
-        "foo = true\n\nbaz = false\n",
+        "foo = true\nbaz = false\n",
         |doc| {
             let ast = doc.ast();
             let bar = ast.entries(doc).nth(1).unwrap();
@@ -192,6 +192,21 @@ fn basic_deletion() {
         },
     )
 }
+
+#[test]
+fn basic_deletion_no_ws() {
+    check_edit(
+        "foo = true\nbar = false\nbaz = false\n",
+        "foo = true\n\nbaz = false\n",
+        |doc| {
+            doc.set_smart_ws(false);
+            let ast = doc.ast();
+            let bar = ast.entries(doc).nth(1).unwrap();
+            doc.detach(bar);
+        },
+    )
+}
+
 
 #[test]
 fn test_swap() {

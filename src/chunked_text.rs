@@ -1,4 +1,4 @@
-pub(crate) trait ChunkedText {
+pub /*(crate)*/ trait ChunkedText {
     fn for_each_chunk<F: FnMut(&str) -> Result<(), T>, T>(&self, f: F) -> Result<(), T>;
 
     fn contains_char(&self, c: char) -> bool {

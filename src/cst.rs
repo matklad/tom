@@ -1,8 +1,7 @@
 use std::cmp;
 
 use {
-    TomlDoc, Symbol, TextUnit, TextRange,
-    chunked_text::{ChunkedText},
+    TomlDoc, Symbol, TextUnit, TextRange, ChunkedText,
     tree::{NodeId, TreeData},
 };
 
