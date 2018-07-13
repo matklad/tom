@@ -2,9 +2,14 @@
 name = "tom"
 version = "0.0.1"
 authors = ["Aleksey Kladov <aleksey.kladov@gmail.com>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/matklad/tom"
+description = """
+Yet another format-preserving TOML parser/manipulator.
+"""
 
 [workspace]
-members = ["tasks"]
+members = ["tasks", "tests/testutils"]
 
 [dependencies]
 # public
@@ -19,6 +24,6 @@ uncover = "0.1"
 string-interner = "0.6"
 
 [dev-dependencies]
-testutils = { path = "./tests/testutils", version = "0.0.0" }
+testutils = { path = "tests/testutils", version = "0.0.0" }
 failure = "0.1"
 clap = "2"
