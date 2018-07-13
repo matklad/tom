@@ -1,6 +1,6 @@
 [package]
 name = "testutils"
-version = "0.1.0"
+version = "0.0.0"
 authors = ["Aleksey Kladov <aleksey.kladov@gmail.com>"]
 publish = false
 

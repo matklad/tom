@@ -19,6 +19,6 @@ uncover = "0.1"
 string-interner = "0.6"
 
 [dev-dependencies]
-testutils = { path = "./tests/testutils" }
+testutils = { path = "./tests/testutils", version = "0.0.0" }
 failure = "0.1"
 clap = "2"
