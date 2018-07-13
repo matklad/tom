@@ -139,6 +139,13 @@ error@[1; 8) "-)\nfoo=": newlines are forbidden in entries"#.trim());
         Some(entry) => assert_eq!(entry.keys(&doc).next().unwrap().name(&doc), "name"),
         None => panic!("can't cast a node to entry"),
     }
+    // Currently, the library does not provide a visitor API.
+    // You can build one oneself in less then a hundred lines, however.
+    // Take a look at the `visitor` and `validator` modules, which define
+    // and use a generic visitor. This API is not currently public just
+    // because the API surface is very large in comparison to small
+    // implementation.
+
 
     // Let's see how the API for modifying the document works.
     // First, we need to call `.start_edit` method. This is required
