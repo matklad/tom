@@ -142,6 +142,6 @@ fn project_dir() -> PathBuf {
         .to_owned()
 }
 
-fn test_data_dir() -> PathBuf {
+pub fn test_data_dir() -> PathBuf {
     project_dir().join("tests/data")
 }

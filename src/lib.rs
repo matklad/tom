@@ -1,5 +1,4 @@
 extern crate m_lexer;
-extern crate string_interner;
 extern crate text_unit;
 #[macro_use]
 extern crate lazy_static;

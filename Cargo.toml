@@ -16,12 +16,11 @@ members = ["tasks", "tests/testutils"]
 text_unit = "0.1"
 
 # private
-itertools = "0.7"
-lazy_static = "1"
-m_lexer = "0.0.4"
 regex = "1"
+lazy_static = "1"
+itertools = "0.7"
+m_lexer = "0.0.4"
 uncover = "0.1"
-string-interner = "0.6"
 
 [dev-dependencies]
 testutils = { path = "tests/testutils", version = "0.0.0" }

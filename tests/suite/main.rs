@@ -9,9 +9,12 @@ mod edit;
 mod factory;
 
 use std::{
-    panic, sync::Mutex
+    panic,
+    fs,
+    sync::Mutex,
+    time::Instant,
 };
-use testutils::assert_eq_text;
+use testutils::{assert_eq_text, test_data_dir};
 use tom::{AstNode, CstNode, TomlDoc};
 
 #[test]
@@ -27,6 +30,17 @@ fn test_parser_ok() {
 #[test]
 fn test_parser_err() {
     testutils::dir_tests(&["err"], |text| toml(text).debug())
+}
+
+#[test]
+fn simple_bench() {
+    let path = test_data_dir().join("ok/complex_config.toml");
+    let text = fs::read_to_string(path).unwrap();
+    let start = Instant::now();
+    let doc = toml(&text);
+    assert!(doc.errors().is_empty());
+    let time = start.elapsed().subsec_micros();
+    println!("{} μs", time);
 }
 
 #[test]

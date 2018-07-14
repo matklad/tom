@@ -1,37 +1,58 @@
-use string_interner::StringInterner;
 use std::num::NonZeroU32;
+use TextRange;
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 pub(crate) struct InternId(NonZeroU32);
 
-impl From<usize> for InternId {
-    fn from(s: usize) -> InternId {
-        InternId(NonZeroU32::new((s + 1) as u32).unwrap())
+impl InternId {
+    fn from_idx(idx: usize) -> InternId {
+        InternId(NonZeroU32::new((idx + 1) as u32).unwrap())
     }
-}
-
-impl From<InternId> for usize {
-    fn from(id: InternId) -> usize {
-        (id.0.get() as usize) - 1
+    fn to_idx(self) -> usize {
+        (self.0.get() as usize) - 1
     }
 }
 
 pub(crate) struct Intern {
-    inner: StringInterner<InternId>,
+    data: String,
+    interned: Vec<TextRange>,
+    sorted: Vec<InternId>,
 }
 
 impl Intern {
     pub fn new() -> Intern {
         Intern {
-            inner: StringInterner::new(),
+            data: String::new(),
+            interned: Vec::new(),
+            sorted: Vec::new(),
         }
     }
 
-    pub fn intern(&mut self, val: &str) -> InternId {
-        self.inner.get_or_intern(val)
+    pub fn resolve(&self, id: InternId) -> &str {
+        let range = self.interned[id.to_idx()];
+        &self.data[range]
     }
 
-    pub fn resolve(&self, id: InternId) -> &str {
-        self.inner.resolve(id).unwrap()
+    pub fn intern(&mut self, val: &str) -> InternId {
+        let idx = self.sorted.binary_search_by(|&id| {
+            self.resolve(id).cmp(val)
+        });
+
+        match idx {
+            Ok(idx) => self.sorted[idx],
+            Err(insertion_point) => {
+                let range = TextRange::offset_len(
+                    (self.data.len() as u32).into(),
+                    (val.len() as u32).into(),
+                );
+                let id = InternId::from_idx(self.interned.len());
+
+                self.data.push_str(val);
+                self.interned.push(range);
+                self.sorted.insert(insertion_point, id);
+
+                id
+            }
+        }
     }
 }
