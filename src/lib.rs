@@ -12,6 +12,7 @@ mod intern;
 mod tree;
 mod parser;
 mod cst;
+mod model;
 mod visitor;
 mod validator;
 mod edit;
@@ -29,6 +30,7 @@ use intern::{Intern, InternId};
 pub use edit::{IntoValue, Position};
 pub use text_unit::{TextRange, TextUnit};
 pub use cst::{CstNode, CstNodeKind, CstChildren, CstChildrenIter, RevCstChildrenIter};
+pub use model::{Item, ArrayFlavor, MapFlavor};
 pub(crate) use chunked_text::ChunkedText;
 
 type Tree = tree::Tree<Symbol, (Symbol, InternId)>;
@@ -95,6 +97,10 @@ impl TomlDoc {
 
     pub fn ast(&self) -> ast::Doc {
         ast::Doc::cast(self.cst(), self).unwrap()
+    }
+
+    pub fn model(&self) -> Item {
+        model::from_doc(self)
     }
 
     pub fn errors(&self) -> Vec<SyntaxError> {
