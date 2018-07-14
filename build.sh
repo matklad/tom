@@ -1,6 +1,6 @@
 set -e
 
-cargo +nightly build \
+cargo build \
       --manifest-path ./tom_wasm/Cargo.toml \
       --target wasm32-unknown-unknown \
       --release
