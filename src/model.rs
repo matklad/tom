@@ -45,7 +45,7 @@ pub enum ArrayFlavor {
 }
 
 pub(crate) fn from_doc(doc: &TomlDoc) -> Item {
-    let mut entries = HashMap::new();
+    let entries = HashMap::new();
     Item::Map {
         flavor: MapFlavor::Root(doc.ast()),
         entries,
