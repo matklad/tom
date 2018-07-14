@@ -317,6 +317,8 @@ impl NodeId {
     }
 
     fn check_invariants<ID, LD>(self, tree: &Tree<ID, LD>) {
+        #[cfg(not(debug_assertions))]
+        let _ = tree;
         #[cfg(debug_assertions)]
         match self.parent(tree) {
             None => {
