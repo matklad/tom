@@ -4,7 +4,7 @@ use {Result, Dependency, DependencySource};
 use tom::{ast, IntoValue, Position::*, TomlDoc};
 
 pub struct CargoToml {
-    doc: TomlDoc
+    doc: TomlDoc,
 }
 
 enum DependencyNode {
@@ -17,7 +17,11 @@ impl CargoToml {
     pub fn new(text: &str) -> Result<CargoToml> {
         let mut doc = TomlDoc::new(text);
         if let Some(err) = doc.errors().first() {
-            bail!("syntax error at offset {}: {}", err.range().start(), err.message());
+            bail!(
+                "syntax error at offset {}: {}",
+                err.range().start(),
+                err.message()
+            );
         };
 
         doc.start_edit();

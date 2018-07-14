@@ -121,7 +121,7 @@ impl TomlDoc {
         if self.edit_in_progress {
             buff += "*modified*\n";
         }
-        go(self.cst(), 0, &self, &data, &mut buff,);
+        go(self.cst(), 0, &self, &data, &mut buff);
 
         let text = self.cst().get_text(self);
         if !self.errors.is_empty() && !self.edit_in_progress {

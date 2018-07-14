@@ -3,10 +3,12 @@ extern crate testutils;
 extern crate tom;
 #[macro_use]
 extern crate lazy_static;
+extern crate serde_json;
 
 mod ast;
 mod edit;
 mod factory;
+mod model;
 
 use std::{
     panic,

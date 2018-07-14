@@ -23,7 +23,9 @@ dob = 1979-05-27T07:32:00-08:00 # First class dates
     // Concrete Syntax Tree (CST) which includes whitespace and
     // comments explicitely. `.debug` method can be used to see
     // this representation:
-    assert_eq!(doc.debug().trim(), r##"
+    assert_eq!(
+        doc.debug().trim(),
+        r##"
 DOC@[0; 112)
   ENTRY@[0; 22)
     KEY@[0; 5)
@@ -61,14 +63,18 @@ DOC@[0; 112)
       WHITESPACE@[91; 92)
       COMMENT@[92; 111) "# First class dates"
   WHITESPACE@[111; 112)
-"##.trim());
+"##
+            .trim()
+    );
 
     // Note that `new` method does not return a `Result`.
     // This is because the library can parse even partially
     // invalid toml documents. Use `.errors` method to check
     // if file has any syntax errors;
     let invalid_toml = TomlDoc::new(":-)\nfoo=1");
-    assert_eq!(invalid_toml.debug().trim(), r#"
+    assert_eq!(
+        invalid_toml.debug().trim(),
+        r#"
 DOC@[0; 9)
   ERROR@[0; 1)
     ERROR@[0; 1) ":"
@@ -86,7 +92,8 @@ DOC@[0; 9)
 
 error@[0; 1) ":": expected a key
 error@[2; 3) ")": expected `.`
-error@[1; 8) "-)\nfoo=": newlines are forbidden in entries"#.trim());
+error@[1; 8) "-)\nfoo=": newlines are forbidden in entries"#.trim()
+    );
     assert_eq!(invalid_toml.errors().len(), 3);
 
     // To access CST, use `.cst` method.
@@ -127,8 +134,8 @@ error@[1; 8) "-)\nfoo=": newlines are forbidden in entries"#.trim());
     match entry.value(&doc).kind(&doc) {
         ast::ValueKind::StringLit(lit) => {
             assert_eq!(lit.value(&doc), "Tom Preston-Werner");
-        },
-        _ => panic!("unexpected entry")
+        }
+        _ => panic!("unexpected entry"),
     }
 
     // Internally, each AST node is a wrapper of the corresponding CST node,
@@ -146,7 +153,6 @@ error@[1; 8) "-)\nfoo=": newlines are forbidden in entries"#.trim());
     // because the API surface is very large in comparison to small
     // implementation.
 
-
     // Let's see how the API for modifying the document works.
     // First, we need to call `.start_edit` method. This is required
     // for two reasons:
@@ -163,7 +169,10 @@ error@[1; 8) "-)\nfoo=": newlines are forbidden in entries"#.trim());
     // `TomlDoc::new_foo_from_text` methods. Using raw text, you
     // have full control of formatting, whitespace and comments:
     let new_entry: ast::Entry = doc.new_entry_from_text("foo= 92 #comments are preserved");
-    assert_eq!(new_entry.cst().get_text(&doc), "foo= 92 #comments are preserved");
+    assert_eq!(
+        new_entry.cst().get_text(&doc),
+        "foo= 92 #comments are preserved"
+    );
 
     // If the text can not be parsed as a requested syntactic construct,
     // the call will panic:
@@ -185,30 +194,39 @@ error@[1; 8) "-)\nfoo=": newlines are forbidden in entries"#.trim());
     // are able mutate document without invalidating existing
     // nodes.
     doc.replace(entry, new_entry);
-    assert_eq!(doc.cst().get_text(&doc), "\
+    assert_eq!(
+        doc.cst().get_text(&doc),
+        "\
 title = \"TOML Example\"
 
 [owner]
 foo = 92
 dob = 1979-05-27T07:32:00-08:00 # First class dates
-");
+"
+    );
 
     doc.detach(new_entry);
-    assert_eq!(doc.cst().get_text(&doc), "\
+    assert_eq!(
+        doc.cst().get_text(&doc),
+        "\
 title = \"TOML Example\"
 
 [owner]
 dob = 1979-05-27T07:32:00-08:00 # First class dates
-");
+"
+    );
 
     doc.insert(new_entry, PrependTo(root.cst()));
-    assert_eq!(doc.cst().get_text(&doc), "\
+    assert_eq!(
+        doc.cst().get_text(&doc),
+        "\
 foo = 92
 title = \"TOML Example\"
 
 [owner]
 dob = 1979-05-27T07:32:00-08:00 # First class dates
-");
+"
+    );
 
     // AST nodes have type-safe mutating methods as well,
     // although currently only few are actually implemented :)

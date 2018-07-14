@@ -2,12 +2,13 @@ use tom::{ast, Position::*, TomlDoc, TextRange};
 use testutils::assert_eq_text;
 use ::{check_edit, toml};
 
-
 #[test]
 fn debug_dump_works_during_edit() {
-    let mut toml = toml(r#"
+    let mut toml = toml(
+        r#"
 foo = "1.0.0"
-"#);
+"#,
+    );
     toml.start_edit();
     let v = toml.new_value(92);
     let root = toml.cst();
@@ -206,7 +207,6 @@ fn basic_deletion_no_ws() {
         },
     )
 }
-
 
 #[test]
 fn test_swap() {

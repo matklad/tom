@@ -34,9 +34,9 @@ impl Intern {
     }
 
     pub fn intern(&mut self, val: &str) -> InternId {
-        let idx = self.sorted.binary_search_by(|&id| {
-            self.resolve(id).cmp(val)
-        });
+        let idx = self
+            .sorted
+            .binary_search_by(|&id| self.resolve(id).cmp(val));
 
         match idx {
             Ok(idx) => self.sorted[idx],

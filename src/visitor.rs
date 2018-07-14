@@ -24,6 +24,13 @@ pub(crate) fn process<'c, C>(node: CstNode, doc: &TomlDoc, mut v: Visitor<'c, C>
     }
 }
 
+pub(crate) fn process_children<'c, C>(node: CstNode, doc: &TomlDoc, mut v: Visitor<'c, C>) -> C {
+    for child in node.children(doc) {
+        v.do_visit(child, doc);
+    }
+    return v.ctx;
+}
+
 impl<'c, C> Visitor<'c, C> {
     pub fn visit<A: AstNode, F: FnMut(&mut C, A) + 'c>(mut self, mut f: F) -> Self {
         let cb: Box<FnMut(&mut C, CstNode, &TomlDoc) + 'c> =

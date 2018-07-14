@@ -126,7 +126,7 @@ impl<'s, 't, 'a> Parser<'s, 't, 'a> {
     fn entries(&mut self) {
         while self.current() != EOF && self.current() != L_BRACK {
             match self.current() {
-                | BARE_KEY | BARE_KEY_OR_NUMBER | BARE_KEY_OR_DATE | BASIC_STRING
+                BARE_KEY | BARE_KEY_OR_NUMBER | BARE_KEY_OR_DATE | BASIC_STRING
                 | LITERAL_STRING => self.entry(),
                 _ => self.bump_error("expected a key"),
             }

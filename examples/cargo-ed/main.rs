@@ -14,10 +14,24 @@ type Result<T> = ::std::result::Result<T, failure::Error>;
 fn main() -> Result<()> {
     let app = App::new("cargo-ed")
         .arg(Arg::with_name("package").required(true))
-        .arg(Arg::with_name("manifest-path").takes_value(true).long("manifest-path"))
-        .arg(Arg::with_name("version").takes_value(true).long("version").required_unless("git"))
+        .arg(
+            Arg::with_name("manifest-path")
+                .takes_value(true)
+                .long("manifest-path"),
+        )
+        .arg(
+            Arg::with_name("version")
+                .takes_value(true)
+                .long("version")
+                .required_unless("git"),
+        )
         .arg(Arg::with_name("git").takes_value(true).long("git"))
-        .arg(Arg::with_name("branch").takes_value(true).long("branch").requires("git"))
+        .arg(
+            Arg::with_name("branch")
+                .takes_value(true)
+                .long("branch")
+                .requires("git"),
+        )
         .arg(Arg::with_name("optional").long("optional"));
     let matches = app.get_matches();
 

@@ -49,7 +49,6 @@ name = "bar"
             }).unwrap();
         },
     );
-
 }
 
 #[test]

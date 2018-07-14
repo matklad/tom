@@ -1,14 +1,14 @@
-use std::collections::HashMap;
-use {TomlDoc, ast};
+use std::collections::BTreeMap;
+use {TomlDoc, CstNode, ast, visitor::{visitor, process_children}};
 
 pub enum Item {
     Map {
         flavor: MapFlavor,
-        entries: HashMap<String, Item>,
+        entries: BTreeMap<String, Item>,
     },
     Array {
         flavor: ArrayFlavor,
-        values: Vec<Item>,
+        items: Vec<Item>,
     },
     Integer {
         ast: ast::Number,
@@ -32,6 +32,49 @@ pub enum Item {
     },
 }
 
+impl Item {
+    pub fn to_string(&self) -> String {
+        let mut buff = String::new();
+        self.write_string(&mut buff);
+        buff
+    }
+
+    fn write_string(&self, buff: &mut String) {
+        match self {
+            Item::Map { entries, .. } => {
+                buff.push_str("{");
+                let mut first = true;
+                for (k, v) in entries {
+                    if !first {
+                        buff.push_str(",");
+                    }
+                    first = false;
+                    buff.push_str(&format!("{:?}:", k));
+                    v.write_string(buff);
+                }
+                buff.push_str("}");
+            }
+            Item::Array { items, .. } => {
+                buff.push_str("[");
+                let mut first = true;
+                for item in items {
+                    if !first {
+                        buff.push_str(",");
+                    }
+                    first = false;
+                    item.write_string(buff);
+                }
+                buff.push_str("]");
+            }
+            Item::Integer { value, .. } => buff.push_str(&value.to_string()),
+            Item::Float { value, .. } => buff.push_str(&value.to_string()),
+            Item::Bool { value, .. } => buff.push_str(&value.to_string()),
+            Item::DateTime { .. } => buff.push_str("TODO:date-time"),
+            Item::String { value, .. } => buff.push_str(&format!("{:?}", value.to_string())),
+        }
+    }
+}
+
 pub enum MapFlavor {
     Root(ast::Doc),
     Table(ast::Table),
@@ -45,9 +88,83 @@ pub enum ArrayFlavor {
 }
 
 pub(crate) fn from_doc(doc: &TomlDoc) -> Item {
-    let entries = HashMap::new();
-    Item::Map {
+    let mut root = Item::Map {
         flavor: MapFlavor::Root(doc.ast()),
-        entries,
+        entries: BTreeMap::new(),
+    };
+    fill(doc, doc.cst(), &mut root);
+    root
+}
+
+fn fill(doc: &TomlDoc, node: CstNode, item: &mut Item) {
+    let v = visitor(item)
+        .visit::<ast::Entry, _>(|item, entry| {
+            match insert_into(doc, *item, entry.keys(doc)) {
+                Some(tbl) => *tbl = from_value(doc, entry.value(doc)),
+                None => return,
+            }
+        })
+        .visit::<ast::Table, _>(|item, table| {
+            match insert_into(doc, *item, table.header(doc).keys(doc)) {
+                Some(tbl) => fill(doc, table.cst(), tbl),
+                None => return,
+            }
+        });
+    process_children(node, doc, v);
+}
+
+fn insert_into<'a>(
+    doc: &TomlDoc,
+    item: &'a mut Item,
+    keys: impl Iterator<Item=ast::Key>,
+) -> Option<&'a mut Item> {
+    let mut curr = item;
+    for key in keys {
+        let prev = curr; // nll shenanigans
+        match prev {
+            Item::Map { entries, .. } => {
+                let key_name = key.name(doc).to_string();
+                curr = entries.entry(key_name).or_insert_with(|| {
+                    Item::Map {
+                        // TODO: append Keyed
+                        flavor: MapFlavor::Keyed(vec![key]),
+                        entries: BTreeMap::new(),
+                    }
+                })
+            }
+            _ => {
+                // TODO:
+                return None;
+            }
+        };
+    }
+    Some(curr)
+}
+
+fn from_value(doc: &TomlDoc, value: ast::Value) -> Item {
+    match value.kind(doc) {
+        ast::ValueKind::Array(a) => Item::Array {
+            flavor: ArrayFlavor::Inline(a),
+            items: a.values(doc).map(|val| from_value(doc, val)).collect(),
+        },
+        ast::ValueKind::Dict(d) => Item::Map {
+            flavor: MapFlavor::Inline(d),
+            entries: BTreeMap::new(), // TODO
+        },
+        ast::ValueKind::Number(n) => Item::Integer {
+            ast: n,
+            value: n.value(doc),
+        },
+        ast::ValueKind::Bool(b) => Item::Bool {
+            ast: b,
+            value: b.value(doc),
+        },
+        ast::ValueKind::DateTime(d) => Item::DateTime {
+            ast: d,
+        },
+        ast::ValueKind::StringLit(s) => Item::String {
+            ast: s,
+            value: s.value(doc).to_string(),
+        }
     }
 }

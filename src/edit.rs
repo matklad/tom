@@ -76,7 +76,10 @@ impl TomlDoc {
         self.tree.detach(what.0);
         match siblings {
             (Some(left), Some(right)) => {
-                if self.smart_ws && left.symbol(self) == WHITESPACE && right.symbol(self) == WHITESPACE {
+                if self.smart_ws
+                    && left.symbol(self) == WHITESPACE
+                    && right.symbol(self) == WHITESPACE
+                {
                     self.tree.detach(right.0);
                 }
             }
