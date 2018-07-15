@@ -26,9 +26,53 @@ pub enum Item {
     },
 }
 
+
+/*
+
+The `ast` field would be *really* tricky for maps.
+
+Here are possible cases
+
+1. whole doc
+
+```
+foo = 1
+bar = 2
+```
+
+2. inline table (the single sane case!)
+
+```
+tbl = { foo = 1, bar = 2}
+```
+
+3. table with, possibly, several components
+
+```
+[tbl]
+foo = 1
+
+[tbl.bar]
+quux = 3
+
+[[tbl.baz]]
+spam = 4
+```
+
+4. implicit table via dotted keys
+
+```
+tbl.foo = 1
+tbl.bar.quux = 3
+tbl.baz = [{spam = 4}]
+```
+
+Perhaps we should make a distinction between the table per-se
+and free-standing entries? Maybe...
+*/
+
 pub struct Map {
-    #[allow(unused)]
-    flavor: MapFlavor,
+    // ast: (╯°□°）╯︵ ┻━┻
     entries: BTreeMap<String, Item>,
 }
 
@@ -39,8 +83,6 @@ impl Map {
 }
 
 pub struct Array {
-    #[allow(unused)]
-    flavor: ArrayFlavor,
     items: Vec<Item>,
 }
 
@@ -93,21 +135,8 @@ impl Item {
     }
 }
 
-pub enum MapFlavor {
-    Root(ast::Doc),
-    Table(ast::Table),
-    Inline(ast::Dict),
-    Keyed(Vec<ast::Key>),
-}
-
-pub enum ArrayFlavor {
-    Table(Vec<ast::ArrayTable>),
-    Inline(ast::Array),
-}
-
 pub(crate) fn from_doc(doc: &TomlDoc) -> Item {
     let mut root = Item::Map(Map {
-        flavor: MapFlavor::Root(doc.ast()),
         entries: BTreeMap::new(),
     });
     fill(doc, doc.cst(), &mut root);
@@ -127,6 +156,25 @@ fn fill(doc: &TomlDoc, node: CstNode, item: &mut Item) {
                 Some(tbl) => fill(doc, table.cst(), tbl),
                 None => return,
             }
+        })
+        .visit::<ast::ArrayTable, _>(|item, table| {
+            match insert_into(doc, *item, table.header(doc).keys(doc)) {
+                Some(tbl) => {
+                    let mut new_item = Item::Map(Map { entries: BTreeMap::new() });
+                    fill(doc, table.cst(), &mut new_item);
+
+                    match tbl {
+                        Item::Map(map) if map.entries.is_empty() => (),
+                        Item::Array(array) => {
+                            array.items.push(new_item);
+                            return;
+                        }
+                        _ => return,
+                    }
+                    *tbl = Item::Array(Array { items: vec![new_item] })
+                }
+                None => return,
+            }
         });
     process_children(node, doc, v);
 }
@@ -144,8 +192,6 @@ fn insert_into<'a>(
                 let key_name = key.name(doc).to_string();
                 curr = map.entries.entry(key_name).or_insert_with(|| {
                     Item::Map(Map {
-                        // TODO: append Keyed
-                        flavor: MapFlavor::Keyed(vec![key]),
                         entries: BTreeMap::new(),
                     })
                 })
@@ -162,11 +208,9 @@ fn insert_into<'a>(
 fn from_value(doc: &TomlDoc, value: ast::Value) -> Item {
     match value.kind(doc) {
         ast::ValueKind::Array(a) => Item::Array(Array {
-            flavor: ArrayFlavor::Inline(a),
             items: a.values(doc).map(|val| from_value(doc, val)).collect(),
         }),
-        ast::ValueKind::Dict(d) => Item::Map(Map {
-            flavor: MapFlavor::Inline(d),
+        ast::ValueKind::Dict(_) => Item::Map(Map {
             entries: BTreeMap::new(), // TODO
         }),
         ast::ValueKind::Number(n) => Item::Integer {

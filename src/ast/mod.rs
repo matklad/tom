@@ -43,8 +43,8 @@ impl ast::Bool {
 }
 
 impl ast::Number {
-    pub fn value(self, _doc: &TomlDoc) -> i64 {
-        unimplemented!()
+    pub fn value(self, doc: &TomlDoc) -> i64 {
+        self.text(doc).parse().unwrap()
     }
 }
 

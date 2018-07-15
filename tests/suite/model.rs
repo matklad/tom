@@ -31,6 +31,30 @@ type.name = "pug"
 "#);
 }
 
+#[test]
+fn array_tables() {
+    do_test(r#"
+[[products]]
+name = "Hammer"
+sku = 738594937
+
+[[products]]
+
+[[products]]
+name = "Nail"
+sku = 284758393
+color = "gray"
+"#, r#"
+{
+  "products": [
+    { "name": "Hammer", "sku": 738594937 },
+    { },
+    { "name": "Nail", "sku": 284758393, "color": "gray" }
+  ]
+}
+"#)
+}
+
 fn do_test(toml: &str, json: &str) {
     let doc = ::toml(toml);
     let model = doc.model();
