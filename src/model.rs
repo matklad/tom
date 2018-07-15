@@ -2,14 +2,8 @@ use std::collections::BTreeMap;
 use {TomlDoc, CstNode, ast, visitor::{visitor, process_children}};
 
 pub enum Item {
-    Map {
-        flavor: MapFlavor,
-        entries: BTreeMap<String, Item>,
-    },
-    Array {
-        flavor: ArrayFlavor,
-        items: Vec<Item>,
-    },
+    Map(Map),
+    Array(Array),
     Integer {
         ast: ast::Number,
         value: i64,
@@ -32,6 +26,30 @@ pub enum Item {
     },
 }
 
+pub struct Map {
+    #[allow(unused)]
+    flavor: MapFlavor,
+    entries: BTreeMap<String, Item>,
+}
+
+impl Map {
+    pub fn entries(&self) -> impl Iterator<Item=(&String, &Item)> {
+        self.entries.iter()
+    }
+}
+
+pub struct Array {
+    #[allow(unused)]
+    flavor: ArrayFlavor,
+    items: Vec<Item>,
+}
+
+impl Array {
+    pub fn items(&self) -> impl Iterator<Item=&Item> {
+        self.items.iter()
+    }
+}
+
 impl Item {
     pub fn to_string(&self) -> String {
         let mut buff = String::new();
@@ -41,10 +59,10 @@ impl Item {
 
     fn write_string(&self, buff: &mut String) {
         match self {
-            Item::Map { entries, .. } => {
+            Item::Map(map) => {
                 buff.push_str("{");
                 let mut first = true;
-                for (k, v) in entries {
+                for (k, v) in map.entries() {
                     if !first {
                         buff.push_str(",");
                     }
@@ -54,10 +72,10 @@ impl Item {
                 }
                 buff.push_str("}");
             }
-            Item::Array { items, .. } => {
+            Item::Array(arr) => {
                 buff.push_str("[");
                 let mut first = true;
-                for item in items {
+                for item in arr.items() {
                     if !first {
                         buff.push_str(",");
                     }
@@ -88,10 +106,10 @@ pub enum ArrayFlavor {
 }
 
 pub(crate) fn from_doc(doc: &TomlDoc) -> Item {
-    let mut root = Item::Map {
+    let mut root = Item::Map(Map {
         flavor: MapFlavor::Root(doc.ast()),
         entries: BTreeMap::new(),
-    };
+    });
     fill(doc, doc.cst(), &mut root);
     root
 }
@@ -122,14 +140,14 @@ fn insert_into<'a>(
     for key in keys {
         let prev = curr; // nll shenanigans
         match prev {
-            Item::Map { entries, .. } => {
+            Item::Map(map) => {
                 let key_name = key.name(doc).to_string();
-                curr = entries.entry(key_name).or_insert_with(|| {
-                    Item::Map {
+                curr = map.entries.entry(key_name).or_insert_with(|| {
+                    Item::Map(Map {
                         // TODO: append Keyed
                         flavor: MapFlavor::Keyed(vec![key]),
                         entries: BTreeMap::new(),
-                    }
+                    })
                 })
             }
             _ => {
@@ -143,14 +161,14 @@ fn insert_into<'a>(
 
 fn from_value(doc: &TomlDoc, value: ast::Value) -> Item {
     match value.kind(doc) {
-        ast::ValueKind::Array(a) => Item::Array {
+        ast::ValueKind::Array(a) => Item::Array(Array {
             flavor: ArrayFlavor::Inline(a),
             items: a.values(doc).map(|val| from_value(doc, val)).collect(),
-        },
-        ast::ValueKind::Dict(d) => Item::Map {
+        }),
+        ast::ValueKind::Dict(d) => Item::Map(Map {
             flavor: MapFlavor::Inline(d),
             entries: BTreeMap::new(), // TODO
-        },
+        }),
         ast::ValueKind::Number(n) => Item::Integer {
             ast: n,
             value: n.value(doc),
