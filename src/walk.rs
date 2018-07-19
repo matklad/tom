@@ -8,11 +8,11 @@ pub(crate) enum WalkEvent {
 
 pub(crate) fn walk_filter<'a>(
     doc: &'a TomlDoc,
-    node: CstNode,
+    root: CstNode,
     filter: impl Fn(CstNode) -> bool + 'a,
 ) -> impl Iterator<Item=WalkEvent> + 'a {
     let mut done = false;
-    ::itertools::unfold(WalkEvent::Enter(node), move |pos| {
+    ::itertools::unfold(WalkEvent::Enter(root), move |pos| {
         if done {
             return None;
         }
@@ -24,13 +24,15 @@ pub(crate) fn walk_filter<'a>(
                     None => WalkEvent::Exit(node),
                 },
                 WalkEvent::Exit(node) => {
-                    match node.next_sibling(doc) {
-                        Some(sibling) => WalkEvent::Enter(sibling),
-                        None => match node.parent(doc) {
-                            Some(node) => WalkEvent::Exit(node),
-                            None => {
-                                done = true;
-                                WalkEvent::Exit(node)
+                    if node == root {
+                        done = true;
+                        WalkEvent::Exit(node)
+                    } else {
+                        match node.next_sibling(doc) {
+                            Some(sibling) => WalkEvent::Enter(sibling),
+                            None => match node.parent(doc) {
+                                Some(node) => WalkEvent::Exit(node),
+                                None => WalkEvent::Exit(node),
                             }
                         }
                     }
