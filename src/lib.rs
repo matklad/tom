@@ -170,7 +170,7 @@ impl TomlDoc {
             let mut len: TextUnit = 0.into();
             match node.kind(doc) {
                 CstNodeKind::Leaf(text) => {
-                    len += (text.len() as u32).into();
+                    len += TextUnit::of_str(text);
                 }
                 CstNodeKind::Internal(children) => {
                     for child in children {

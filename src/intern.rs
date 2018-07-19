@@ -1,5 +1,5 @@
 use std::num::NonZeroU32;
-use TextRange;
+use {TextRange, TextUnit};
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 pub(crate) struct InternId(NonZeroU32);
@@ -42,8 +42,8 @@ impl Intern {
             Ok(idx) => self.sorted[idx],
             Err(insertion_point) => {
                 let range = TextRange::offset_len(
-                    (self.data.len() as u32).into(),
-                    (val.len() as u32).into(),
+                    TextUnit::of_str(&self.data),
+                    TextUnit::of_str(val),
                 );
                 let id = InternId::from_idx(self.interned.len());
 
