@@ -3,6 +3,7 @@ use std::cmp;
 use {
     TomlDoc, Symbol, TextUnit, TextRange, ChunkedText,
     tree::{NodeId, TreeData},
+    walk::{walk, WalkEvent},
 };
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
@@ -60,43 +61,19 @@ impl CstNode {
     }
 
     pub fn get_text(self, doc: &TomlDoc) -> String {
-        self.chunked_text(doc).to_string()
+        self.chunked_text(doc).into_string()
     }
 
     pub(crate) fn chunked_text<'a>(self, doc: &'a TomlDoc) -> impl ChunkedText + 'a {
-        struct Chunks<'a> {
-            root: CstNode,
-            doc: &'a TomlDoc,
-        }
-
-        impl<'a> Chunks<'a> {
-            fn go<F: FnMut(&str) -> Result<(), T>, T>(
-                &self,
-                node: CstNode,
-                f: &mut F,
-            ) -> Result<(), T> {
-                match node.kind(self.doc) {
-                    CstNodeKind::Leaf(text) => f(text)?,
-                    CstNodeKind::Internal(children) => {
-                        for child in children {
-                            self.go(child, f)?;
-                        }
-                    }
-                }
-                Ok(())
-            }
-        }
-
-        impl<'a> ChunkedText for Chunks<'a> {
-            fn for_each_chunk<F: FnMut(&str) -> Result<(), T>, T>(
-                &self,
-                mut f: F,
-            ) -> Result<(), T> {
-                self.go(self.root, &mut f)
-            }
-        }
-
-        Chunks { root: self, doc }
+        walk(doc, self)
+            .filter_map(move |event| match event {
+                WalkEvent::Enter(node) => Some(node),
+                WalkEvent::Exit(_) => None,
+            })
+            .filter_map(move |node| match node.kind(doc) {
+                CstNodeKind::Leaf(text) => Some(text),
+                CstNodeKind::Internal(_) => None,
+            })
     }
 
     pub(crate) fn chunked_substring<'a>(
@@ -140,7 +117,7 @@ impl CstNode {
 
         impl<'a> ChunkedText for Chunks<'a> {
             fn for_each_chunk<F: FnMut(&str) -> Result<(), T>, T>(
-                &self,
+                self,
                 mut f: F,
             ) -> Result<(), T> {
                 self.go(self.root, &mut f)
