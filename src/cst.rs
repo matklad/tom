@@ -3,7 +3,7 @@ use std::cmp;
 use {
     TomlDoc, Symbol, TextUnit, TextRange, ChunkedText,
     tree::{NodeId, TreeData},
-    walk::{walk, WalkEvent},
+    walk::{walk, walk_filter, WalkEvent},
 };
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
@@ -81,55 +81,21 @@ impl CstNode {
         doc: &'a TomlDoc,
         range: TextRange,
     ) -> impl ChunkedText + 'a {
-        assert!(
-            !doc.edit_in_progress,
-            "range info is unavailable during edit"
-        );
-
-        struct Chunks<'a> {
-            root: CstNode,
-            doc: &'a TomlDoc,
-            range: TextRange,
-        }
-
-        impl<'a> Chunks<'a> {
-            fn go<F: FnMut(&str) -> Result<(), T>, T>(
-                &self,
-                node: CstNode,
-                f: &mut F,
-            ) -> Result<(), T> {
-                let node_range = node.range(self.doc);
-                let rel_range = match intersect(self.range, node_range) {
-                    None => return Ok(()),
-                    Some(range) => relative_range(node_range.start(), range),
-                };
-                match node.kind(self.doc) {
-                    CstNodeKind::Leaf(text) => f(&text[rel_range])?,
-                    CstNodeKind::Internal(children) => {
-                        for child in children {
-                            self.go(child, f)?;
-                        }
-                    }
-                }
-                Ok(())
-            }
-        }
-
-        impl<'a> ChunkedText for Chunks<'a> {
-            fn for_each_chunk<F: FnMut(&str) -> Result<(), T>, T>(
-                self,
-                mut f: F,
-            ) -> Result<(), T> {
-                self.go(self.root, &mut f)
-            }
-        }
-        Chunks {
-            root: self,
-            doc,
-            range,
-        }
+        walk_filter(doc, self, move |node| intersects(range, node.range(doc)))
+            .filter_map(move |event| match event {
+                WalkEvent::Enter(node) => Some(node),
+                WalkEvent::Exit(_) => None,
+            })
+            .filter_map(move |node| match node.kind(doc) {
+                CstNodeKind::Leaf(text) => {
+                    let node_range = node.range(doc);
+                    let subrange = intersect(range, node_range).unwrap();
+                    let subrange = relative_range(node_range.start(), subrange);
+                    Some(&text[subrange])
+                },
+                CstNodeKind::Internal(_) => None,
+            })
     }
-
     pub fn debug(self, doc: &TomlDoc) -> String {
         if doc.edit_in_progress {
             format!("{}@[??:??)", self.symbol(doc).name())
@@ -214,6 +180,10 @@ fn intersect(r1: TextRange, r2: TextRange) -> Option<TextRange> {
     } else {
         None
     }
+}
+
+fn intersects(r1: TextRange, r2: TextRange) -> bool {
+    intersect(r1, r2).is_some()
 }
 
 fn relative_range(offset: TextUnit, range: TextRange) -> TextRange {
