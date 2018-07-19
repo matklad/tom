@@ -51,3 +51,10 @@ pub(crate) fn walk_filter<'a>(
 pub(crate) fn walk<'a>(doc: &'a TomlDoc, node: CstNode) -> impl Iterator<Item=WalkEvent> + 'a {
     walk_filter(doc, node, |_| true)
 }
+
+pub(crate) fn preorder<'a>(doc: &'a TomlDoc, node: CstNode) -> impl Iterator<Item=CstNode> + 'a {
+    walk(doc, node).filter_map(|event| match event {
+        WalkEvent::Enter(node) => Some(node),
+        WalkEvent::Exit(_) => None,
+    })
+}

@@ -1,4 +1,7 @@
-use {AstNode, CstNode, TomlDoc};
+use {
+    AstNode, CstNode, TomlDoc,
+    walk::preorder,
+};
 
 pub(crate) struct Visitor<'c, C> {
     ctx: C,
@@ -13,15 +16,8 @@ pub(crate) fn visitor<'c, C>(ctx: C) -> Visitor<'c, C> {
 }
 
 pub(crate) fn process<'c, C>(node: CstNode, doc: &TomlDoc, mut v: Visitor<'c, C>) -> C {
-    go(node, doc, &mut v);
+    preorder(doc, node).for_each(|node| v.do_visit(node, doc));
     return v.ctx;
-
-    fn go<'c, C>(node: CstNode, doc: &TomlDoc, v: &mut Visitor<'c, C>) {
-        v.do_visit(node, doc);
-        for child in node.children(doc) {
-            go(child, doc, v);
-        }
-    }
 }
 
 pub(crate) fn process_children<'c, C>(node: CstNode, doc: &TomlDoc, mut v: Visitor<'c, C>) -> C {

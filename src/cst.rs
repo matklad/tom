@@ -3,7 +3,7 @@ use std::cmp;
 use {
     TomlDoc, Symbol, TextUnit, TextRange, ChunkedText,
     tree::{NodeId, TreeData},
-    walk::{walk, walk_filter, WalkEvent},
+    walk::{preorder, walk_filter, WalkEvent},
 };
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
@@ -65,11 +65,7 @@ impl CstNode {
     }
 
     pub(crate) fn chunked_text<'a>(self, doc: &'a TomlDoc) -> impl ChunkedText + 'a {
-        walk(doc, self)
-            .filter_map(move |event| match event {
-                WalkEvent::Enter(node) => Some(node),
-                WalkEvent::Exit(_) => None,
-            })
+        preorder(doc, self)
             .filter_map(move |node| match node.kind(doc) {
                 CstNodeKind::Leaf(text) => Some(text),
                 CstNodeKind::Internal(_) => None,
