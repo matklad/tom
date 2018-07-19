@@ -1,4 +1,5 @@
 extern crate m_lexer;
+extern crate itertools;
 extern crate text_unit;
 #[macro_use]
 extern crate lazy_static;
@@ -14,6 +15,7 @@ mod parser;
 mod cst;
 mod model;
 mod visitor;
+mod walk;
 mod validator;
 mod edit;
 
@@ -26,6 +28,7 @@ use std::{
 };
 
 use intern::{Intern, InternId};
+use walk::{walk, WalkEvent};
 
 pub use edit::{IntoValue, Position};
 pub use text_unit::{TextRange, TextUnit};
@@ -121,10 +124,33 @@ impl TomlDoc {
         if self.edit_in_progress {
             buff += "*modified*\n";
         }
-        go(self.cst(), 0, &self, &data, &mut buff);
+        let mut level = 0;
+        for event in walk(self, self.cst()) {
+            match event {
+                WalkEvent::Enter(node) => {
+                    buff.push_str(&String::from("  ").repeat(level));
+                    let range = data[node.0.to_idx()].range;
+                    let symbol = node.symbol(self);
+                    buff.push_str(&format!("{}@{:?}", symbol.name(), range));
+                    match node.kind(self) {
+                        CstNodeKind::Leaf(text) => {
+                            if !text.chars().all(char::is_whitespace) {
+                                buff.push_str(&format!(" {:?}", text));
+                            }
+                        }
+                        CstNodeKind::Internal(_) => (),
+                    }
+                    buff.push('\n');
+                    level += 1;
+                },
+                WalkEvent::Exit(_) => {
+                    level -= 1;
+                },
+            }
+        }
 
-        let text = self.cst().get_text(self);
         if !self.errors.is_empty() && !self.edit_in_progress {
+            let text = self.cst().get_text(self);
             buff += "\n";
             for e in self.errors.iter() {
                 let text = &text[e.range];
@@ -133,25 +159,6 @@ impl TomlDoc {
         }
         return buff;
 
-        fn go(node: CstNode, level: usize, doc: &TomlDoc, data: &[NodeData], buff: &mut String) {
-            buff.push_str(&String::from("  ").repeat(level));
-            //TODO: panics during edit :(
-            let range = data[node.0.to_idx()].range;
-            let symbol = node.symbol(doc);
-            buff.push_str(&format!("{}@{:?}", symbol.name(), range));
-            match node.kind(doc) {
-                CstNodeKind::Leaf(text) => {
-                    if !text.chars().all(char::is_whitespace) {
-                        buff.push_str(&format!(" {:?}", text));
-                    }
-                }
-                CstNodeKind::Internal(_) => (),
-            }
-            buff.push('\n');
-            for child in node.children(&doc) {
-                go(child, level + 1, doc, data, buff)
-            }
-        }
     }
 
     fn recalculate_ranges(&self, data: &mut Vec<NodeData>) {
@@ -159,27 +166,27 @@ impl TomlDoc {
             range: TextRange::offset_len(0.into(), 0.into()),
         };
         data.resize(self.tree.len(), node_data);
-        go(self, self.cst(), 0.into(), data);
-
-        fn go(
-            doc: &TomlDoc,
-            node: CstNode,
-            start_offset: TextUnit,
-            data: &mut Vec<NodeData>,
-        ) -> TextUnit {
-            let mut len: TextUnit = 0.into();
-            match node.kind(doc) {
-                CstNodeKind::Leaf(text) => {
-                    len += TextUnit::of_str(text);
-                }
-                CstNodeKind::Internal(children) => {
-                    for child in children {
-                        len += go(doc, child, start_offset + len, data);
+        let mut edge: TextUnit = 0.into();
+        for event in walk(self, self.cst()) {
+            match event {
+                WalkEvent::Enter(node) => {
+                    data[node].range = TextRange::offset_len(
+                        edge,
+                        0.into(),
+                    );
+                    match node.kind(self) {
+                        CstNodeKind::Leaf(text) => edge += TextUnit::of_str(text),
+                        CstNodeKind::Internal(_) => (),
                     }
-                }
+                },
+                WalkEvent::Exit(node) => {
+                    let start = data[node].range.start();
+                    data[node].range = TextRange::from_to(
+                        start,
+                        edge,
+                    )
+                },
             }
-            data[node.0.to_idx()].range = TextRange::offset_len(start_offset, len);
-            len
         }
     }
 }
@@ -221,4 +228,18 @@ impl<'a, A: AstNode> Iterator for AstChildren<'a, A> {
 #[derive(Clone, Copy)]
 struct NodeData {
     range: TextRange,
+}
+
+impl ::std::ops::Index<CstNode> for Vec<NodeData> {
+    type Output = NodeData;
+
+    fn index(&self, index: CstNode) -> &NodeData {
+        &self[index.0.to_idx()]
+    }
+}
+
+impl ::std::ops::IndexMut<CstNode> for Vec<NodeData> {
+    fn index_mut(&mut self, index: CstNode) -> &mut NodeData {
+        &mut self[index.0.to_idx()]
+    }
 }
