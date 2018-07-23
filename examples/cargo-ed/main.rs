@@ -5,9 +5,13 @@ extern crate tom;
 
 mod cargo_toml;
 
-use std::fs;
+use std::{
+    fs,
+    borrow::Cow,
+};
 use clap::{App, Arg};
 pub use cargo_toml::CargoToml;
+use tom::{ast, TomlDoc};
 
 type Result<T> = ::std::result::Result<T, failure::Error>;
 
@@ -53,17 +57,50 @@ fn main() -> Result<()> {
     let mut toml = CargoToml::new(&text)?;
     toml.update_dependency(&dep)?;
     let result = toml.text();
+
     fs::write(manifest_path, result)?;
 
     Ok(())
 }
 
+#[derive(Debug, PartialEq, Eq)]
 pub struct Dependency {
     pub name: String,
     pub optional: bool,
     pub source: DependencySource,
 }
 
+impl Dependency {
+    fn from_entry(doc: &TomlDoc, entry: ast::Entry) -> Option<Dependency> {
+        let name = single_key(doc, entry)?.into_owned();
+        let value = entry.value(doc);
+        let mut optional = false;
+        let source = match value.kind(doc) {
+            ast::ValueKind::StringLit(s) => {
+                DependencySource::Version(s.value(doc).into_owned())
+            }
+            ast::ValueKind::Dict(d) => {
+                let mut url = None;
+                let mut branch = None;
+                let mut version = None;
+                for e in d.entries(doc) {
+                    match single_key(doc, e)?.as_ref() {
+                        "git" => url = Some(string_value(doc, e)?),
+                        "version" => version = Some(string_value(doc, e)?),
+                        "branch" => branch = Some(string_value(doc, e)?),
+                        "optional" => optional = bool_value(doc, e)?,
+                        _ => return None,
+                    }
+                }
+                DependencySource::Git { url: url?, version, branch }
+            }
+            _ => return None,
+        };
+        Some(Dependency { name, optional, source })
+    }
+}
+
+#[derive(Debug, PartialEq, Eq)]
 pub enum DependencySource {
     Version(String),
     Git {
@@ -72,6 +109,30 @@ pub enum DependencySource {
         branch: Option<String>,
     },
 }
+
+fn single_key(doc: &TomlDoc, node: impl ast::KeyOwner) -> Option<Cow<str>> {
+    let mut keys = node.keys(doc);
+    let first = keys.next()?;
+    if keys.next().is_some() {
+        return None;
+    }
+    Some(first.name(doc))
+}
+
+fn string_value(doc: &TomlDoc, node: ast::Entry) -> Option<String> {
+    match node.value(doc).kind(doc) {
+        ast::ValueKind::StringLit(l) => Some(l.value(doc).into_owned()),
+        _ => None
+    }
+}
+
+fn bool_value(doc: &TomlDoc, node: ast::Entry) -> Option<bool> {
+    match node.value(doc).kind(doc) {
+        ast::ValueKind::Bool(l) => Some(l.value(doc)),
+        _ => None
+    }
+}
+
 
 #[cfg(test)]
 mod tests;

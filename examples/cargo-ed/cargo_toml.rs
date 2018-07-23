@@ -32,6 +32,31 @@ impl CargoToml {
         self.doc.cst().get_text(&self.doc)
     }
 
+    pub fn dependencies(&self) -> Vec<Dependency> {
+        let mut res = Vec::new();
+        for entry in self.doc.ast().entries(&self.doc) {
+            if compare_keys(&self.doc, entry, &["dependencies"]) {
+                match entry.value(&self.doc).kind(&self.doc) {
+                    ast::ValueKind::Dict(d) => {
+                        res.extend(d.entries(&self.doc).filter_map(|entry| {
+                            Dependency::from_entry(&self.doc, entry)
+                        }))
+                    },
+                    _ => {},
+                }
+            }
+        }
+
+        for table in self.doc.ast().tables(&self.doc) {
+            if compare_keys(&self.doc, table.header(&self.doc), &["dependencies"]) {
+                res.extend(table.entries(&self.doc).filter_map(|entry| {
+                    Dependency::from_entry(&self.doc, entry)
+                }))
+            }
+        }
+        res
+    }
+
     pub fn update_dependency(&mut self, dep: &Dependency) -> Result<()> {
         self.doc.start_edit();
         let toml_dep = self.find_or_insert_dep(&dep.name)?;

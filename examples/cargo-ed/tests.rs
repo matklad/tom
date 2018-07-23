@@ -1,6 +1,70 @@
 use {CargoToml, Dependency, DependencySource};
 
 #[test]
+fn test_get_dependencies() {
+    fn do_check(toml: &str, expected: Vec<Dependency>) {
+        let cargo_toml = CargoToml::new(toml).unwrap();
+        assert_eq!(cargo_toml.dependencies(), expected);
+    }
+
+    do_check(r#"
+[dependencies]
+foo = "1.0"
+bar = { git = "https://example.com" }
+
+[dependencies.baz]
+version = "2.0"
+git = "https://example.com"
+"#, vec![
+        Dependency {
+            name: "foo".to_string(),
+            optional: false,
+            source: DependencySource::Version("1.0".to_string()),
+        },
+        Dependency {
+            name: "bar".to_string(),
+            optional: false,
+            source: DependencySource::Git {
+                url: "https://example.com".to_string(),
+                version: None,
+                branch: None,
+            },
+        },
+    ]);
+
+    do_check(r#"
+dependencies = { foo = "1.0", bar = { git = "https://example.com" } }
+"#, vec![
+        Dependency {
+            name: "foo".to_string(),
+            optional: false,
+            source: DependencySource::Version("1.0".to_string()),
+        },
+        Dependency {
+            name: "bar".to_string(),
+            optional: false,
+            source: DependencySource::Git {
+                url: "https://example.com".to_string(),
+                version: None,
+                branch: None,
+            },
+        },
+    ]);
+
+    do_check(r#"
+dependencies.foo = "1.0"
+dependencies.bar.git = "https://example.com"
+dependencies.bar.version = "https://example.com"
+"#, vec![]);
+
+    do_check(r#"
+[dependencies]
+bar.git = "https://example.com"
+bar.version = "https://example.com"
+"#, vec![]);
+}
+
+#[test]
 fn updating_dependency_no_table() {
     check_cargo_toml_edit(
         r#"
