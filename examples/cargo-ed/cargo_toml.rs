@@ -2,7 +2,7 @@ use std::{
     collections::HashMap,
     borrow::Cow,
 };
-use tom::{ast, IntoValue, Position::*, TomlDoc};
+use tom::{ast, TomlDoc};
 
 use {Result};
 
@@ -42,10 +42,10 @@ impl Dependency {
                 let mut version = None;
                 for e in d.entries(doc) {
                     match single_key(doc, e)?.as_ref() {
-                        "git" => url = Some(string_value(doc, e)?),
-                        "version" => version = Some(string_value(doc, e)?),
-                        "branch" => branch = Some(string_value(doc, e)?),
-                        "optional" => optional = bool_value(doc, e)?,
+                        "git" => url = Some(e.value(doc).as_string(doc)?.into_owned()),
+                        "version" => version = Some(e.value(doc).as_string(doc)?.into_owned()),
+                        "branch" => branch = Some(e.value(doc).as_string(doc)?.into_owned()),
+                        "optional" => optional = e.value(doc).as_bool(doc)?,
                         _ => return None,
                     }
                 }
@@ -64,20 +64,6 @@ fn single_key(doc: &TomlDoc, node: impl ast::KeyOwner) -> Option<Cow<str>> {
         return None;
     }
     Some(first.name(doc))
-}
-
-fn string_value(doc: &TomlDoc, node: ast::Entry) -> Option<String> {
-    match node.value(doc).kind(doc) {
-        ast::ValueKind::StringLit(l) => Some(l.value(doc).into_owned()),
-        _ => None
-    }
-}
-
-fn bool_value(doc: &TomlDoc, node: ast::Entry) -> Option<bool> {
-    match node.value(doc).kind(doc) {
-        ast::ValueKind::Bool(l) => Some(l.value(doc)),
-        _ => None
-    }
 }
 
 impl CargoToml {

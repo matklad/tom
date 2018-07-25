@@ -55,6 +55,29 @@ impl ast::DateTime {
     }
 }
 
+impl ast::Value {
+    pub fn as_string(self, doc: &TomlDoc) -> Option<Cow<str>> {
+        match self.kind(doc) {
+            ast::ValueKind::StringLit(l) => Some(l.value(doc)),
+            _ => None,
+        }
+    }
+
+    pub fn as_bool(self, doc: &TomlDoc) -> Option<bool> {
+        match self.kind(doc) {
+            ast::ValueKind::Bool(l) => Some(l.value(doc)),
+            _ => None,
+        }
+    }
+
+    pub fn as_i64(self, doc: &TomlDoc) -> Option<i64> {
+        match self.kind(doc) {
+            ast::ValueKind::Number(l) => Some(l.value(doc)),
+            _ => None,
+        }
+    }
+}
+
 impl EntryOwner for ast::Dict {
     fn entries(self, doc: &TomlDoc) -> AstChildren<ast::Entry> {
         self.entries(doc)

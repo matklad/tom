@@ -8,7 +8,7 @@ mod cargo_toml;
 
 use std::{fs};
 use clap::{App, Arg};
-pub use cargo_toml::CargoToml;
+pub use cargo_toml::{CargoToml, Dependency, DependencySource};
 
 type Result<T> = ::std::result::Result<T, failure::Error>;
 
