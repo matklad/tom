@@ -20,7 +20,7 @@ impl Map {
         Map { map: BTreeMap::new() }
     }
 
-    pub fn entries(&self) -> impl Iterator<Item=(&str, &Item)> {
+    pub fn iter(&self) -> impl Iterator<Item=(&str, &Item)> {
         self.map.iter()
             .map(|(k, (_, v))| (k.as_str(), v))
     }
@@ -28,9 +28,48 @@ impl Map {
     pub fn is_empty(&self) -> bool {
         self.map.is_empty()
     }
+
+    pub fn get(&self, key: &str) -> Option<&Item> {
+        self.map.get(key).map(|(_, i)| i)
+    }
 }
 
 impl Item {
+    pub fn as_map(&self) -> Option<&Map> {
+        match self {
+            Item::Map(m) => Some(m),
+            _ => None,
+        }
+    }
+
+    pub fn as_str(&self) -> Option<&str> {
+        match self {
+            Item::String(s) => Some(s.as_str()),
+            _ => None,
+        }
+    }
+
+    pub fn as_bool(&self) -> Option<bool> {
+        match self {
+            Item::Bool(v) => Some(*v),
+            _ => None,
+        }
+    }
+
+    pub fn as_i64(&self) -> Option<i64> {
+        match self {
+            Item::Integer(v) => Some(*v),
+            _ => None,
+        }
+    }
+
+    pub fn as_f64(&self) -> Option<f64> {
+        match self {
+            Item::Float(v) => Some(*v),
+            _ => None,
+        }
+    }
+
     pub fn to_string(&self) -> String {
         let mut buff = String::new();
         self.write_string(&mut buff);
@@ -42,7 +81,7 @@ impl Item {
             Item::Map(map) => {
                 buff.push_str("{");
                 let mut first = true;
-                for (k, v) in map.entries() {
+                for (k, v) in map.iter() {
                     if !first {
                         buff.push_str(",");
                     }
@@ -73,10 +112,13 @@ impl Item {
     }
 }
 
-pub(crate) fn from_doc(doc: &TomlDoc) -> Item {
+pub(crate) fn from_doc(doc: &TomlDoc) -> Map {
     let mut root = Item::Map(Map::new());
     fill(doc, doc.cst(), &mut root);
-    root
+    match root {
+        Item::Map(map) => map,
+        _ => unreachable!()
+    }
 }
 
 fn fill(doc: &TomlDoc, node: CstNode, item: &mut Item) {
@@ -144,12 +186,14 @@ fn from_value(doc: &TomlDoc, value: ast::Value) -> Item {
         ast::ValueKind::Array(a) => Item::Array(
             a.values(doc).map(|val| from_value(doc, val)).collect(),
         ),
-        ast::ValueKind::Dict(_) => Item::Map(Map {
-            map: BTreeMap::new(), // TODO
-        }),
+        ast::ValueKind::Dict(d) => {
+            let mut map = Item::Map(Map::new());
+            fill(doc, d.cst(), &mut map);
+            map
+        },
         ast::ValueKind::Number(n) => Item::Integer(n.value(doc)),
         ast::ValueKind::Bool(b) => Item::Bool(b.value(doc)),
-        ast::ValueKind::DateTime(d) => Item::DateTime,
+        ast::ValueKind::DateTime(_) => Item::DateTime,
         ast::ValueKind::StringLit(s) => Item::String(s.value(doc).to_string()),
     }
 }

@@ -18,11 +18,6 @@ git = "https://example.com"
 branch = "dev"
 "#, vec![
         Dependency {
-            name: "foo".to_string(),
-            optional: false,
-            source: DependencySource::Version("1.0".to_string()),
-        },
-        Dependency {
             name: "bar".to_string(),
             optional: false,
             source: DependencySource::Git {
@@ -39,17 +34,17 @@ branch = "dev"
                 version: Some("2.0".to_string()),
                 branch: Some("dev".to_string()),
             },
-        }
-    ]);
-
-    do_check(r#"
-dependencies = { foo = "1.0", bar = { git = "https://example.com" } }
-"#, vec![
+        },
         Dependency {
             name: "foo".to_string(),
             optional: false,
             source: DependencySource::Version("1.0".to_string()),
         },
+    ]);
+
+    do_check(r#"
+dependencies = { foo = "1.0", bar = { git = "https://example.com" } }
+"#, vec![
         Dependency {
             name: "bar".to_string(),
             optional: false,
@@ -58,6 +53,11 @@ dependencies = { foo = "1.0", bar = { git = "https://example.com" } }
                 version: None,
                 branch: None,
             },
+        },
+        Dependency {
+            name: "foo".to_string(),
+            optional: false,
+            source: DependencySource::Version("1.0".to_string()),
         },
     ]);
 
@@ -68,16 +68,6 @@ dependencies.bar.version = "2.0"
 dependencies.baz = { version = "9.2" }
 "#, vec![
         Dependency {
-            name: "foo".to_string(),
-            optional: false,
-            source: DependencySource::Version("1.0".to_string()),
-        },
-        Dependency {
-            name: "baz".to_string(),
-            optional: false,
-            source: DependencySource::Version("9.2".to_string()),
-        },
-        Dependency {
             name: "bar".to_string(),
             optional: false,
             source: DependencySource::Git {
@@ -85,6 +75,16 @@ dependencies.baz = { version = "9.2" }
                 version: Some("2.0".to_string()),
                 branch: None,
             },
+        },
+        Dependency {
+            name: "baz".to_string(),
+            optional: false,
+            source: DependencySource::Version("9.2".to_string()),
+        },
+        Dependency {
+            name: "foo".to_string(),
+            optional: false,
+            source: DependencySource::Version("1.0".to_string()),
         },
     ]);
 

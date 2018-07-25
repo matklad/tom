@@ -33,7 +33,7 @@ use walk::{walk, WalkEvent};
 pub use edit::{IntoValue, Position};
 pub use text_unit::{TextRange, TextUnit};
 pub use cst::{CstNode, CstNodeKind, CstChildren, CstChildrenIter, RevCstChildrenIter};
-pub use model::{Item};
+pub use model::{Item, Map};
 pub(crate) use chunked_text::ChunkedText;
 
 type Tree = tree::Tree<Symbol, (Symbol, InternId)>;
@@ -102,7 +102,7 @@ impl TomlDoc {
         ast::Doc::cast(self.cst(), self).unwrap()
     }
 
-    pub fn model(&self) -> Item {
+    pub fn model(&self) -> Map {
         model::from_doc(self)
     }
 
