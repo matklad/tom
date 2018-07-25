@@ -163,10 +163,6 @@ impl EntryGroup {
     fn empty(prefix: usize) -> EntryGroup {
         EntryGroup { members: Vec::new(), prefix }
     }
-
-    fn name<'a>(&self, doc: &'a TomlDoc) -> Cow<'a, str> {
-        self.members.first().unwrap().keys(doc).next().unwrap().name(doc)
-    }
 }
 
 fn group<'a>(

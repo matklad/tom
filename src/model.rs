@@ -3,92 +3,30 @@ use {TomlDoc, CstNode, ast, visitor::{visitor, process_children}};
 
 pub enum Item {
     Map(Map),
-    Array(Array),
-    Integer {
-        ast: ast::Number,
-        value: i64,
-    },
-    Float {
-        ast: ast::Number,
-        value: f64,
-    },
-    Bool {
-        ast: ast::Bool,
-        value: bool,
-    },
-    DateTime {
-        ast: ast::DateTime,
-        // value: ???
-    },
-    String {
-        ast: ast::StringLit,
-        value: String,
-    },
+    Array(Vec<Item>),
+    Integer(i64),
+    Float(f64),
+    Bool(bool),
+    DateTime,
+    String(String),
 }
 
-
-/*
-
-The `ast` field would be *really* tricky for maps.
-
-Here are possible cases
-
-1. whole doc
-
-```
-foo = 1
-bar = 2
-```
-
-2. inline table (the single sane case!)
-
-```
-tbl = { foo = 1, bar = 2}
-```
-
-3. table with, possibly, several components
-
-```
-[tbl]
-foo = 1
-
-[tbl.bar]
-quux = 3
-
-[[tbl.baz]]
-spam = 4
-```
-
-4. implicit table via dotted keys
-
-```
-tbl.foo = 1
-tbl.bar.quux = 3
-tbl.baz = [{spam = 4}]
-```
-
-Perhaps we should make a distinction between the table per-se
-and free-standing entries? Maybe...
-*/
-
 pub struct Map {
-    // ast: (╯°□°）╯︵ ┻━┻
-    entries: BTreeMap<String, Item>,
+    map: BTreeMap<String, (ast::Key, Item)>,
 }
 
 impl Map {
-    pub fn entries(&self) -> impl Iterator<Item=(&String, &Item)> {
-        self.entries.iter()
+    fn new() -> Map {
+        Map { map: BTreeMap::new() }
     }
-}
 
-pub struct Array {
-    items: Vec<Item>,
-}
+    pub fn entries(&self) -> impl Iterator<Item=(&str, &Item)> {
+        self.map.iter()
+            .map(|(k, (_, v))| (k.as_str(), v))
+    }
 
-impl Array {
-    pub fn items(&self) -> impl Iterator<Item=&Item> {
-        self.items.iter()
+    pub fn is_empty(&self) -> bool {
+        self.map.is_empty()
     }
 }
 
@@ -117,7 +55,7 @@ impl Item {
             Item::Array(arr) => {
                 buff.push_str("[");
                 let mut first = true;
-                for item in arr.items() {
+                for item in arr.iter() {
                     if !first {
                         buff.push_str(",");
                     }
@@ -126,19 +64,17 @@ impl Item {
                 }
                 buff.push_str("]");
             }
-            Item::Integer { value, .. } => buff.push_str(&value.to_string()),
-            Item::Float { value, .. } => buff.push_str(&value.to_string()),
-            Item::Bool { value, .. } => buff.push_str(&value.to_string()),
-            Item::DateTime { .. } => buff.push_str("TODO:date-time"),
-            Item::String { value, .. } => buff.push_str(&format!("{:?}", value.to_string())),
+            Item::Integer(value) => buff.push_str(&value.to_string()),
+            Item::Float(value) => buff.push_str(&value.to_string()),
+            Item::Bool(value) => buff.push_str(&value.to_string()),
+            Item::DateTime => buff.push_str("TODO:date-time"),
+            Item::String(value) => buff.push_str(&format!("{:?}", value.to_string())),
         }
     }
 }
 
 pub(crate) fn from_doc(doc: &TomlDoc) -> Item {
-    let mut root = Item::Map(Map {
-        entries: BTreeMap::new(),
-    });
+    let mut root = Item::Map(Map::new());
     fill(doc, doc.cst(), &mut root);
     root
 }
@@ -160,18 +96,18 @@ fn fill(doc: &TomlDoc, node: CstNode, item: &mut Item) {
         .visit::<ast::ArrayTable, _>(|item, table| {
             match insert_into(doc, *item, table.header(doc).keys(doc)) {
                 Some(tbl) => {
-                    let mut new_item = Item::Map(Map { entries: BTreeMap::new() });
+                    let mut new_item = Item::Map(Map::new());
                     fill(doc, table.cst(), &mut new_item);
 
                     match tbl {
-                        Item::Map(map) if map.entries.is_empty() => (),
+                        Item::Map(map) if map.is_empty() => (),
                         Item::Array(array) => {
-                            array.items.push(new_item);
+                            array.push(new_item);
                             return;
                         }
                         _ => return,
                     }
-                    *tbl = Item::Array(Array { items: vec![new_item] })
+                    *tbl = Item::Array(vec![new_item])
                 }
                 None => return,
             }
@@ -190,11 +126,9 @@ fn insert_into<'a>(
         match prev {
             Item::Map(map) => {
                 let key_name = key.name(doc).to_string();
-                curr = map.entries.entry(key_name).or_insert_with(|| {
-                    Item::Map(Map {
-                        entries: BTreeMap::new(),
-                    })
-                })
+                curr = &mut map.map.entry(key_name).or_insert_with(|| {
+                    (key, Item::Map(Map::new()))
+                }).1
             }
             _ => {
                 // TODO:
@@ -207,26 +141,15 @@ fn insert_into<'a>(
 
 fn from_value(doc: &TomlDoc, value: ast::Value) -> Item {
     match value.kind(doc) {
-        ast::ValueKind::Array(a) => Item::Array(Array {
-            items: a.values(doc).map(|val| from_value(doc, val)).collect(),
-        }),
+        ast::ValueKind::Array(a) => Item::Array(
+            a.values(doc).map(|val| from_value(doc, val)).collect(),
+        ),
         ast::ValueKind::Dict(_) => Item::Map(Map {
-            entries: BTreeMap::new(), // TODO
+            map: BTreeMap::new(), // TODO
         }),
-        ast::ValueKind::Number(n) => Item::Integer {
-            ast: n,
-            value: n.value(doc),
-        },
-        ast::ValueKind::Bool(b) => Item::Bool {
-            ast: b,
-            value: b.value(doc),
-        },
-        ast::ValueKind::DateTime(d) => Item::DateTime {
-            ast: d,
-        },
-        ast::ValueKind::StringLit(s) => Item::String {
-            ast: s,
-            value: s.value(doc).to_string(),
-        }
+        ast::ValueKind::Number(n) => Item::Integer(n.value(doc)),
+        ast::ValueKind::Bool(b) => Item::Bool(b.value(doc)),
+        ast::ValueKind::DateTime(d) => Item::DateTime,
+        ast::ValueKind::StringLit(s) => Item::String(s.value(doc).to_string()),
     }
 }
