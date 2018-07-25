@@ -4,7 +4,7 @@ use std::{
 };
 use tom::{ast, TomlDoc};
 
-use {Result};
+use Result;
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct Dependency {
@@ -28,43 +28,58 @@ pub struct CargoToml {
 }
 
 impl Dependency {
-    fn from_entry(doc: &TomlDoc, entry: ast::Entry) -> Option<Dependency> {
-        let name = entry.keys(doc).last().unwrap().name(doc).into_owned();
-        let value = entry.value(doc);
+    fn from_entries(
+        doc: &TomlDoc,
+        name: String,
+        entries: impl Iterator<Item=ast::Entry>,
+        prefix: usize,
+    ) -> Option<Dependency> {
+        let mut url = None;
+        let mut branch = None;
+        let mut version = None;
         let mut optional = false;
-        let source = match value.kind(doc) {
-            ast::ValueKind::StringLit(s) => {
-                DependencySource::Version(s.value(doc).into_owned())
+        for e in entries {
+            match last_key(doc, e, prefix)?.as_ref() {
+                "git" => url = Some(e.value(doc).as_string(doc)?.into_owned()),
+                "version" => version = Some(e.value(doc).as_string(doc)?.into_owned()),
+                "branch" => branch = Some(e.value(doc).as_string(doc)?.into_owned()),
+                "optional" => optional = e.value(doc).as_bool(doc)?,
+                _ => return None,
             }
-            ast::ValueKind::Dict(d) => {
-                let mut url = None;
-                let mut branch = None;
-                let mut version = None;
-                for e in d.entries(doc) {
-                    match single_key(doc, e)?.as_ref() {
-                        "git" => url = Some(e.value(doc).as_string(doc)?.into_owned()),
-                        "version" => version = Some(e.value(doc).as_string(doc)?.into_owned()),
-                        "branch" => branch = Some(e.value(doc).as_string(doc)?.into_owned()),
-                        "optional" => optional = e.value(doc).as_bool(doc)?,
-                        _ => return None,
-                    }
-                }
-                DependencySource::Git { url: url?, version, branch }
+        }
+        let source = match url {
+            Some(url) => DependencySource::Git { url, version, branch },
+            None => match (version, branch) {
+                (Some(version), None) => DependencySource::Version(version),
+                _ => return None,
             }
-            _ => return None,
         };
         Some(Dependency { name, optional, source })
     }
+
+    fn from_entry(doc: &TomlDoc, entry: ast::Entry) -> Option<Dependency> {
+        let name = entry.keys(doc).last().unwrap().name(doc).into_owned();
+        let value = entry.value(doc);
+        match value.kind(doc) {
+            ast::ValueKind::StringLit(s) => {
+                let source = DependencySource::Version(s.value(doc).into_owned());
+                Some(Dependency { name, optional: false, source })
+            }
+            ast::ValueKind::Dict(d) => Dependency::from_entries(doc, name, d.entries(doc), 0),
+            _ => None,
+        }
+    }
 }
 
-fn single_key(doc: &TomlDoc, node: impl ast::KeyOwner) -> Option<Cow<str>> {
-    let mut keys = node.keys(doc);
+fn last_key(doc: &TomlDoc, node: impl ast::KeyOwner, prefix: usize) -> Option<Cow<str>> {
+    let mut keys = node.keys(doc).skip(prefix);
     let first = keys.next()?;
     if keys.next().is_some() {
         return None;
     }
     Some(first.name(doc))
 }
+
 
 impl CargoToml {
     pub fn new(text: &str) -> Result<CargoToml> {
@@ -92,7 +107,13 @@ impl CargoToml {
                 .map(|&e| e)
                 .filter(|e| e.keys(&self.doc).count() == 2)
                 .filter_map(|e| Dependency::from_entry(&self.doc, e))
-            )
+            );
+            for (name, group) in group(&self.doc, deps_group.members.iter().map(|&e| e), 1) {
+                let name = name.into_owned();
+                res.extend(
+                    Dependency::from_entries(&self.doc, name, group.members.into_iter(), group.prefix)
+                )
+            }
         }
 
         for entry in self.doc.ast().entries(&self.doc) {
@@ -109,12 +130,24 @@ impl CargoToml {
         }
 
         for table in self.doc.ast().tables(&self.doc) {
-            if compare_keys(&self.doc, table.header(&self.doc), &["dependencies"]) {
+            let header = table.header(&self.doc);
+            if compare_keys(&self.doc, header, &["dependencies"]) {
                 res.extend(table.entries(&self.doc)
                     .filter(|e| e.keys(&self.doc).count() == 1)
                     .filter_map(|entry| {
-                    Dependency::from_entry(&self.doc, entry)
-                }))
+                        Dependency::from_entry(&self.doc, entry)
+                    }));
+                for (name, group) in group(&self.doc, table.entries(&self.doc), 0) {
+                    let name = name.into_owned();
+                    res.extend(
+                        Dependency::from_entries(&self.doc, name, group.members.into_iter(), group.prefix)
+                    )
+                }
+            }
+
+            if header.keys(&self.doc).count() == 2 && header.keys(&self.doc).next().unwrap().name(&self.doc) == "dependencies" {
+                let dep_name = header.keys(&self.doc).nth(1).unwrap().name(&self.doc).into_owned();
+                res.extend(Dependency::from_entries(&self.doc, dep_name, table.entries(&self.doc), 0));
             }
         }
         res

@@ -72,22 +72,35 @@ dependencies.baz = { version = "9.2" }
             optional: false,
             source: DependencySource::Version("1.0".to_string()),
         },
-//        Dependency {
-//            name: "bar".to_string(),
-//            optional: false,
-//            source: DependencySource::Git {
-//                url: "https://example.com".to_string(),
-//                version: Some("2.0".to_string()),
-//                branch: None,
-//            },
-//        }
+        Dependency {
+            name: "baz".to_string(),
+            optional: false,
+            source: DependencySource::Version("9.2".to_string()),
+        },
+        Dependency {
+            name: "bar".to_string(),
+            optional: false,
+            source: DependencySource::Git {
+                url: "https://example.com".to_string(),
+                version: Some("2.0".to_string()),
+                branch: None,
+            },
+        },
     ]);
 
     do_check(r#"
 [dependencies]
 bar.git = "https://example.com"
-bar.version = "https://example.com"
-"#, vec![]);
+bar.version = "2.0"
+"#, vec![Dependency {
+        name: "bar".to_string(),
+        optional: false,
+        source: DependencySource::Git {
+            url: "https://example.com".to_string(),
+            version: Some("2.0".to_string()),
+            branch: None,
+        },
+    }]);
 }
 
 //#[test]
