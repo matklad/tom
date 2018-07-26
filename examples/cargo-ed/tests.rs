@@ -103,57 +103,57 @@ bar.version = "2.0"
     }]);
 }
 
-//#[test]
-//fn updating_dependency_no_table() {
-//    check_cargo_toml_edit(
-//        r#"
-//[package]
-//name = "tom"
-//"#,
-//        r#"
-//[package]
-//name = "tom"
-//
-//[dependencies]
-//regex = "1.0"
-//"#,
-//        |toml| {
-//            toml.update_dependency(&Dependency {
-//                name: "regex".to_string(),
-//                source: DependencySource::Version("1.0".to_string()),
-//                optional: false,
-//            }).unwrap();
-//        },
-//    );
-//
-//    check_cargo_toml_edit(
-//        r#"
-//[package]
-//name = "tom"
-//
-//[bin]
-//name = "bar"
-//"#,
-//        r#"
-//[package]
-//name = "tom"
-//
-//[dependencies]
-//regex = "1.0"
-//
-//[bin]
-//name = "bar"
-//"#,
-//        |toml| {
-//            toml.update_dependency(&Dependency {
-//                name: "regex".to_string(),
-//                source: DependencySource::Version("1.0".to_string()),
-//                optional: false,
-//            }).unwrap();
-//        },
-//    );
-//}
-//
+#[test]
+fn updating_dependency_no_table() {
+    check_cargo_toml_edit(
+        r#"
+[package]
+name = "tom"
+"#,
+        r#"
+[package]
+name = "tom"
+
+[dependencies]
+regex = "1.0"
+"#,
+        |toml| {
+            toml.update_dependency(&Dependency {
+                name: "regex".to_string(),
+                source: DependencySource::Version("1.0".to_string()),
+                optional: false,
+            }).unwrap();
+        },
+    );
+
+    check_cargo_toml_edit(
+        r#"
+[package]
+name = "tom"
+
+[bin]
+name = "bar"
+"#,
+        r#"
+[package]
+name = "tom"
+
+[dependencies]
+regex = "1.0"
+
+[bin]
+name = "bar"
+"#,
+        |toml| {
+            toml.update_dependency(&Dependency {
+                name: "regex".to_string(),
+                source: DependencySource::Version("1.0".to_string()),
+                optional: false,
+            }).unwrap();
+        },
+    );
+}
+
 //#[test]
 //fn updating_dependency() {
 //    check_cargo_toml_edit(
@@ -264,10 +264,10 @@ bar.version = "2.0"
 //        },
 //    );
 //}
-//
-//fn check_cargo_toml_edit(before: &str, after: &str, edit: impl FnOnce(&mut CargoToml)) {
-//    let mut cargo_toml = CargoToml::new(before).unwrap();
-//    edit(&mut cargo_toml);
-//    let actual = cargo_toml.text();
-//    assert_eq!(after, &actual);
-//}
+
+fn check_cargo_toml_edit(before: &str, after: &str, edit: impl FnOnce(&mut CargoToml)) {
+    let mut cargo_toml = CargoToml::new(before).unwrap();
+    edit(&mut cargo_toml);
+    let actual = cargo_toml.text();
+    assert_eq!(after, &actual);
+}
