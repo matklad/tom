@@ -91,4 +91,20 @@ impl CargoToml {
             .collect::<Vec<_>>();
         deps
     }
+
+    pub fn update_dependency(&mut self, dep: &Dependency) -> Result<()> {
+        let existing = self.dependencies().into_iter().find(|d| d.name == dep.name);
+        match existing {
+            None => self.insert_dep(dep),
+            Some(d) => self.merge_deps(&d, dep),
+        }
+    }
+
+    fn insert_dep(&mut self, _dep: &Dependency) -> Result<()> {
+        Ok(())
+    }
+
+    fn merge_deps(&mut self, _old: &Dependency, _new: &Dependency) -> Result<()> {
+        Ok(())
+    }
 }
