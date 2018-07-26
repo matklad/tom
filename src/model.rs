@@ -15,7 +15,7 @@ pub enum Item {
 }
 
 pub struct Map {
-    map: BTreeMap<String, (ast::Key, Item)>,
+    map: BTreeMap<String, (Vec<ast::Key>, Item)>,
 }
 
 impl Map {
@@ -34,6 +34,10 @@ impl Map {
 
     pub fn get(&self, key: &str) -> Option<&Item> {
         self.map.get(key).map(|(_, i)| i)
+    }
+
+    pub fn get_keys(&self, key: &str) -> Vec<ast::Key> {
+        self.map.get(key).map(|(k, _)| k).into_iter().flat_map(|keys| keys.iter().cloned()).collect()
     }
 }
 
@@ -174,9 +178,11 @@ fn insert_into<'a>(
         match prev {
             Item::Map(map) => {
                 let key_name = key.name(doc).to_string();
-                curr = &mut map.map.entry(key_name).or_insert_with(|| {
-                    (key, Item::Map(Map::new()))
-                }).1
+                let mut entry = map.map.entry(key_name).or_insert_with(|| {
+                    (vec![], Item::Map(Map::new()))
+                });
+                entry.0.push(key);
+                curr = &mut entry.1;
             }
             _ => {
                 // TODO:

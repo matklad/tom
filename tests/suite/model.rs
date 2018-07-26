@@ -55,6 +55,17 @@ color = "gray"
 "#)
 }
 
+#[test]
+fn test_keys() {
+    let doc = ::toml(r"
+foo.bar = 1
+foo.baz = 2
+    ");
+
+    let keys = doc.model().get_keys("foo");
+    assert_eq!(keys.len(), 2);
+}
+
 fn do_test(toml: &str, json: &str) {
     let doc = ::toml(toml);
     let model = doc.model();
