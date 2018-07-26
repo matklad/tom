@@ -1,4 +1,7 @@
-use std::collections::BTreeMap;
+use std::{
+    collections::BTreeMap,
+    fmt,
+};
 use {TomlDoc, CstNode, ast, visitor::{visitor, process_children}};
 
 pub enum Item {
@@ -31,6 +34,24 @@ impl Map {
 
     pub fn get(&self, key: &str) -> Option<&Item> {
         self.map.get(key).map(|(_, i)| i)
+    }
+}
+
+impl fmt::Display for Map {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        f.write_str("{")?;
+        let mut first = true;
+        for (k, v) in self.iter() {
+            if !first {
+                f.write_str(",")?;
+            }
+            first = false;
+            fmt::Debug::fmt(k, f)?;
+            f.write_str(":")?;
+            fmt::Display::fmt(v, f)?;
+        }
+        f.write_str("}")?;
+        Ok(())
     }
 }
 
@@ -69,46 +90,31 @@ impl Item {
             _ => None,
         }
     }
+}
 
-    pub fn to_string(&self) -> String {
-        let mut buff = String::new();
-        self.write_string(&mut buff);
-        buff
-    }
-
-    fn write_string(&self, buff: &mut String) {
+impl fmt::Display for Item {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         match self {
-            Item::Map(map) => {
-                buff.push_str("{");
-                let mut first = true;
-                for (k, v) in map.iter() {
-                    if !first {
-                        buff.push_str(",");
-                    }
-                    first = false;
-                    buff.push_str(&format!("{:?}:", k));
-                    v.write_string(buff);
-                }
-                buff.push_str("}");
-            }
+            Item::Map(map) => map.fmt(f)?,
             Item::Array(arr) => {
-                buff.push_str("[");
+                f.write_str("[")?;
                 let mut first = true;
                 for item in arr.iter() {
                     if !first {
-                        buff.push_str(",");
+                        f.write_str(",")?;
                     }
                     first = false;
-                    item.write_string(buff);
+                    item.fmt(f)?;
                 }
-                buff.push_str("]");
+                f.write_str("]")?;
             }
-            Item::Integer(value) => buff.push_str(&value.to_string()),
-            Item::Float(value) => buff.push_str(&value.to_string()),
-            Item::Bool(value) => buff.push_str(&value.to_string()),
-            Item::DateTime => buff.push_str("TODO:date-time"),
-            Item::String(value) => buff.push_str(&format!("{:?}", value.to_string())),
+            Item::Integer(value) => value.fmt(f)?,
+            Item::Float(value) => value.fmt(f)?,
+            Item::Bool(value) => value.fmt(f)?,
+            Item::DateTime => f.write_str("TODO:date-time")?,
+            Item::String(value) => fmt::Debug::fmt(value, f)?,
         }
+        Ok(())
     }
 }
 
@@ -190,7 +196,7 @@ fn from_value(doc: &TomlDoc, value: ast::Value) -> Item {
             let mut map = Item::Map(Map::new());
             fill(doc, d.cst(), &mut map);
             map
-        },
+        }
         ast::ValueKind::Number(n) => Item::Integer(n.value(doc)),
         ast::ValueKind::Bool(b) => Item::Bool(b.value(doc)),
         ast::ValueKind::DateTime(_) => Item::DateTime,
