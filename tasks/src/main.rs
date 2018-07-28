@@ -3,51 +3,81 @@ extern crate failure;
 extern crate heck;
 extern crate itertools;
 
-use clap::{App, SubCommand};
+use clap::{App, Arg, SubCommand};
 use itertools::Itertools;
 use std::fs;
+use std::process::exit;
 
 type Result<T> = ::std::result::Result<T, failure::Error>;
 
 mod gen_ast;
 
 fn main() -> Result<()> {
+    let gen_command = |name| {
+        SubCommand::with_name(name).arg(
+            Arg::with_name("verify")
+                .long("--verify")
+                .help("Verify that generated code is up-to-date"),
+        )
+    };
     let matches = App::new("tasks")
-        .subcommand(SubCommand::with_name("gen-ast"))
-        .subcommand(SubCommand::with_name("gen-symbols"))
-        .subcommand(SubCommand::with_name("gen-tests"))
+        .setting(clap::AppSettings::SubcommandRequiredElseHelp)
+        .subcommand(gen_command("gen-ast"))
+        .subcommand(gen_command("gen-symbols"))
+        .subcommand(gen_command("gen-tests"))
+        .subcommand(SubCommand::with_name("verify"))
         .get_matches();
-    match matches.subcommand_name().unwrap() {
+    match matches.subcommand() {
+        ("verify", _) => verify()?,
+        (name, Some(matches)) => run_gen_command(name, matches.is_present("verify"))?,
+        _ => unreachable!(),
+    }
+    Ok(())
+}
+
+fn run_gen_command(name: &str, verify: bool) -> Result<()> {
+    match name {
         "gen-ast" => {
-            update("./src/ast/generated.rs", &gen_ast::gen_ast())?;
+            update("./src/ast/generated.rs", &gen_ast::gen_ast(), verify)?;
         }
         "gen-symbols" => {
-            update("./src/symbol/generated.rs", &gen_symbols())?;
+            update("./src/symbol/generated.rs", &gen_symbols(), verify)?;
         }
-        "gen-tests" => get_tests()?,
+        "gen-tests" => get_tests(verify)?,
         _ => unreachable!(),
     };
     Ok(())
 }
 
-fn update(path: &str, contents: &str) -> Result<()> {
+fn verify() -> Result<()> {
+    run_gen_command("gen-ast", true)?;
+    run_gen_command("gen-symbols", true)?;
+    run_gen_command("gen-tests", true)?;
+    Ok(())
+}
+
+fn update(path: &str, contents: &str, verify: bool) -> Result<()> {
     match fs::read_to_string(path) {
         Ok(ref old_contents) if old_contents == contents => {
             return Ok(());
         }
         _ => (),
     }
+    if verify {
+        eprintln!("error: `{}` is not up-to-date", path);
+        exit(1);
+    }
     fs::write(path, contents)?;
     Ok(())
 }
 
-fn get_tests() -> Result<()> {
+fn get_tests(verify: bool) -> Result<()> {
     let src_dir = "./src/parser/grammar.rs";
     let grammar = fs::read_to_string(src_dir)?;
     let tests = collect_tests(&grammar);
     for (i, test) in tests.into_iter().enumerate() {
         let path = format!("./tests/data/inline/test_{:02}.toml", i);
-        update(&path, &test)?;
+        update(&path, &test, verify)?;
     }
     return Ok(());
 
