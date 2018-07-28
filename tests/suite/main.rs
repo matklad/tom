@@ -21,7 +21,7 @@ use tom::{AstNode, CstNode, TomlDoc};
 
 #[test]
 fn test_parser_inline() {
-    testutils::dir_tests(&["inline"], |text| toml(text).debug())
+    testutils::dir_tests(&["inline"], |text| TomlDoc::new(text).debug())
 }
 
 #[test]
@@ -31,7 +31,7 @@ fn test_parser_ok() {
 
 #[test]
 fn test_parser_err() {
-    testutils::dir_tests(&["err"], |text| toml(text).debug())
+    testutils::dir_tests(&["err"], |text| toml_err(text).debug())
 }
 
 #[test]
@@ -39,19 +39,26 @@ fn simple_bench() {
     let path = test_data_dir().join("ok/complex_config.toml");
     let text = fs::read_to_string(path).unwrap();
     let start = Instant::now();
-    let doc = toml(&text);
-    assert!(doc.errors().is_empty());
+    let _doc = toml(&text);
     let time = start.elapsed().subsec_micros();
     println!("{} μs", time);
 }
 
 #[test]
 fn test_parser_validation() {
-    testutils::dir_tests(&["validation"], |text| toml(text).debug())
+    testutils::dir_tests(&["validation"], |text| toml_err(text).debug())
+}
+
+fn toml_err(text: &str) -> TomlDoc {
+    let doc = TomlDoc::new(text);
+    assert!(!doc.errors().is_empty());
+    doc
 }
 
 fn toml(text: &str) -> TomlDoc {
-    TomlDoc::new(text)
+    let doc = TomlDoc::new(text);
+    assert!(doc.errors().is_empty());
+    doc
 }
 
 fn find<A: AstNode>(doc: &TomlDoc) -> A {
