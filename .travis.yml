@@ -1,9 +1,14 @@
 language: rust
 
+branches:
+  only:
+    - staging
+    - trying
+
 matrix:
   include:
     - rust: beta
       script:
-        - cargo run -p tasks -- verify
+        - cargo run --package tasks -- verify
         - cargo test
         - cargo run --example api-walkthrough
