@@ -1,0 +1,6 @@
+DOC@[0; 1)
+  TABLE@[0; 1)
+    TABLE_HEADER@[0; 1)
+      L_BRACK@[0; 1) "["
+
+error@[0; 1) "[": expected `]`

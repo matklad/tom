@@ -1,0 +1,42 @@
+{
+  "lines": {
+    "type": "string",
+    "value": "''\nThe first newline is\ntrimmed in raw strings.\n   All other whitespace\n   is preserved.\n''"
+  },
+  "quoted": {
+    "type": "string",
+    "value": "Tom \"Dubs\" Preston-Werner"
+  },
+  "regex": {
+    "type": "string",
+    "value": "<\\i\\c*\\s*>"
+  },
+  "regex2": {
+    "type": "string",
+    "value": "''I [dw]on't need \\d{2} apples''"
+  },
+  "str": {
+    "type": "string",
+    "value": "I'm a string. \\\"You can quote me\\\". Name\\tJos\\u00E9\\nLocation\\tSF."
+  },
+  "str1": {
+    "type": "string",
+    "value": "The quick brown fox jumps over the lazy dog."
+  },
+  "str2": {
+    "type": "string",
+    "value": "\"\"\nThe quick brown \\\n\n\n  fox jumps over \\\n    the lazy dog.\"\""
+  },
+  "str3": {
+    "type": "string",
+    "value": "\"\"\\\n       The quick brown \\\n       fox jumps over \\\n       the lazy dog.\\\n       \"\""
+  },
+  "winpath": {
+    "type": "string",
+    "value": "C:\\Users\\nodejs\\templates"
+  },
+  "winpath2": {
+    "type": "string",
+    "value": "\\\\ServerX\\admin$\\system32\\"
+  }
+}

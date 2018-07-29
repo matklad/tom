@@ -1,0 +1,68 @@
+DOC@[0; 130)
+  ENTRY@[0; 15)
+    KEY@[0; 4)
+      BARE_KEY@[0; 4) "name"
+    WHITESPACE@[4; 5)
+    EQ@[5; 6) "="
+    WHITESPACE@[6; 7)
+    VALUE@[7; 15)
+      BASIC_STRING@[7; 15) "\"Orange\""
+  WHITESPACE@[15; 16)
+  ENTRY@[16; 41)
+    KEY@[16; 24)
+      BARE_KEY@[16; 24) "physical"
+    DOT@[24; 25) "."
+    KEY@[25; 30)
+      BARE_KEY@[25; 30) "color"
+    WHITESPACE@[30; 31)
+    EQ@[31; 32) "="
+    WHITESPACE@[32; 33)
+    VALUE@[33; 41)
+      BASIC_STRING@[33; 41) "\"orange\""
+  WHITESPACE@[41; 42)
+  ENTRY@[42; 66)
+    KEY@[42; 50)
+      BARE_KEY@[42; 50) "physical"
+    DOT@[50; 51) "."
+    KEY@[51; 56)
+      BARE_KEY@[51; 56) "shape"
+    WHITESPACE@[56; 57)
+    EQ@[57; 58) "="
+    WHITESPACE@[58; 59)
+    VALUE@[59; 66)
+      BASIC_STRING@[59; 66) "\"round\""
+  WHITESPACE@[66; 67)
+  ENTRY@[67; 91)
+    KEY@[67; 71)
+      BARE_KEY@[67; 71) "site"
+    DOT@[71; 72) "."
+    KEY@[72; 84)
+      BASIC_STRING@[72; 84) "\"google.com\""
+    WHITESPACE@[84; 85)
+    EQ@[85; 86) "="
+    WHITESPACE@[86; 87)
+    VALUE@[87; 91)
+      BOOL@[87; 91) "true"
+  WHITESPACE@[91; 93)
+  TABLE@[93; 128)
+    TABLE_HEADER@[93; 110)
+      L_BRACK@[93; 94) "["
+      KEY@[94; 97)
+        BARE_KEY@[94; 97) "dog"
+      DOT@[97; 98) "."
+      KEY@[98; 109)
+        BASIC_STRING@[98; 109) "\"tater.man\""
+      R_BRACK@[109; 110) "]"
+    WHITESPACE@[110; 111)
+    ENTRY@[111; 128)
+      KEY@[111; 115)
+        BARE_KEY@[111; 115) "type"
+      DOT@[115; 116) "."
+      KEY@[116; 120)
+        BARE_KEY@[116; 120) "name"
+      WHITESPACE@[120; 121)
+      EQ@[121; 122) "="
+      WHITESPACE@[122; 123)
+      VALUE@[123; 128)
+        BASIC_STRING@[123; 128) "\"pug\""
+  WHITESPACE@[128; 130)

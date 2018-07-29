@@ -1,0 +1,23 @@
+DOC@[0; 28)
+  ENTRY@[0; 23)
+    KEY@[0; 7)
+      BARE_KEY@[0; 7) "no-secs"
+    WHITESPACE@[7; 8)
+    EQ@[8; 9) "="
+    WHITESPACE@[9; 10)
+    VALUE@[10; 23)
+      ERROR@[10; 23)
+        BARE_KEY@[10; 23) "1987-07-05T17"
+  ERROR@[23; 24)
+    ERROR@[23; 24) ":"
+  ENTRY@[24; 28)
+    KEY@[24; 27)
+      BARE_KEY@[24; 27) "45Z"
+    WHITESPACE@[27; 28)
+    VALUE@[28; 28)
+
+error@[10; 23) "1987-07-05T17": expected a value
+error@[23; 24) ":": expected a key
+error@[27; 28) "\n": expected `=`
+error@[27; 28) "\n": expected a value
+error@[24; 28) "45Z\n": newlines are forbidden in entries

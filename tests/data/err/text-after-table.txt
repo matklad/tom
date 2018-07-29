@@ -1,0 +1,38 @@
+DOC@[0; 31)
+  TABLE@[0; 31)
+    TABLE_HEADER@[0; 7)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 6)
+        BARE_KEY@[1; 6) "error"
+      R_BRACK@[6; 7) "]"
+    WHITESPACE@[7; 8)
+    ENTRY@[8; 31)
+      KEY@[8; 12)
+        BARE_KEY@[8; 12) "this"
+      WHITESPACE@[12; 13)
+      ERROR@[13; 20)
+        BARE_KEY@[13; 20) "shouldn"
+      KEY@[20; 21)
+        ERROR@[20; 21)
+          ERROR@[20; 21) "\'"
+      ERROR@[21; 22)
+        BARE_KEY@[21; 22) "t"
+      WHITESPACE@[22; 23)
+      KEY@[23; 25)
+        BARE_KEY@[23; 25) "be"
+      WHITESPACE@[25; 26)
+      ERROR@[26; 30)
+        BARE_KEY@[26; 30) "here"
+      WHITESPACE@[30; 31)
+      KEY@[31; 31)
+      VALUE@[31; 31)
+
+error@[13; 20) "shouldn": expected `.`
+error@[20; 21) "\'": expected a key
+error@[21; 22) "t": expected `.`
+error@[26; 30) "here": expected `.`
+error@[30; 31) "\n": expected a key
+error@[30; 31) "\n": expected `=`
+error@[30; 31) "\n": expected a value
+error@[0; 8) "[error] ": newline is mandatory after table header
+error@[8; 31) "this shouldn\'t be here\n": newlines are forbidden in entries

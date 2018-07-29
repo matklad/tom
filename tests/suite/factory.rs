@@ -1,5 +1,5 @@
 use std::iter;
-use testutils::assert_eq_text;
+use util::assert_eq_text;
 use tom::{CstNode, TomlDoc};
 
 #[test]

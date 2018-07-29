@@ -1,0 +1,10 @@
+DOC@[0; 47)
+  ENTRY@[0; 46)
+    KEY@[0; 6)
+      BARE_KEY@[0; 6) "answer"
+    WHITESPACE@[6; 7)
+    EQ@[7; 8) "="
+    WHITESPACE@[8; 9)
+    VALUE@[9; 46)
+      BASIC_STRING@[9; 46) "\"You are not drinking enough whisky.\""
+  WHITESPACE@[46; 47)

@@ -1,0 +1,30 @@
+{
+  "equivalent_one": {
+    "type": "string",
+    "value": "The quick brown fox jumps over the lazy dog."
+  },
+  "equivalent_three": {
+    "type": "string",
+    "value": "\"\"\\ \n       The quick brown \\ \n       fox jumps over \\\n       the lazy dog.\\          \n       \"\""
+  },
+  "equivalent_two": {
+    "type": "string",
+    "value": "\"\"\nThe quick brown \\ \n\n\n  fox jumps over \\ \n    the lazy dog.\"\""
+  },
+  "multiline_empty_four": {
+    "type": "string",
+    "value": "\"\"\\ \n   \\  \n   \\    \n   \"\""
+  },
+  "multiline_empty_one": {
+    "type": "string",
+    "value": "\"\"\"\""
+  },
+  "multiline_empty_three": {
+    "type": "string",
+    "value": "\"\"\\ \n    \"\""
+  },
+  "multiline_empty_two": {
+    "type": "string",
+    "value": "\"\"\n\"\""
+  }
+}

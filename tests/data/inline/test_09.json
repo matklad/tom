@@ -1,0 +1,15 @@
+{
+  "a": {
+    "type": "array",
+    "value": [
+      {
+        "type": "integer",
+        "value": "1"
+      },
+      {
+        "type": "string",
+        "value": "foo"
+      }
+    ]
+  }
+}

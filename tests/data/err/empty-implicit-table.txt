@@ -1,0 +1,21 @@
+DOC@[0; 19)
+  TABLE@[0; 18)
+    TABLE_HEADER@[0; 18)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 8)
+        BARE_KEY@[1; 8) "naughty"
+      DOT@[8; 9) "."
+      KEY@[9; 10)
+        ERROR@[9; 10)
+          DOT@[9; 10) "."
+      ERROR@[10; 17)
+        BARE_KEY@[10; 17) "naughty"
+      KEY@[17; 18)
+        ERROR@[17; 18)
+          R_BRACK@[17; 18) "]"
+  WHITESPACE@[18; 19)
+
+error@[9; 10) ".": expected a key
+error@[10; 17) "naughty": expected `.`
+error@[17; 18) "]": expected a key
+error@[18; 19) "\n": expected `]`

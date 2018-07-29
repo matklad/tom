@@ -1,5 +1,5 @@
 use tom::{ast, Position::*, TomlDoc, TextRange};
-use testutils::assert_eq_text;
+use util::assert_eq_text;
 use ::{check_edit, toml};
 
 #[test]

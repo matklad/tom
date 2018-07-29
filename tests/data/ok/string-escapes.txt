@@ -1,0 +1,100 @@
+DOC@[0; 642)
+  ENTRY@[0; 55)
+    KEY@[0; 9)
+      BARE_KEY@[0; 9) "backspace"
+    WHITESPACE@[9; 10)
+    EQ@[10; 11) "="
+    WHITESPACE@[11; 12)
+    VALUE@[12; 55)
+      BASIC_STRING@[12; 55) "\"This string has a \\b backspace character.\""
+  WHITESPACE@[55; 56)
+  ENTRY@[56; 99)
+    KEY@[56; 59)
+      BARE_KEY@[56; 59) "tab"
+    WHITESPACE@[59; 60)
+    EQ@[60; 61) "="
+    WHITESPACE@[61; 62)
+    VALUE@[62; 99)
+      BASIC_STRING@[62; 99) "\"This string has a \\t tab character.\""
+  WHITESPACE@[99; 100)
+  ENTRY@[100; 152)
+    KEY@[100; 107)
+      BARE_KEY@[100; 107) "newline"
+    WHITESPACE@[107; 108)
+    EQ@[108; 109) "="
+    WHITESPACE@[109; 110)
+    VALUE@[110; 152)
+      BASIC_STRING@[110; 152) "\"This string has a \\n new line character.\""
+  WHITESPACE@[152; 153)
+  ENTRY@[153; 207)
+    KEY@[153; 161)
+      BARE_KEY@[153; 161) "formfeed"
+    WHITESPACE@[161; 162)
+    EQ@[162; 163) "="
+    WHITESPACE@[163; 164)
+    VALUE@[164; 207)
+      BASIC_STRING@[164; 207) "\"This string has a \\f form feed character.\""
+  WHITESPACE@[207; 208)
+  ENTRY@[208; 268)
+    KEY@[208; 216)
+      BARE_KEY@[208; 216) "carriage"
+    WHITESPACE@[216; 217)
+    EQ@[217; 218) "="
+    WHITESPACE@[218; 219)
+    VALUE@[219; 268)
+      BASIC_STRING@[219; 268) "\"This string has a \\r carriage return character.\""
+  WHITESPACE@[268; 269)
+  ENTRY@[269; 316)
+    KEY@[269; 274)
+      BARE_KEY@[269; 274) "quote"
+    WHITESPACE@[274; 275)
+    EQ@[275; 276) "="
+    WHITESPACE@[276; 277)
+    VALUE@[277; 316)
+      BASIC_STRING@[277; 316) "\"This string has a \\\" quote character.\""
+  WHITESPACE@[316; 317)
+  ENTRY@[317; 372)
+    KEY@[317; 326)
+      BARE_KEY@[317; 326) "backslash"
+    WHITESPACE@[326; 327)
+    EQ@[327; 328) "="
+    WHITESPACE@[328; 329)
+    VALUE@[329; 372)
+      BASIC_STRING@[329; 372) "\"This string has a \\\\ backslash character.\""
+  WHITESPACE@[372; 373)
+  ENTRY@[373; 436)
+    KEY@[373; 384)
+      BARE_KEY@[373; 384) "notunicode1"
+    WHITESPACE@[384; 385)
+    EQ@[385; 386) "="
+    WHITESPACE@[386; 387)
+    VALUE@[387; 436)
+      BASIC_STRING@[387; 436) "\"This string does not have a unicode \\\\u escape.\""
+  WHITESPACE@[436; 437)
+  ENTRY@[437; 504)
+    KEY@[437; 448)
+      BARE_KEY@[437; 448) "notunicode2"
+    WHITESPACE@[448; 449)
+    EQ@[449; 450) "="
+    WHITESPACE@[450; 451)
+    VALUE@[451; 504)
+      BASIC_STRING@[451; 504) "\"This string does not have a unicode \\u005Cu escape.\""
+  WHITESPACE@[504; 505)
+  ENTRY@[505; 572)
+    KEY@[505; 516)
+      BARE_KEY@[505; 516) "notunicode3"
+    WHITESPACE@[516; 517)
+    EQ@[517; 518) "="
+    WHITESPACE@[518; 519)
+    VALUE@[519; 572)
+      BASIC_STRING@[519; 572) "\"This string does not have a unicode \\\\u0075 escape.\""
+  WHITESPACE@[572; 573)
+  ENTRY@[573; 641)
+    KEY@[573; 584)
+      BARE_KEY@[573; 584) "notunicode4"
+    WHITESPACE@[584; 585)
+    EQ@[585; 586) "="
+    WHITESPACE@[586; 587)
+    VALUE@[587; 641)
+      BASIC_STRING@[587; 641) "\"This string does not have a unicode \\\\\\u0075 escape.\""
+  WHITESPACE@[641; 642)

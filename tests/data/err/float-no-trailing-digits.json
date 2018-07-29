@@ -1,0 +1,10 @@
+{
+  "answer": {
+    "type": "float",
+    "value": "1.0"
+  },
+  "neganswer": {
+    "type": "float",
+    "value": "-1.0"
+  }
+}

@@ -1,0 +1,42 @@
+DOC@[0; 36)
+  ENTRY@[0; 10)
+    KEY@[0; 6)
+      BARE_KEY@[0; 6) "answer"
+    WHITESPACE@[6; 7)
+    EQ@[7; 8) "="
+    WHITESPACE@[8; 9)
+    VALUE@[9; 10)
+      ERROR@[9; 10)
+        DOT@[9; 10) "."
+  ENTRY@[10; 36)
+    KEY@[10; 15)
+      BARE_KEY@[10; 15) "12345"
+    WHITESPACE@[15; 16)
+    ERROR@[16; 25)
+      BARE_KEY@[16; 25) "neganswer"
+    WHITESPACE@[25; 26)
+    KEY@[26; 27)
+      ERROR@[26; 27)
+        EQ@[26; 27) "="
+    WHITESPACE@[27; 28)
+    ERROR@[28; 29)
+      BARE_KEY@[28; 29) "-"
+    KEY@[29; 30)
+      ERROR@[29; 30)
+        DOT@[29; 30) "."
+    ERROR@[30; 35)
+      BARE_KEY_OR_NUMBER@[30; 35) "12345"
+    WHITESPACE@[35; 36)
+    KEY@[36; 36)
+    VALUE@[36; 36)
+
+error@[9; 10) ".": expected a value
+error@[16; 25) "neganswer": expected `.`
+error@[26; 27) "=": expected a key
+error@[28; 29) "-": expected `.`
+error@[29; 30) ".": expected a key
+error@[30; 35) "12345": expected `.`
+error@[35; 36) "\n": expected a key
+error@[35; 36) "\n": expected `=`
+error@[35; 36) "\n": expected a value
+error@[10; 36) "12345\nneganswer = -.12345\n": newlines are forbidden in entries

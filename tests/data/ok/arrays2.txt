@@ -1,0 +1,217 @@
+DOC@[0; 245)
+  ENTRY@[0; 18)
+    KEY@[0; 4)
+      BARE_KEY@[0; 4) "arr1"
+    WHITESPACE@[4; 5)
+    EQ@[5; 6) "="
+    WHITESPACE@[6; 7)
+    VALUE@[7; 18)
+      ARRAY@[7; 18)
+        L_BRACK@[7; 8) "["
+        WHITESPACE@[8; 9)
+        VALUE@[9; 10)
+          NUMBER@[9; 10) "1"
+        COMMA@[10; 11) ","
+        WHITESPACE@[11; 12)
+        VALUE@[12; 13)
+          NUMBER@[12; 13) "2"
+        COMMA@[13; 14) ","
+        WHITESPACE@[14; 15)
+        VALUE@[15; 16)
+          NUMBER@[15; 16) "3"
+        WHITESPACE@[16; 17)
+        R_BRACK@[17; 18) "]"
+  WHITESPACE@[18; 19)
+  ENTRY@[19; 54)
+    KEY@[19; 23)
+      BARE_KEY@[19; 23) "arr2"
+    WHITESPACE@[23; 24)
+    EQ@[24; 25) "="
+    WHITESPACE@[25; 26)
+    VALUE@[26; 54)
+      ARRAY@[26; 54)
+        L_BRACK@[26; 27) "["
+        WHITESPACE@[27; 28)
+        VALUE@[28; 33)
+          BASIC_STRING@[28; 33) "\"red\""
+        COMMA@[33; 34) ","
+        WHITESPACE@[34; 35)
+        VALUE@[35; 43)
+          BASIC_STRING@[35; 43) "\"yellow\""
+        COMMA@[43; 44) ","
+        WHITESPACE@[44; 45)
+        VALUE@[45; 52)
+          BASIC_STRING@[45; 52) "\"green\""
+        WHITESPACE@[52; 53)
+        R_BRACK@[53; 54) "]"
+  WHITESPACE@[54; 55)
+  ENTRY@[55; 85)
+    KEY@[55; 59)
+      BARE_KEY@[55; 59) "arr3"
+    WHITESPACE@[59; 60)
+    EQ@[60; 61) "="
+    WHITESPACE@[61; 62)
+    VALUE@[62; 85)
+      ARRAY@[62; 85)
+        L_BRACK@[62; 63) "["
+        WHITESPACE@[63; 64)
+        VALUE@[64; 72)
+          ARRAY@[64; 72)
+            L_BRACK@[64; 65) "["
+            WHITESPACE@[65; 66)
+            VALUE@[66; 67)
+              NUMBER@[66; 67) "1"
+            COMMA@[67; 68) ","
+            WHITESPACE@[68; 69)
+            VALUE@[69; 70)
+              NUMBER@[69; 70) "2"
+            WHITESPACE@[70; 71)
+            R_BRACK@[71; 72) "]"
+        COMMA@[72; 73) ","
+        WHITESPACE@[73; 74)
+        VALUE@[74; 83)
+          ARRAY@[74; 83)
+            L_BRACK@[74; 75) "["
+            VALUE@[75; 76)
+              NUMBER@[75; 76) "3"
+            COMMA@[76; 77) ","
+            WHITESPACE@[77; 78)
+            VALUE@[78; 79)
+              NUMBER@[78; 79) "4"
+            COMMA@[79; 80) ","
+            WHITESPACE@[80; 81)
+            VALUE@[81; 82)
+              NUMBER@[81; 82) "5"
+            R_BRACK@[82; 83) "]"
+        WHITESPACE@[83; 84)
+        R_BRACK@[84; 85) "]"
+  WHITESPACE@[85; 86)
+  ENTRY@[86; 144)
+    KEY@[86; 90)
+      BARE_KEY@[86; 90) "arr4"
+    WHITESPACE@[90; 91)
+    EQ@[91; 92) "="
+    WHITESPACE@[92; 93)
+    VALUE@[93; 144)
+      ARRAY@[93; 144)
+        L_BRACK@[93; 94) "["
+        WHITESPACE@[94; 95)
+        VALUE@[95; 100)
+          BASIC_STRING@[95; 100) "\"all\""
+        COMMA@[100; 101) ","
+        WHITESPACE@[101; 102)
+        VALUE@[102; 111)
+          LITERAL_STRING@[102; 111) "\'strings\'"
+        COMMA@[111; 112) ","
+        WHITESPACE@[112; 113)
+        VALUE@[113; 131)
+          MULTILINE_BASIC_STRING@[113; 131) "\"\"\"are the same\"\"\""
+        COMMA@[131; 132) ","
+        WHITESPACE@[132; 133)
+        VALUE@[133; 143)
+          MULTILINE_LITERAL_STRING@[133; 143) "\'\'\'type\'\'\'"
+        R_BRACK@[143; 144) "]"
+  WHITESPACE@[144; 145)
+  ENTRY@[145; 181)
+    KEY@[145; 149)
+      BARE_KEY@[145; 149) "arr5"
+    WHITESPACE@[149; 150)
+    EQ@[150; 151) "="
+    WHITESPACE@[151; 152)
+    VALUE@[152; 181)
+      ARRAY@[152; 181)
+        L_BRACK@[152; 153) "["
+        WHITESPACE@[153; 154)
+        VALUE@[154; 162)
+          ARRAY@[154; 162)
+            L_BRACK@[154; 155) "["
+            WHITESPACE@[155; 156)
+            VALUE@[156; 157)
+              NUMBER@[156; 157) "1"
+            COMMA@[157; 158) ","
+            WHITESPACE@[158; 159)
+            VALUE@[159; 160)
+              NUMBER@[159; 160) "2"
+            WHITESPACE@[160; 161)
+            R_BRACK@[161; 162) "]"
+        COMMA@[162; 163) ","
+        WHITESPACE@[163; 164)
+        VALUE@[164; 179)
+          ARRAY@[164; 179)
+            L_BRACK@[164; 165) "["
+            VALUE@[165; 168)
+              BASIC_STRING@[165; 168) "\"a\""
+            COMMA@[168; 169) ","
+            WHITESPACE@[169; 170)
+            VALUE@[170; 173)
+              BASIC_STRING@[170; 173) "\"b\""
+            COMMA@[173; 174) ","
+            WHITESPACE@[174; 175)
+            VALUE@[175; 178)
+              BASIC_STRING@[175; 178) "\"c\""
+            R_BRACK@[178; 179) "]"
+        WHITESPACE@[179; 180)
+        R_BRACK@[180; 181) "]"
+  WHITESPACE@[181; 183)
+  ENTRY@[183; 200)
+    KEY@[183; 187)
+      BARE_KEY@[183; 187) "arr6"
+    WHITESPACE@[187; 188)
+    EQ@[188; 189) "="
+    WHITESPACE@[189; 190)
+    VALUE@[190; 200)
+      ARRAY@[190; 200)
+        L_BRACK@[190; 191) "["
+        WHITESPACE@[191; 192)
+        VALUE@[192; 193)
+          NUMBER@[192; 193) "1"
+        COMMA@[193; 194) ","
+        WHITESPACE@[194; 195)
+        VALUE@[195; 198)
+          NUMBER@[195; 198) "2.0"
+        WHITESPACE@[198; 199)
+        R_BRACK@[199; 200) "]"
+  WHITESPACE@[200; 202)
+  ENTRY@[202; 222)
+    KEY@[202; 206)
+      BARE_KEY@[202; 206) "arr7"
+    WHITESPACE@[206; 207)
+    EQ@[207; 208) "="
+    WHITESPACE@[208; 209)
+    VALUE@[209; 222)
+      ARRAY@[209; 222)
+        L_BRACK@[209; 210) "["
+        WHITESPACE@[210; 213)
+        VALUE@[213; 214)
+          NUMBER@[213; 214) "1"
+        COMMA@[214; 215) ","
+        WHITESPACE@[215; 216)
+        VALUE@[216; 217)
+          NUMBER@[216; 217) "2"
+        COMMA@[217; 218) ","
+        WHITESPACE@[218; 219)
+        VALUE@[219; 220)
+          NUMBER@[219; 220) "3"
+        WHITESPACE@[220; 221)
+        R_BRACK@[221; 222) "]"
+  WHITESPACE@[222; 224)
+  ENTRY@[224; 244)
+    KEY@[224; 228)
+      BARE_KEY@[224; 228) "arr8"
+    WHITESPACE@[228; 229)
+    EQ@[229; 230) "="
+    WHITESPACE@[230; 231)
+    VALUE@[231; 244)
+      ARRAY@[231; 244)
+        L_BRACK@[231; 232) "["
+        WHITESPACE@[232; 235)
+        VALUE@[235; 236)
+          NUMBER@[235; 236) "1"
+        COMMA@[236; 237) ","
+        WHITESPACE@[237; 240)
+        VALUE@[240; 241)
+          NUMBER@[240; 241) "2"
+        COMMA@[241; 242) ","
+        WHITESPACE@[242; 243)
+        R_BRACK@[243; 244) "]"
+  WHITESPACE@[244; 245)

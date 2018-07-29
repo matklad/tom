@@ -1,0 +1,49 @@
+{
+  "fruit": {
+    "type": "array",
+    "value": [
+      {
+        "name": {
+          "type": "string",
+          "value": "apple"
+        }
+      },
+      {
+        "name": {
+          "type": "string",
+          "value": "banana"
+        }
+      }
+    ]
+  },
+  "products": {
+    "type": "array",
+    "value": [
+      {
+        "name": {
+          "type": "string",
+          "value": "Hammer"
+        },
+        "sku": {
+          "type": "integer",
+          "value": "738594937"
+        }
+      },
+      {},
+      {
+        "color": {
+          "type": "string",
+          "value": "gray"
+        },
+        "name": {
+          "type": "string",
+          "value": "Nail"
+        },
+        "sku": {
+          "type": "integer",
+          "value": "284758393"
+        }
+      }
+    ]
+  }
+}

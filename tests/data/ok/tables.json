@@ -1,0 +1,65 @@
+{
+  "a": {
+    "b": {
+      "c": {
+        "type": "integer",
+        "value": "1"
+      }
+    },
+    "d": {
+      "type": "integer",
+      "value": "2"
+    }
+  },
+  "d": {
+    "e": {
+      "f": {}
+    }
+  },
+  "dog": {
+    "tater.man": {
+      "type": {
+        "type": "string",
+        "value": "pug"
+      }
+    }
+  },
+  "g": {
+    "h": {
+      "i": {}
+    }
+  },
+  "j": {
+    "ʞ": {
+      "l": {}
+    }
+  },
+  "table": {},
+  "table-1": {
+    "key1": {
+      "type": "string",
+      "value": "some string"
+    },
+    "key2": {
+      "type": "integer",
+      "value": "123"
+    }
+  },
+  "table-2": {
+    "key1": {
+      "type": "string",
+      "value": "another string"
+    },
+    "key2": {
+      "type": "integer",
+      "value": "456"
+    }
+  },
+  "x": {
+    "y": {
+      "z": {
+        "w": {}
+      }
+    }
+  }
+}

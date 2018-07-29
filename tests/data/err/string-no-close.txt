@@ -1,0 +1,41 @@
+DOC@[0; 42)
+  ENTRY@[0; 19)
+    KEY@[0; 15)
+      BARE_KEY@[0; 15) "no-ending-quote"
+    WHITESPACE@[15; 16)
+    EQ@[16; 17) "="
+    WHITESPACE@[17; 18)
+    VALUE@[18; 19)
+      ERROR@[18; 19)
+        ERROR@[18; 19) "\""
+  ENTRY@[19; 42)
+    KEY@[19; 22)
+      BARE_KEY@[19; 22) "One"
+    WHITESPACE@[22; 23)
+    ERROR@[23; 27)
+      BARE_KEY@[23; 27) "time"
+    KEY@[27; 28)
+      ERROR@[27; 28)
+        COMMA@[27; 28) ","
+    WHITESPACE@[28; 29)
+    ERROR@[29; 31)
+      BARE_KEY@[29; 31) "at"
+    WHITESPACE@[31; 32)
+    KEY@[32; 36)
+      BARE_KEY@[32; 36) "band"
+    WHITESPACE@[36; 37)
+    ERROR@[37; 41)
+      BARE_KEY@[37; 41) "camp"
+    WHITESPACE@[41; 42)
+    KEY@[42; 42)
+    VALUE@[42; 42)
+
+error@[18; 19) "\"": expected a value
+error@[23; 27) "time": expected `.`
+error@[27; 28) ",": expected a key
+error@[29; 31) "at": expected `.`
+error@[37; 41) "camp": expected `.`
+error@[41; 42) "\n": expected a key
+error@[41; 42) "\n": expected `=`
+error@[41; 42) "\n": expected a value
+error@[19; 42) "One time, at band camp\n": newlines are forbidden in entries

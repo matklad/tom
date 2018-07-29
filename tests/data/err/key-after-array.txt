@@ -1,0 +1,21 @@
+DOC@[0; 32)
+  ARRAY_TABLE@[0; 31)
+    TABLE_HEADER@[0; 12)
+      L_BRACK@[0; 1) "["
+      L_BRACK@[1; 2) "["
+      KEY@[2; 10)
+        BARE_KEY@[2; 10) "agencies"
+      R_BRACK@[10; 11) "]"
+      R_BRACK@[11; 12) "]"
+    WHITESPACE@[12; 13)
+    ENTRY@[13; 31)
+      KEY@[13; 18)
+        BARE_KEY@[13; 18) "owner"
+      WHITESPACE@[18; 19)
+      EQ@[19; 20) "="
+      WHITESPACE@[20; 21)
+      VALUE@[21; 31)
+        BASIC_STRING@[21; 31) "\"S Cjelli\""
+  WHITESPACE@[31; 32)
+
+error@[0; 13) "[[agencies]] ": newline is mandatory after table header

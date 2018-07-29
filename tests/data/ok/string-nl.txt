@@ -1,0 +1,46 @@
+DOC@[0; 115)
+  ENTRY@[0; 18)
+    KEY@[0; 6)
+      BARE_KEY@[0; 6) "nl_mid"
+    WHITESPACE@[6; 7)
+    EQ@[7; 8) "="
+    WHITESPACE@[8; 9)
+    VALUE@[9; 18)
+      BASIC_STRING@[9; 18) "\"val\\nue\""
+  WHITESPACE@[18; 19)
+  ENTRY@[19; 41)
+    KEY@[19; 25)
+      BARE_KEY@[19; 25) "nl_end"
+    WHITESPACE@[25; 26)
+    EQ@[26; 27) "="
+    WHITESPACE@[27; 28)
+    VALUE@[28; 41)
+      MULTILINE_BASIC_STRING@[28; 41) "\"\"\"value\\n\"\"\""
+  WHITESPACE@[41; 43)
+  ENTRY@[43; 69)
+    KEY@[43; 53)
+      BARE_KEY@[43; 53) "lit_nl_end"
+    WHITESPACE@[53; 54)
+    EQ@[54; 55) "="
+    WHITESPACE@[55; 56)
+    VALUE@[56; 69)
+      MULTILINE_LITERAL_STRING@[56; 69) "\'\'\'value\\n\'\'\'"
+  WHITESPACE@[69; 70)
+  ENTRY@[70; 92)
+    KEY@[70; 80)
+      BARE_KEY@[70; 80) "lit_nl_mid"
+    WHITESPACE@[80; 81)
+    EQ@[81; 82) "="
+    WHITESPACE@[82; 83)
+    VALUE@[83; 92)
+      LITERAL_STRING@[83; 92) "\'val\\nue\'"
+  WHITESPACE@[92; 93)
+  ENTRY@[93; 114)
+    KEY@[93; 103)
+      BARE_KEY@[93; 103) "lit_nl_uni"
+    WHITESPACE@[103; 104)
+    EQ@[104; 105) "="
+    WHITESPACE@[105; 106)
+    VALUE@[106; 114)
+      LITERAL_STRING@[106; 114) "\'val\\ue\'"
+  WHITESPACE@[114; 115)

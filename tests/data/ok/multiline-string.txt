@@ -1,0 +1,64 @@
+DOC@[0; 394)
+  ENTRY@[0; 28)
+    KEY@[0; 19)
+      BARE_KEY@[0; 19) "multiline_empty_one"
+    WHITESPACE@[19; 20)
+    EQ@[20; 21) "="
+    WHITESPACE@[21; 22)
+    VALUE@[22; 28)
+      MULTILINE_BASIC_STRING@[22; 28) "\"\"\"\"\"\""
+  WHITESPACE@[28; 29)
+  ENTRY@[29; 58)
+    KEY@[29; 48)
+      BARE_KEY@[29; 48) "multiline_empty_two"
+    WHITESPACE@[48; 49)
+    EQ@[49; 50) "="
+    WHITESPACE@[50; 51)
+    VALUE@[51; 58)
+      MULTILINE_BASIC_STRING@[51; 58) "\"\"\"\n\"\"\""
+  WHITESPACE@[58; 59)
+  ENTRY@[59; 95)
+    KEY@[59; 80)
+      BARE_KEY@[59; 80) "multiline_empty_three"
+    WHITESPACE@[80; 81)
+    EQ@[81; 82) "="
+    WHITESPACE@[82; 83)
+    VALUE@[83; 95)
+      MULTILINE_BASIC_STRING@[83; 95) "\"\"\"\\\n    \"\"\""
+  WHITESPACE@[95; 96)
+  ENTRY@[96; 140)
+    KEY@[96; 116)
+      BARE_KEY@[96; 116) "multiline_empty_four"
+    WHITESPACE@[116; 117)
+    EQ@[117; 118) "="
+    WHITESPACE@[118; 119)
+    VALUE@[119; 140)
+      MULTILINE_BASIC_STRING@[119; 140) "\"\"\"\\\n   \\\n   \\\n   \"\"\""
+  WHITESPACE@[140; 142)
+  ENTRY@[142; 205)
+    KEY@[142; 156)
+      BARE_KEY@[142; 156) "equivalent_one"
+    WHITESPACE@[156; 157)
+    EQ@[157; 158) "="
+    WHITESPACE@[158; 159)
+    VALUE@[159; 205)
+      BASIC_STRING@[159; 205) "\"The quick brown fox jumps over the lazy dog.\""
+  WHITESPACE@[205; 206)
+  ENTRY@[206; 286)
+    KEY@[206; 220)
+      BARE_KEY@[206; 220) "equivalent_two"
+    WHITESPACE@[220; 221)
+    EQ@[221; 222) "="
+    WHITESPACE@[222; 223)
+    VALUE@[223; 286)
+      MULTILINE_BASIC_STRING@[223; 286) "\"\"\"\nThe quick brown \\\n\n\n  fox jumps over \\\n    the lazy dog.\"\"\""
+  WHITESPACE@[286; 288)
+  ENTRY@[288; 393)
+    KEY@[288; 304)
+      BARE_KEY@[288; 304) "equivalent_three"
+    WHITESPACE@[304; 305)
+    EQ@[305; 306) "="
+    WHITESPACE@[306; 307)
+    VALUE@[307; 393)
+      MULTILINE_BASIC_STRING@[307; 393) "\"\"\"\\\n       The quick brown \\\n       fox jumps over \\\n       the lazy dog.\\\n       \"\"\""
+  WHITESPACE@[393; 394)

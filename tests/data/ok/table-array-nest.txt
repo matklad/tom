@@ -1,0 +1,121 @@
+DOC@[0; 262)
+  ARRAY_TABLE@[0; 31)
+    TABLE_HEADER@[0; 10)
+      L_BRACK@[0; 1) "["
+      L_BRACK@[1; 2) "["
+      KEY@[2; 8)
+        BARE_KEY@[2; 8) "albums"
+      R_BRACK@[8; 9) "]"
+      R_BRACK@[9; 10) "]"
+    WHITESPACE@[10; 11)
+    ENTRY@[11; 31)
+      KEY@[11; 15)
+        BARE_KEY@[11; 15) "name"
+      WHITESPACE@[15; 16)
+      EQ@[16; 17) "="
+      WHITESPACE@[17; 18)
+      VALUE@[18; 31)
+        BASIC_STRING@[18; 31) "\"Born to Run\""
+  WHITESPACE@[31; 35)
+  ARRAY_TABLE@[35; 73)
+    TABLE_HEADER@[35; 51)
+      L_BRACK@[35; 36) "["
+      L_BRACK@[36; 37) "["
+      KEY@[37; 43)
+        BARE_KEY@[37; 43) "albums"
+      DOT@[43; 44) "."
+      KEY@[44; 49)
+        BARE_KEY@[44; 49) "songs"
+      R_BRACK@[49; 50) "]"
+      R_BRACK@[50; 51) "]"
+    WHITESPACE@[51; 54)
+    ENTRY@[54; 73)
+      KEY@[54; 58)
+        BARE_KEY@[54; 58) "name"
+      WHITESPACE@[58; 59)
+      EQ@[59; 60) "="
+      WHITESPACE@[60; 61)
+      VALUE@[61; 73)
+        BASIC_STRING@[61; 73) "\"Jungleland\""
+  WHITESPACE@[73; 77)
+  ARRAY_TABLE@[77; 129)
+    TABLE_HEADER@[77; 93)
+      L_BRACK@[77; 78) "["
+      L_BRACK@[78; 79) "["
+      KEY@[79; 85)
+        BARE_KEY@[79; 85) "albums"
+      DOT@[85; 86) "."
+      KEY@[86; 91)
+        BARE_KEY@[86; 91) "songs"
+      R_BRACK@[91; 92) "]"
+      R_BRACK@[92; 93) "]"
+    WHITESPACE@[93; 96)
+    ENTRY@[96; 129)
+      KEY@[96; 100)
+        BARE_KEY@[96; 100) "name"
+      WHITESPACE@[100; 101)
+      EQ@[101; 102) "="
+      WHITESPACE@[102; 103)
+      VALUE@[103; 129)
+        BASIC_STRING@[103; 129) "\"Meeting Across the River\""
+  WHITESPACE@[129; 131)
+  ARRAY_TABLE@[131; 166)
+    TABLE_HEADER@[131; 141)
+      L_BRACK@[131; 132) "["
+      L_BRACK@[132; 133) "["
+      KEY@[133; 139)
+        BARE_KEY@[133; 139) "albums"
+      R_BRACK@[139; 140) "]"
+      R_BRACK@[140; 141) "]"
+    WHITESPACE@[141; 142)
+    ENTRY@[142; 166)
+      KEY@[142; 146)
+        BARE_KEY@[142; 146) "name"
+      WHITESPACE@[146; 147)
+      EQ@[147; 148) "="
+      WHITESPACE@[148; 149)
+      VALUE@[149; 166)
+        BASIC_STRING@[149; 166) "\"Born in the USA\""
+  WHITESPACE@[166; 172)
+  ARRAY_TABLE@[172; 210)
+    TABLE_HEADER@[172; 188)
+      L_BRACK@[172; 173) "["
+      L_BRACK@[173; 174) "["
+      KEY@[174; 180)
+        BARE_KEY@[174; 180) "albums"
+      DOT@[180; 181) "."
+      KEY@[181; 186)
+        BARE_KEY@[181; 186) "songs"
+      R_BRACK@[186; 187) "]"
+      R_BRACK@[187; 188) "]"
+    WHITESPACE@[188; 191)
+    ENTRY@[191; 210)
+      KEY@[191; 195)
+        BARE_KEY@[191; 195) "name"
+      WHITESPACE@[195; 196)
+      EQ@[196; 197) "="
+      WHITESPACE@[197; 198)
+      VALUE@[198; 210)
+        BASIC_STRING@[198; 210) "\"Glory Days\""
+  WHITESPACE@[210; 214)
+  ARRAY_TABLE@[214; 261)
+    TABLE_HEADER@[214; 230)
+      L_BRACK@[214; 215) "["
+      L_BRACK@[215; 216) "["
+      KEY@[216; 222)
+        BARE_KEY@[216; 222) "albums"
+      DOT@[222; 223) "."
+      KEY@[223; 228)
+        BARE_KEY@[223; 228) "songs"
+      R_BRACK@[228; 229) "]"
+      R_BRACK@[229; 230) "]"
+    WHITESPACE@[230; 233)
+    ENTRY@[233; 261)
+      KEY@[233; 237)
+        BARE_KEY@[233; 237) "name"
+      WHITESPACE@[237; 238)
+      EQ@[238; 239) "="
+      WHITESPACE@[239; 240)
+      VALUE@[240; 261)
+        BASIC_STRING@[240; 261) "\"Dancing in the Dark\""
+  WHITESPACE@[261; 262)

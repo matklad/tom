@@ -1,0 +1,23 @@
+DOC@[0; 15)
+  TABLE@[0; 14)
+    TABLE_HEADER@[0; 5)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 2)
+        BARE_KEY@[1; 2) "a"
+      ERROR@[2; 3)
+        L_BRACK@[2; 3) "["
+      KEY@[3; 4)
+        BARE_KEY@[3; 4) "b"
+      R_BRACK@[4; 5) "]"
+    WHITESPACE@[5; 6)
+    ENTRY@[6; 14)
+      KEY@[6; 9)
+        BARE_KEY@[6; 9) "zyx"
+      WHITESPACE@[9; 10)
+      EQ@[10; 11) "="
+      WHITESPACE@[11; 12)
+      VALUE@[12; 14)
+        NUMBER@[12; 14) "42"
+  WHITESPACE@[14; 15)
+
+error@[2; 3) "[": expected `.`

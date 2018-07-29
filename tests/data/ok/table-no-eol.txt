@@ -1,0 +1,7 @@
+DOC@[0; 7)
+  TABLE@[0; 7)
+    TABLE_HEADER@[0; 7)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 6)
+        BARE_KEY@[1; 6) "table"
+      R_BRACK@[6; 7) "]"

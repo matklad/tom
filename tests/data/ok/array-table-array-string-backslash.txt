@@ -1,0 +1,25 @@
+DOC@[0; 31)
+  ENTRY@[0; 30)
+    KEY@[0; 3)
+      BARE_KEY@[0; 3) "foo"
+    WHITESPACE@[3; 4)
+    EQ@[4; 5) "="
+    WHITESPACE@[5; 6)
+    VALUE@[6; 30)
+      ARRAY@[6; 30)
+        L_BRACK@[6; 7) "["
+        WHITESPACE@[7; 8)
+        VALUE@[8; 28)
+          DICT@[8; 28)
+            L_CURLY@[8; 9) "{"
+            WHITESPACE@[9; 10)
+            ENTRY@[10; 27)
+              KEY@[10; 13)
+                BARE_KEY@[10; 13) "bar"
+              EQ@[13; 14) "="
+              VALUE@[14; 27)
+                BASIC_STRING@[14; 27) "\"\\\"{{baz}}\\\"\""
+            R_CURLY@[27; 28) "}"
+        WHITESPACE@[28; 29)
+        R_BRACK@[29; 30) "]"
+  WHITESPACE@[30; 31)

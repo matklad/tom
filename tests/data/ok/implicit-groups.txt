@@ -1,0 +1,23 @@
+DOC@[0; 20)
+  TABLE@[0; 19)
+    TABLE_HEADER@[0; 7)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 2)
+        BARE_KEY@[1; 2) "a"
+      DOT@[2; 3) "."
+      KEY@[3; 4)
+        BARE_KEY@[3; 4) "b"
+      DOT@[4; 5) "."
+      KEY@[5; 6)
+        BARE_KEY@[5; 6) "c"
+      R_BRACK@[6; 7) "]"
+    WHITESPACE@[7; 8)
+    ENTRY@[8; 19)
+      KEY@[8; 14)
+        BARE_KEY@[8; 14) "answer"
+      WHITESPACE@[14; 15)
+      EQ@[15; 16) "="
+      WHITESPACE@[16; 17)
+      VALUE@[17; 19)
+        NUMBER@[17; 19) "42"
+  WHITESPACE@[19; 20)

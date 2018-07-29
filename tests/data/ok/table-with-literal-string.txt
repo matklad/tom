@@ -1,0 +1,40 @@
+DOC@[0; 41)
+  TABLE@[0; 5)
+    TABLE_HEADER@[0; 5)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 4)
+        LITERAL_STRING@[1; 4) "\'a\'"
+      R_BRACK@[4; 5) "]"
+  WHITESPACE@[5; 6)
+  TABLE@[6; 15)
+    TABLE_HEADER@[6; 15)
+      L_BRACK@[6; 7) "["
+      KEY@[7; 8)
+        BARE_KEY@[7; 8) "a"
+      DOT@[8; 9) "."
+      KEY@[9; 14)
+        LITERAL_STRING@[9; 14) "\'\"b\"\'"
+      R_BRACK@[14; 15) "]"
+  WHITESPACE@[15; 16)
+  TABLE@[16; 39)
+    TABLE_HEADER@[16; 27)
+      L_BRACK@[16; 17) "["
+      KEY@[17; 18)
+        BARE_KEY@[17; 18) "a"
+      DOT@[18; 19) "."
+      KEY@[19; 24)
+        LITERAL_STRING@[19; 24) "\'\"b\"\'"
+      DOT@[24; 25) "."
+      KEY@[25; 26)
+        BARE_KEY@[25; 26) "c"
+      R_BRACK@[26; 27) "]"
+    WHITESPACE@[27; 28)
+    ENTRY@[28; 39)
+      KEY@[28; 34)
+        BARE_KEY@[28; 34) "answer"
+      WHITESPACE@[34; 35)
+      EQ@[35; 36) "="
+      WHITESPACE@[36; 37)
+      VALUE@[37; 39)
+        NUMBER@[37; 39) "42"
+  WHITESPACE@[39; 41)

@@ -1,0 +1,19 @@
+DOC@[0; 36)
+  TABLE@[0; 35)
+    TABLE_HEADER@[0; 7)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 6)
+        BARE_KEY@[1; 6) "error"
+      R_BRACK@[6; 7) "]"
+    WHITESPACE@[7; 8)
+    ENTRY@[8; 35)
+      KEY@[8; 12)
+        BARE_KEY@[8; 12) "this"
+      WHITESPACE@[12; 13)
+      EQ@[13; 14) "="
+      WHITESPACE@[14; 15)
+      VALUE@[15; 35)
+        BASIC_STRING@[15; 35) "\"should not be here\""
+  WHITESPACE@[35; 36)
+
+error@[0; 8) "[error] ": newline is mandatory after table header

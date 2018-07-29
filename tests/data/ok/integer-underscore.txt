@@ -1,0 +1,10 @@
+DOC@[0; 13)
+  ENTRY@[0; 12)
+    KEY@[0; 4)
+      BARE_KEY@[0; 4) "kilo"
+    WHITESPACE@[4; 5)
+    EQ@[5; 6) "="
+    WHITESPACE@[6; 7)
+    VALUE@[7; 12)
+      NUMBER@[7; 12) "1_000"
+  WHITESPACE@[12; 13)

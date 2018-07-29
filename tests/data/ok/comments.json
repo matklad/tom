@@ -1,0 +1,20 @@
+{
+  "key": {
+    "type": "string",
+    "value": "value"
+  },
+  "table": {
+    "baz": {
+      "type": "integer",
+      "value": "62"
+    },
+    "foo": {
+      "type": "integer",
+      "value": "92"
+    },
+    "quux": {
+      "type": "string",
+      "value": ""
+    }
+  }
+}

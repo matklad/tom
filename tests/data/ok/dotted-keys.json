@@ -1,0 +1,32 @@
+{
+  "dog": {
+    "tater.man": {
+      "type": {
+        "name": {
+          "type": "string",
+          "value": "pug"
+        }
+      }
+    }
+  },
+  "name": {
+    "type": "string",
+    "value": "Orange"
+  },
+  "physical": {
+    "color": {
+      "type": "string",
+      "value": "orange"
+    },
+    "shape": {
+      "type": "string",
+      "value": "round"
+    }
+  },
+  "site": {
+    "google.com": {
+      "type": "bool",
+      "value": "true"
+    }
+  }
+}

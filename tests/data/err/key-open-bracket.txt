@@ -1,0 +1,21 @@
+DOC@[0; 9)
+  TABLE@[0; 9)
+    TABLE_HEADER@[0; 6)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 4)
+        BARE_KEY@[1; 4) "abc"
+      WHITESPACE@[4; 5)
+      ERROR@[5; 6)
+        EQ@[5; 6) "="
+    WHITESPACE@[6; 7)
+    ENTRY@[7; 9)
+      KEY@[7; 8)
+        BARE_KEY@[7; 8) "1"
+      WHITESPACE@[8; 9)
+      VALUE@[9; 9)
+
+error@[5; 6) "=": expected `]`
+error@[8; 9) "\n": expected `=`
+error@[8; 9) "\n": expected a value
+error@[0; 7) "[abc = ": newline is mandatory after table header
+error@[7; 9) "1\n": newlines are forbidden in entries

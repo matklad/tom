@@ -1,0 +1,22 @@
+DOC@[0; 37)
+  ARRAY_TABLE@[0; 36)
+    TABLE_HEADER@[0; 16)
+      L_BRACK@[0; 1) "["
+      L_BRACK@[1; 2) "["
+      KEY@[2; 8)
+        BARE_KEY@[2; 8) "albums"
+      DOT@[8; 9) "."
+      KEY@[9; 14)
+        BARE_KEY@[9; 14) "songs"
+      R_BRACK@[14; 15) "]"
+      R_BRACK@[15; 16) "]"
+    WHITESPACE@[16; 17)
+    ENTRY@[17; 36)
+      KEY@[17; 21)
+        BARE_KEY@[17; 21) "name"
+      WHITESPACE@[21; 22)
+      EQ@[22; 23) "="
+      WHITESPACE@[23; 24)
+      VALUE@[24; 36)
+        BASIC_STRING@[24; 36) "\"Glory Days\""
+  WHITESPACE@[36; 37)

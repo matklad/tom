@@ -1,0 +1,29 @@
+DOC@[0; 71)
+  ENTRY@[0; 70)
+    KEY@[0; 5)
+      BARE_KEY@[0; 5) "array"
+    WHITESPACE@[5; 6)
+    EQ@[6; 7) "="
+    WHITESPACE@[7; 8)
+    VALUE@[8; 70)
+      ARRAY@[8; 70)
+        L_BRACK@[8; 9) "["
+        WHITESPACE@[9; 12)
+        VALUE@[12; 54)
+          BASIC_STRING@[12; 54) "\"Is there life before an array separator?\""
+        WHITESPACE@[54; 55)
+        ERROR@[55; 57)
+          BARE_KEY@[55; 57) "No"
+        VALUE@[57; 58)
+          ERROR@[57; 58)
+            COMMA@[57; 58) ","
+        WHITESPACE@[58; 61)
+        ERROR@[61; 68)
+          BASIC_STRING@[61; 68) "\"Entry\""
+        WHITESPACE@[68; 69)
+        R_BRACK@[69; 70) "]"
+  WHITESPACE@[70; 71)
+
+error@[55; 57) "No": expected `,`
+error@[57; 58) ",": expected a value
+error@[61; 68) "\"Entry\"": expected `,`

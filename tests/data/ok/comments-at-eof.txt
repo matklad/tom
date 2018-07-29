@@ -1,0 +1,14 @@
+DOC@[0; 85)
+  ENTRY@[0; 84)
+    COMMENT@[0; 29) "# This is a full-line comment"
+    WHITESPACE@[29; 30)
+    KEY@[30; 33)
+      BARE_KEY@[30; 33) "key"
+    WHITESPACE@[33; 34)
+    EQ@[34; 35) "="
+    WHITESPACE@[35; 36)
+    VALUE@[36; 43)
+      BASIC_STRING@[36; 43) "\"value\""
+    WHITESPACE@[43; 44)
+    COMMENT@[44; 84) "# This is a comment at the end of a line"
+  WHITESPACE@[84; 85)

@@ -1,0 +1,36 @@
+DOC@[0; 17)
+  TABLE@[0; 3)
+    TABLE_HEADER@[0; 3)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 2)
+        BARE_KEY@[1; 2) "a"
+      R_BRACK@[2; 3) "]"
+  WHITESPACE@[3; 4)
+  TABLE@[4; 17)
+    TABLE_HEADER@[4; 10)
+      L_BRACK@[4; 5) "["
+      KEY@[5; 8)
+        BARE_KEY@[5; 8) "xyz"
+      WHITESPACE@[8; 9)
+      ERROR@[9; 10)
+        EQ@[9; 10) "="
+    WHITESPACE@[10; 11)
+    ENTRY@[11; 17)
+      KEY@[11; 12)
+        BARE_KEY@[11; 12) "5"
+      WHITESPACE@[12; 13)
+      ERROR@[13; 14)
+        L_BRACK@[13; 14) "["
+      KEY@[14; 15)
+        BARE_KEY@[14; 15) "b"
+      ERROR@[15; 16)
+        R_BRACK@[15; 16) "]"
+      WHITESPACE@[16; 17)
+      VALUE@[17; 17)
+
+error@[9; 10) "=": expected `]`
+error@[13; 14) "[": expected `.`
+error@[15; 16) "]": expected `=`
+error@[16; 17) "\n": expected a value
+error@[4; 11) "[xyz = ": newline is mandatory after table header
+error@[11; 17) "5\n[b]\n": newlines are forbidden in entries

@@ -1,0 +1,47 @@
+DOC@[0; 91)
+  ENTRY@[0; 36)
+    KEY@[0; 13)
+      BARE_KEY@[0; 13) "best-day-ever"
+    WHITESPACE@[13; 14)
+    EQ@[14; 15) "="
+    WHITESPACE@[15; 16)
+    VALUE@[16; 36)
+      DATE_TIME@[16; 36) "1987-07-05T17:45:00Z"
+  WHITESPACE@[36; 38)
+  TABLE@[38; 90)
+    TABLE_HEADER@[38; 49)
+      L_BRACK@[38; 39) "["
+      KEY@[39; 48)
+        BARE_KEY@[39; 48) "numtheory"
+      R_BRACK@[48; 49) "]"
+    WHITESPACE@[49; 50)
+    ENTRY@[50; 64)
+      KEY@[50; 56)
+        BARE_KEY@[50; 56) "boring"
+      WHITESPACE@[56; 57)
+      EQ@[57; 58) "="
+      WHITESPACE@[58; 59)
+      VALUE@[59; 64)
+        BOOL@[59; 64) "false"
+    WHITESPACE@[64; 65)
+    ENTRY@[65; 90)
+      KEY@[65; 75)
+        BARE_KEY@[65; 75) "perfection"
+      WHITESPACE@[75; 76)
+      EQ@[76; 77) "="
+      WHITESPACE@[77; 78)
+      VALUE@[78; 90)
+        ARRAY@[78; 90)
+          L_BRACK@[78; 79) "["
+          VALUE@[79; 80)
+            NUMBER@[79; 80) "6"
+          COMMA@[80; 81) ","
+          WHITESPACE@[81; 82)
+          VALUE@[82; 84)
+            NUMBER@[82; 84) "28"
+          COMMA@[84; 85) ","
+          WHITESPACE@[85; 86)
+          VALUE@[86; 89)
+            NUMBER@[86; 89) "496"
+          R_BRACK@[89; 90) "]"
+  WHITESPACE@[90; 91)
