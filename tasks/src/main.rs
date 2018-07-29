@@ -7,6 +7,7 @@ use clap::{App, Arg, SubCommand};
 use itertools::Itertools;
 use std::fs;
 use std::process::exit;
+use std::collections::HashSet;
 
 type Result<T> = ::std::result::Result<T, failure::Error>;
 
@@ -75,14 +76,15 @@ fn get_tests(verify: bool) -> Result<()> {
     let src_dir = "./src/parser/grammar.rs";
     let grammar = fs::read_to_string(src_dir)?;
     let tests = collect_tests(&grammar);
-    for (i, test) in tests.into_iter().enumerate() {
-        let path = format!("./tests/data/inline/test_{:02}.toml", i);
+    for (name, test) in tests.into_iter() {
+        let path = format!("./tests/data/inline/test-{}.toml", name);
         update(&path, &test, verify)?;
     }
     return Ok(());
 
-    fn collect_tests(s: &str) -> Vec<String> {
+    fn collect_tests(s: &str) -> Vec<(String, String)> {
         let mut res = vec![];
+        let mut names = HashSet::new();
         let comment_blocks = s
             .lines()
             .map(str::trim_left)
@@ -97,13 +99,17 @@ fn get_tests(verify: bool) -> Result<()> {
                 &line[prefix.len()..]
             });
 
-            match block.next() {
-                Some(line) if line.starts_with("test") => (),
+            let name = match block.next() {
+                Some(line) if line.starts_with("test-") => line[5..].to_string(),
                 _ => continue 'outer,
+            };
+            if names.contains(&name) {
+                panic!("Test name `{}` already used.", name);
             }
+            names.insert(name.clone());
             let text: String = itertools::join(block.chain(::std::iter::once("")), "\n");
             assert!(!text.trim().is_empty() && text.ends_with("\n"));
-            res.push(text)
+            res.push((name, text))
         }
         res
     }
