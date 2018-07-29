@@ -1,0 +1,28 @@
+DOC@[0; 195)
+  ENTRY@[0; 52)
+    KEY@[0; 7)
+      BARE_KEY@[0; 7) "oneline"
+    WHITESPACE@[7; 8)
+    EQ@[8; 9) "="
+    WHITESPACE@[9; 10)
+    VALUE@[10; 52)
+      MULTILINE_LITERAL_STRING@[10; 52) "\'\'\'This string has a \' quote character.\'\'\'"
+  WHITESPACE@[52; 53)
+  ENTRY@[53; 106)
+    KEY@[53; 60)
+      BARE_KEY@[53; 60) "firstnl"
+    WHITESPACE@[60; 61)
+    EQ@[61; 62) "="
+    WHITESPACE@[62; 63)
+    VALUE@[63; 106)
+      MULTILINE_LITERAL_STRING@[63; 106) "\'\'\'\nThis string has a \' quote character.\'\'\'"
+  WHITESPACE@[106; 107)
+  ENTRY@[107; 194)
+    KEY@[107; 116)
+      BARE_KEY@[107; 116) "multiline"
+    WHITESPACE@[116; 117)
+    EQ@[117; 118) "="
+    WHITESPACE@[118; 119)
+    VALUE@[119; 194)
+      MULTILINE_LITERAL_STRING@[119; 194) "\'\'\'\nThis string\nhas \' a quote character\nand more than\none newline\nin it.\'\'\'"
+  WHITESPACE@[194; 195)

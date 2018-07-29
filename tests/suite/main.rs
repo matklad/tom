@@ -1,4 +1,4 @@
-extern crate testutils;
+extern crate difference;
 #[macro_use]
 extern crate tom;
 #[macro_use]
@@ -6,9 +6,11 @@ extern crate lazy_static;
 extern crate serde_json;
 
 mod ast;
+mod dir;
 mod edit;
 mod factory;
 mod model;
+mod util;
 
 use std::{
     panic,
@@ -16,23 +18,8 @@ use std::{
     sync::Mutex,
     time::Instant,
 };
-use testutils::{assert_eq_text, test_data_dir};
+use util::{assert_eq_text, test_data_dir};
 use tom::{AstNode, CstNode, TomlDoc};
-
-#[test]
-fn test_parser_inline() {
-    testutils::dir_tests(&["inline"], |text| TomlDoc::new(text).debug())
-}
-
-#[test]
-fn test_parser_ok() {
-    testutils::dir_tests(&["ok"], |text| toml(text).debug())
-}
-
-#[test]
-fn test_parser_err() {
-    testutils::dir_tests(&["err"], |text| toml_err(text).debug())
-}
 
 #[test]
 fn simple_bench() {
@@ -44,20 +31,10 @@ fn simple_bench() {
     println!("{} μs", time);
 }
 
-#[test]
-fn test_parser_validation() {
-    testutils::dir_tests(&["validation"], |text| toml_err(text).debug())
-}
-
-fn toml_err(text: &str) -> TomlDoc {
-    let doc = TomlDoc::new(text);
-    assert!(!doc.errors().is_empty());
-    doc
-}
-
 fn toml(text: &str) -> TomlDoc {
     let doc = TomlDoc::new(text);
-    assert!(doc.errors().is_empty());
+    assert!(doc.errors().is_empty(),
+        "No errors expected, but found in:\n{}\nerrors:\n{:?}", text, doc.errors());
     doc
 }
 

@@ -1,0 +1,25 @@
+DOC@[0; 23)
+  TABLE@[0; 23)
+    TABLE_HEADER@[0; 23)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 4)
+        BARE_KEY@[1; 4) "key"
+      COMMENT@[4; 11) "#group]"
+      WHITESPACE@[11; 12)
+      ERROR@[12; 18)
+        BARE_KEY@[12; 18) "answer"
+      WHITESPACE@[18; 19)
+      KEY@[19; 20)
+        ERROR@[19; 20)
+          EQ@[19; 20) "="
+      WHITESPACE@[20; 21)
+      ERROR@[21; 23)
+        BARE_KEY_OR_NUMBER@[21; 23) "42"
+      KEY@[23; 23)
+
+error@[12; 18) "answer": expected `.`
+error@[19; 20) "=": expected a key
+error@[21; 23) "42": expected `.`
+error@[21; 23) "42": expected a key
+error@[21; 23) "42": expected `]`
+error@[0; 23) "[key#group]\nanswer = 42": table header must fit into a single line

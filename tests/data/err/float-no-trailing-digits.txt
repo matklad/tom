@@ -1,0 +1,26 @@
+DOC@[0; 28)
+  ENTRY@[0; 10)
+    KEY@[0; 6)
+      BARE_KEY@[0; 6) "answer"
+    WHITESPACE@[6; 7)
+    EQ@[7; 8) "="
+    WHITESPACE@[8; 9)
+    VALUE@[9; 10)
+      NUMBER@[9; 10) "1"
+  ERROR@[10; 11)
+    DOT@[10; 11) "."
+  WHITESPACE@[11; 12)
+  ENTRY@[12; 26)
+    KEY@[12; 21)
+      BARE_KEY@[12; 21) "neganswer"
+    WHITESPACE@[21; 22)
+    EQ@[22; 23) "="
+    WHITESPACE@[23; 24)
+    VALUE@[24; 26)
+      NUMBER@[24; 26) "-1"
+  ERROR@[26; 27)
+    DOT@[26; 27) "."
+  WHITESPACE@[27; 28)
+
+error@[10; 11) ".": expected a key
+error@[26; 27) ".": expected a key

@@ -1,0 +1,533 @@
+{
+  "bind": {
+    "foo": {
+      "members": {
+        "type": "array",
+        "value": [
+          {}
+        ]
+      }
+    }
+  },
+  "cfg": {},
+  "hab": {
+    "version": {
+      "type": "string",
+      "value": "0.0.0"
+    }
+  },
+  "pkg": {
+    "deps": {
+      "type": "array",
+      "value": [
+        {
+          "name": {
+            "type": "string",
+            "value": "acl"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20161208223311"
+          },
+          "version": {
+            "type": "string",
+            "value": "2.2.52"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "attr"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20161208223238"
+          },
+          "version": {
+            "type": "string",
+            "value": "2.4.47"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "bzip2"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20161208225359"
+          },
+          "version": {
+            "type": "string",
+            "value": "1.0.6"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "coreutils"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20161208223423"
+          },
+          "version": {
+            "type": "string",
+            "value": "8.25"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "db"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20161213234940"
+          },
+          "version": {
+            "type": "string",
+            "value": "5.3.28"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "gcc-libs"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20161208223920"
+          },
+          "version": {
+            "type": "string",
+            "value": "5.2.0"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "gdbm"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20161208225425"
+          },
+          "version": {
+            "type": "string",
+            "value": "1.11"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "glibc"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20160612063629"
+          },
+          "version": {
+            "type": "string",
+            "value": "2.22"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "gmp"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20161208212521"
+          },
+          "version": {
+            "type": "string",
+            "value": "6.1.0"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "less"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20161213235230"
+          },
+          "version": {
+            "type": "string",
+            "value": "481"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "libcap"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20161208223353"
+          },
+          "version": {
+            "type": "string",
+            "value": "2.24"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "linux-headers"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20160612063537"
+          },
+          "version": {
+            "type": "string",
+            "value": "4.3"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "lsyncd"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20170215185907"
+          },
+          "version": {
+            "type": "string",
+            "value": "2.1.6"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "ncurses"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20161213233720"
+          },
+          "version": {
+            "type": "string",
+            "value": "6.0"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "pcre"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20161213233903"
+          },
+          "version": {
+            "type": "string",
+            "value": "8.38"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "perl"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20161213235304"
+          },
+          "version": {
+            "type": "string",
+            "value": "5.22.1"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "rsync"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20161215000807"
+          },
+          "version": {
+            "type": "string",
+            "value": "3.1.2"
+          }
+        },
+        {
+          "name": {
+            "type": "string",
+            "value": "zlib"
+          },
+          "origin": {
+            "type": "string",
+            "value": "core"
+          },
+          "release": {
+            "type": "string",
+            "value": "20161118033245"
+          },
+          "version": {
+            "type": "string",
+            "value": "1.2.8"
+          }
+        }
+      ]
+    },
+    "exports": {},
+    "exposes": {
+      "type": "array",
+      "value": []
+    },
+    "ident": {
+      "type": "string",
+      "value": "smith/lsyncd/0.1.0/20170215230753"
+    },
+    "name": {
+      "type": "string",
+      "value": "lsyncd"
+    },
+    "origin": {
+      "type": "string",
+      "value": "smith"
+    },
+    "path": {
+      "type": "string",
+      "value": "/hab/pkgs/smith/lsyncd/0.1.0/20170215230753"
+    },
+    "release": {
+      "type": "string",
+      "value": "20170215230753"
+    },
+    "svc_config_path": {
+      "type": "string",
+      "value": "/hab/svc/lsyncd/config"
+    },
+    "svc_data_path": {
+      "type": "string",
+      "value": "/hab/svc/lsyncd/data"
+    },
+    "svc_files_path": {
+      "type": "string",
+      "value": "/hab/svc/lsyncd/files"
+    },
+    "svc_group": {
+      "type": "string",
+      "value": "hab"
+    },
+    "svc_path": {
+      "type": "string",
+      "value": "/hab/svc/lsyncd"
+    },
+    "svc_pid_file": {
+      "type": "string",
+      "value": "/hab/svc/lsyncd/PID"
+    },
+    "svc_static_path": {
+      "type": "string",
+      "value": "/hab/svc/lsyncd/static"
+    },
+    "svc_user": {
+      "type": "string",
+      "value": "hab"
+    },
+    "svc_var_path": {
+      "type": "string",
+      "value": "/hab/svc/lsyncd/var"
+    },
+    "version": {
+      "type": "string",
+      "value": "0.1.0"
+    }
+  },
+  "svc": {
+    "group": {
+      "type": "string",
+      "value": "default"
+    },
+    "ident": {
+      "type": "string",
+      "value": "lsyncd.default"
+    },
+    "me": {
+      "cfg": {},
+      "group": {
+        "type": "string",
+        "value": "default"
+      },
+      "member_id": {
+        "type": "string",
+        "value": "b3130c943a2d481492af62891f34cad3"
+      },
+      "pkg": {
+        "name": {
+          "type": "string",
+          "value": "lsyncd"
+        },
+        "origin": {
+          "type": "string",
+          "value": "smith"
+        },
+        "release": {
+          "type": "string",
+          "value": "20170215230753"
+        },
+        "version": {
+          "type": "string",
+          "value": "0.1.0"
+        }
+      },
+      "service": {
+        "type": "string",
+        "value": "lsyncd"
+      },
+      "sys": {
+        "gossip_ip": {
+          "type": "string",
+          "value": "0.0.0.0"
+        },
+        "gossip_port": {
+          "type": "string",
+          "value": "9638"
+        },
+        "hostname": {
+          "type": "string",
+          "value": "ef8549a34328"
+        },
+        "http_gateway_ip": {
+          "type": "string",
+          "value": "0.0.0.0"
+        },
+        "http_gateway_port": {
+          "type": "string",
+          "value": "9631"
+        },
+        "ip": {
+          "type": "string",
+          "value": "172.17.0.4"
+        }
+      }
+    },
+    "members": {
+      "type": "array",
+      "value": [
+        {
+          "group": {
+            "type": "string",
+            "value": "default"
+          },
+          "member_id": {
+            "type": "string",
+            "value": "b3130c943a2d481492af62891f34cad3"
+          },
+          "service": {
+            "type": "string",
+            "value": "lsyncd"
+          }
+        }
+      ]
+    },
+    "service": {
+      "type": "string",
+      "value": "lsyncd"
+    }
+  },
+  "sys": {
+    "gossip_ip": {
+      "type": "string",
+      "value": "0.0.0.0"
+    },
+    "gossip_port": {
+      "type": "string",
+      "value": "9638"
+    },
+    "hostname": {
+      "type": "string",
+      "value": "ef8549a34328"
+    },
+    "http_gateway_ip": {
+      "type": "string",
+      "value": "0.0.0.0"
+    },
+    "http_gateway_port": {
+      "type": "string",
+      "value": "9631"
+    },
+    "ip": {
+      "type": "string",
+      "value": "172.17.0.4"
+    }
+  }
+}

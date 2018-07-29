@@ -1,0 +1,19 @@
+DOC@[0; 42)
+  ENTRY@[0; 18)
+    KEY@[0; 7)
+      BARE_KEY@[0; 7) "answer4"
+    WHITESPACE@[7; 8)
+    EQ@[8; 9) "="
+    WHITESPACE@[9; 10)
+    VALUE@[10; 18)
+      BASIC_STRING@[10; 18) "\"\\u03B4\""
+  WHITESPACE@[18; 19)
+  ENTRY@[19; 41)
+    KEY@[19; 26)
+      BARE_KEY@[19; 26) "answer8"
+    WHITESPACE@[26; 27)
+    EQ@[27; 28) "="
+    WHITESPACE@[28; 29)
+    VALUE@[29; 41)
+      BASIC_STRING@[29; 41) "\"\\U000003B4\""
+  WHITESPACE@[41; 42)

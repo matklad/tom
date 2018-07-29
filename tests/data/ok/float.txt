@@ -1,0 +1,37 @@
+DOC@[0; 59)
+  ENTRY@[0; 9)
+    KEY@[0; 2)
+      BARE_KEY@[0; 2) "pi"
+    WHITESPACE@[2; 3)
+    EQ@[3; 4) "="
+    WHITESPACE@[4; 5)
+    VALUE@[5; 9)
+      NUMBER@[5; 9) "3.14"
+  WHITESPACE@[9; 10)
+  ENTRY@[10; 23)
+    KEY@[10; 15)
+      BARE_KEY@[10; 15) "pospi"
+    WHITESPACE@[15; 16)
+    EQ@[16; 17) "="
+    WHITESPACE@[17; 18)
+    VALUE@[18; 23)
+      NUMBER@[18; 23) "+3.14"
+  WHITESPACE@[23; 24)
+  ENTRY@[24; 37)
+    KEY@[24; 29)
+      BARE_KEY@[24; 29) "negpi"
+    WHITESPACE@[29; 30)
+    EQ@[30; 31) "="
+    WHITESPACE@[31; 32)
+    VALUE@[32; 37)
+      NUMBER@[32; 37) "-3.14"
+  WHITESPACE@[37; 38)
+  ENTRY@[38; 58)
+    KEY@[38; 50)
+      BARE_KEY@[38; 50) "zero-intpart"
+    WHITESPACE@[50; 51)
+    EQ@[51; 52) "="
+    WHITESPACE@[52; 53)
+    VALUE@[53; 58)
+      NUMBER@[53; 58) "0.123"
+  WHITESPACE@[58; 59)

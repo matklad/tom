@@ -1,0 +1,10 @@
+{
+  "bar": {
+    "type": "integer",
+    "value": "14"
+  },
+  "foo": {
+    "type": "integer",
+    "value": "92"
+  }
+}

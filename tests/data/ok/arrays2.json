@@ -1,0 +1,157 @@
+{
+  "arr1": {
+    "type": "array",
+    "value": [
+      {
+        "type": "integer",
+        "value": "1"
+      },
+      {
+        "type": "integer",
+        "value": "2"
+      },
+      {
+        "type": "integer",
+        "value": "3"
+      }
+    ]
+  },
+  "arr2": {
+    "type": "array",
+    "value": [
+      {
+        "type": "string",
+        "value": "red"
+      },
+      {
+        "type": "string",
+        "value": "yellow"
+      },
+      {
+        "type": "string",
+        "value": "green"
+      }
+    ]
+  },
+  "arr3": {
+    "type": "array",
+    "value": [
+      {
+        "type": "array",
+        "value": [
+          {
+            "type": "integer",
+            "value": "1"
+          },
+          {
+            "type": "integer",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "type": "array",
+        "value": [
+          {
+            "type": "integer",
+            "value": "3"
+          },
+          {
+            "type": "integer",
+            "value": "4"
+          },
+          {
+            "type": "integer",
+            "value": "5"
+          }
+        ]
+      }
+    ]
+  },
+  "arr4": {
+    "type": "array",
+    "value": [
+      {
+        "type": "string",
+        "value": "all"
+      },
+      {
+        "type": "string",
+        "value": "strings"
+      },
+      {
+        "type": "string",
+        "value": "are the same"
+      },
+      {
+        "type": "string",
+        "value": "type"
+      }
+    ]
+  },
+  "arr5": {
+    "type": "array",
+    "value": [
+      {
+        "type": "array",
+        "value": [
+          {
+            "type": "integer",
+            "value": "1"
+          },
+          {
+            "type": "integer",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "type": "array",
+        "value": [
+          {
+            "type": "string",
+            "value": "a"
+          },
+          {
+            "type": "string",
+            "value": "b"
+          },
+          {
+            "type": "string",
+            "value": "c"
+          }
+        ]
+      }
+    ]
+  },
+  "arr7": {
+    "type": "array",
+    "value": [
+      {
+        "type": "integer",
+        "value": "1"
+      },
+      {
+        "type": "integer",
+        "value": "2"
+      },
+      {
+        "type": "integer",
+        "value": "3"
+      }
+    ]
+  },
+  "arr8": {
+    "type": "array",
+    "value": [
+      {
+        "type": "integer",
+        "value": "1"
+      },
+      {
+        "type": "integer",
+        "value": "2"
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "a": {
+    "type": "string",
+    "value": "hello\nworld"
+  },
+  "b": {
+    "type": "string",
+    "value": "  hello\n  world\n"
+  }
+}

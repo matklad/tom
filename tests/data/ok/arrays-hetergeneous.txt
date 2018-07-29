@@ -1,0 +1,46 @@
+DOC@[0; 41)
+  ENTRY@[0; 40)
+    KEY@[0; 5)
+      BARE_KEY@[0; 5) "mixed"
+    WHITESPACE@[5; 6)
+    EQ@[6; 7) "="
+    WHITESPACE@[7; 8)
+    VALUE@[8; 40)
+      ARRAY@[8; 40)
+        L_BRACK@[8; 9) "["
+        VALUE@[9; 15)
+          ARRAY@[9; 15)
+            L_BRACK@[9; 10) "["
+            VALUE@[10; 11)
+              NUMBER@[10; 11) "1"
+            COMMA@[11; 12) ","
+            WHITESPACE@[12; 13)
+            VALUE@[13; 14)
+              NUMBER@[13; 14) "2"
+            R_BRACK@[14; 15) "]"
+        COMMA@[15; 16) ","
+        WHITESPACE@[16; 17)
+        VALUE@[17; 27)
+          ARRAY@[17; 27)
+            L_BRACK@[17; 18) "["
+            VALUE@[18; 21)
+              BASIC_STRING@[18; 21) "\"a\""
+            COMMA@[21; 22) ","
+            WHITESPACE@[22; 23)
+            VALUE@[23; 26)
+              BASIC_STRING@[23; 26) "\"b\""
+            R_BRACK@[26; 27) "]"
+        COMMA@[27; 28) ","
+        WHITESPACE@[28; 29)
+        VALUE@[29; 39)
+          ARRAY@[29; 39)
+            L_BRACK@[29; 30) "["
+            VALUE@[30; 33)
+              NUMBER@[30; 33) "1.1"
+            COMMA@[33; 34) ","
+            WHITESPACE@[34; 35)
+            VALUE@[35; 38)
+              NUMBER@[35; 38) "2.1"
+            R_BRACK@[38; 39) "]"
+        R_BRACK@[39; 40) "]"
+  WHITESPACE@[40; 41)

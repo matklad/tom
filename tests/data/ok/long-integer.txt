@@ -1,0 +1,19 @@
+DOC@[0; 62)
+  ENTRY@[0; 28)
+    KEY@[0; 6)
+      BARE_KEY@[0; 6) "answer"
+    WHITESPACE@[6; 7)
+    EQ@[7; 8) "="
+    WHITESPACE@[8; 9)
+    VALUE@[9; 28)
+      NUMBER@[9; 28) "9223372036854775807"
+  WHITESPACE@[28; 29)
+  ENTRY@[29; 61)
+    KEY@[29; 38)
+      BARE_KEY@[29; 38) "neganswer"
+    WHITESPACE@[38; 39)
+    EQ@[39; 40) "="
+    WHITESPACE@[40; 41)
+    VALUE@[41; 61)
+      NUMBER@[41; 61) "-9223372036854775808"
+  WHITESPACE@[61; 62)

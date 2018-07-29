@@ -1,0 +1,19 @@
+DOC@[0; 19)
+  ENTRY@[0; 8)
+    KEY@[0; 1)
+      BARE_KEY@[0; 1) "t"
+    WHITESPACE@[1; 2)
+    EQ@[2; 3) "="
+    WHITESPACE@[3; 4)
+    VALUE@[4; 8)
+      BOOL@[4; 8) "true"
+  WHITESPACE@[8; 9)
+  ENTRY@[9; 18)
+    KEY@[9; 10)
+      BARE_KEY@[9; 10) "f"
+    WHITESPACE@[10; 11)
+    EQ@[11; 12) "="
+    WHITESPACE@[12; 13)
+    VALUE@[13; 18)
+      BOOL@[13; 18) "false"
+  WHITESPACE@[18; 19)

@@ -1,0 +1,18 @@
+DOC@[0; 11)
+  ENTRY@[0; 9)
+    KEY@[0; 3)
+      BARE_KEY@[0; 3) "bad"
+    WHITESPACE@[3; 4)
+    EQ@[4; 5) "="
+    WHITESPACE@[5; 6)
+    VALUE@[6; 9)
+      NUMBER@[6; 9) "1.2"
+  ENTRY@[9; 11)
+    KEY@[9; 10)
+      BARE_KEY@[9; 10) "_"
+    WHITESPACE@[10; 11)
+    VALUE@[11; 11)
+
+error@[10; 11) "\n": expected `=`
+error@[10; 11) "\n": expected a value
+error@[9; 11) "_\n": newlines are forbidden in entries

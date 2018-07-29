@@ -1,0 +1,20 @@
+DOC@[0; 56)
+  ENTRY@[0; 55)
+    KEY@[0; 5)
+      BARE_KEY@[0; 5) "title"
+    WHITESPACE@[5; 6)
+    EQ@[6; 7) "="
+    WHITESPACE@[7; 8)
+    VALUE@[8; 55)
+      ARRAY@[8; 55)
+        L_BRACK@[8; 9) "["
+        WHITESPACE@[9; 10)
+        VALUE@[10; 39)
+          BASIC_STRING@[10; 39) "\"Client: \\\"XXXX\\\", Job: XXXX\""
+        COMMA@[39; 40) ","
+        WHITESPACE@[40; 41)
+        VALUE@[41; 53)
+          BASIC_STRING@[41; 53) "\"Code: XXXX\""
+        WHITESPACE@[53; 54)
+        R_BRACK@[54; 55) "]"
+  WHITESPACE@[55; 56)

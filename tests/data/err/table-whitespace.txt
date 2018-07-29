@@ -1,0 +1,16 @@
+DOC@[0; 13)
+  TABLE@[0; 13)
+    TABLE_HEADER@[0; 13)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 8)
+        BARE_KEY@[1; 8) "invalid"
+      WHITESPACE@[8; 9)
+      ERROR@[9; 12)
+        BARE_KEY@[9; 12) "key"
+      KEY@[12; 13)
+        ERROR@[12; 13)
+          R_BRACK@[12; 13) "]"
+
+error@[9; 12) "key": expected `.`
+error@[12; 13) "]": expected a key
+error@[12; 13) "]": expected `]`

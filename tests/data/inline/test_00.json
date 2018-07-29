@@ -1,0 +1,23 @@
+{
+  "array-table": {
+    "type": "array",
+    "value": [
+      {
+        "b": {
+          "type": "integer",
+          "value": "3"
+        }
+      }
+    ]
+  },
+  "key": {
+    "type": "string",
+    "value": "value"
+  },
+  "table": {
+    "a": {
+      "type": "integer",
+      "value": "2"
+    }
+  }
+}

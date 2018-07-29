@@ -1,0 +1,10 @@
+{
+  "bar": {
+    "type": "bool",
+    "value": "false"
+  },
+  "foo": {
+    "type": "integer",
+    "value": "92"
+  }
+}

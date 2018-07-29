@@ -1,0 +1,13 @@
+DOC@[0; 11)
+  ENTRY@[0; 10)
+    KEY@[0; 3)
+      BARE_KEY@[0; 3) "bad"
+    WHITESPACE@[3; 4)
+    EQ@[4; 5) "="
+    WHITESPACE@[5; 6)
+    VALUE@[6; 10)
+      ERROR@[6; 10)
+        BARE_KEY@[6; 10) "123_"
+  WHITESPACE@[10; 11)
+
+error@[6; 10) "123_": expected a value

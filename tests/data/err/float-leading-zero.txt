@@ -1,0 +1,21 @@
+DOC@[0; 21)
+  ENTRY@[0; 17)
+    KEY@[0; 12)
+      BARE_KEY@[0; 12) "leading-zero"
+    WHITESPACE@[12; 13)
+    EQ@[13; 14) "="
+    WHITESPACE@[14; 15)
+    VALUE@[15; 17)
+      NUMBER@[15; 17) "03"
+  ERROR@[17; 18)
+    DOT@[17; 18) "."
+  ENTRY@[18; 21)
+    KEY@[18; 20)
+      BARE_KEY@[18; 20) "14"
+    WHITESPACE@[20; 21)
+    VALUE@[21; 21)
+
+error@[17; 18) ".": expected a key
+error@[20; 21) "\n": expected `=`
+error@[20; 21) "\n": expected a value
+error@[18; 21) "14\n": newlines are forbidden in entries

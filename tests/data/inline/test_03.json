@@ -1,0 +1,14 @@
+{
+  "1914-08-26": {
+    "type": "integer",
+    "value": "92"
+  },
+  "92": {
+    "type": "integer",
+    "value": "92"
+  },
+  "foo": {
+    "type": "integer",
+    "value": "92"
+  }
+}

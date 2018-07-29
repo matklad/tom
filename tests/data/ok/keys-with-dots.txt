@@ -1,0 +1,71 @@
+DOC@[0; 111)
+  ENTRY@[0; 9)
+    KEY@[0; 5)
+      BARE_KEY@[0; 5) "plain"
+    WHITESPACE@[5; 6)
+    EQ@[6; 7) "="
+    WHITESPACE@[7; 8)
+    VALUE@[8; 9)
+      NUMBER@[8; 9) "1"
+  WHITESPACE@[9; 10)
+  ENTRY@[10; 24)
+    KEY@[10; 20)
+      BASIC_STRING@[10; 20) "\"with.dot\""
+    WHITESPACE@[20; 21)
+    EQ@[21; 22) "="
+    WHITESPACE@[22; 23)
+    VALUE@[23; 24)
+      NUMBER@[23; 24) "2"
+  WHITESPACE@[24; 26)
+  TABLE@[26; 64)
+    TABLE_HEADER@[26; 39)
+      L_BRACK@[26; 27) "["
+      KEY@[27; 38)
+        BARE_KEY@[27; 38) "plain_table"
+      R_BRACK@[38; 39) "]"
+    WHITESPACE@[39; 40)
+    ENTRY@[40; 49)
+      KEY@[40; 45)
+        BARE_KEY@[40; 45) "plain"
+      WHITESPACE@[45; 46)
+      EQ@[46; 47) "="
+      WHITESPACE@[47; 48)
+      VALUE@[48; 49)
+        NUMBER@[48; 49) "3"
+    WHITESPACE@[49; 50)
+    ENTRY@[50; 64)
+      KEY@[50; 60)
+        BASIC_STRING@[50; 60) "\"with.dot\""
+      WHITESPACE@[60; 61)
+      EQ@[61; 62) "="
+      WHITESPACE@[62; 63)
+      VALUE@[63; 64)
+        NUMBER@[63; 64) "4"
+  WHITESPACE@[64; 66)
+  TABLE@[66; 111)
+    TABLE_HEADER@[66; 81)
+      L_BRACK@[66; 67) "["
+      KEY@[67; 72)
+        BARE_KEY@[67; 72) "table"
+      DOT@[72; 73) "."
+      KEY@[73; 80)
+        BARE_KEY@[73; 80) "withdot"
+      R_BRACK@[80; 81) "]"
+    WHITESPACE@[81; 82)
+    ENTRY@[82; 91)
+      KEY@[82; 87)
+        BARE_KEY@[82; 87) "plain"
+      WHITESPACE@[87; 88)
+      EQ@[88; 89) "="
+      WHITESPACE@[89; 90)
+      VALUE@[90; 91)
+        NUMBER@[90; 91) "5"
+    WHITESPACE@[91; 92)
+    ENTRY@[92; 111)
+      KEY@[92; 107)
+        BASIC_STRING@[92; 107) "\"key.with.dots\""
+      WHITESPACE@[107; 108)
+      EQ@[108; 109) "="
+      WHITESPACE@[109; 110)
+      VALUE@[110; 111)
+        NUMBER@[110; 111) "6"

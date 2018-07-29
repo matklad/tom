@@ -1,0 +1,44 @@
+DOC@[0; 56)
+  ENTRY@[0; 55)
+    KEY@[0; 5)
+      BARE_KEY@[0; 5) "array"
+    WHITESPACE@[5; 6)
+    EQ@[6; 7) "="
+    WHITESPACE@[7; 8)
+    VALUE@[8; 55)
+      ARRAY@[8; 55)
+        L_BRACK@[8; 9) "["
+        WHITESPACE@[9; 12)
+        VALUE@[12; 21)
+          BASIC_STRING@[12; 21) "\"Entry 1\""
+        COMMA@[21; 22) ","
+        WHITESPACE@[22; 25)
+        VALUE@[25; 26)
+          ERROR@[25; 26)
+            BARE_KEY@[25; 26) "I"
+        WHITESPACE@[26; 27)
+        ERROR@[27; 30)
+          BARE_KEY@[27; 30) "don"
+        VALUE@[30; 31)
+          ERROR@[30; 31)
+            ERROR@[30; 31) "\'"
+        ERROR@[31; 32)
+          BARE_KEY@[31; 32) "t"
+        WHITESPACE@[32; 33)
+        VALUE@[33; 39)
+          ERROR@[33; 39)
+            BARE_KEY@[33; 39) "belong"
+        COMMA@[39; 40) ","
+        WHITESPACE@[40; 43)
+        VALUE@[43; 52)
+          BASIC_STRING@[43; 52) "\"Entry 2\""
+        COMMA@[52; 53) ","
+        WHITESPACE@[53; 54)
+        R_BRACK@[54; 55) "]"
+  WHITESPACE@[55; 56)
+
+error@[25; 26) "I": expected a value
+error@[27; 30) "don": expected `,`
+error@[30; 31) "\'": expected a value
+error@[31; 32) "t": expected `,`
+error@[33; 39) "belong": expected a value

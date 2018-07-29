@@ -1,0 +1,31 @@
+DOC@[0; 33)
+  ENTRY@[0; 11)
+    KEY@[0; 6)
+      BARE_KEY@[0; 6) "answer"
+    WHITESPACE@[6; 7)
+    EQ@[7; 8) "="
+    WHITESPACE@[8; 9)
+    VALUE@[9; 11)
+      NUMBER@[9; 11) "42"
+  WHITESPACE@[11; 12)
+  ENTRY@[12; 33)
+    KEY@[12; 15)
+      BARE_KEY@[12; 15) "the"
+    WHITESPACE@[15; 16)
+    ERROR@[16; 24)
+      BARE_KEY@[16; 24) "ultimate"
+    WHITESPACE@[24; 25)
+    KEY@[25; 31)
+      BARE_KEY@[25; 31) "answer"
+    ERROR@[31; 32)
+      ERROR@[31; 32) "?"
+    WHITESPACE@[32; 33)
+    KEY@[33; 33)
+    VALUE@[33; 33)
+
+error@[16; 24) "ultimate": expected `.`
+error@[31; 32) "?": expected `.`
+error@[32; 33) "\n": expected a key
+error@[32; 33) "\n": expected `=`
+error@[32; 33) "\n": expected a value
+error@[12; 33) "the ultimate answer?\n": newlines are forbidden in entries

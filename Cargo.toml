@@ -9,7 +9,7 @@ Yet another format-preserving TOML parser/manipulator.
 """
 
 [workspace]
-members = ["tasks", "tests/testutils"]
+members = ["tasks"]
 
 [dependencies]
 # public
@@ -23,7 +23,7 @@ m_lexer = "0.0.4"
 uncover = "0.1"
 
 [dev-dependencies]
-testutils = { path = "tests/testutils", version = "0.0.0" }
 failure = "0.1"
 clap = "2"
 serde_json = "1"
+difference = "2"

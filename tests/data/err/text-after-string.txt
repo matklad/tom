@@ -1,0 +1,22 @@
+DOC@[0; 44)
+  ENTRY@[0; 39)
+    KEY@[0; 6)
+      BARE_KEY@[0; 6) "string"
+    WHITESPACE@[6; 7)
+    EQ@[7; 8) "="
+    WHITESPACE@[8; 9)
+    VALUE@[9; 39)
+      BASIC_STRING@[9; 39) "\"Is there life after strings?\""
+  WHITESPACE@[39; 40)
+  ENTRY@[40; 44)
+    KEY@[40; 42)
+      BARE_KEY@[40; 42) "No"
+    DOT@[42; 43) "."
+    WHITESPACE@[43; 44)
+    KEY@[44; 44)
+    VALUE@[44; 44)
+
+error@[43; 44) "\n": expected a key
+error@[43; 44) "\n": expected `=`
+error@[43; 44) "\n": expected a value
+error@[40; 44) "No.\n": newlines are forbidden in entries

@@ -1,0 +1,23 @@
+DOC@[0; 7)
+  ENTRY@[0; 7)
+    KEY@[0; 1)
+      BARE_KEY@[0; 1) "a"
+    WHITESPACE@[1; 2)
+    ERROR@[2; 3)
+      BARE_KEY@[2; 3) "b"
+    WHITESPACE@[3; 4)
+    KEY@[4; 5)
+      ERROR@[4; 5)
+        EQ@[4; 5) "="
+    WHITESPACE@[5; 6)
+    ERROR@[6; 7)
+      BARE_KEY_OR_NUMBER@[6; 7) "1"
+    KEY@[7; 7)
+    VALUE@[7; 7)
+
+error@[2; 3) "b": expected `.`
+error@[4; 5) "=": expected a key
+error@[6; 7) "1": expected `.`
+error@[6; 7) "1": expected a key
+error@[6; 7) "1": expected `=`
+error@[6; 7) "1": expected a value

@@ -1,0 +1,64 @@
+DOC@[0; 416)
+  ENTRY@[0; 28)
+    KEY@[0; 19)
+      BARE_KEY@[0; 19) "multiline_empty_one"
+    WHITESPACE@[19; 20)
+    EQ@[20; 21) "="
+    WHITESPACE@[21; 22)
+    VALUE@[22; 28)
+      MULTILINE_BASIC_STRING@[22; 28) "\"\"\"\"\"\""
+  WHITESPACE@[28; 29)
+  ENTRY@[29; 58)
+    KEY@[29; 48)
+      BARE_KEY@[29; 48) "multiline_empty_two"
+    WHITESPACE@[48; 49)
+    EQ@[49; 50) "="
+    WHITESPACE@[50; 51)
+    VALUE@[51; 58)
+      MULTILINE_BASIC_STRING@[51; 58) "\"\"\"\n\"\"\""
+  WHITESPACE@[58; 59)
+  ENTRY@[59; 96)
+    KEY@[59; 80)
+      BARE_KEY@[59; 80) "multiline_empty_three"
+    WHITESPACE@[80; 81)
+    EQ@[81; 82) "="
+    WHITESPACE@[82; 83)
+    VALUE@[83; 96)
+      MULTILINE_BASIC_STRING@[83; 96) "\"\"\"\\ \n    \"\"\""
+  WHITESPACE@[96; 97)
+  ENTRY@[97; 148)
+    KEY@[97; 117)
+      BARE_KEY@[97; 117) "multiline_empty_four"
+    WHITESPACE@[117; 118)
+    EQ@[118; 119) "="
+    WHITESPACE@[119; 120)
+    VALUE@[120; 148)
+      MULTILINE_BASIC_STRING@[120; 148) "\"\"\"\\ \n   \\  \n   \\    \n   \"\"\""
+  WHITESPACE@[148; 150)
+  ENTRY@[150; 213)
+    KEY@[150; 164)
+      BARE_KEY@[150; 164) "equivalent_one"
+    WHITESPACE@[164; 165)
+    EQ@[165; 166) "="
+    WHITESPACE@[166; 167)
+    VALUE@[167; 213)
+      BASIC_STRING@[167; 213) "\"The quick brown fox jumps over the lazy dog.\""
+  WHITESPACE@[213; 214)
+  ENTRY@[214; 296)
+    KEY@[214; 228)
+      BARE_KEY@[214; 228) "equivalent_two"
+    WHITESPACE@[228; 229)
+    EQ@[229; 230) "="
+    WHITESPACE@[230; 231)
+    VALUE@[231; 296)
+      MULTILINE_BASIC_STRING@[231; 296) "\"\"\"\nThe quick brown \\ \n\n\n  fox jumps over \\ \n    the lazy dog.\"\"\""
+  WHITESPACE@[296; 298)
+  ENTRY@[298; 415)
+    KEY@[298; 314)
+      BARE_KEY@[298; 314) "equivalent_three"
+    WHITESPACE@[314; 315)
+    EQ@[315; 316) "="
+    WHITESPACE@[316; 317)
+    VALUE@[317; 415)
+      MULTILINE_BASIC_STRING@[317; 415) "\"\"\"\\ \n       The quick brown \\ \n       fox jumps over \\\n       the lazy dog.\\          \n       \"\"\""
+  WHITESPACE@[415; 416)

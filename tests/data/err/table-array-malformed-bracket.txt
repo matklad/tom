@@ -1,0 +1,27 @@
+DOC@[0; 31)
+  ARRAY_TABLE@[0; 31)
+    TABLE_HEADER@[0; 14)
+      L_BRACK@[0; 1) "["
+      L_BRACK@[1; 2) "["
+      KEY@[2; 8)
+        BARE_KEY@[2; 8) "albums"
+      R_BRACK@[8; 9) "]"
+      WHITESPACE@[9; 10)
+      ERROR@[10; 14)
+        BARE_KEY@[10; 14) "name"
+    WHITESPACE@[14; 15)
+    ERROR@[15; 16)
+      EQ@[15; 16) "="
+    WHITESPACE@[16; 17)
+    ENTRY@[17; 31)
+      KEY@[17; 30)
+        BASIC_STRING@[17; 30) "\"Born to Run\""
+      WHITESPACE@[30; 31)
+      VALUE@[31; 31)
+
+error@[10; 14) "name": expected `]`
+error@[15; 16) "=": expected a key
+error@[30; 31) "\n": expected `=`
+error@[30; 31) "\n": expected a value
+error@[0; 10) "[[albums]\n": table header must fit into a single line
+error@[17; 31) "\"Born to Run\"\n": newlines are forbidden in entries

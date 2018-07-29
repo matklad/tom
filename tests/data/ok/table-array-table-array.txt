@@ -1,0 +1,78 @@
+DOC@[0; 108)
+  ARRAY_TABLE@[0; 5)
+    TABLE_HEADER@[0; 5)
+      L_BRACK@[0; 1) "["
+      L_BRACK@[1; 2) "["
+      KEY@[2; 3)
+        BARE_KEY@[2; 3) "a"
+      R_BRACK@[3; 4) "]"
+      R_BRACK@[4; 5) "]"
+  WHITESPACE@[5; 10)
+  ARRAY_TABLE@[10; 17)
+    TABLE_HEADER@[10; 17)
+      L_BRACK@[10; 11) "["
+      L_BRACK@[11; 12) "["
+      KEY@[12; 13)
+        BARE_KEY@[12; 13) "a"
+      DOT@[13; 14) "."
+      KEY@[14; 15)
+        BARE_KEY@[14; 15) "b"
+      R_BRACK@[15; 16) "]"
+      R_BRACK@[16; 17) "]"
+  WHITESPACE@[17; 26)
+  TABLE@[26; 56)
+    TABLE_HEADER@[26; 33)
+      L_BRACK@[26; 27) "["
+      KEY@[27; 28)
+        BARE_KEY@[27; 28) "a"
+      DOT@[28; 29) "."
+      KEY@[29; 30)
+        BARE_KEY@[29; 30) "b"
+      DOT@[30; 31) "."
+      KEY@[31; 32)
+        BARE_KEY@[31; 32) "c"
+      R_BRACK@[32; 33) "]"
+    WHITESPACE@[33; 46)
+    ENTRY@[46; 56)
+      KEY@[46; 47)
+        BARE_KEY@[46; 47) "d"
+      WHITESPACE@[47; 48)
+      EQ@[48; 49) "="
+      WHITESPACE@[49; 50)
+      VALUE@[50; 56)
+        BASIC_STRING@[50; 56) "\"val0\""
+  WHITESPACE@[56; 61)
+  ARRAY_TABLE@[61; 68)
+    TABLE_HEADER@[61; 68)
+      L_BRACK@[61; 62) "["
+      L_BRACK@[62; 63) "["
+      KEY@[63; 64)
+        BARE_KEY@[63; 64) "a"
+      DOT@[64; 65) "."
+      KEY@[65; 66)
+        BARE_KEY@[65; 66) "b"
+      R_BRACK@[66; 67) "]"
+      R_BRACK@[67; 68) "]"
+  WHITESPACE@[68; 77)
+  TABLE@[77; 107)
+    TABLE_HEADER@[77; 84)
+      L_BRACK@[77; 78) "["
+      KEY@[78; 79)
+        BARE_KEY@[78; 79) "a"
+      DOT@[79; 80) "."
+      KEY@[80; 81)
+        BARE_KEY@[80; 81) "b"
+      DOT@[81; 82) "."
+      KEY@[82; 83)
+        BARE_KEY@[82; 83) "c"
+      R_BRACK@[83; 84) "]"
+    WHITESPACE@[84; 97)
+    ENTRY@[97; 107)
+      KEY@[97; 98)
+        BARE_KEY@[97; 98) "d"
+      WHITESPACE@[98; 99)
+      EQ@[99; 100) "="
+      WHITESPACE@[100; 101)
+      VALUE@[101; 107)
+        BASIC_STRING@[101; 107) "\"val1\""
+  WHITESPACE@[107; 108)

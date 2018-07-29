@@ -1,0 +1,21 @@
+DOC@[0; 113)
+  ENTRY@[0; 36)
+    KEY@[0; 5)
+      BARE_KEY@[0; 5) "pound"
+    WHITESPACE@[5; 6)
+    EQ@[6; 7) "="
+    WHITESPACE@[7; 8)
+    VALUE@[8; 36)
+      BASIC_STRING@[8; 36) "\"We see no # comments here.\""
+  WHITESPACE@[36; 37)
+  ENTRY@[37; 112)
+    KEY@[37; 49)
+      BARE_KEY@[37; 49) "poundcomment"
+    WHITESPACE@[49; 50)
+    EQ@[50; 51) "="
+    WHITESPACE@[51; 52)
+    VALUE@[52; 89)
+      BASIC_STRING@[52; 89) "\"But there are # some comments here.\""
+    WHITESPACE@[89; 90)
+    COMMENT@[90; 112) "# Did I # mess you up?"
+  WHITESPACE@[112; 113)

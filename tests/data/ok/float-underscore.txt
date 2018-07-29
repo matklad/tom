@@ -1,0 +1,28 @@
+DOC@[0; 56)
+  ENTRY@[0; 19)
+    KEY@[0; 6)
+      BARE_KEY@[0; 6) "before"
+    WHITESPACE@[6; 7)
+    EQ@[7; 8) "="
+    WHITESPACE@[8; 9)
+    VALUE@[9; 19)
+      NUMBER@[9; 19) "3_141.5927"
+  WHITESPACE@[19; 20)
+  ENTRY@[20; 38)
+    KEY@[20; 25)
+      BARE_KEY@[20; 25) "after"
+    WHITESPACE@[25; 26)
+    EQ@[26; 27) "="
+    WHITESPACE@[27; 28)
+    VALUE@[28; 38)
+      NUMBER@[28; 38) "3141.592_7"
+  WHITESPACE@[38; 39)
+  ENTRY@[39; 55)
+    KEY@[39; 47)
+      BARE_KEY@[39; 47) "exponent"
+    WHITESPACE@[47; 48)
+    EQ@[48; 49) "="
+    WHITESPACE@[49; 50)
+    VALUE@[50; 55)
+      NUMBER@[50; 55) "3e1_4"
+  WHITESPACE@[55; 56)

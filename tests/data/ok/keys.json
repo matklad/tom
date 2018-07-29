@@ -1,0 +1,42 @@
+{
+  "": {
+    "type": "string",
+    "value": "value"
+  },
+  "1234": {
+    "type": "string",
+    "value": "value"
+  },
+  "127.0.0.1": {
+    "type": "string",
+    "value": "value"
+  },
+  "bare-key": {
+    "type": "string",
+    "value": "value"
+  },
+  "bare_key": {
+    "type": "string",
+    "value": "value"
+  },
+  "character encoding": {
+    "type": "string",
+    "value": "value"
+  },
+  "key": {
+    "type": "string",
+    "value": "value"
+  },
+  "key2": {
+    "type": "string",
+    "value": "value"
+  },
+  "quoted \"value\"": {
+    "type": "string",
+    "value": "value"
+  },
+  "ʎǝʞ": {
+    "type": "string",
+    "value": "value"
+  }
+}

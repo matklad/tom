@@ -1,0 +1,8 @@
+{
+  "error": {
+    "this": {
+      "type": "string",
+      "value": "should not be here"
+    }
+  }
+}

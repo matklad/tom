@@ -1,0 +1,10 @@
+DOC@[0; 12)
+  ENTRY@[0; 11)
+    KEY@[0; 6)
+      BARE_KEY@[0; 6) "answer"
+    WHITESPACE@[6; 7)
+    EQ@[7; 8) "="
+    WHITESPACE@[8; 9)
+    VALUE@[9; 11)
+      BASIC_STRING@[9; 11) "\"\""
+  WHITESPACE@[11; 12)

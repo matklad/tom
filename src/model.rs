@@ -28,6 +28,11 @@ impl Map {
             .map(|(k, (_, v))| (k.as_str(), v))
     }
 
+    pub fn into_iter(self) -> impl Iterator<Item=(String, Item)> {
+        self.map.into_iter()
+            .map(|(k, (_, v))| (k, v))
+    }
+
     pub fn is_empty(&self) -> bool {
         self.map.is_empty()
     }

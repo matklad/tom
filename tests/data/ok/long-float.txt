@@ -1,0 +1,19 @@
+DOC@[0; 58)
+  ENTRY@[0; 26)
+    KEY@[0; 6)
+      BARE_KEY@[0; 6) "longpi"
+    WHITESPACE@[6; 7)
+    EQ@[7; 8) "="
+    WHITESPACE@[8; 9)
+    VALUE@[9; 26)
+      NUMBER@[9; 26) "3.141592653589793"
+  WHITESPACE@[26; 27)
+  ENTRY@[27; 57)
+    KEY@[27; 36)
+      BARE_KEY@[27; 36) "neglongpi"
+    WHITESPACE@[36; 37)
+    EQ@[37; 38) "="
+    WHITESPACE@[38; 39)
+    VALUE@[39; 57)
+      NUMBER@[39; 57) "-3.141592653589793"
+  WHITESPACE@[57; 58)

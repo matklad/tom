@@ -1,0 +1,82 @@
+DOC@[0; 163)
+  ARRAY_TABLE@[0; 57)
+    TABLE_HEADER@[0; 10)
+      L_BRACK@[0; 1) "["
+      L_BRACK@[1; 2) "["
+      KEY@[2; 8)
+        BARE_KEY@[2; 8) "people"
+      R_BRACK@[8; 9) "]"
+      R_BRACK@[9; 10) "]"
+    WHITESPACE@[10; 11)
+    ENTRY@[11; 31)
+      KEY@[11; 21)
+        BARE_KEY@[11; 21) "first_name"
+      WHITESPACE@[21; 22)
+      EQ@[22; 23) "="
+      WHITESPACE@[23; 24)
+      VALUE@[24; 31)
+        BASIC_STRING@[24; 31) "\"Bruce\""
+    WHITESPACE@[31; 32)
+    ENTRY@[32; 57)
+      KEY@[32; 41)
+        BARE_KEY@[32; 41) "last_name"
+      WHITESPACE@[41; 42)
+      EQ@[42; 43) "="
+      WHITESPACE@[43; 44)
+      VALUE@[44; 57)
+        BASIC_STRING@[44; 57) "\"Springsteen\""
+  WHITESPACE@[57; 59)
+  ARRAY_TABLE@[59; 111)
+    TABLE_HEADER@[59; 69)
+      L_BRACK@[59; 60) "["
+      L_BRACK@[60; 61) "["
+      KEY@[61; 67)
+        BARE_KEY@[61; 67) "people"
+      R_BRACK@[67; 68) "]"
+      R_BRACK@[68; 69) "]"
+    WHITESPACE@[69; 70)
+    ENTRY@[70; 89)
+      KEY@[70; 80)
+        BARE_KEY@[70; 80) "first_name"
+      WHITESPACE@[80; 81)
+      EQ@[81; 82) "="
+      WHITESPACE@[82; 83)
+      VALUE@[83; 89)
+        BASIC_STRING@[83; 89) "\"Eric\""
+    WHITESPACE@[89; 90)
+    ENTRY@[90; 111)
+      KEY@[90; 99)
+        BARE_KEY@[90; 99) "last_name"
+      WHITESPACE@[99; 100)
+      EQ@[100; 101) "="
+      WHITESPACE@[101; 102)
+      VALUE@[102; 111)
+        BASIC_STRING@[102; 111) "\"Clapton\""
+  WHITESPACE@[111; 113)
+  ARRAY_TABLE@[113; 162)
+    TABLE_HEADER@[113; 123)
+      L_BRACK@[113; 114) "["
+      L_BRACK@[114; 115) "["
+      KEY@[115; 121)
+        BARE_KEY@[115; 121) "people"
+      R_BRACK@[121; 122) "]"
+      R_BRACK@[122; 123) "]"
+    WHITESPACE@[123; 124)
+    ENTRY@[124; 142)
+      KEY@[124; 134)
+        BARE_KEY@[124; 134) "first_name"
+      WHITESPACE@[134; 135)
+      EQ@[135; 136) "="
+      WHITESPACE@[136; 137)
+      VALUE@[137; 142)
+        BASIC_STRING@[137; 142) "\"Bob\""
+    WHITESPACE@[142; 143)
+    ENTRY@[143; 162)
+      KEY@[143; 152)
+        BARE_KEY@[143; 152) "last_name"
+      WHITESPACE@[152; 153)
+      EQ@[153; 154) "="
+      WHITESPACE@[154; 155)
+      VALUE@[155; 162)
+        BASIC_STRING@[155; 162) "\"Seger\""
+  WHITESPACE@[162; 163)

@@ -1,0 +1,16 @@
+{
+  "a": {},
+  "b": {
+    "foo": {
+      "type": "integer",
+      "value": 1
+    }
+  },
+  "c": {
+    "foo": {
+      "type": "integer",
+      "value": 1
+    }
+  },
+  "d": {}
+}

@@ -1,0 +1,64 @@
+DOC@[0; 373)
+  ENTRY@[0; 55)
+    KEY@[0; 9)
+      BARE_KEY@[0; 9) "backspace"
+    WHITESPACE@[9; 10)
+    EQ@[10; 11) "="
+    WHITESPACE@[11; 12)
+    VALUE@[12; 55)
+      LITERAL_STRING@[12; 55) "\'This string has a \\b backspace character.\'"
+  WHITESPACE@[55; 56)
+  ENTRY@[56; 99)
+    KEY@[56; 59)
+      BARE_KEY@[56; 59) "tab"
+    WHITESPACE@[59; 60)
+    EQ@[60; 61) "="
+    WHITESPACE@[61; 62)
+    VALUE@[62; 99)
+      LITERAL_STRING@[62; 99) "\'This string has a \\t tab character.\'"
+  WHITESPACE@[99; 100)
+  ENTRY@[100; 152)
+    KEY@[100; 107)
+      BARE_KEY@[100; 107) "newline"
+    WHITESPACE@[107; 108)
+    EQ@[108; 109) "="
+    WHITESPACE@[109; 110)
+    VALUE@[110; 152)
+      LITERAL_STRING@[110; 152) "\'This string has a \\n new line character.\'"
+  WHITESPACE@[152; 153)
+  ENTRY@[153; 207)
+    KEY@[153; 161)
+      BARE_KEY@[153; 161) "formfeed"
+    WHITESPACE@[161; 162)
+    EQ@[162; 163) "="
+    WHITESPACE@[163; 164)
+    VALUE@[164; 207)
+      LITERAL_STRING@[164; 207) "\'This string has a \\f form feed character.\'"
+  WHITESPACE@[207; 208)
+  ENTRY@[208; 268)
+    KEY@[208; 216)
+      BARE_KEY@[208; 216) "carriage"
+    WHITESPACE@[216; 217)
+    EQ@[217; 218) "="
+    WHITESPACE@[218; 219)
+    VALUE@[219; 268)
+      LITERAL_STRING@[219; 268) "\'This string has a \\r carriage return character.\'"
+  WHITESPACE@[268; 269)
+  ENTRY@[269; 316)
+    KEY@[269; 274)
+      BARE_KEY@[269; 274) "slash"
+    WHITESPACE@[274; 275)
+    EQ@[275; 276) "="
+    WHITESPACE@[276; 277)
+    VALUE@[277; 316)
+      LITERAL_STRING@[277; 316) "\'This string has a \\/ slash character.\'"
+  WHITESPACE@[316; 317)
+  ENTRY@[317; 372)
+    KEY@[317; 326)
+      BARE_KEY@[317; 326) "backslash"
+    WHITESPACE@[326; 327)
+    EQ@[327; 328) "="
+    WHITESPACE@[328; 329)
+    VALUE@[329; 372)
+      LITERAL_STRING@[329; 372) "\'This string has a \\\\ backslash character.\'"
+  WHITESPACE@[372; 373)

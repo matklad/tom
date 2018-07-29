@@ -1,0 +1,13 @@
+{
+  "agencies": {
+    "type": "array",
+    "value": [
+      {
+        "owner": {
+          "type": "string",
+          "value": "S Cjelli"
+        }
+      }
+    ]
+  }
+}

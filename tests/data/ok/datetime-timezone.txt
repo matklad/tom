@@ -1,0 +1,10 @@
+DOC@[0; 40)
+  ENTRY@[0; 39)
+    KEY@[0; 11)
+      BARE_KEY@[0; 11) "bestdayever"
+    WHITESPACE@[11; 12)
+    EQ@[12; 13) "="
+    WHITESPACE@[13; 14)
+    VALUE@[14; 39)
+      DATE_TIME@[14; 39) "2017-06-06T12:34:56-05:00"
+  WHITESPACE@[39; 40)

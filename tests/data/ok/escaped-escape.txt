@@ -1,0 +1,10 @@
+DOC@[0; 17)
+  ENTRY@[0; 16)
+    KEY@[0; 6)
+      BARE_KEY@[0; 6) "answer"
+    WHITESPACE@[6; 7)
+    EQ@[7; 8) "="
+    WHITESPACE@[8; 9)
+    VALUE@[9; 16)
+      BASIC_STRING@[9; 16) "\"\\\\x64\""
+  WHITESPACE@[16; 17)

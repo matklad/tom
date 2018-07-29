@@ -1,0 +1,10 @@
+DOC@[0; 42)
+  ENTRY@[0; 41)
+    KEY@[0; 37)
+      BASIC_STRING@[0; 37) "\"~!@$^&*()_+-`1234567890[]|/?><.,;:\'\""
+    WHITESPACE@[37; 38)
+    EQ@[38; 39) "="
+    WHITESPACE@[39; 40)
+    VALUE@[40; 41)
+      NUMBER@[40; 41) "1"
+  WHITESPACE@[41; 42)

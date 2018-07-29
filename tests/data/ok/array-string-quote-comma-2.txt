@@ -1,0 +1,16 @@
+DOC@[0; 20)
+  ENTRY@[0; 19)
+    KEY@[0; 5)
+      BARE_KEY@[0; 5) "title"
+    WHITESPACE@[5; 6)
+    EQ@[6; 7) "="
+    WHITESPACE@[7; 8)
+    VALUE@[8; 19)
+      ARRAY@[8; 19)
+        L_BRACK@[8; 9) "["
+        WHITESPACE@[9; 10)
+        VALUE@[10; 17)
+          BASIC_STRING@[10; 17) "\" \\\", \""
+        COMMA@[17; 18) ","
+        R_BRACK@[18; 19) "]"
+  WHITESPACE@[19; 20)

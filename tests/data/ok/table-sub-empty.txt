@@ -1,0 +1,18 @@
+DOC@[0; 10)
+  TABLE@[0; 3)
+    TABLE_HEADER@[0; 3)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 2)
+        BARE_KEY@[1; 2) "a"
+      R_BRACK@[2; 3) "]"
+  WHITESPACE@[3; 4)
+  TABLE@[4; 9)
+    TABLE_HEADER@[4; 9)
+      L_BRACK@[4; 5) "["
+      KEY@[5; 6)
+        BARE_KEY@[5; 6) "a"
+      DOT@[6; 7) "."
+      KEY@[7; 8)
+        BARE_KEY@[7; 8) "b"
+      R_BRACK@[8; 9) "]"
+  WHITESPACE@[9; 10)

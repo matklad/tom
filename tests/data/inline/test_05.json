@@ -1,0 +1,10 @@
+{
+  "a": {
+    "type": "integer",
+    "value": "92"
+  },
+  "b": {
+    "type": "float",
+    "value": "8.5"
+  }
+}

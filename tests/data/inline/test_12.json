@@ -1,0 +1,37 @@
+{
+  "a": {
+    "type": "array",
+    "value": []
+  },
+  "b": {
+    "type": "array",
+    "value": [
+      {
+        "type": "integer",
+        "value": "1"
+      }
+    ]
+  },
+  "c": {
+    "type": "array",
+    "value": [
+      {
+        "type": "integer",
+        "value": "1"
+      }
+    ]
+  },
+  "d": {
+    "type": "array",
+    "value": []
+  },
+  "e": {
+    "type": "array",
+    "value": [
+      {
+        "type": "integer",
+        "value": "1"
+      }
+    ]
+  }
+}

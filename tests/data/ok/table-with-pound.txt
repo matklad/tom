@@ -1,0 +1,17 @@
+DOC@[0; 26)
+  TABLE@[0; 25)
+    TABLE_HEADER@[0; 13)
+      L_BRACK@[0; 1) "["
+      KEY@[1; 12)
+        BASIC_STRING@[1; 12) "\"key#group\""
+      R_BRACK@[12; 13) "]"
+    WHITESPACE@[13; 14)
+    ENTRY@[14; 25)
+      KEY@[14; 20)
+        BARE_KEY@[14; 20) "answer"
+      WHITESPACE@[20; 21)
+      EQ@[21; 22) "="
+      WHITESPACE@[22; 23)
+      VALUE@[23; 25)
+        NUMBER@[23; 25) "42"
+  WHITESPACE@[25; 26)

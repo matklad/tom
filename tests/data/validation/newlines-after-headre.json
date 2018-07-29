@@ -1,0 +1,19 @@
+{
+  "array-table": {
+    "type": "array",
+    "value": [
+      {
+        "bar": {
+          "type": "integer",
+          "value": "92"
+        }
+      }
+    ]
+  },
+  "table": {
+    "bar": {
+      "type": "integer",
+      "value": "92"
+    }
+  }
+}
