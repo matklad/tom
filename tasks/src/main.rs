@@ -7,6 +7,7 @@ use clap::{App, Arg, SubCommand};
 use itertools::Itertools;
 use std::fs;
 use std::process::exit;
+use std::collections::HashMap;
 
 type Result<T> = ::std::result::Result<T, failure::Error>;
 
@@ -75,14 +76,29 @@ fn get_tests(verify: bool) -> Result<()> {
     let src_dir = "./src/parser/grammar.rs";
     let grammar = fs::read_to_string(src_dir)?;
     let tests = collect_tests(&grammar);
-    for (i, test) in tests.into_iter().enumerate() {
-        let path = format!("./tests/data/inline/test_{:02}.toml", i);
-        update(&path, &test, verify)?;
+    for (name, test) in &tests {
+        let path = format!("./tests/data/inline/test-{}.toml", name);
+        update(&path, test, verify)?;
+    }
+    // Check for strays.
+    for file in fs::read_dir("tests/data/inline").unwrap() {
+        let path = file.unwrap().path();
+        let stem = path.file_stem().unwrap();
+        let name = stem.to_str().unwrap();
+        if name.starts_with("test-") {
+            let name = name[5..].to_string();
+            if !tests.contains_key(&name) {
+                panic!(
+                    "File `{}` exists, but no inline test found.",
+                    path.display()
+                );
+            }
+        }
     }
     return Ok(());
 
-    fn collect_tests(s: &str) -> Vec<String> {
-        let mut res = vec![];
+    fn collect_tests(s: &str) -> HashMap<String, String> {
+        let mut res = HashMap::new();
         let comment_blocks = s
             .lines()
             .map(str::trim_left)
@@ -97,13 +113,15 @@ fn get_tests(verify: bool) -> Result<()> {
                 &line[prefix.len()..]
             });
 
-            match block.next() {
-                Some(line) if line.starts_with("test") => (),
+            let name = match block.next() {
+                Some(line) if line.starts_with("test-") => line[5..].to_string(),
                 _ => continue 'outer,
-            }
+            };
             let text: String = itertools::join(block.chain(::std::iter::once("")), "\n");
             assert!(!text.trim().is_empty() && text.ends_with("\n"));
-            res.push(text)
+            if let Some(name) = res.insert(name, text) {
+                panic!("Test name `{}` already used.", name);
+            }
         }
         res
     }

@@ -93,7 +93,7 @@ impl<'s, 't, 'a> Parser<'s, 't, 'a> {
         self.doc();
     }
 
-    // test
+    // test-doc
     // key = "value"
     //
     // [table]
@@ -120,7 +120,7 @@ impl<'s, 't, 'a> Parser<'s, 't, 'a> {
         self.finish(m);
     }
 
-    // test
+    // test-entries
     // foo = 92
     // 'bar' = 14
     fn entries(&mut self) {
@@ -141,7 +141,7 @@ impl<'s, 't, 'a> Parser<'s, 't, 'a> {
         self.finish(m);
     }
 
-    // test
+    // test-keys
     // foo = 1
     // foo.bar = 2
     fn keys(&mut self) {
@@ -162,12 +162,12 @@ impl<'s, 't, 'a> Parser<'s, 't, 'a> {
     fn key(&mut self) {
         let m = self.start(KEY);
         match self.current() {
-            // test
+            // test-key
             // foo = 92
             // 92 = 92
             // 1914-08-26 = 92
             BARE_KEY | BARE_KEY_OR_NUMBER | BARE_KEY_OR_DATE => self.bump_remap(BARE_KEY),
-            // test
+            // test-key-str
             // "foo" = 92
             // 'bar' = 92
             BASIC_STRING | LITERAL_STRING => self.bump(),
@@ -179,38 +179,38 @@ impl<'s, 't, 'a> Parser<'s, 't, 'a> {
     fn val(&mut self) {
         let m = self.start(VALUE);
         match self.current() {
-            // test
+            // test-val-num
             // a = 92
             // b = 8.5
             BARE_KEY_OR_NUMBER | NUMBER => self.bump_remap(NUMBER),
-            // test
+            // test-val-bool
             // a = true
             // b = false
             BOOL => self.bump(),
             // a = 1914-08-26
             // b = 1979-05-27T07:32:00-08:00
             BARE_KEY_OR_DATE | DATE_TIME => self.bump_remap(DATE_TIME),
-            // test
+            // test-val-str
             // a = "hello\nworld"
             // b = """
             //   hello
             //   world
             // """
             BASIC_STRING | MULTILINE_BASIC_STRING => self.bump(),
-            // test
+            // test-val-lit
             // a = 'hello\nworld'
             // b = '''
             //   hello
             //   world
             // '''
             LITERAL_STRING | MULTILINE_LITERAL_STRING => self.bump(),
-            // test
+            // test-val-array
             // a = [1, "foo"]
             L_BRACK => self.array(),
-            // test
+            // test-val-inline
             // a = { "foo" = 1, bar = 2, }
             L_CURLY => self.dict(),
-            // test
+            // test-val-unexpected
             // foo = _
             _ => self.bump_error("expected a value"),
         }
@@ -223,7 +223,7 @@ impl<'s, 't, 'a> Parser<'s, 't, 'a> {
         self.bump();
         while self.current() != EOF && self.current() != R_BRACK {
             self.val();
-            // test
+            // test-array
             // a = []
             // b = [1]
             // c = [1,]
@@ -243,10 +243,10 @@ impl<'s, 't, 'a> Parser<'s, 't, 'a> {
         let m = self.start(DICT);
         self.bump();
         while self.current() != EOF && self.current() != R_CURLY {
-            // test
+            // test-inline-key
             // a = { dotted.key = 92 }
             self.entry();
-            // test
+            // test-inline
             // a = {}
             // b = {foo=1}
             // c = {foo=1,}
@@ -260,7 +260,7 @@ impl<'s, 't, 'a> Parser<'s, 't, 'a> {
         self.finish(m);
     }
 
-    // test
+    // test-table
     // [table]
     // a = 1
     // b = 2
@@ -272,7 +272,7 @@ impl<'s, 't, 'a> Parser<'s, 't, 'a> {
         self.finish(m)
     }
 
-    // test
+    // test-array-table
     // [[array-table]]
     // a = 1
     // b = 2
@@ -284,7 +284,7 @@ impl<'s, 't, 'a> Parser<'s, 't, 'a> {
         self.finish(m)
     }
 
-    // test
+    // test-table-header
     // [[table . 'header']]
     fn table_header(&mut self, array: bool) {
         assert_eq!(self.current(), L_BRACK);
