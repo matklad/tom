@@ -4,5 +4,5 @@ DOC@[0; 10)
       BARE_KEY@[0; 6) "answer"
     EQ@[6; 7) "="
     VALUE@[7; 9)
-      NUMBER@[7; 9) "42"
+      INTEGER@[7; 9) "42"
   WHITESPACE@[9; 10)

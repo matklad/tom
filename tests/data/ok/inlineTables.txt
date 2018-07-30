@@ -47,7 +47,7 @@ DOC@[0; 75)
           EQ@[62; 63) "="
           WHITESPACE@[63; 64)
           VALUE@[64; 65)
-            NUMBER@[64; 65) "1"
+            INTEGER@[64; 65) "1"
         COMMA@[65; 66) ","
         WHITESPACE@[66; 67)
         ENTRY@[67; 72)
@@ -57,7 +57,7 @@ DOC@[0; 75)
           EQ@[69; 70) "="
           WHITESPACE@[70; 71)
           VALUE@[71; 72)
-            NUMBER@[71; 72) "2"
+            INTEGER@[71; 72) "2"
         WHITESPACE@[72; 73)
         R_CURLY@[73; 74) "}"
   WHITESPACE@[74; 75)

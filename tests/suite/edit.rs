@@ -28,7 +28,7 @@ DOC@[0; 18)
       BASIC_STRING@[7; 14) "\"1.0.0\""
   WHITESPACE@[14; 15)
   VALUE@[15; 17)
-    NUMBER@[15; 17) "92"
+    INTEGER@[15; 17) "92"
   WHITESPACE@[17; 18)"#.trim(),
         toml.debug().trim(),
     );

@@ -27,7 +27,7 @@ fn bool_value() {
 #[ignore]
 fn int_value() {
     let doc = toml(r"foo = 92");
-    let lit: ast::Number = find(&doc);
+    let lit: ast::Integer = find(&doc);
     assert_eq!(lit.value(&doc), 92);
 }
 

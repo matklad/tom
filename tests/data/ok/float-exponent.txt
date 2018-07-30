@@ -1,0 +1,64 @@
+DOC@[0; 95)
+  ENTRY@[0; 11)
+    KEY@[0; 5)
+      BARE_KEY@[0; 5) "lower"
+    WHITESPACE@[5; 6)
+    EQ@[6; 7) "="
+    WHITESPACE@[7; 8)
+    VALUE@[8; 11)
+      FLOAT@[8; 11) "3e2"
+  WHITESPACE@[11; 12)
+  ENTRY@[12; 23)
+    KEY@[12; 17)
+      BARE_KEY@[12; 17) "upper"
+    WHITESPACE@[17; 18)
+    EQ@[18; 19) "="
+    WHITESPACE@[19; 20)
+    VALUE@[20; 23)
+      FLOAT@[20; 23) "3E2"
+  WHITESPACE@[23; 24)
+  ENTRY@[24; 34)
+    KEY@[24; 27)
+      BARE_KEY@[24; 27) "neg"
+    WHITESPACE@[27; 28)
+    EQ@[28; 29) "="
+    WHITESPACE@[29; 30)
+    VALUE@[30; 34)
+      FLOAT@[30; 34) "3e-2"
+  WHITESPACE@[34; 35)
+  ENTRY@[35; 45)
+    KEY@[35; 38)
+      BARE_KEY@[35; 38) "pos"
+    WHITESPACE@[38; 39)
+    EQ@[39; 40) "="
+    WHITESPACE@[40; 41)
+    VALUE@[41; 45)
+      FLOAT@[41; 45) "3E+2"
+  WHITESPACE@[45; 46)
+  ENTRY@[46; 56)
+    KEY@[46; 50)
+      BARE_KEY@[46; 50) "zero"
+    WHITESPACE@[50; 51)
+    EQ@[51; 52) "="
+    WHITESPACE@[52; 53)
+    VALUE@[53; 56)
+      FLOAT@[53; 56) "3e0"
+  WHITESPACE@[56; 57)
+  ENTRY@[57; 75)
+    KEY@[57; 67)
+      BARE_KEY@[57; 67) "pointlower"
+    WHITESPACE@[67; 68)
+    EQ@[68; 69) "="
+    WHITESPACE@[69; 70)
+    VALUE@[70; 75)
+      FLOAT@[70; 75) "3.1e2"
+  WHITESPACE@[75; 76)
+  ENTRY@[76; 94)
+    KEY@[76; 86)
+      BARE_KEY@[76; 86) "pointupper"
+    WHITESPACE@[86; 87)
+    EQ@[87; 88) "="
+    WHITESPACE@[88; 89)
+    VALUE@[89; 94)
+      FLOAT@[89; 94) "3.1E2"
+  WHITESPACE@[94; 95)

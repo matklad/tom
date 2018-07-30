@@ -42,7 +42,13 @@ impl ast::Bool {
     }
 }
 
-impl ast::Number {
+impl ast::Float {
+    pub fn value(self, doc: &TomlDoc) -> f64 {
+        self.text(doc).parse().unwrap()
+    }
+}
+
+impl ast::Integer {
     pub fn value(self, doc: &TomlDoc) -> i64 {
         self.text(doc).parse().unwrap()
     }
@@ -72,7 +78,14 @@ impl ast::Value {
 
     pub fn as_i64(self, doc: &TomlDoc) -> Option<i64> {
         match self.kind(doc) {
-            ast::ValueKind::Number(l) => Some(l.value(doc)),
+            ast::ValueKind::Integer(l) => Some(l.value(doc)),
+            _ => None,
+        }
+    }
+
+    pub fn as_f64(self, doc: &TomlDoc) -> Option<f64> {
+        match self.kind(doc) {
+            ast::ValueKind::Float(l) => Some(l.value(doc)),
             _ => None,
         }
     }

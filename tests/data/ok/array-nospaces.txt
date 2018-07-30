@@ -9,12 +9,12 @@ DOC@[0; 15)
       ARRAY@[7; 14)
         L_BRACK@[7; 8) "["
         VALUE@[8; 9)
-          NUMBER@[8; 9) "1"
+          INTEGER@[8; 9) "1"
         COMMA@[9; 10) ","
         VALUE@[10; 11)
-          NUMBER@[10; 11) "2"
+          INTEGER@[10; 11) "2"
         COMMA@[11; 12) ","
         VALUE@[12; 13)
-          NUMBER@[12; 13) "3"
+          INTEGER@[12; 13) "3"
         R_BRACK@[13; 14) "]"
   WHITESPACE@[14; 15)

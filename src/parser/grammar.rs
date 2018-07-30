@@ -179,10 +179,12 @@ impl<'s, 't, 'a> Parser<'s, 't, 'a> {
     fn val(&mut self) {
         let m = self.start(VALUE);
         match self.current() {
-            // test-val-num
+            // test-val-int
             // a = 92
+            BARE_KEY_OR_NUMBER | INTEGER => self.bump_remap(INTEGER),
+            // test-val-float
             // b = 8.5
-            BARE_KEY_OR_NUMBER | NUMBER => self.bump_remap(NUMBER),
+            FLOAT => self.bump_remap(FLOAT),
             // test-val-bool
             // a = true
             // b = false

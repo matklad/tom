@@ -29,7 +29,7 @@ DOC@[0; 218)
       EQ@[45; 46) "="
       WHITESPACE@[46; 47)
       VALUE@[47; 50)
-        NUMBER@[47; 50) "123"
+        INTEGER@[47; 50) "123"
   WHITESPACE@[50; 52)
   TABLE@[52; 96)
     TABLE_HEADER@[52; 61)
@@ -54,7 +54,7 @@ DOC@[0; 218)
       EQ@[91; 92) "="
       WHITESPACE@[92; 93)
       VALUE@[93; 96)
-        NUMBER@[93; 96) "456"
+        INTEGER@[93; 96) "456"
   WHITESPACE@[96; 98)
   TABLE@[98; 128)
     TABLE_HEADER@[98; 115)
@@ -174,7 +174,7 @@ DOC@[0; 218)
       EQ@[203; 204) "="
       WHITESPACE@[204; 205)
       VALUE@[205; 206)
-        NUMBER@[205; 206) "1"
+        INTEGER@[205; 206) "1"
   WHITESPACE@[206; 208)
   TABLE@[208; 217)
     TABLE_HEADER@[208; 211)
@@ -190,5 +190,5 @@ DOC@[0; 218)
       EQ@[214; 215) "="
       WHITESPACE@[215; 216)
       VALUE@[216; 217)
-        NUMBER@[216; 217) "2"
+        INTEGER@[216; 217) "2"
   WHITESPACE@[217; 218)

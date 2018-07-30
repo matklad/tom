@@ -51,7 +51,8 @@ fn dir_tests(paths: &[&str], expect_errors: ExpectErrors) {
         }
         let expected = read_text(&cst_path);
         if expected != cst {
-            print_difference(&expected, &cst, &cst_path)
+            print_difference(&expected, &cst, &cst_path);
+            panic!("Comparison failed");
         }
 
         // Check model against .json file.

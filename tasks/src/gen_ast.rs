@@ -24,7 +24,7 @@ fn descr() -> Vec<AstNode> {
         n("TableHeader").methods(&["keys"]),
         n("Entry").methods(&["keys", "value"]),
         n("Key").kinds(&["StringLit", "BareKey"]),
-        n("Value").kinds(&["Array", "Dict", "Number", "Bool", "DateTime", "StringLit"]),
+        n("Value").kinds(&["Array", "Dict", "Float", "Integer", "Bool", "DateTime", "StringLit"]),
         n("StringLit")
             .symbols(&[
                 "BASIC_STRING",
@@ -36,7 +36,8 @@ fn descr() -> Vec<AstNode> {
         n("BareKey").text(),
         n("Array").methods(&["values"]),
         n("Dict").method("entries", "Entry"),
-        n("Number").text(),
+        n("Float").text(),
+        n("Integer").text(),
         n("Bool").text(),
         n("DateTime").text(),
     ]

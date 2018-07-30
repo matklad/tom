@@ -20,7 +20,8 @@ pub(crate) const SYMBOLS: &[SymbolInfo] = &[
     SymbolInfo("R_BRACK"),
     SymbolInfo("L_CURLY"),
     SymbolInfo("R_CURLY"),
-    SymbolInfo("NUMBER"),
+    SymbolInfo("FLOAT"),
+    SymbolInfo("INTEGER"),
     SymbolInfo("BOOL"),
     SymbolInfo("BARE_KEY"),
     SymbolInfo("BASIC_STRING"),
@@ -52,14 +53,15 @@ pub const L_BRACK: Symbol                            = Symbol(unsafe { NonZeroU8
 pub const R_BRACK: Symbol                            = Symbol(unsafe { NonZeroU8::new_unchecked(16 + 1) });
 pub const L_CURLY: Symbol                            = Symbol(unsafe { NonZeroU8::new_unchecked(17 + 1) });
 pub const R_CURLY: Symbol                            = Symbol(unsafe { NonZeroU8::new_unchecked(18 + 1) });
-pub const NUMBER: Symbol                             = Symbol(unsafe { NonZeroU8::new_unchecked(19 + 1) });
-pub const BOOL: Symbol                               = Symbol(unsafe { NonZeroU8::new_unchecked(20 + 1) });
-pub const BARE_KEY: Symbol                           = Symbol(unsafe { NonZeroU8::new_unchecked(21 + 1) });
-pub const BASIC_STRING: Symbol                       = Symbol(unsafe { NonZeroU8::new_unchecked(22 + 1) });
-pub const MULTILINE_BASIC_STRING: Symbol             = Symbol(unsafe { NonZeroU8::new_unchecked(23 + 1) });
-pub const LITERAL_STRING: Symbol                     = Symbol(unsafe { NonZeroU8::new_unchecked(24 + 1) });
-pub const MULTILINE_LITERAL_STRING: Symbol           = Symbol(unsafe { NonZeroU8::new_unchecked(25 + 1) });
-pub const DATE_TIME: Symbol                          = Symbol(unsafe { NonZeroU8::new_unchecked(26 + 1) });
-pub const BARE_KEY_OR_NUMBER: Symbol                 = Symbol(unsafe { NonZeroU8::new_unchecked(27 + 1) });
-pub const BARE_KEY_OR_DATE: Symbol                   = Symbol(unsafe { NonZeroU8::new_unchecked(28 + 1) });
-pub const EOF: Symbol                                = Symbol(unsafe { NonZeroU8::new_unchecked(29 + 1) });
+pub const FLOAT: Symbol                              = Symbol(unsafe { NonZeroU8::new_unchecked(19 + 1) });
+pub const INTEGER: Symbol                            = Symbol(unsafe { NonZeroU8::new_unchecked(20 + 1) });
+pub const BOOL: Symbol                               = Symbol(unsafe { NonZeroU8::new_unchecked(21 + 1) });
+pub const BARE_KEY: Symbol                           = Symbol(unsafe { NonZeroU8::new_unchecked(22 + 1) });
+pub const BASIC_STRING: Symbol                       = Symbol(unsafe { NonZeroU8::new_unchecked(23 + 1) });
+pub const MULTILINE_BASIC_STRING: Symbol             = Symbol(unsafe { NonZeroU8::new_unchecked(24 + 1) });
+pub const LITERAL_STRING: Symbol                     = Symbol(unsafe { NonZeroU8::new_unchecked(25 + 1) });
+pub const MULTILINE_LITERAL_STRING: Symbol           = Symbol(unsafe { NonZeroU8::new_unchecked(26 + 1) });
+pub const DATE_TIME: Symbol                          = Symbol(unsafe { NonZeroU8::new_unchecked(27 + 1) });
+pub const BARE_KEY_OR_NUMBER: Symbol                 = Symbol(unsafe { NonZeroU8::new_unchecked(28 + 1) });
+pub const BARE_KEY_OR_DATE: Symbol                   = Symbol(unsafe { NonZeroU8::new_unchecked(29 + 1) });
+pub const EOF: Symbol                                = Symbol(unsafe { NonZeroU8::new_unchecked(30 + 1) });

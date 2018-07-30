@@ -36,5 +36,5 @@ DOC@[0; 41)
       EQ@[35; 36) "="
       WHITESPACE@[36; 37)
       VALUE@[37; 39)
-        NUMBER@[37; 39) "42"
+        INTEGER@[37; 39) "42"
   WHITESPACE@[39; 41)

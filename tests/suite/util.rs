@@ -24,7 +24,6 @@ pub fn print_difference(expected: &str, actual: &str, path: &Path) {
     let changeset = Changeset::new(actual, expected, "\n");
     print!("{}", changeset);
     println!("file: {}\n", path.display());
-    // panic!("Comparison failed")
 }
 
 pub fn assert_eq_text(expected: &str, actual: &str) {
