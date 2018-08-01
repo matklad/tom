@@ -1,11 +1,16 @@
+use drop_bomb::DebugDropBomb;
 use {parser::Parser, symbol::*, Symbol};
 
-struct Mark(Symbol);
+struct Mark {
+    symbol: Symbol,
+    bomb: DebugDropBomb,
+}
 
-impl Drop for Mark {
-    fn drop(&mut self) {
-        if !::std::thread::panicking() {
-            panic!("Mark dropped")
+impl Mark {
+    fn new(symbol: Symbol) -> Mark {
+        Mark {
+            symbol,
+            bomb: DebugDropBomb::new("Mark dropped")
         }
     }
 }
@@ -13,12 +18,12 @@ impl Drop for Mark {
 impl<'t, 's, 'a> Parser<'t, 's, 'a> {
     fn start(&mut self, s: Symbol) -> Mark {
         self.sink.start(s);
-        Mark(s)
+        Mark::new(s)
     }
 
-    fn finish(&mut self, m: Mark) {
-        self.sink.finish(m.0);
-        ::std::mem::forget(m)
+    fn finish(&mut self, mut m: Mark) {
+        m.bomb.defuse();
+        self.sink.finish(m.symbol);
     }
 
     fn error(&mut self, msg: &str) {
