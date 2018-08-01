@@ -5,6 +5,7 @@ extern crate text_unit;
 extern crate lazy_static;
 #[macro_use]
 extern crate uncover;
+extern crate drop_bomb;
 
 define_uncover_macros!(enable_if(cfg!(debug_assertions)));
 
