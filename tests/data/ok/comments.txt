@@ -28,7 +28,7 @@ DOC@[0; 161)
       EQ@[82; 83) "="
       WHITESPACE@[83; 84)
       VALUE@[84; 86)
-        NUMBER@[84; 86) "92"
+        INTEGER@[84; 86) "92"
     WHITESPACE@[86; 87)
     ENTRY@[87; 122)
       KEY@[87; 90)
@@ -37,7 +37,7 @@ DOC@[0; 161)
       EQ@[91; 92) "="
       WHITESPACE@[92; 93)
       VALUE@[93; 95)
-        NUMBER@[93; 95) "62"
+        INTEGER@[93; 95) "62"
       WHITESPACE@[95; 96)
       COMMENT@[96; 122) "# inline key-value comment"
     WHITESPACE@[122; 123)

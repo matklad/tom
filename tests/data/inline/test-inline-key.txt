@@ -19,7 +19,7 @@ DOC@[0; 24)
           EQ@[17; 18) "="
           WHITESPACE@[18; 19)
           VALUE@[19; 21)
-            NUMBER@[19; 21) "92"
+            INTEGER@[19; 21) "92"
         WHITESPACE@[21; 22)
         R_CURLY@[22; 23) "}"
   WHITESPACE@[23; 24)

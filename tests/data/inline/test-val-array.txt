@@ -9,7 +9,7 @@ DOC@[0; 15)
       ARRAY@[4; 14)
         L_BRACK@[4; 5) "["
         VALUE@[5; 6)
-          NUMBER@[5; 6) "1"
+          INTEGER@[5; 6) "1"
         COMMA@[6; 7) ","
         WHITESPACE@[7; 8)
         VALUE@[8; 13)

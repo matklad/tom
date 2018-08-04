@@ -32,7 +32,8 @@ pub struct Value(CstNode);
 pub enum ValueKind {
     Array(Array),
     Dict(Dict),
-    Number(Number),
+    Float(Float),
+    Integer(Integer),
     Bool(Bool),
     DateTime(DateTime),
     StringLit(StringLit),
@@ -51,7 +52,10 @@ pub struct Array(CstNode);
 pub struct Dict(CstNode);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Number(CstNode);
+pub struct Float(CstNode);
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Integer(CstNode);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Bool(CstNode);
@@ -247,8 +251,11 @@ impl Value {
         if let Some(node) = Dict::cast(node, doc) {
             return ValueKind::Dict(node);
         }
-        if let Some(node) = Number::cast(node, doc) {
-            return ValueKind::Number(node);
+        if let Some(node) = Float::cast(node, doc) {
+            return ValueKind::Float(node);
+        }
+        if let Some(node) = Integer::cast(node, doc) {
+            return ValueKind::Integer(node);
         }
         if let Some(node) = Bool::cast(node, doc) {
             return ValueKind::Bool(node);
@@ -365,18 +372,44 @@ impl Dict {
     }
 }
 
-impl AstNode for Number {
+impl AstNode for Float {
     fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
 }
 
-impl From<Number> for CstNode {
-    fn from(ast: Number) -> CstNode { ast.cst() }
+impl From<Float> for CstNode {
+    fn from(ast: Float) -> CstNode { ast.cst() }
 }
 
-impl Number {
-    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Number> {
+impl Float {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Float> {
         match node.symbol(doc) {
-            NUMBER => Some(Number(node)),
+            FLOAT => Some(Float(node)),
+            _ => None,
+        }
+    }
+
+    pub fn cst(self) -> CstNode { self.0 }
+
+    pub fn text(self, doc: &TomlDoc) -> &str {
+        match self.cst().kind(doc) {
+            CstNodeKind::Leaf(text) => text,
+            CstNodeKind::Internal(_) => unreachable!(),
+        }
+    }
+}
+
+impl AstNode for Integer {
+    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
+}
+
+impl From<Integer> for CstNode {
+    fn from(ast: Integer) -> CstNode { ast.cst() }
+}
+
+impl Integer {
+    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Integer> {
+        match node.symbol(doc) {
+            INTEGER => Some(Integer(node)),
             _ => None,
         }
     }

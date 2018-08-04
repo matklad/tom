@@ -6,7 +6,7 @@ DOC@[0; 11)
     EQ@[4; 5) "="
     WHITESPACE@[5; 6)
     VALUE@[6; 7)
-      NUMBER@[6; 7) "1"
+      INTEGER@[6; 7) "1"
   ERROR@[7; 8)
     DOT@[7; 8) "."
   ENTRY@[8; 11)

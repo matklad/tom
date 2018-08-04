@@ -6,7 +6,7 @@ DOC@[0; 6)
     EQ@[2; 3) "="
     WHITESPACE@[3; 4)
     VALUE@[4; 5)
-      NUMBER@[4; 5) "1"
+      INTEGER@[4; 5) "1"
   WHITESPACE@[5; 6)
 
 error@[0; 4) "a\n= ": newlines are forbidden in entries

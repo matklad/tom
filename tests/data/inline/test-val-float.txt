@@ -1,0 +1,10 @@
+DOC@[0; 8)
+  ENTRY@[0; 7)
+    KEY@[0; 1)
+      BARE_KEY@[0; 1) "b"
+    WHITESPACE@[1; 2)
+    EQ@[2; 3) "="
+    WHITESPACE@[3; 4)
+    VALUE@[4; 7)
+      FLOAT@[4; 7) "8.5"
+  WHITESPACE@[7; 8)

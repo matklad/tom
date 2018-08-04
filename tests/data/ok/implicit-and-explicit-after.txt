@@ -19,7 +19,7 @@ DOC@[0; 37)
       EQ@[15; 16) "="
       WHITESPACE@[16; 17)
       VALUE@[17; 19)
-        NUMBER@[17; 19) "42"
+        INTEGER@[17; 19) "42"
   WHITESPACE@[19; 21)
   TABLE@[21; 36)
     TABLE_HEADER@[21; 24)
@@ -35,5 +35,5 @@ DOC@[0; 37)
       EQ@[32; 33) "="
       WHITESPACE@[33; 34)
       VALUE@[34; 36)
-        NUMBER@[34; 36) "43"
+        INTEGER@[34; 36) "43"
   WHITESPACE@[36; 37)

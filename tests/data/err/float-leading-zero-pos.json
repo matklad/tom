@@ -1,6 +1,6 @@
 {
   "leading-zero": {
-    "type": "float",
-    "value": "3.14"
+    "type": "integer",
+    "value": "0"
   }
 }

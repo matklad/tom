@@ -11,7 +11,7 @@ DOC@[0; 10)
       BARE_KEY@[4; 7) "foo"
     EQ@[7; 8) "="
     VALUE@[8; 9)
-      NUMBER@[8; 9) "1"
+      INTEGER@[8; 9) "1"
   WHITESPACE@[9; 10)
 
 error@[0; 1) ":": expected a key

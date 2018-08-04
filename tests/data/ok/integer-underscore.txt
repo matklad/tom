@@ -6,5 +6,5 @@ DOC@[0; 13)
     EQ@[5; 6) "="
     WHITESPACE@[6; 7)
     VALUE@[7; 12)
-      NUMBER@[7; 12) "1_000"
+      INTEGER@[7; 12) "1_000"
   WHITESPACE@[12; 13)

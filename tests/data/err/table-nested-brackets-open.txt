@@ -17,7 +17,7 @@ DOC@[0; 15)
       EQ@[10; 11) "="
       WHITESPACE@[11; 12)
       VALUE@[12; 14)
-        NUMBER@[12; 14) "42"
+        INTEGER@[12; 14) "42"
   WHITESPACE@[14; 15)
 
 error@[2; 3) "[": expected `.`

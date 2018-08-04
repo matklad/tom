@@ -208,7 +208,8 @@ fn from_value(doc: &TomlDoc, value: ast::Value) -> Item {
             fill(doc, d.cst(), &mut map);
             map
         }
-        ast::ValueKind::Number(n) => Item::Integer(n.value(doc)),
+        ast::ValueKind::Integer(n) => Item::Integer(n.value(doc)),
+        ast::ValueKind::Float(n) => Item::Float(n.value(doc)),
         ast::ValueKind::Bool(b) => Item::Bool(b.value(doc)),
         ast::ValueKind::DateTime(_) => Item::DateTime,
         ast::ValueKind::StringLit(s) => Item::String(s.value(doc).to_string()),

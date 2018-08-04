@@ -9,15 +9,15 @@ DOC@[0; 152)
       ARRAY@[7; 16)
         L_BRACK@[7; 8) "["
         VALUE@[8; 9)
-          NUMBER@[8; 9) "1"
+          INTEGER@[8; 9) "1"
         COMMA@[9; 10) ","
         WHITESPACE@[10; 11)
         VALUE@[11; 12)
-          NUMBER@[11; 12) "2"
+          INTEGER@[11; 12) "2"
         COMMA@[12; 13) ","
         WHITESPACE@[13; 14)
         VALUE@[14; 15)
-          NUMBER@[14; 15) "3"
+          INTEGER@[14; 15) "3"
         R_BRACK@[15; 16) "]"
   WHITESPACE@[16; 17)
   ENTRY@[17; 41)
@@ -30,15 +30,15 @@ DOC@[0; 152)
       ARRAY@[26; 41)
         L_BRACK@[26; 27) "["
         VALUE@[27; 30)
-          NUMBER@[27; 30) "1.1"
+          FLOAT@[27; 30) "1.1"
         COMMA@[30; 31) ","
         WHITESPACE@[31; 32)
         VALUE@[32; 35)
-          NUMBER@[32; 35) "2.1"
+          FLOAT@[32; 35) "2.1"
         COMMA@[35; 36) ","
         WHITESPACE@[36; 37)
         VALUE@[37; 40)
-          NUMBER@[37; 40) "3.1"
+          FLOAT@[37; 40) "3.1"
         R_BRACK@[40; 41) "]"
   WHITESPACE@[41; 42)
   ENTRY@[42; 67)

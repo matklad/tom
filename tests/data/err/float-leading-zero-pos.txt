@@ -6,9 +6,9 @@ DOC@[0; 22)
     EQ@[13; 14) "="
     WHITESPACE@[14; 15)
     VALUE@[15; 17)
-      NUMBER@[15; 17) "+0"
+      INTEGER@[15; 17) "+0"
   ERROR@[17; 21)
-    NUMBER@[17; 21) "3.14"
+    FLOAT@[17; 21) "3.14"
   WHITESPACE@[21; 22)
 
 error@[17; 21) "3.14": expected a key

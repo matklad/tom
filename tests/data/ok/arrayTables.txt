@@ -24,7 +24,7 @@ DOC@[0; 483)
       EQ@[33; 34) "="
       WHITESPACE@[34; 35)
       VALUE@[35; 44)
-        NUMBER@[35; 44) "738594937"
+        INTEGER@[35; 44) "738594937"
   WHITESPACE@[44; 46)
   ARRAY_TABLE@[46; 58)
     TABLE_HEADER@[46; 58)
@@ -60,7 +60,7 @@ DOC@[0; 483)
       EQ@[91; 92) "="
       WHITESPACE@[92; 93)
       VALUE@[93; 102)
-        NUMBER@[93; 102) "284758393"
+        INTEGER@[93; 102) "284758393"
     WHITESPACE@[102; 103)
     ENTRY@[103; 117)
       KEY@[103; 108)
@@ -219,7 +219,7 @@ DOC@[0; 483)
                 EQ@[389; 390) "="
                 WHITESPACE@[390; 391)
                 VALUE@[391; 392)
-                  NUMBER@[391; 392) "1"
+                  INTEGER@[391; 392) "1"
               COMMA@[392; 393) ","
               WHITESPACE@[393; 394)
               ENTRY@[394; 399)
@@ -229,7 +229,7 @@ DOC@[0; 483)
                 EQ@[396; 397) "="
                 WHITESPACE@[397; 398)
                 VALUE@[398; 399)
-                  NUMBER@[398; 399) "2"
+                  INTEGER@[398; 399) "2"
               COMMA@[399; 400) ","
               WHITESPACE@[400; 401)
               ENTRY@[401; 406)
@@ -239,7 +239,7 @@ DOC@[0; 483)
                 EQ@[403; 404) "="
                 WHITESPACE@[404; 405)
                 VALUE@[405; 406)
-                  NUMBER@[405; 406) "3"
+                  INTEGER@[405; 406) "3"
               WHITESPACE@[406; 407)
               R_CURLY@[407; 408) "}"
           COMMA@[408; 409) ","
@@ -255,7 +255,7 @@ DOC@[0; 483)
                 EQ@[425; 426) "="
                 WHITESPACE@[426; 427)
                 VALUE@[427; 428)
-                  NUMBER@[427; 428) "7"
+                  INTEGER@[427; 428) "7"
               COMMA@[428; 429) ","
               WHITESPACE@[429; 430)
               ENTRY@[430; 435)
@@ -265,7 +265,7 @@ DOC@[0; 483)
                 EQ@[432; 433) "="
                 WHITESPACE@[433; 434)
                 VALUE@[434; 435)
-                  NUMBER@[434; 435) "8"
+                  INTEGER@[434; 435) "8"
               COMMA@[435; 436) ","
               WHITESPACE@[436; 437)
               ENTRY@[437; 442)
@@ -275,7 +275,7 @@ DOC@[0; 483)
                 EQ@[439; 440) "="
                 WHITESPACE@[440; 441)
                 VALUE@[441; 442)
-                  NUMBER@[441; 442) "9"
+                  INTEGER@[441; 442) "9"
               WHITESPACE@[442; 443)
               R_CURLY@[443; 444) "}"
           COMMA@[444; 445) ","
@@ -291,7 +291,7 @@ DOC@[0; 483)
                 EQ@[461; 462) "="
                 WHITESPACE@[462; 463)
                 VALUE@[463; 464)
-                  NUMBER@[463; 464) "2"
+                  INTEGER@[463; 464) "2"
               COMMA@[464; 465) ","
               WHITESPACE@[465; 466)
               ENTRY@[466; 471)
@@ -301,7 +301,7 @@ DOC@[0; 483)
                 EQ@[468; 469) "="
                 WHITESPACE@[469; 470)
                 VALUE@[470; 471)
-                  NUMBER@[470; 471) "4"
+                  INTEGER@[470; 471) "4"
               COMMA@[471; 472) ","
               WHITESPACE@[472; 473)
               ENTRY@[473; 478)
@@ -311,7 +311,7 @@ DOC@[0; 483)
                 EQ@[475; 476) "="
                 WHITESPACE@[476; 477)
                 VALUE@[477; 478)
-                  NUMBER@[477; 478) "8"
+                  INTEGER@[477; 478) "8"
               WHITESPACE@[478; 479)
               R_CURLY@[479; 480) "}"
           WHITESPACE@[480; 481)

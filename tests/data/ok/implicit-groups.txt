@@ -19,5 +19,5 @@ DOC@[0; 20)
       EQ@[15; 16) "="
       WHITESPACE@[16; 17)
       VALUE@[17; 19)
-        NUMBER@[17; 19) "42"
+        INTEGER@[17; 19) "42"
   WHITESPACE@[19; 20)

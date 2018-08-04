@@ -13,7 +13,7 @@ DOC@[0; 20)
       EQ@[10; 11) "="
       WHITESPACE@[11; 12)
       VALUE@[12; 13)
-        NUMBER@[12; 13) "1"
+        INTEGER@[12; 13) "1"
     WHITESPACE@[13; 14)
     ENTRY@[14; 19)
       KEY@[14; 15)
@@ -22,5 +22,5 @@ DOC@[0; 20)
       EQ@[16; 17) "="
       WHITESPACE@[17; 18)
       VALUE@[18; 19)
-        NUMBER@[18; 19) "2"
+        INTEGER@[18; 19) "2"
   WHITESPACE@[19; 20)

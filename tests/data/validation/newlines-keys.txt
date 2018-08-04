@@ -30,7 +30,7 @@ DOC@[0; 45)
       EQ@[40; 41) "="
       WHITESPACE@[41; 42)
       VALUE@[42; 44)
-        NUMBER@[42; 44) "92"
+        INTEGER@[42; 44) "92"
   WHITESPACE@[44; 45)
 
 error@[0; 12) "[\n    table\n": table header must fit into a single line

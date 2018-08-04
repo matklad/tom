@@ -24,7 +24,7 @@ DOC@[0; 40)
             BARE_KEY@[12; 15) "foo"
           EQ@[15; 16) "="
           VALUE@[16; 17)
-            NUMBER@[16; 17) "1"
+            INTEGER@[16; 17) "1"
         R_CURLY@[17; 18) "}"
   WHITESPACE@[18; 19)
   ENTRY@[19; 31)
@@ -41,7 +41,7 @@ DOC@[0; 40)
             BARE_KEY@[24; 27) "foo"
           EQ@[27; 28) "="
           VALUE@[28; 29)
-            NUMBER@[28; 29) "1"
+            INTEGER@[28; 29) "1"
         COMMA@[29; 30) ","
         R_CURLY@[30; 31) "}"
   WHITESPACE@[31; 32)
