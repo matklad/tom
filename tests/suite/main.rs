@@ -6,10 +6,10 @@ extern crate lazy_static;
 extern crate serde_json;
 
 mod ast;
-mod dir;
+// mod dir;
 mod edit;
 mod factory;
-mod model;
+// mod model;
 mod util;
 
 use std::{

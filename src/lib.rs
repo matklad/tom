@@ -6,15 +6,17 @@ extern crate lazy_static;
 #[macro_use]
 extern crate uncover;
 extern crate drop_bomb;
+extern crate rowan;
 
 define_uncover_macros!(enable_if(cfg!(debug_assertions)));
 
 mod chunked_text;
 mod intern;
 mod tree;
+mod rtree;
 mod parser;
 mod cst;
-mod model;
+// mod model;
 mod visitor;
 mod walk;
 mod validator;
@@ -34,7 +36,7 @@ use walk::{walk, WalkEvent};
 pub use edit::{IntoValue, Position};
 pub use text_unit::{TextRange, TextUnit};
 pub use cst::{CstNode, CstNodeKind, CstChildren, CstChildrenIter, RevCstChildrenIter};
-pub use model::{Item, Map};
+// pub use model::{Item, Map};
 pub(crate) use chunked_text::ChunkedText;
 
 type Tree = tree::Tree<Symbol, (Symbol, InternId)>;
@@ -103,9 +105,9 @@ impl TomlDoc {
         ast::Doc::cast(self.cst(), self).unwrap()
     }
 
-    pub fn model(&self) -> Map {
-        model::from_doc(self)
-    }
+    // pub fn model(&self) -> Map {
+    //     model::from_doc(self)
+    // }
 
     pub fn errors(&self) -> Vec<SyntaxError> {
         self.errors.clone()
