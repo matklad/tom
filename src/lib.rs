@@ -14,7 +14,7 @@ define_uncover_macros!(enable_if(cfg!(debug_assertions)));
 // mod intern;
 // mod tree;
 mod rtree;
-// mod parser;
+mod parser;
 // mod cst;
 // mod model;
 // mod visitor;
