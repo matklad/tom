@@ -5,9 +5,7 @@ use std::{
 
 use rowan::{Types, SmolStr, TextRange};
 
-use ::{Symbol};
-// use self::syntax_text::SyntaxText;
-// use crate::{SmolStr, SyntaxKind, TextRange, TextUnit};
+use ::{Symbol, SyntaxError};
 
 
 pub use rowan::TreeRoot;
@@ -16,19 +14,13 @@ pub use rowan::TreeRoot;
 pub enum TomTypes {}
 impl Types for TomTypes {
     type Kind = Symbol;
-    type RootData = ();
+    type RootData = Vec<SyntaxError>;
 }
 
 pub type OwnedRoot = ::rowan::OwnedRoot<TomTypes>;
 pub type RefRoot<'a> = ::rowan::RefRoot<'a, TomTypes>;
 
 pub type GreenNode = ::rowan::GreenNode<TomTypes>;
-
-// #[derive(Debug, Clone, PartialEq, Eq, Hash, Ord, PartialOrd)]
-// pub struct SyntaxError {
-//     pub msg: String,
-//     pub offset: TextUnit,
-// }
 
 #[derive(Clone, Copy)]
 pub struct SyntaxNode<R: TreeRoot<TomTypes> = OwnedRoot>(::rowan::SyntaxNode<TomTypes, R>);
@@ -52,8 +44,8 @@ impl<R: TreeRoot<TomTypes>> Hash for SyntaxNode<R> {
 }
 
 impl SyntaxNode {
-    pub(crate) fn new(green: GreenNode) -> SyntaxNode {
-        SyntaxNode(::rowan::SyntaxNode::new(green, ()))
+    pub(crate) fn new(green: GreenNode, errors: Vec<SyntaxError>) -> SyntaxNode {
+        SyntaxNode(::rowan::SyntaxNode::new(green, errors))
     }
 }
 
