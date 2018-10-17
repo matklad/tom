@@ -1,9 +1,9 @@
-use serde_json;
+// use serde_json;
 use std::{
     fs::{self, read_dir},
     path::{Path, PathBuf},
 };
-use tom::{TomlDoc, Item};
+use tom::{TomlDoc};
 use util::{print_difference, test_data_dir};
 
 enum ExpectErrors {
@@ -54,46 +54,46 @@ fn dir_tests(paths: &[&str], expect_errors: ExpectErrors) {
             print_difference(&expected, &cst, &cst_path)
         }
 
-        // Check model against .json file.
-        // TODO: Remove this once the API is stable enough.
-        let actual_json = match ::std::panic::catch_unwind(|| to_json(Item::Map(doc.model()))) {
-            Ok(json) => json,
-            Err(e) => {
-                let msg = match e.downcast_ref::<&'static str>() {
-                    Some(s) => *s,
-                    None => match e.downcast_ref::<String>() {
-                        Some(s) => &s[..],
-                        None => "Box<Any>",
-                    },
-                };
-                println!(
-                    "Failed to convert to model to json for `{}`: {}",
-                    path.display(),
-                    msg
-                );
-                continue;
-            }
-        };
-        // let actual_json = to_json(Item::Map(doc.model()));
-        let actual_pretty = serde_json::to_string_pretty(&actual_json).unwrap();
-        let json_path = path.with_extension("json");
-        if !json_path.exists() {
-            // TODO: Remove this once model is more reliable.
-            println!("\nJSON not yet ready: {}", json_path.display());
-            continue;
-            // println!("\nfile: {}", json_path.display());
-            // println!("No .json file with expected result, creating...\n");
-            // let pretty_json = serde_json::to_string_pretty(&actual_json).unwrap();
-            // println!("{}\n{}", input_code, pretty_json);
-            // fs::write(&json_path, pretty_json).unwrap();
-            // panic!("No expected result");
-        }
-        let expected = read_text(&json_path);
-        let json: serde_json::Value = serde_json::from_str(&expected).expect("valid json");
-        let expected_pretty = serde_json::to_string_pretty(&json).unwrap();
-        if actual_json != json {
-            print_difference(&expected_pretty, &actual_pretty, &json_path);
-        }
+        // // Check model against .json file.
+        // // TODO: Remove this once the API is stable enough.
+        // let actual_json = match ::std::panic::catch_unwind(|| to_json(Item::Map(doc.model()))) {
+        //     Ok(json) => json,
+        //     Err(e) => {
+        //         let msg = match e.downcast_ref::<&'static str>() {
+        //             Some(s) => *s,
+        //             None => match e.downcast_ref::<String>() {
+        //                 Some(s) => &s[..],
+        //                 None => "Box<Any>",
+        //             },
+        //         };
+        //         println!(
+        //             "Failed to convert to model to json for `{}`: {}",
+        //             path.display(),
+        //             msg
+        //         );
+        //         continue;
+        //     }
+        // };
+        // // let actual_json = to_json(Item::Map(doc.model()));
+        // let actual_pretty = serde_json::to_string_pretty(&actual_json).unwrap();
+        // let json_path = path.with_extension("json");
+        // if !json_path.exists() {
+        //     // TODO: Remove this once model is more reliable.
+        //     println!("\nJSON not yet ready: {}", json_path.display());
+        //     continue;
+        //     // println!("\nfile: {}", json_path.display());
+        //     // println!("No .json file with expected result, creating...\n");
+        //     // let pretty_json = serde_json::to_string_pretty(&actual_json).unwrap();
+        //     // println!("{}\n{}", input_code, pretty_json);
+        //     // fs::write(&json_path, pretty_json).unwrap();
+        //     // panic!("No expected result");
+        // }
+        // let expected = read_text(&json_path);
+        // let json: serde_json::Value = serde_json::from_str(&expected).expect("valid json");
+        // let expected_pretty = serde_json::to_string_pretty(&json).unwrap();
+        // if actual_json != json {
+        //     print_difference(&expected_pretty, &actual_pretty, &json_path);
+        // }
         // TODO: Uncomment this if you want to test the `Display` impl
         // produces valid JSON.
         // if actual_pretty != expected_pretty {
@@ -102,48 +102,48 @@ fn dir_tests(paths: &[&str], expect_errors: ExpectErrors) {
     }
 }
 
-fn to_json(model: Item) -> serde_json::Value {
-    fn entry(ty: &str, value: serde_json::Value) -> serde_json::Value {
-        let mut map = serde_json::Map::new();
-        map.insert(
-            "type".to_string(),
-            serde_json::Value::String(ty.to_string()),
-        );
-        map.insert("value".to_string(), value);
-        serde_json::Value::Object(map)
-    }
+// fn to_json(model: Item) -> serde_json::Value {
+//     fn entry(ty: &str, value: serde_json::Value) -> serde_json::Value {
+//         let mut map = serde_json::Map::new();
+//         map.insert(
+//             "type".to_string(),
+//             serde_json::Value::String(ty.to_string()),
+//         );
+//         map.insert("value".to_string(), value);
+//         serde_json::Value::Object(map)
+//     }
 
-    match model {
-        Item::Map(map) => {
-            let mut json_map = serde_json::Map::new();
-            // TODO: add into_iter
-            for (k, v) in map.into_iter() {
-                json_map.insert(k.to_string(), to_json(v));
-            }
-            serde_json::Value::Object(json_map)
-        }
-        Item::Array(items) => {
-            let json_items = items.into_iter().map(to_json).collect();
-            entry("array", json_items)
-        }
-        Item::Integer(i) => entry("integer", serde_json::Value::String(i.to_string())),
-        Item::Float(f) => {
-            let s = format!("{:.15}", f);
-            let s = format!("{}", s.trim_right_matches('0'));
-            let f = if s.ends_with('.') {
-                format!("{}0", s)
-            } else {
-                s
-            };
-            entry("float", serde_json::Value::String(f))
-        }
-        Item::Bool(b) => entry("bool", serde_json::Value::String(format!("{}", b))),
-        Item::DateTime => {
-            unimplemented!();
-        }
-        Item::String(s) => entry("string", serde_json::Value::String(s)),
-    }
-}
+//     match model {
+//         Item::Map(map) => {
+//             let mut json_map = serde_json::Map::new();
+//             // TODO: add into_iter
+//             for (k, v) in map.into_iter() {
+//                 json_map.insert(k.to_string(), to_json(v));
+//             }
+//             serde_json::Value::Object(json_map)
+//         }
+//         Item::Array(items) => {
+//             let json_items = items.into_iter().map(to_json).collect();
+//             entry("array", json_items)
+//         }
+//         Item::Integer(i) => entry("integer", serde_json::Value::String(i.to_string())),
+//         Item::Float(f) => {
+//             let s = format!("{:.15}", f);
+//             let s = format!("{}", s.trim_right_matches('0'));
+//             let f = if s.ends_with('.') {
+//                 format!("{}0", s)
+//             } else {
+//                 s
+//             };
+//             entry("float", serde_json::Value::String(f))
+//         }
+//         Item::Bool(b) => entry("bool", serde_json::Value::String(format!("{}", b))),
+//         Item::DateTime => {
+//             unimplemented!();
+//         }
+//         Item::String(s) => entry("string", serde_json::Value::String(s)),
+//     }
+// }
 
 fn collect_tests(paths: &[&str]) -> Vec<PathBuf> {
     paths

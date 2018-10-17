@@ -27,42 +27,42 @@ pub fn print_difference(expected: &str, actual: &str, path: &Path) {
     // panic!("Comparison failed")
 }
 
-pub fn assert_eq_text(expected: &str, actual: &str) {
-    if expected == actual {
-        return;
-    }
-    if expected.trim() == actual.trim() {
-        eprintln!("whitespace difference!");
-        eprintln!("expected:\n{:?}\nactual:\n{:?}\n", expected, actual);
-        panic!("Comparison failed");
-    }
-    let changeset = Changeset::new(actual, expected, "\n");
-    if expected.lines().count() < 20 {
-        let line = "--------------------------";
-        eprintln!(
-            "
-Expected:
-{line}
-{expected}
-{line}
-Actual:
-{line}
-{actual}
-{line}
-Diff:
-{diff}
-",
-            line = line,
-            expected = expected,
-            actual = actual,
-            diff = changeset
-        );
-        panic!("Comparison failed")
-    } else {
-        print!("{}", changeset);
-        panic!("Comparison failed")
-    }
-}
+// pub fn assert_eq_text(expected: &str, actual: &str) {
+//     if expected == actual {
+//         return;
+//     }
+//     if expected.trim() == actual.trim() {
+//         eprintln!("whitespace difference!");
+//         eprintln!("expected:\n{:?}\nactual:\n{:?}\n", expected, actual);
+//         panic!("Comparison failed");
+//     }
+//     let changeset = Changeset::new(actual, expected, "\n");
+//     if expected.lines().count() < 20 {
+//         let line = "--------------------------";
+//         eprintln!(
+//             "
+// Expected:
+// {line}
+// {expected}
+// {line}
+// Actual:
+// {line}
+// {actual}
+// {line}
+// Diff:
+// {diff}
+// ",
+//             line = line,
+//             expected = expected,
+//             actual = actual,
+//             diff = changeset
+//         );
+//         panic!("Comparison failed")
+//     } else {
+//         print!("{}", changeset);
+//         panic!("Comparison failed")
+//     }
+// }
 
 fn project_dir() -> PathBuf {
     let dir = env!("CARGO_MANIFEST_DIR");

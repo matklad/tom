@@ -1,5 +1,5 @@
 use {
-    TomlDoc, SyntaxNodeRef, AstNode, AstChildren,
+    SyntaxNodeRef, AstNode, AstChildren,
     symbol::*,
 };
 

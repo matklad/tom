@@ -1,16 +1,16 @@
-// extern crate difference;
+extern crate difference;
 // #[macro_use]
-// extern crate tom;
+extern crate tom;
 // #[macro_use]
 // extern crate lazy_static;
 // extern crate serde_json;
 
 // mod ast;
-// mod dir;
+mod dir;
 // mod edit;
 // mod factory;
 // mod model;
-// mod util;
+mod util;
 
 // use std::{
 //     panic,

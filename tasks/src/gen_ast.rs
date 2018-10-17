@@ -148,7 +148,7 @@ pub fn gen_ast() -> String {
         }};
     }
     ln!("use {{");
-    ln!("TomlDoc, SyntaxNodeRef, AstNode, AstChildren,");
+    ln!("SyntaxNodeRef, AstNode, AstChildren,");
     ln!("symbol::*,");
     ln!("}};");
     ln!();

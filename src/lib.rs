@@ -13,7 +13,6 @@ define_uncover_macros!(enable_if(cfg!(debug_assertions)));
 mod chunked_text;
 mod rtree;
 mod parser;
-// mod cst;
 // mod model;
 // mod visitor;
 mod validator;
@@ -27,12 +26,9 @@ use std::{
     marker::PhantomData,
 };
 
-// use intern::{Intern, InternId};
-// use walk::{walk, WalkEvent};
 
 // pub use edit::{IntoValue, Position};
 pub use rowan::{SmolStr, TextRange, TextUnit, WalkEvent};
-// pub use cst::{CstNode, CstNodeKind, CstChildren, CstChildrenIter, RevCstChildrenIter};
 // pub use model::{Item, Map};
 pub use rtree::{SyntaxNode, SyntaxNodeRef, RefRoot, OwnedRoot, SyntaxNodeChildren};
 pub(crate) use rtree::{GreenBuilder};
@@ -102,85 +98,43 @@ impl TomlDoc {
             .collect()
     }
 
-    // pub fn debug(&self) -> String {
-    //     let mut store;
-    //     let data = if self.edit_in_progress {
-    //         store = Vec::new();
-    //         self.recalculate_ranges(&mut store);
-    //         &store
-    //     } else {
-    //         &self.data
-    //     };
+    pub fn debug(&self) -> String {
+        let mut buff = String::new();
+        let mut level = 0;
+        for event in self.cst().preorder() {
+            match event {
+                WalkEvent::Enter(node) => {
+                    buff.push_str(&String::from("  ").repeat(level));
+                    let range = node.range();
+                    let symbol = node.symbol();
+                    buff.push_str(&format!("{}@{:?}", symbol.name(), range));
+                    if let Some(text) = node.leaf_text() {
+                        if !text.chars().all(char::is_whitespace) {
+                            buff.push_str(&format!(" {:?}", text));
+                        }
+                    }
+                    buff.push('\n');
+                    level += 1;
+                },
+                WalkEvent::Leave(_) => {
+                    level -= 1;
+                },
+            }
+        }
 
-    //     let mut buff = String::new();
-    //     if self.edit_in_progress {
-    //         buff += "*modified*\n";
-    //     }
-    //     let mut level = 0;
-    //     for event in walk(self, self.cst()) {
-    //         match event {
-    //             WalkEvent::Enter(node) => {
-    //                 buff.push_str(&String::from("  ").repeat(level));
-    //                 let range = data[node.0.to_idx()].range;
-    //                 let symbol = node.symbol(self);
-    //                 buff.push_str(&format!("{}@{:?}", symbol.name(), range));
-    //                 match node.kind(self) {
-    //                     CstNodeKind::Leaf(text) => {
-    //                         if !text.chars().all(char::is_whitespace) {
-    //                             buff.push_str(&format!(" {:?}", text));
-    //                         }
-    //                     }
-    //                     CstNodeKind::Internal(_) => (),
-    //                 }
-    //                 buff.push('\n');
-    //                 level += 1;
-    //             },
-    //             WalkEvent::Exit(_) => {
-    //                 level -= 1;
-    //             },
-    //         }
-    //     }
+        let errors = self.errors();
+        if !errors.is_empty() {
+            let text = self.cst().get_text();
+            buff += "\n";
+            for e in errors {
+                let text = &text[e.range];
+                buff += &format!("error@{:?} {:?}: {}\n", e.range(), text, e.message());
+            }
+        }
+        return buff;
 
-    //     if !self.errors.is_empty() && !self.edit_in_progress {
-    //         let text = self.cst().get_text(self);
-    //         buff += "\n";
-    //         for e in self.errors.iter() {
-    //             let text = &text[e.range];
-    //             buff += &format!("error@{:?} {:?}: {}\n", e.range(), text, e.message());
-    //         }
-    //     }
-    //     return buff;
+    }
 
-    // }
-
-    // fn recalculate_ranges(&self, data: &mut Vec<NodeData>) {
-    //     let node_data = NodeData {
-    //         range: TextRange::offset_len(0.into(), 0.into()),
-    //     };
-    //     data.resize(self.tree.len(), node_data);
-    //     let mut edge: TextUnit = 0.into();
-    //     for event in walk(self, self.cst()) {
-    //         match event {
-    //             WalkEvent::Enter(node) => {
-    //                 data[node].range = TextRange::offset_len(
-    //                     edge,
-    //                     0.into(),
-    //                 );
-    //                 match node.kind(self) {
-    //                     CstNodeKind::Leaf(text) => edge += TextUnit::of_str(text),
-    //                     CstNodeKind::Internal(_) => (),
-    //                 }
-    //             },
-    //             WalkEvent::Exit(node) => {
-    //                 let start = data[node].range.start();
-    //                 data[node].range = TextRange::from_to(
-    //                     start,
-    //                     edge,
-    //                 )
-    //             },
-    //         }
-    //     }
-    // }
 }
 
 pub trait AstNode<'a>: Clone + Copy + 'a {
