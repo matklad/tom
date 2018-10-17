@@ -1,5 +1,5 @@
 use {
-    TomlDoc, SyntaxNodeRef, AstNode,
+    TomlDoc, SyntaxNodeRef, AstNode, AstChildren,
     symbol::*,
 };
 
@@ -79,6 +79,15 @@ impl<'a> Doc<'a> {
 
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
+    pub fn tables(self) -> AstChildren<'a, Table<'a>> {
+        AstChildren::new(self.syntax())
+    }
+    pub fn array_tables(self) -> AstChildren<'a, ArrayTable<'a>> {
+        AstChildren::new(self.syntax())
+    }
+    pub fn entries(self) -> AstChildren<'a, Entry<'a>> {
+        AstChildren::new(self.syntax())
+    }
 }
 
 impl<'a> AstNode<'a> for Table<'a> {
@@ -100,6 +109,12 @@ impl<'a> Table<'a> {
 
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
+    pub fn header(self) -> TableHeader<'a> {
+        AstChildren::new(self.syntax()).next().unwrap()
+    }
+    pub fn entries(self) -> AstChildren<'a, Entry<'a>> {
+        AstChildren::new(self.syntax())
+    }
 }
 
 impl<'a> AstNode<'a> for ArrayTable<'a> {
@@ -121,6 +136,12 @@ impl<'a> ArrayTable<'a> {
 
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
+    pub fn header(self) -> TableHeader<'a> {
+        AstChildren::new(self.syntax()).next().unwrap()
+    }
+    pub fn entries(self) -> AstChildren<'a, Entry<'a>> {
+        AstChildren::new(self.syntax())
+    }
 }
 
 impl<'a> AstNode<'a> for TableHeader<'a> {
@@ -142,6 +163,9 @@ impl<'a> TableHeader<'a> {
 
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
+    pub fn keys(self) -> AstChildren<'a, Key<'a>> {
+        AstChildren::new(self.syntax())
+    }
 }
 
 impl<'a> AstNode<'a> for Entry<'a> {
@@ -163,6 +187,12 @@ impl<'a> Entry<'a> {
 
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
+    pub fn keys(self) -> AstChildren<'a, Key<'a>> {
+        AstChildren::new(self.syntax())
+    }
+    pub fn value(self) -> Value<'a> {
+        AstChildren::new(self.syntax()).next().unwrap()
+    }
 }
 
 impl<'a> AstNode<'a> for Key<'a> {
@@ -184,6 +214,17 @@ impl<'a> Key<'a> {
 
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
+    pub fn kind(self) -> KeyKind<'a> {
+        let node = self.syntax().children().next().unwrap();
+        if let Some(node) = StringLit::cast(node) {
+            return KeyKind::StringLit(node);
+        }
+        if let Some(node) = BareKey::cast(node) {
+            return KeyKind::BareKey(node);
+        }
+        unreachable!()
+    }
+
 }
 
 impl<'a> AstNode<'a> for Value<'a> {
@@ -204,6 +245,29 @@ impl<'a> Value<'a> {
     }
 
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+
+    pub fn kind(self) -> ValueKind<'a> {
+        let node = self.syntax().children().next().unwrap();
+        if let Some(node) = Array::cast(node) {
+            return ValueKind::Array(node);
+        }
+        if let Some(node) = Dict::cast(node) {
+            return ValueKind::Dict(node);
+        }
+        if let Some(node) = Number::cast(node) {
+            return ValueKind::Number(node);
+        }
+        if let Some(node) = Bool::cast(node) {
+            return ValueKind::Bool(node);
+        }
+        if let Some(node) = DateTime::cast(node) {
+            return ValueKind::DateTime(node);
+        }
+        if let Some(node) = StringLit::cast(node) {
+            return ValueKind::StringLit(node);
+        }
+        unreachable!()
+    }
 
 }
 
@@ -229,6 +293,9 @@ impl<'a> StringLit<'a> {
 
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
+    pub fn text(self) -> &'a str {
+        self.syntax().leaf_text().unwrap().as_str()
+    }
 }
 
 impl<'a> AstNode<'a> for BareKey<'a> {
@@ -250,6 +317,9 @@ impl<'a> BareKey<'a> {
 
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
+    pub fn text(self) -> &'a str {
+        self.syntax().leaf_text().unwrap().as_str()
+    }
 }
 
 impl<'a> AstNode<'a> for Array<'a> {
@@ -271,6 +341,9 @@ impl<'a> Array<'a> {
 
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
+    pub fn values(self) -> AstChildren<'a, Value<'a>> {
+        AstChildren::new(self.syntax())
+    }
 }
 
 impl<'a> AstNode<'a> for Dict<'a> {
@@ -292,6 +365,9 @@ impl<'a> Dict<'a> {
 
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
+    pub fn entries(self) -> AstChildren<'a, Entry<'a>> {
+        AstChildren::new(self.syntax())
+    }
 }
 
 impl<'a> AstNode<'a> for Number<'a> {
@@ -313,6 +389,9 @@ impl<'a> Number<'a> {
 
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
+    pub fn text(self) -> &'a str {
+        self.syntax().leaf_text().unwrap().as_str()
+    }
 }
 
 impl<'a> AstNode<'a> for Bool<'a> {
@@ -334,6 +413,9 @@ impl<'a> Bool<'a> {
 
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
+    pub fn text(self) -> &'a str {
+        self.syntax().leaf_text().unwrap().as_str()
+    }
 }
 
 impl<'a> AstNode<'a> for DateTime<'a> {
@@ -355,4 +437,7 @@ impl<'a> DateTime<'a> {
 
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
+    pub fn text(self) -> &'a str {
+        self.syntax().leaf_text().unwrap().as_str()
+    }
 }

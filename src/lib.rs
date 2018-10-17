@@ -26,7 +26,8 @@ pub mod ast;
 pub mod symbol;
 
 use std::{
-    num::NonZeroU8
+    num::NonZeroU8,
+    marker::PhantomData,
 };
 
 // use intern::{Intern, InternId};
@@ -36,7 +37,7 @@ use std::{
 pub use rowan::{SmolStr, TextRange, TextUnit};
 // pub use cst::{CstNode, CstNodeKind, CstChildren, CstChildrenIter, RevCstChildrenIter};
 // pub use model::{Item, Map};
-pub use rtree::{SyntaxNode, SyntaxNodeRef};
+pub use rtree::{SyntaxNode, SyntaxNodeRef, RefRoot, OwnedRoot, SyntaxNodeChildren};
 pub(crate) use rtree::{GreenBuilder};
 // pub(crate) use chunked_text::ChunkedText;
 
@@ -185,29 +186,29 @@ pub trait AstNode<'a>: Clone + Copy + 'a {
     fn syntax(self) -> SyntaxNodeRef<'a>;
 }
 
-// pub struct AstChildren<'a, A: AstNode> {
-//     inner: CstChildrenIter<'a>,
-//     phantom: PhantomData<A>,
-// }
+pub struct AstChildren<'a, A> {
+    inner: SyntaxNodeChildren<RefRoot<'a>>,
+    phantom: PhantomData<A>,
+}
 
-// impl<'a, A: AstNode> AstChildren<'a, A> {
-//     fn new(node: CstNode, doc: &'a TomlDoc) -> Self {
-//         AstChildren {
-//             inner: node.children(doc).iter(),
-//             phantom: PhantomData,
-//         }
-//     }
-// }
+impl<'a, A: AstNode<'a>> AstChildren<'a, A> {
+    fn new(node: SyntaxNodeRef<'a>) -> Self {
+        AstChildren {
+            inner: node.children(),
+            phantom: PhantomData,
+        }
+    }
+}
 
-// impl<'a, A: AstNode> Iterator for AstChildren<'a, A> {
-//     type Item = A;
+impl<'a, A: AstNode<'a>> Iterator for AstChildren<'a, A> {
+    type Item = A;
 
-//     fn next(&mut self) -> Option<Self::Item> {
-//         while let Some(node) = self.inner.next() {
-//             if let Some(a) = A::cast(node, self.inner.doc) {
-//                 return Some(a);
-//             }
-//         }
-//         return None;
-//     }
-// }
+    fn next(&mut self) -> Option<Self::Item> {
+        while let Some(node) = self.inner.next() {
+            if let Some(a) = A::cast(node) {
+                return Some(a);
+            }
+        }
+        return None;
+    }
+}

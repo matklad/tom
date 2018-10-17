@@ -115,15 +115,15 @@ enum Arity {
 impl Method {
     fn ret_type(&self) -> String {
         match self.arity {
-            Arity::One => format!("{}", self.type_name),
-            Arity::Many => format!("AstChildren<{}>", self.type_name),
+            Arity::One => format!("{}<'a>", self.type_name),
+            Arity::Many => format!("AstChildren<'a, {}<'a>>", self.type_name),
         }
     }
 
     fn body(&self) -> &'static str {
         match self.arity {
-            Arity::One => "AstChildren::new(self.cst(), doc).next().unwrap()",
-            Arity::Many => "AstChildren::new(self.cst(), doc)",
+            Arity::One => "AstChildren::new(self.syntax()).next().unwrap()",
+            Arity::Many => "AstChildren::new(self.syntax())",
         }
     }
 }
@@ -148,7 +148,7 @@ pub fn gen_ast() -> String {
         }};
     }
     ln!("use {{");
-    ln!("TomlDoc, SyntaxNodeRef, AstNode,");
+    ln!("TomlDoc, SyntaxNodeRef, AstNode, AstChildren,");
     ln!("symbol::*,");
     ln!("}};");
     ln!();
@@ -211,37 +211,34 @@ pub fn gen_ast() -> String {
                 ln!();
             }
 
-            // if n.text {
-            //     ln!("pub fn text(self, doc: &TomlDoc) -> &str {{");
-            //     ln!("match self.cst().kind(doc) {{");
-            //     ln!("CstNodeKind::Leaf(text) => text,");
-            //     ln!("CstNodeKind::Internal(_) => unreachable!(),");
-            //     ln!("}}");
-            //     ln!("}}");
-            // }
+            if n.text {
+                ln!("pub fn text(self) -> &'a str {{");
+                ln!("self.syntax().leaf_text().unwrap().as_str()");
+                ln!("}}");
+            }
 
-            // if !n.kinds.is_empty() {
-            //     ln!("pub fn kind(self, doc: &TomlDoc) -> {}Kind {{", n.name);
-            //     ln!("let node = self.cst().children(doc).first().unwrap();");
-            //     for k in n.kinds.iter() {
-            //         ln!("if let Some(node) = {}::cast(node, doc) {{", k);
-            //         ln!("return {}Kind::{}(node);", n.name, k);
-            //         ln!("}}");
-            //     }
-            //     ln!("unreachable!()");
-            //     ln!("}}");
-            //     ln!();
-            // }
+            if !n.kinds.is_empty() {
+                ln!("pub fn kind(self) -> {}Kind<'a> {{", n.name);
+                ln!("let node = self.syntax().children().next().unwrap();");
+                for k in n.kinds.iter() {
+                    ln!("if let Some(node) = {}::cast(node) {{", k);
+                    ln!("return {}Kind::{}(node);", n.name, k);
+                    ln!("}}");
+                }
+                ln!("unreachable!()");
+                ln!("}}");
+                ln!();
+            }
 
-            // for m in n.methods.iter() {
-            //     ln!(
-            //         "pub fn {}(self, doc: &TomlDoc) -> {} {{",
-            //         m.name,
-            //         m.ret_type()
-            //     );
-            //     ln!("{}", m.body());
-            //     ln!("}}");
-            // }
+            for m in n.methods.iter() {
+                ln!(
+                    "pub fn {}(self) -> {} {{",
+                    m.name,
+                    m.ret_type()
+                );
+                ln!("{}", m.body());
+                ln!("}}");
+            }
         }
         ln!("}}");
     }
