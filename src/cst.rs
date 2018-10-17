@@ -168,20 +168,8 @@ impl<'a> Iterator for RevCstChildrenIter<'a> {
     }
 }
 
-fn intersect(r1: TextRange, r2: TextRange) -> Option<TextRange> {
-    let start = cmp::max(r1.start(), r2.start());
-    let end = cmp::min(r1.end(), r2.end());
-    if end > start {
-        Some(TextRange::from_to(start, end))
-    } else {
-        None
-    }
-}
-
 fn intersects(r1: TextRange, r2: TextRange) -> bool {
     intersect(r1, r2).is_some()
 }
 
-fn relative_range(offset: TextUnit, range: TextRange) -> TextRange {
-    TextRange::from_to(range.start() - offset, range.end() - offset)
-}
+

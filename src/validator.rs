@@ -1,53 +1,48 @@
 use {
-    CstNode, SyntaxError, TextRange, TomlDoc, ChunkedText,
+    SyntaxNodeRef, SyntaxError, TextRange, TomlDoc, ChunkedText,
     ast,
-    visitor,
 };
 
 pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
-    visitor::process(
-        doc.cst(),
-        doc,
-        visitor::visitor(Vec::new())
-            .visit::<ast::Entry, _>(|errors, entry| {
-                if let Some(first_key) = entry.keys(doc).next() {
-                    check_new_line(
-                        doc,
-                        errors,
-                        first_key,
-                        entry.value(doc),
-                        Forbid,
-                        "newlines are forbidden in entries",
-                    );
-                }
-            })
-            .visit::<ast::Dict, _>(|errors, d| {
+    let mut errors = Vec::new();
+    for node in doc.cst().descendants() {
+        if let Some(entry) = ast::Entry::cast(node) {
+            if let Some(first_key) = entry.keys().next() {
                 check_new_line(
-                    doc,
-                    errors,
-                    d.cst().children(doc).first().unwrap(),
-                    d.cst().children(doc).last().unwrap(),
+                    &mut errors,
+                    first_key,
+                    entry.value(),
                     Forbid,
-                    "newlines are forbidden in inline tables",
-                )
-            })
-            .visit::<ast::Table, _>(|errors, table| check_table(doc, errors, table))
-            .visit::<ast::ArrayTable, _>(|errors, table| check_table(doc, errors, table)),
-    )
+                    "newlines are forbidden in entries",
+                );
+            }
+        } else if let Some(d) = ast::Dict::cast(node) {
+            check_new_line(
+                &mut errors,
+                d.syntax().children().next().unwrap(),
+                d.syntax().children().last().unwrap(),
+                Forbid,
+                "newlines are forbidden in inline tables",
+            );
+        } else if let Some(table) = ast::Table::cast(node) {
+            check_table(&mut errors, table)
+        } else if let Some(table) = ast::ArrayTable::cast(node) {
+            check_table(&mut errors, table)
+        }
+    }
+    errors
 }
 
-fn check_table<'f>(
-    doc: &TomlDoc,
+fn check_table<'a>(
     errors: &mut Vec<SyntaxError>,
-    table: impl ast::EntryOwner + ast::TableHeaderOwner,
+    table: impl ast::EntryOwner<'a> + ast::TableHeaderOwner<'a>,
 ) {
-    let header = table.header(doc);
+    let header = table.header();
     match (
-        header.cst().children(doc).first(),
-        header.cst().children(doc).last(),
+        header.syntax().children().next(),
+        header.syntax().children().last(),
     ) {
         (Some(first), Some(last)) => check_new_line(
-            doc,
             errors,
             first,
             last,
@@ -56,9 +51,8 @@ fn check_table<'f>(
         ),
         _ => (),
     }
-    if let Some(entry) = table.entries(doc).next() {
+    if let Some(entry) = table.entries().next() {
         check_new_line(
-            doc,
             errors,
             header,
             entry,
@@ -75,23 +69,22 @@ enum Requirement {
 }
 use self::Requirement::*;
 
-fn check_new_line<'f>(
-    doc: &TomlDoc,
+fn check_new_line<'a>(
     errors: &mut Vec<SyntaxError>,
-    left: impl Into<CstNode>,
-    right: impl Into<CstNode>,
+    left: impl Into<SyntaxNodeRef<'a>>,
+    right: impl Into<SyntaxNodeRef<'a>>,
     r: Requirement,
     msg: &str,
 ) {
     let left = left.into();
     let right = right.into();
-    assert_eq!(left.parent(doc), right.parent(doc));
-    let parent = left.parent(doc).unwrap();
+    assert_eq!(left.parent(), right.parent());
+    let parent = left.parent().unwrap();
     // TODO: more precise
-    let start = left.range(doc).start();
-    let end = right.range(doc).start();
+    let start = left.range().start();
+    let end = right.range().start();
     let range = TextRange::from_to(start, end);
-    let has_newline = parent.chunked_substring(doc, range).contains_char('\n');
+    let has_newline = parent.chunked_substring(range).contains_char('\n');
     if has_newline != (r == Require) {
         errors.push(SyntaxError {
             range,

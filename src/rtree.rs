@@ -3,9 +3,9 @@ use std::{
     hash::{Hash, Hasher},
 };
 
-use rowan::{Types, SmolStr, TextRange};
+use rowan::{Types, WalkEvent};
 
-use ::{Symbol, SyntaxError};
+use ::{SmolStr, TextRange, Symbol, SyntaxError, ChunkedText};
 
 
 pub use rowan::TreeRoot;
@@ -57,35 +57,57 @@ pub enum Direction {
 }
 
 impl<'a> SyntaxNodeRef<'a> {
-    pub fn leaf_text(self) -> Option<&'a SmolStr> {
-        self.0.leaf_text()
+    pub fn leaf_text(self) -> Option<&'a str> {
+        self.0.leaf_text().map(|it| it.as_str())
     }
-    // pub fn ancestors(self) -> impl Iterator<Item = SyntaxNodeRef<'a>> {
-    //     crate::algo::generate(Some(self), |&node| node.parent())
-    // }
+    pub fn ancestors(self) -> impl Iterator<Item = SyntaxNodeRef<'a>> {
+        generate(Some(self), |&node| node.parent())
+    }
+    pub fn descendants(self) -> impl Iterator<Item = SyntaxNodeRef<'a>> {
+        self.preorder().filter_map(|event| match event {
+            WalkEvent::Enter(node) => Some(node),
+            WalkEvent::Leave(_) => None,
+        })
+    }
+    pub fn siblings(self, direction: Direction) -> impl Iterator<Item = SyntaxNodeRef<'a>> {
+        generate(Some(self), move |&node| match direction {
+            Direction::Next => node.next_sibling(),
+            Direction::Prev => node.prev_sibling(),
+        })
+    }
+    pub fn preorder(self) -> impl Iterator<Item = WalkEvent<SyntaxNodeRef<'a>>> {
+        self.0.preorder().map(|event| match event {
+            WalkEvent::Enter(n) => WalkEvent::Enter(SyntaxNode(n)),
+            WalkEvent::Leave(n) => WalkEvent::Leave(SyntaxNode(n)),
+        })
+    }
+    pub fn get_text(self) -> String {
+        self.chunked_text().into_string()
+    }
 
-    // pub fn descendants(self) -> impl Iterator<Item = SyntaxNodeRef<'a>> {
-    //     crate::algo::walk::walk(self).filter_map(|event| match event {
-    //         crate::algo::walk::WalkEvent::Enter(node) => Some(node),
-    //         crate::algo::walk::WalkEvent::Exit(_) => None,
-    //     })
-    // }
+    pub(crate) fn chunked_text(self) -> impl ChunkedText + 'a {
+        self.descendants().filter_map(|it| it.leaf_text())
+    }
 
-    // pub fn siblings(self, direction: Direction) -> impl Iterator<Item = SyntaxNodeRef<'a>> {
-    //     crate::algo::generate(Some(self), move |&node| match direction {
-    //         Direction::Next => node.next_sibling(),
-    //         Direction::Prev => node.prev_sibling(),
-    //     })
-    // }
+    pub(crate) fn chunked_substring(
+        self,
+        range: TextRange,
+    ) -> impl ChunkedText + 'a {
+        self.descendants()
+            .filter_map(move |it| {
+                let subrange = intersect(it.range(), range)? - it.range().start();
+                Some(&it.leaf_text()?[subrange])
+            })
+    }
 }
 
 impl<R: TreeRoot<TomTypes>> SyntaxNode<R> {
-//     pub(crate) fn root_data(&self) -> &Vec<SyntaxError> {
-//         self.0.root_data()
-//     }
-    pub(crate) fn replace_with(&self, replacement: GreenNode) -> GreenNode {
-        self.0.replace_with(replacement)
+    pub(crate) fn root_data(&self) -> &Vec<SyntaxError> {
+        self.0.root_data()
     }
+    // pub(crate) fn replace_with(&self, replacement: GreenNode) -> GreenNode {
+    //     self.0.replace_with(replacement)
+    // }
     pub fn borrowed<'a>(&'a self) -> SyntaxNode<RefRoot<'a>> {
         SyntaxNode(self.0.borrowed())
     }
@@ -142,5 +164,25 @@ impl<R: TreeRoot<TomTypes>> Iterator for SyntaxNodeChildren<R> {
 
     fn next(&mut self) -> Option<SyntaxNode<R>> {
         self.0.next().map(SyntaxNode)
+    }
+}
+
+fn generate<'a, T: 'a, F: Fn(&T) -> Option<T> + 'a>(seed: Option<T>, step: F) -> impl Iterator<Item = T> + 'a {
+    ::std::iter::repeat(())
+        .scan(seed, move |state, ()| {
+            state.take().map(|curr| {
+                *state = step(&curr);
+                curr
+            })
+        })
+}
+
+fn intersect(r1: TextRange, r2: TextRange) -> Option<TextRange> {
+    let start = ::std::cmp::max(r1.start(), r2.start());
+    let end = ::std::cmp::min(r1.end(), r2.end());
+    if end > start {
+        Some(TextRange::from_to(start, end))
+    } else {
+        None
     }
 }

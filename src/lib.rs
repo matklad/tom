@@ -10,7 +10,7 @@ extern crate rowan;
 
 define_uncover_macros!(enable_if(cfg!(debug_assertions)));
 
-// mod chunked_text;
+mod chunked_text;
 // mod intern;
 // mod tree;
 mod rtree;
@@ -19,7 +19,7 @@ mod parser;
 // mod model;
 // mod visitor;
 // mod walk;
-// mod validator;
+mod validator;
 // mod edit;
 
 pub mod ast;
@@ -34,12 +34,12 @@ use std::{
 // use walk::{walk, WalkEvent};
 
 // pub use edit::{IntoValue, Position};
-pub use rowan::{SmolStr, TextRange, TextUnit};
+pub use rowan::{SmolStr, TextRange, TextUnit, WalkEvent};
 // pub use cst::{CstNode, CstNodeKind, CstChildren, CstChildrenIter, RevCstChildrenIter};
 // pub use model::{Item, Map};
 pub use rtree::{SyntaxNode, SyntaxNodeRef, RefRoot, OwnedRoot, SyntaxNodeChildren};
 pub(crate) use rtree::{GreenBuilder};
-// pub(crate) use chunked_text::ChunkedText;
+pub(crate) use chunked_text::ChunkedText;
 
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -69,15 +69,16 @@ impl SyntaxError {
 
 pub struct TomlDoc {
     root: rtree::SyntaxNode,
+    validation_errors: Vec<SyntaxError>,
 }
 
 impl TomlDoc {
     pub fn new(text: &str) -> TomlDoc {
         let root = parser::parse(text);
-        let doc = TomlDoc { root };
+        let mut doc = TomlDoc { root, validation_errors: Vec::new() };
 
-        // let validation_errors = validator::validate(&doc);
-        // doc.errors.extend(validation_errors);
+        let validation_errors = validator::validate(&doc);
+        doc.validation_errors = validation_errors;
 
         doc
     }
@@ -89,14 +90,20 @@ impl TomlDoc {
     pub fn ast(&self) -> ast::Doc {
         ast::Doc::cast(self.cst()).unwrap()
     }
+    // pub(crate) fn replace_with(&self, replacement: GreenNode) -> GreenNode {
+    //     self.0.replace_with(replacement)
+    // }
 
     // pub fn model(&self) -> Map {
     //     model::from_doc(self)
     // }
 
-    // pub fn errors(&self) -> Vec<SyntaxError> {
-    //     self.errors.clone()
-    // }
+    pub fn errors(&self) -> Vec<SyntaxError> {
+        self.root.root_data().iter()
+            .chain(self.validation_errors.iter())
+            .cloned()
+            .collect()
+    }
 
     // pub fn debug(&self) -> String {
     //     let mut store;

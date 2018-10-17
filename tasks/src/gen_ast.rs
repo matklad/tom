@@ -213,7 +213,7 @@ pub fn gen_ast() -> String {
 
             if n.text {
                 ln!("pub fn text(self) -> &'a str {{");
-                ln!("self.syntax().leaf_text().unwrap().as_str()");
+                ln!("self.syntax().leaf_text().unwrap()");
                 ln!("}}");
             }
 

@@ -294,7 +294,7 @@ impl<'a> StringLit<'a> {
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
     pub fn text(self) -> &'a str {
-        self.syntax().leaf_text().unwrap().as_str()
+        self.syntax().leaf_text().unwrap()
     }
 }
 
@@ -318,7 +318,7 @@ impl<'a> BareKey<'a> {
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
     pub fn text(self) -> &'a str {
-        self.syntax().leaf_text().unwrap().as_str()
+        self.syntax().leaf_text().unwrap()
     }
 }
 
@@ -390,7 +390,7 @@ impl<'a> Number<'a> {
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
     pub fn text(self) -> &'a str {
-        self.syntax().leaf_text().unwrap().as_str()
+        self.syntax().leaf_text().unwrap()
     }
 }
 
@@ -414,7 +414,7 @@ impl<'a> Bool<'a> {
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
     pub fn text(self) -> &'a str {
-        self.syntax().leaf_text().unwrap().as_str()
+        self.syntax().leaf_text().unwrap()
     }
 }
 
@@ -438,6 +438,6 @@ impl<'a> DateTime<'a> {
     pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
     pub fn text(self) -> &'a str {
-        self.syntax().leaf_text().unwrap().as_str()
+        self.syntax().leaf_text().unwrap()
     }
 }
