@@ -22,11 +22,10 @@ mod parser;
 // mod validator;
 // mod edit;
 
-// pub mod ast;
+pub mod ast;
 pub mod symbol;
 
 use std::{
-    marker::PhantomData,
     num::NonZeroU8
 };
 
@@ -86,9 +85,9 @@ impl TomlDoc {
         self.root.borrowed()
     }
 
-    // pub fn ast(&self) -> ast::Doc {
-    //     ast::Doc::cast(self.cst(), self).unwrap()
-    // }
+    pub fn ast(&self) -> ast::Doc {
+        ast::Doc::cast(self.cst()).unwrap()
+    }
 
     // pub fn model(&self) -> Map {
     //     model::from_doc(self)
@@ -179,12 +178,12 @@ impl TomlDoc {
     // }
 }
 
-// pub trait AstNode: Into<CstNode> + Clone + Copy {
-//     fn cst(self) -> CstNode {
-//         self.into()
-//     }
-//     fn cast(cst: CstNode, doc: &TomlDoc) -> Option<Self>;
-// }
+pub trait AstNode<'a>: Clone + Copy + 'a {
+    fn cast(syntax: SyntaxNodeRef<'a>) -> Option<Self>
+    where
+        Self: Sized;
+    fn syntax(self) -> SyntaxNodeRef<'a>;
+}
 
 // pub struct AstChildren<'a, A: AstNode> {
 //     inner: CstChildrenIter<'a>,

@@ -148,20 +148,20 @@ pub fn gen_ast() -> String {
         }};
     }
     ln!("use {{");
-    ln!("TomlDoc, CstNode, AstNode, AstChildren, CstNodeKind,");
+    ln!("TomlDoc, SyntaxNodeRef, AstNode,");
     ln!("symbol::*,");
     ln!("}};");
     ln!();
 
     for n in descr.iter() {
         ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
-        ln!("pub struct {}(CstNode);", n.name);
+        ln!("pub struct {}<'a>(SyntaxNodeRef<'a>);", n.name);
         ln!();
 
         if !n.kinds.is_empty() {
-            ln!("pub enum {}Kind {{", n.name);
+            ln!("pub enum {}Kind<'a> {{", n.name);
             for k in n.kinds.iter() {
-                ln!("{k}({k}),", k = k);
+                ln!("{k}({k}<'a>),", k = k);
             }
             ln!("}}");
             ln!();
@@ -170,28 +170,29 @@ pub fn gen_ast() -> String {
 
     for n in descr.iter() {
         ln!();
-        ln!("impl AstNode for {} {{", n.name);
+        ln!("impl<'a> AstNode<'a> for {}<'a> {{", n.name);
         {
-            ln!("fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized {{ Self::cast(node, doc) }}");
+            ln!("fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized {{ Self::cast(node) }}");
+            ln!("fn syntax(self) -> SyntaxNodeRef<'a> {{ self.0 }}");
         }
         ln!("}}");
         ln!();
 
-        ln!("impl From<{}> for CstNode {{", n.name);
+        ln!("impl<'a> From<{}<'a>> for SyntaxNodeRef<'a> {{", n.name);
         {
-            ln!("fn from(ast: {}) -> CstNode {{ ast.cst() }}", n.name);
+            ln!("fn from(ast: {}<'a>) -> SyntaxNodeRef<'a> {{ ast.syntax() }}", n.name);
         }
         ln!("}}");
         ln!();
 
-        ln!("impl {} {{", n.name);
+        ln!("impl<'a> {}<'a> {{", n.name);
         {
             ln!(
-                "pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<{}> {{",
+                "pub fn cast(node: SyntaxNodeRef<'a>) -> Option<{}> {{",
                 n.name
             );
             {
-                ln!("match node.symbol(doc) {{");
+                ln!("match node.symbol() {{");
                 let symbols = if n.symbols.is_empty() {
                     vec![n.name.to_shouty_snake_case()]
                 } else {
@@ -205,42 +206,42 @@ pub fn gen_ast() -> String {
             }
             ln!("}}");
             ln!();
-            ln!("pub fn cst(self) -> CstNode {{ self.0 }}");
+            ln!("pub fn syntax(self) -> SyntaxNodeRef<'a> {{ self.0 }}");
             if !n.kinds.is_empty() || !n.methods.is_empty() || n.text {
                 ln!();
             }
 
-            if n.text {
-                ln!("pub fn text(self, doc: &TomlDoc) -> &str {{");
-                ln!("match self.cst().kind(doc) {{");
-                ln!("CstNodeKind::Leaf(text) => text,");
-                ln!("CstNodeKind::Internal(_) => unreachable!(),");
-                ln!("}}");
-                ln!("}}");
-            }
+            // if n.text {
+            //     ln!("pub fn text(self, doc: &TomlDoc) -> &str {{");
+            //     ln!("match self.cst().kind(doc) {{");
+            //     ln!("CstNodeKind::Leaf(text) => text,");
+            //     ln!("CstNodeKind::Internal(_) => unreachable!(),");
+            //     ln!("}}");
+            //     ln!("}}");
+            // }
 
-            if !n.kinds.is_empty() {
-                ln!("pub fn kind(self, doc: &TomlDoc) -> {}Kind {{", n.name);
-                ln!("let node = self.cst().children(doc).first().unwrap();");
-                for k in n.kinds.iter() {
-                    ln!("if let Some(node) = {}::cast(node, doc) {{", k);
-                    ln!("return {}Kind::{}(node);", n.name, k);
-                    ln!("}}");
-                }
-                ln!("unreachable!()");
-                ln!("}}");
-                ln!();
-            }
+            // if !n.kinds.is_empty() {
+            //     ln!("pub fn kind(self, doc: &TomlDoc) -> {}Kind {{", n.name);
+            //     ln!("let node = self.cst().children(doc).first().unwrap();");
+            //     for k in n.kinds.iter() {
+            //         ln!("if let Some(node) = {}::cast(node, doc) {{", k);
+            //         ln!("return {}Kind::{}(node);", n.name, k);
+            //         ln!("}}");
+            //     }
+            //     ln!("unreachable!()");
+            //     ln!("}}");
+            //     ln!();
+            // }
 
-            for m in n.methods.iter() {
-                ln!(
-                    "pub fn {}(self, doc: &TomlDoc) -> {} {{",
-                    m.name,
-                    m.ret_type()
-                );
-                ln!("{}", m.body());
-                ln!("}}");
-            }
+            // for m in n.methods.iter() {
+            //     ln!(
+            //         "pub fn {}(self, doc: &TomlDoc) -> {} {{",
+            //         m.name,
+            //         m.ret_type()
+            //     );
+            //     ln!("{}", m.body());
+            //     ln!("}}");
+            // }
         }
         ln!("}}");
     }

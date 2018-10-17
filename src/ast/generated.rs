@@ -1,280 +1,224 @@
 use {
-    TomlDoc, CstNode, AstNode, AstChildren, CstNodeKind,
+    TomlDoc, SyntaxNodeRef, AstNode,
     symbol::*,
 };
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Doc(CstNode);
+pub struct Doc<'a>(SyntaxNodeRef<'a>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Table(CstNode);
+pub struct Table<'a>(SyntaxNodeRef<'a>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct ArrayTable(CstNode);
+pub struct ArrayTable<'a>(SyntaxNodeRef<'a>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct TableHeader(CstNode);
+pub struct TableHeader<'a>(SyntaxNodeRef<'a>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Entry(CstNode);
+pub struct Entry<'a>(SyntaxNodeRef<'a>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Key(CstNode);
+pub struct Key<'a>(SyntaxNodeRef<'a>);
 
-pub enum KeyKind {
-    StringLit(StringLit),
-    BareKey(BareKey),
+pub enum KeyKind<'a> {
+    StringLit(StringLit<'a>),
+    BareKey(BareKey<'a>),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Value(CstNode);
+pub struct Value<'a>(SyntaxNodeRef<'a>);
 
-pub enum ValueKind {
-    Array(Array),
-    Dict(Dict),
-    Number(Number),
-    Bool(Bool),
-    DateTime(DateTime),
-    StringLit(StringLit),
+pub enum ValueKind<'a> {
+    Array(Array<'a>),
+    Dict(Dict<'a>),
+    Number(Number<'a>),
+    Bool(Bool<'a>),
+    DateTime(DateTime<'a>),
+    StringLit(StringLit<'a>),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct StringLit(CstNode);
+pub struct StringLit<'a>(SyntaxNodeRef<'a>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct BareKey(CstNode);
+pub struct BareKey<'a>(SyntaxNodeRef<'a>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Array(CstNode);
+pub struct Array<'a>(SyntaxNodeRef<'a>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Dict(CstNode);
+pub struct Dict<'a>(SyntaxNodeRef<'a>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Number(CstNode);
+pub struct Number<'a>(SyntaxNodeRef<'a>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Bool(CstNode);
+pub struct Bool<'a>(SyntaxNodeRef<'a>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct DateTime(CstNode);
+pub struct DateTime<'a>(SyntaxNodeRef<'a>);
 
 
-impl AstNode for Doc {
-    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
+impl<'a> AstNode<'a> for Doc<'a> {
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 }
 
-impl From<Doc> for CstNode {
-    fn from(ast: Doc) -> CstNode { ast.cst() }
+impl<'a> From<Doc<'a>> for SyntaxNodeRef<'a> {
+    fn from(ast: Doc<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
 }
 
-impl Doc {
-    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Doc> {
-        match node.symbol(doc) {
+impl<'a> Doc<'a> {
+    pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Doc> {
+        match node.symbol() {
             DOC => Some(Doc(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
-    pub fn tables(self, doc: &TomlDoc) -> AstChildren<Table> {
-        AstChildren::new(self.cst(), doc)
-    }
-    pub fn array_tables(self, doc: &TomlDoc) -> AstChildren<ArrayTable> {
-        AstChildren::new(self.cst(), doc)
-    }
-    pub fn entries(self, doc: &TomlDoc) -> AstChildren<Entry> {
-        AstChildren::new(self.cst(), doc)
-    }
 }
 
-impl AstNode for Table {
-    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
+impl<'a> AstNode<'a> for Table<'a> {
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 }
 
-impl From<Table> for CstNode {
-    fn from(ast: Table) -> CstNode { ast.cst() }
+impl<'a> From<Table<'a>> for SyntaxNodeRef<'a> {
+    fn from(ast: Table<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
 }
 
-impl Table {
-    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Table> {
-        match node.symbol(doc) {
+impl<'a> Table<'a> {
+    pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Table> {
+        match node.symbol() {
             TABLE => Some(Table(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
-    pub fn header(self, doc: &TomlDoc) -> TableHeader {
-        AstChildren::new(self.cst(), doc).next().unwrap()
-    }
-    pub fn entries(self, doc: &TomlDoc) -> AstChildren<Entry> {
-        AstChildren::new(self.cst(), doc)
-    }
 }
 
-impl AstNode for ArrayTable {
-    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
+impl<'a> AstNode<'a> for ArrayTable<'a> {
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 }
 
-impl From<ArrayTable> for CstNode {
-    fn from(ast: ArrayTable) -> CstNode { ast.cst() }
+impl<'a> From<ArrayTable<'a>> for SyntaxNodeRef<'a> {
+    fn from(ast: ArrayTable<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
 }
 
-impl ArrayTable {
-    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<ArrayTable> {
-        match node.symbol(doc) {
+impl<'a> ArrayTable<'a> {
+    pub fn cast(node: SyntaxNodeRef<'a>) -> Option<ArrayTable> {
+        match node.symbol() {
             ARRAY_TABLE => Some(ArrayTable(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
-    pub fn header(self, doc: &TomlDoc) -> TableHeader {
-        AstChildren::new(self.cst(), doc).next().unwrap()
-    }
-    pub fn entries(self, doc: &TomlDoc) -> AstChildren<Entry> {
-        AstChildren::new(self.cst(), doc)
-    }
 }
 
-impl AstNode for TableHeader {
-    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
+impl<'a> AstNode<'a> for TableHeader<'a> {
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 }
 
-impl From<TableHeader> for CstNode {
-    fn from(ast: TableHeader) -> CstNode { ast.cst() }
+impl<'a> From<TableHeader<'a>> for SyntaxNodeRef<'a> {
+    fn from(ast: TableHeader<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
 }
 
-impl TableHeader {
-    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<TableHeader> {
-        match node.symbol(doc) {
+impl<'a> TableHeader<'a> {
+    pub fn cast(node: SyntaxNodeRef<'a>) -> Option<TableHeader> {
+        match node.symbol() {
             TABLE_HEADER => Some(TableHeader(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
-    pub fn keys(self, doc: &TomlDoc) -> AstChildren<Key> {
-        AstChildren::new(self.cst(), doc)
-    }
 }
 
-impl AstNode for Entry {
-    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
+impl<'a> AstNode<'a> for Entry<'a> {
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 }
 
-impl From<Entry> for CstNode {
-    fn from(ast: Entry) -> CstNode { ast.cst() }
+impl<'a> From<Entry<'a>> for SyntaxNodeRef<'a> {
+    fn from(ast: Entry<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
 }
 
-impl Entry {
-    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Entry> {
-        match node.symbol(doc) {
+impl<'a> Entry<'a> {
+    pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Entry> {
+        match node.symbol() {
             ENTRY => Some(Entry(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
-    pub fn keys(self, doc: &TomlDoc) -> AstChildren<Key> {
-        AstChildren::new(self.cst(), doc)
-    }
-    pub fn value(self, doc: &TomlDoc) -> Value {
-        AstChildren::new(self.cst(), doc).next().unwrap()
-    }
 }
 
-impl AstNode for Key {
-    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
+impl<'a> AstNode<'a> for Key<'a> {
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 }
 
-impl From<Key> for CstNode {
-    fn from(ast: Key) -> CstNode { ast.cst() }
+impl<'a> From<Key<'a>> for SyntaxNodeRef<'a> {
+    fn from(ast: Key<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
 }
 
-impl Key {
-    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Key> {
-        match node.symbol(doc) {
+impl<'a> Key<'a> {
+    pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Key> {
+        match node.symbol() {
             KEY => Some(Key(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode { self.0 }
-
-    pub fn kind(self, doc: &TomlDoc) -> KeyKind {
-        let node = self.cst().children(doc).first().unwrap();
-        if let Some(node) = StringLit::cast(node, doc) {
-            return KeyKind::StringLit(node);
-        }
-        if let Some(node) = BareKey::cast(node, doc) {
-            return KeyKind::BareKey(node);
-        }
-        unreachable!()
-    }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
 }
 
-impl AstNode for Value {
-    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
+impl<'a> AstNode<'a> for Value<'a> {
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 }
 
-impl From<Value> for CstNode {
-    fn from(ast: Value) -> CstNode { ast.cst() }
+impl<'a> From<Value<'a>> for SyntaxNodeRef<'a> {
+    fn from(ast: Value<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
 }
 
-impl Value {
-    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Value> {
-        match node.symbol(doc) {
+impl<'a> Value<'a> {
+    pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Value> {
+        match node.symbol() {
             VALUE => Some(Value(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode { self.0 }
-
-    pub fn kind(self, doc: &TomlDoc) -> ValueKind {
-        let node = self.cst().children(doc).first().unwrap();
-        if let Some(node) = Array::cast(node, doc) {
-            return ValueKind::Array(node);
-        }
-        if let Some(node) = Dict::cast(node, doc) {
-            return ValueKind::Dict(node);
-        }
-        if let Some(node) = Number::cast(node, doc) {
-            return ValueKind::Number(node);
-        }
-        if let Some(node) = Bool::cast(node, doc) {
-            return ValueKind::Bool(node);
-        }
-        if let Some(node) = DateTime::cast(node, doc) {
-            return ValueKind::DateTime(node);
-        }
-        if let Some(node) = StringLit::cast(node, doc) {
-            return ValueKind::StringLit(node);
-        }
-        unreachable!()
-    }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
 }
 
-impl AstNode for StringLit {
-    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
+impl<'a> AstNode<'a> for StringLit<'a> {
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 }
 
-impl From<StringLit> for CstNode {
-    fn from(ast: StringLit) -> CstNode { ast.cst() }
+impl<'a> From<StringLit<'a>> for SyntaxNodeRef<'a> {
+    fn from(ast: StringLit<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
 }
 
-impl StringLit {
-    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<StringLit> {
-        match node.symbol(doc) {
+impl<'a> StringLit<'a> {
+    pub fn cast(node: SyntaxNodeRef<'a>) -> Option<StringLit> {
+        match node.symbol() {
             BASIC_STRING => Some(StringLit(node)),
             MULTILINE_BASIC_STRING => Some(StringLit(node)),
             LITERAL_STRING => Some(StringLit(node)),
@@ -283,162 +227,132 @@ impl StringLit {
         }
     }
 
-    pub fn cst(self) -> CstNode { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
-    pub fn text(self, doc: &TomlDoc) -> &str {
-        match self.cst().kind(doc) {
-            CstNodeKind::Leaf(text) => text,
-            CstNodeKind::Internal(_) => unreachable!(),
-        }
-    }
 }
 
-impl AstNode for BareKey {
-    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
+impl<'a> AstNode<'a> for BareKey<'a> {
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 }
 
-impl From<BareKey> for CstNode {
-    fn from(ast: BareKey) -> CstNode { ast.cst() }
+impl<'a> From<BareKey<'a>> for SyntaxNodeRef<'a> {
+    fn from(ast: BareKey<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
 }
 
-impl BareKey {
-    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<BareKey> {
-        match node.symbol(doc) {
+impl<'a> BareKey<'a> {
+    pub fn cast(node: SyntaxNodeRef<'a>) -> Option<BareKey> {
+        match node.symbol() {
             BARE_KEY => Some(BareKey(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
-    pub fn text(self, doc: &TomlDoc) -> &str {
-        match self.cst().kind(doc) {
-            CstNodeKind::Leaf(text) => text,
-            CstNodeKind::Internal(_) => unreachable!(),
-        }
-    }
 }
 
-impl AstNode for Array {
-    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
+impl<'a> AstNode<'a> for Array<'a> {
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 }
 
-impl From<Array> for CstNode {
-    fn from(ast: Array) -> CstNode { ast.cst() }
+impl<'a> From<Array<'a>> for SyntaxNodeRef<'a> {
+    fn from(ast: Array<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
 }
 
-impl Array {
-    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Array> {
-        match node.symbol(doc) {
+impl<'a> Array<'a> {
+    pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Array> {
+        match node.symbol() {
             ARRAY => Some(Array(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
-    pub fn values(self, doc: &TomlDoc) -> AstChildren<Value> {
-        AstChildren::new(self.cst(), doc)
-    }
 }
 
-impl AstNode for Dict {
-    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
+impl<'a> AstNode<'a> for Dict<'a> {
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 }
 
-impl From<Dict> for CstNode {
-    fn from(ast: Dict) -> CstNode { ast.cst() }
+impl<'a> From<Dict<'a>> for SyntaxNodeRef<'a> {
+    fn from(ast: Dict<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
 }
 
-impl Dict {
-    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Dict> {
-        match node.symbol(doc) {
+impl<'a> Dict<'a> {
+    pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Dict> {
+        match node.symbol() {
             DICT => Some(Dict(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
-    pub fn entries(self, doc: &TomlDoc) -> AstChildren<Entry> {
-        AstChildren::new(self.cst(), doc)
-    }
 }
 
-impl AstNode for Number {
-    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
+impl<'a> AstNode<'a> for Number<'a> {
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 }
 
-impl From<Number> for CstNode {
-    fn from(ast: Number) -> CstNode { ast.cst() }
+impl<'a> From<Number<'a>> for SyntaxNodeRef<'a> {
+    fn from(ast: Number<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
 }
 
-impl Number {
-    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Number> {
-        match node.symbol(doc) {
+impl<'a> Number<'a> {
+    pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Number> {
+        match node.symbol() {
             NUMBER => Some(Number(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
-    pub fn text(self, doc: &TomlDoc) -> &str {
-        match self.cst().kind(doc) {
-            CstNodeKind::Leaf(text) => text,
-            CstNodeKind::Internal(_) => unreachable!(),
-        }
-    }
 }
 
-impl AstNode for Bool {
-    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
+impl<'a> AstNode<'a> for Bool<'a> {
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 }
 
-impl From<Bool> for CstNode {
-    fn from(ast: Bool) -> CstNode { ast.cst() }
+impl<'a> From<Bool<'a>> for SyntaxNodeRef<'a> {
+    fn from(ast: Bool<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
 }
 
-impl Bool {
-    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<Bool> {
-        match node.symbol(doc) {
+impl<'a> Bool<'a> {
+    pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Bool> {
+        match node.symbol() {
             BOOL => Some(Bool(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
-    pub fn text(self, doc: &TomlDoc) -> &str {
-        match self.cst().kind(doc) {
-            CstNodeKind::Leaf(text) => text,
-            CstNodeKind::Internal(_) => unreachable!(),
-        }
-    }
 }
 
-impl AstNode for DateTime {
-    fn cast(node: CstNode, doc: &TomlDoc) -> Option<Self> where Self: Sized { Self::cast(node, doc) }
+impl<'a> AstNode<'a> for DateTime<'a> {
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
+    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 }
 
-impl From<DateTime> for CstNode {
-    fn from(ast: DateTime) -> CstNode { ast.cst() }
+impl<'a> From<DateTime<'a>> for SyntaxNodeRef<'a> {
+    fn from(ast: DateTime<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
 }
 
-impl DateTime {
-    pub fn cast(node: CstNode, doc: &TomlDoc) -> Option<DateTime> {
-        match node.symbol(doc) {
+impl<'a> DateTime<'a> {
+    pub fn cast(node: SyntaxNodeRef<'a>) -> Option<DateTime> {
+        match node.symbol() {
             DATE_TIME => Some(DateTime(node)),
             _ => None,
         }
     }
 
-    pub fn cst(self) -> CstNode { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
 
-    pub fn text(self, doc: &TomlDoc) -> &str {
-        match self.cst().kind(doc) {
-            CstNodeKind::Leaf(text) => text,
-            CstNodeKind::Internal(_) => unreachable!(),
-        }
-    }
 }
