@@ -3,7 +3,6 @@ mod generated;
 use std::borrow::Cow;
 
 use ::{ast, AstNode, AstChildren};
-// use {ast, , AstNode, Position::*, TomlDoc};
 pub use self::generated::*;
 
 pub trait EntryOwner<'a>: AstNode<'a> {
@@ -19,14 +18,14 @@ pub trait KeyOwner<'a>: AstNode<'a> {
     fn keys(self) -> AstChildren<'a, ast::Key<'a>>;
 }
 
-// impl<'a> ast::Key<'a> {
-//     pub fn name(self) -> Cow<str> {
-//         match self.kind(doc) {
-//             ast::KeyKind::StringLit(lit) => lit.value(doc),
-//             ast::KeyKind::BareKey(key) => Cow::from(key.text(doc)),
-//         }
-//     }
-// }
+impl<'a> ast::Key<'a> {
+    pub fn name(self) -> Cow<'a, str> {
+        match self.kind() {
+            ast::KeyKind::StringLit(lit) => lit.value(),
+            ast::KeyKind::BareKey(key) => Cow::from(key.text()),
+        }
+    }
+}
 
 impl<'a> ast::StringLit<'a> {
     pub fn value(self) -> Cow<'a, str> {
