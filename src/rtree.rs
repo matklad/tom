@@ -5,7 +5,7 @@ use std::{
 
 use rowan::{Types, WalkEvent};
 
-use ::{SmolStr, TextRange, Symbol, SyntaxError, ChunkedText};
+use ::{TextRange, Symbol, SyntaxError, ChunkedText};
 
 
 pub use rowan::TreeRoot;

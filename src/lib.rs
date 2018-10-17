@@ -11,14 +11,11 @@ extern crate rowan;
 define_uncover_macros!(enable_if(cfg!(debug_assertions)));
 
 mod chunked_text;
-// mod intern;
-// mod tree;
 mod rtree;
 mod parser;
 // mod cst;
 // mod model;
 // mod visitor;
-// mod walk;
 mod validator;
 // mod edit;
 
