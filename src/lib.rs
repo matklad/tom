@@ -38,6 +38,7 @@ pub use rowan::{SmolStr, TextRange, TextUnit};
 // pub use cst::{CstNode, CstNodeKind, CstChildren, CstChildrenIter, RevCstChildrenIter};
 // pub use model::{Item, Map};
 pub use rtree::{SyntaxNode, SyntaxNodeRef};
+pub(crate) use rtree::{GreenBuilder};
 // pub(crate) use chunked_text::ChunkedText;
 
 
@@ -72,25 +73,13 @@ pub struct TomlDoc {
 
 impl TomlDoc {
     pub fn new(text: &str) -> TomlDoc {
-        // let mut doc = TomlDoc {
-        //     tree: Tree::new(symbol::DOC),
-        //     intern: Intern::new(),
-        //     errors: Vec::new(),
-        //     data: Vec::new(),
-        //     edit_in_progress: false,
-        //     smart_ws: true,
-        // };
-        // let root = doc.tree.root();
-        // parser::parse(text, &mut doc, root);
-        // let mut data = Vec::new();
-        // doc.recalculate_ranges(&mut data);
-        // doc.data = data;
+        let root = parser::parse(text);
+        let doc = TomlDoc { root };
 
         // let validation_errors = validator::validate(&doc);
         // doc.errors.extend(validation_errors);
 
-        // doc
-        unimplemented!()
+        doc
     }
 
     pub fn cst(&self) -> SyntaxNodeRef {

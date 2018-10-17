@@ -21,6 +21,7 @@ pub type OwnedRoot = ::rowan::OwnedRoot<TomTypes>;
 pub type RefRoot<'a> = ::rowan::RefRoot<'a, TomTypes>;
 
 pub type GreenNode = ::rowan::GreenNode<TomTypes>;
+pub(crate) type GreenBuilder = ::rowan::GreenNodeBuilder<TomTypes>;
 
 #[derive(Clone, Copy)]
 pub struct SyntaxNode<R: TreeRoot<TomTypes> = OwnedRoot>(::rowan::SyntaxNode<TomTypes, R>);

@@ -15,7 +15,7 @@ impl Mark {
     }
 }
 
-impl<'t, 's, 'a> Parser<'t, 's, 'a> {
+impl<'t, 's> Parser<'t, 's> {
     fn start(&mut self, s: Symbol) -> Mark {
         self.sink.start(s);
         Mark::new(s)
@@ -93,7 +93,7 @@ impl<'t, 's, 'a> Parser<'t, 's, 'a> {
     }
 }
 
-impl<'s, 't, 'a> Parser<'s, 't, 'a> {
+impl<'s, 't> Parser<'s, 't> {
     pub(crate) fn parse(&mut self) {
         self.doc();
     }
