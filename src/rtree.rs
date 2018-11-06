@@ -3,9 +3,9 @@ use std::{
     hash::{Hash, Hasher},
 };
 
-use rowan::{Types, WalkEvent};
+use rowan::{Types, WalkEvent, LeafAtOffset};
 
-use ::{TextRange, Symbol, SyntaxError, ChunkedText};
+use ::{TextRange, TextUnit, Symbol, SyntaxError, ChunkedText};
 
 
 pub use rowan::TreeRoot;
@@ -80,6 +80,16 @@ impl<'a> SyntaxNodeRef<'a> {
             WalkEvent::Enter(n) => WalkEvent::Enter(SyntaxNode(n)),
             WalkEvent::Leave(n) => WalkEvent::Leave(SyntaxNode(n)),
         })
+    }
+    pub fn leaf_at_offset(self, offset: TextUnit) -> LeafAtOffset<SyntaxNodeRef<'a>> {
+        match self.0.leaf_at_offset(offset) {
+            LeafAtOffset::None => LeafAtOffset::None,
+            LeafAtOffset::Single(n) => LeafAtOffset::Single(SyntaxNode(n)),
+            LeafAtOffset::Between(l, r) => LeafAtOffset::Between(SyntaxNode(l), SyntaxNode(r)),
+        }
+    }
+    pub fn covering_node(self, range: TextRange) -> SyntaxNodeRef<'a> {
+        SyntaxNode(self.0.covering_node(range))
     }
     pub fn get_text(self) -> String {
         self.chunked_text().into_string()

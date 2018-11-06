@@ -15,7 +15,6 @@ extern crate log;
 
 mod line_index;
 mod req;
-mod algo;
 mod caps;
 
 use std::collections::HashMap;
@@ -214,7 +213,7 @@ impl State {
 
 
 pub(crate) fn extend(doc: &TomlDoc, range: TextRange) -> TextRange {
-    let node = algo::find_covering_node(doc.cst(), range);
+    let node = doc.cst().covering_node(range);
 
     match node.ancestors().skip_while(|n| n.range() == range).next() {
         None => range,
