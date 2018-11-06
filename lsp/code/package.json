@@ -1,0 +1,81 @@
+{
+    "name": "tom-lsp",
+    "displayName": "tom-lsp",
+    "description": "",
+    "version": "0.0.1",
+    "publisher": "matklad",
+    "repository": {
+        "url": "https://github.com/matklad/tom/"
+    },
+    "categories": [
+        "Other"
+    ],
+    "engines": {
+        "vscode": "^1.26.0"
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "fix": "prettier **/*.{json,ts} --write && tslint --project . --fix",
+        "lint": "tslint --project .",
+        "prettier": "prettier **/*.{json,ts}",
+        "travis": "npm run compile && npm run lint && npm run prettier --list-different"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "singleQuote": true
+    },
+    "dependencies": {
+        "vscode-languageclient": "^5.1.1"
+    },
+    "devDependencies": {
+        "@types/mocha": "^2.2.42",
+        "@types/node": "^8.10.34",
+        "prettier": "^1.14.3",
+        "tslint": "^5.11.0",
+        "tslint-config-prettier": "^1.15.0",
+        "typescript": "^2.6.1",
+        "vsce": "^1.52.0",
+        "vscode": "^1.1.21"
+    },
+    "activationEvents": [
+        "onLanguage:toml"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "languages": [{
+            "id": "toml",
+            "extensions": [ ".toml" ]
+        }],
+        "commands": [
+            {
+                "command": "tom-lsp.syntaxTree",
+                "title": "Show Toml syntax tree"
+            },
+            {
+                "command": "tom-lsp.extendSelection",
+                "title": "Toml Extend Selection"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "tom-lsp.extendSelection",
+                "key": "ctrl+w",
+                "when": "editorTextFocus && editorLangId == toml"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Tom",
+            "properties": {
+                "tom-lsp.highlightingOn": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Highlight Toml code (overrides built-in syntax highlighting)"
+                }
+            }
+        }
+    }
+}

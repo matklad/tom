@@ -9,11 +9,11 @@ Yet another format-preserving TOML parser/manipulator.
 """
 
 [workspace]
-members = ["tasks"]
+members = ["tasks", "lsp"]
 
 [dependencies]
 # public
-text_unit = "0.1"
+text_unit = "0.1.5"
 
 # private
 regex = "1"

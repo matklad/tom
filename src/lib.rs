@@ -60,6 +60,7 @@ impl SyntaxError {
     }
 }
 
+#[derive(Clone)]
 pub struct TomlDoc {
     root: rtree::SyntaxNode,
     validation_errors: Vec<SyntaxError>,
