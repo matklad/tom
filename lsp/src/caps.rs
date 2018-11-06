@@ -3,9 +3,6 @@ use languageserver_types::{
     TextDocumentSyncCapability,
     TextDocumentSyncOptions,
     TextDocumentSyncKind,
-    ExecuteCommandOptions,
-    CompletionOptions,
-    DocumentOnTypeFormattingOptions,
 };
 
 pub fn server_capabilities() -> ServerCapabilities {

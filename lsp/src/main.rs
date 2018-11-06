@@ -21,12 +21,12 @@ use std::collections::HashMap;
 
 use crossbeam_channel::{Sender, Receiver};
 use languageserver_types::{
-    ServerCapabilities, InitializeParams, Url, Range, Position,
+    InitializeParams, Url, Range, Position,
     notification::{self},
 };
 use gen_lsp_server::{run_server, stdio_transport, handle_shutdown, RawMessage, RawResponse, RawNotification};
 use flexi_logger::{Logger, Duplicate};
-use tom::{TomlDoc, ast, TextRange, TextUnit};
+use tom::{TomlDoc, ast, TextRange, TextUnit, symbol::*};
 
 
 use line_index::{LineIndex, LineCol};
@@ -165,12 +165,21 @@ impl State {
         };
         let mut decorations = Vec::new();
         for node in doc.cst().descendants() {
-            if ast::TableHeader::cast(node).is_some() {
-                decorations.push(req::Decoration {
-                    range: to_vs_range(node.range(), line_index),
-                    tag: "keyword",
-                })
-            }
+            let tag = match node.symbol() {
+                TABLE_HEADER => "keyword",
+
+                | BASIC_STRING
+                | MULTILINE_BASIC_STRING
+                | LITERAL_STRING
+                | MULTILINE_LITERAL_STRING => "string",
+                COMMENT => "comment",
+                _ => continue,
+            };
+
+            decorations.push(req::Decoration {
+                range: to_vs_range(node.range(), line_index),
+                tag,
+            });
         }
         decorations
     }
