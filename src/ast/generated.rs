@@ -1,25 +1,31 @@
 use {
-    SyntaxNodeRef, AstNode, AstChildren,
+    SyntaxNode, SyntaxNodeRef, AstNode, AstChildren, TreeRoot, RefRoot, OwnedRoot, TomTypes,
     symbol::*,
 };
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Doc<'a>(SyntaxNodeRef<'a>);
+pub struct DocNode<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);
+pub type Doc<'a> = DocNode<RefRoot<'a>>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Table<'a>(SyntaxNodeRef<'a>);
+pub struct TableNode<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);
+pub type Table<'a> = TableNode<RefRoot<'a>>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct ArrayTable<'a>(SyntaxNodeRef<'a>);
+pub struct ArrayTableNode<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);
+pub type ArrayTable<'a> = ArrayTableNode<RefRoot<'a>>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct TableHeader<'a>(SyntaxNodeRef<'a>);
+pub struct TableHeaderNode<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);
+pub type TableHeader<'a> = TableHeaderNode<RefRoot<'a>>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Entry<'a>(SyntaxNodeRef<'a>);
+pub struct EntryNode<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);
+pub type Entry<'a> = EntryNode<RefRoot<'a>>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Key<'a>(SyntaxNodeRef<'a>);
+pub struct KeyNode<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);
+pub type Key<'a> = KeyNode<RefRoot<'a>>;
 
 pub enum KeyKind<'a> {
     StringLit(StringLit<'a>),
@@ -27,7 +33,8 @@ pub enum KeyKind<'a> {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Value<'a>(SyntaxNodeRef<'a>);
+pub struct ValueNode<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);
+pub type Value<'a> = ValueNode<RefRoot<'a>>;
 
 pub enum ValueKind<'a> {
     Array(Array<'a>),
@@ -39,25 +46,32 @@ pub enum ValueKind<'a> {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct StringLit<'a>(SyntaxNodeRef<'a>);
+pub struct StringLitNode<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);
+pub type StringLit<'a> = StringLitNode<RefRoot<'a>>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct BareKey<'a>(SyntaxNodeRef<'a>);
+pub struct BareKeyNode<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);
+pub type BareKey<'a> = BareKeyNode<RefRoot<'a>>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Array<'a>(SyntaxNodeRef<'a>);
+pub struct ArrayNode<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);
+pub type Array<'a> = ArrayNode<RefRoot<'a>>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Dict<'a>(SyntaxNodeRef<'a>);
+pub struct DictNode<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);
+pub type Dict<'a> = DictNode<RefRoot<'a>>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Number<'a>(SyntaxNodeRef<'a>);
+pub struct NumberNode<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);
+pub type Number<'a> = NumberNode<RefRoot<'a>>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Bool<'a>(SyntaxNodeRef<'a>);
+pub struct BoolNode<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);
+pub type Bool<'a> = BoolNode<RefRoot<'a>>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct DateTime<'a>(SyntaxNodeRef<'a>);
+pub struct DateTimeNode<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);
+pub type DateTime<'a> = DateTimeNode<RefRoot<'a>>;
 
 
 impl<'a> AstNode<'a> for Doc<'a> {
@@ -72,7 +86,7 @@ impl<'a> From<Doc<'a>> for SyntaxNodeRef<'a> {
 impl<'a> Doc<'a> {
     pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Doc> {
         match node.symbol() {
-            DOC => Some(Doc(node)),
+            DOC => Some(DocNode(node)),
             _ => None,
         }
     }
@@ -102,7 +116,7 @@ impl<'a> From<Table<'a>> for SyntaxNodeRef<'a> {
 impl<'a> Table<'a> {
     pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Table> {
         match node.symbol() {
-            TABLE => Some(Table(node)),
+            TABLE => Some(TableNode(node)),
             _ => None,
         }
     }
@@ -129,7 +143,7 @@ impl<'a> From<ArrayTable<'a>> for SyntaxNodeRef<'a> {
 impl<'a> ArrayTable<'a> {
     pub fn cast(node: SyntaxNodeRef<'a>) -> Option<ArrayTable> {
         match node.symbol() {
-            ARRAY_TABLE => Some(ArrayTable(node)),
+            ARRAY_TABLE => Some(ArrayTableNode(node)),
             _ => None,
         }
     }
@@ -156,7 +170,7 @@ impl<'a> From<TableHeader<'a>> for SyntaxNodeRef<'a> {
 impl<'a> TableHeader<'a> {
     pub fn cast(node: SyntaxNodeRef<'a>) -> Option<TableHeader> {
         match node.symbol() {
-            TABLE_HEADER => Some(TableHeader(node)),
+            TABLE_HEADER => Some(TableHeaderNode(node)),
             _ => None,
         }
     }
@@ -180,7 +194,7 @@ impl<'a> From<Entry<'a>> for SyntaxNodeRef<'a> {
 impl<'a> Entry<'a> {
     pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Entry> {
         match node.symbol() {
-            ENTRY => Some(Entry(node)),
+            ENTRY => Some(EntryNode(node)),
             _ => None,
         }
     }
@@ -207,7 +221,7 @@ impl<'a> From<Key<'a>> for SyntaxNodeRef<'a> {
 impl<'a> Key<'a> {
     pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Key> {
         match node.symbol() {
-            KEY => Some(Key(node)),
+            KEY => Some(KeyNode(node)),
             _ => None,
         }
     }
@@ -239,7 +253,7 @@ impl<'a> From<Value<'a>> for SyntaxNodeRef<'a> {
 impl<'a> Value<'a> {
     pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Value> {
         match node.symbol() {
-            VALUE => Some(Value(node)),
+            VALUE => Some(ValueNode(node)),
             _ => None,
         }
     }
@@ -283,10 +297,10 @@ impl<'a> From<StringLit<'a>> for SyntaxNodeRef<'a> {
 impl<'a> StringLit<'a> {
     pub fn cast(node: SyntaxNodeRef<'a>) -> Option<StringLit> {
         match node.symbol() {
-            BASIC_STRING => Some(StringLit(node)),
-            MULTILINE_BASIC_STRING => Some(StringLit(node)),
-            LITERAL_STRING => Some(StringLit(node)),
-            MULTILINE_LITERAL_STRING => Some(StringLit(node)),
+            BASIC_STRING => Some(StringLitNode(node)),
+            MULTILINE_BASIC_STRING => Some(StringLitNode(node)),
+            LITERAL_STRING => Some(StringLitNode(node)),
+            MULTILINE_LITERAL_STRING => Some(StringLitNode(node)),
             _ => None,
         }
     }
@@ -310,7 +324,7 @@ impl<'a> From<BareKey<'a>> for SyntaxNodeRef<'a> {
 impl<'a> BareKey<'a> {
     pub fn cast(node: SyntaxNodeRef<'a>) -> Option<BareKey> {
         match node.symbol() {
-            BARE_KEY => Some(BareKey(node)),
+            BARE_KEY => Some(BareKeyNode(node)),
             _ => None,
         }
     }
@@ -334,7 +348,7 @@ impl<'a> From<Array<'a>> for SyntaxNodeRef<'a> {
 impl<'a> Array<'a> {
     pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Array> {
         match node.symbol() {
-            ARRAY => Some(Array(node)),
+            ARRAY => Some(ArrayNode(node)),
             _ => None,
         }
     }
@@ -358,7 +372,7 @@ impl<'a> From<Dict<'a>> for SyntaxNodeRef<'a> {
 impl<'a> Dict<'a> {
     pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Dict> {
         match node.symbol() {
-            DICT => Some(Dict(node)),
+            DICT => Some(DictNode(node)),
             _ => None,
         }
     }
@@ -382,7 +396,7 @@ impl<'a> From<Number<'a>> for SyntaxNodeRef<'a> {
 impl<'a> Number<'a> {
     pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Number> {
         match node.symbol() {
-            NUMBER => Some(Number(node)),
+            NUMBER => Some(NumberNode(node)),
             _ => None,
         }
     }
@@ -406,7 +420,7 @@ impl<'a> From<Bool<'a>> for SyntaxNodeRef<'a> {
 impl<'a> Bool<'a> {
     pub fn cast(node: SyntaxNodeRef<'a>) -> Option<Bool> {
         match node.symbol() {
-            BOOL => Some(Bool(node)),
+            BOOL => Some(BoolNode(node)),
             _ => None,
         }
     }
@@ -430,7 +444,7 @@ impl<'a> From<DateTime<'a>> for SyntaxNodeRef<'a> {
 impl<'a> DateTime<'a> {
     pub fn cast(node: SyntaxNodeRef<'a>) -> Option<DateTime> {
         match node.symbol() {
-            DATE_TIME => Some(DateTime(node)),
+            DATE_TIME => Some(DateTimeNode(node)),
             _ => None,
         }
     }

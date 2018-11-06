@@ -30,7 +30,7 @@ use std::{
 // pub use edit::{IntoValue, Position};
 pub use rowan::{SmolStr, TextRange, TextUnit, WalkEvent};
 // pub use model::{Item, Map};
-pub use rtree::{SyntaxNode, SyntaxNodeRef, RefRoot, OwnedRoot, SyntaxNodeChildren};
+pub use rtree::{SyntaxNode, SyntaxNodeRef, RefRoot, OwnedRoot, SyntaxNodeChildren, TreeRoot, TomTypes};
 pub(crate) use rtree::{GreenBuilder};
 pub(crate) use chunked_text::ChunkedText;
 

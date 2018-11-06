@@ -148,14 +148,15 @@ pub fn gen_ast() -> String {
         }};
     }
     ln!("use {{");
-    ln!("SyntaxNodeRef, AstNode, AstChildren,");
+    ln!("SyntaxNode, SyntaxNodeRef, AstNode, AstChildren, TreeRoot, RefRoot, OwnedRoot, TomTypes,");
     ln!("symbol::*,");
     ln!("}};");
     ln!();
 
     for n in descr.iter() {
         ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
-        ln!("pub struct {}<'a>(SyntaxNodeRef<'a>);", n.name);
+        ln!("pub struct {}Node<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);", n.name);
+        ln!("pub type {}<'a> = {}Node<RefRoot<'a>>;", n.name, n.name);
         ln!();
 
         if !n.kinds.is_empty() {
@@ -199,7 +200,7 @@ pub fn gen_ast() -> String {
                     n.symbols.iter().map(|s| s.to_string()).collect()
                 };
                 for s in symbols {
-                    ln!("{} => Some({}(node)),", s, n.name);
+                    ln!("{} => Some({}Node(node)),", s, n.name);
                 }
                 ln!("_ => None,");
                 ln!("}}");
