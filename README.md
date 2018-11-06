@@ -4,6 +4,10 @@
 [![Crates.io](https://img.shields.io/crates/v/tom.svg)](https://crates.io/crates/tom)
 [![API reference](https://docs.rs/tom/badge.svg)](https://docs.rs/tom/)
 
+
+**Status** a rewrite to the [rowan](https://github.com/rust-analyzer/rowan) library is in progress.
+Nothing works, but we have a language server in the lsp dir now!
+
 Yet another TOML parser. Preserves whitespace for real this time!
 
 Work in progress, take a look at
@@ -128,7 +132,7 @@ gen-ast` command.
 
 The underlying `tree::Tree` is mutable and document-editing API builds
 on that. It is specified in the `edit.rs` file and is more-or less
-just a wrapper of the corresponding `tree::Tree` API. 
+just a wrapper of the corresponding `tree::Tree` API.
 
 One interesting bit is that to create a completely new node, we just
 parse it from text. That way, arbitrary comments and whitespace are
