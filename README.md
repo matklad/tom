@@ -16,7 +16,7 @@ Work in progress, take a look at
 relatively more ready.
 
 The best documentation at the moment is
-[./examples/api-walkthrough.rs](./examples/api-walkthrough.rs).
+[./crates/tom/examples/api-walkthrough.rs](./crates/tom/examples/api-walkthrough.rs).
 
 There's a WASM demo of the parser here: [https://matklad.github.io/tom/](https://matklad.github.io/tom/).
 
@@ -25,12 +25,12 @@ There's a WASM demo of the parser here: [https://matklad.github.io/tom/](https:/
 
 Contributions are very much welcome! Keep in mind that the code is
 very much in experimental state, and so good contributing guides are
-missing, formatting is artisan, etc.  Feel free to ask questions by
+missing, formatting is artisan, etc. Feel free to ask questions by
 creating issues/PRs, or by pinging @matklad at the
-[Rust discord](https://discordapp.com/channels/442252698964721669/).
+[rust-analyzer zulip](https://rust-lang.zulipchat.com/#narrow/stream/185405-t-compiler.2Fwg-rls-2.2E0).
 
 Checkout [E-easy](https://github.com/matklad/tom/issues?q=is%3Aopen+is%3Aissue+label%3AE-easy)
-and [E-mentor](https://github.com/matklad/tom/issues?q=is%3Aopen+is%3Aissue+label%3AE-mentor) labels.
+and [E-has-instructions](https://github.com/matklad/tom/issues?q=is%3Aopen+is%3Aissue+label%3AE-has-instructions) labels.
 
 
 # Architecture
@@ -43,9 +43,9 @@ Currently, beta version of Rust is required.
 
 Code-generation is used heavily:
 
-  * `cargo gen-symbols` generates the `symbol` module,
-  * `cargo gen-ast` generates the `ast` module,
-  * `cargo gen-tests` generates tests from special comments.
+  * `cargo xtask gen-symbols` generates the `symbol` module,
+  * `cargo xtask gen-ast` generates the `ast` module,
+  * `cargo xtask gen-tests` generates tests from special comments.
 
 The generated code is committed: this way, clients of the library don't
 need to build the code-generator, which has a lot of dependencies.
@@ -109,7 +109,7 @@ same-line heuristic (see `EventSink::trailing_ws`).
 
 The grammar in `parser/grammar.rs` is interspersed with `// test`
 comments. These comments help to map grammar's code to the TOML
-syntax, and they are real regression tests as well: `cargo gen-test`
+syntax, and they are real regression tests as well: `cargo xtask gen-test`
 collects all such comments and dumps them as test-cases to
 `tests/data/inline`. Additional parser/lexer tests are found in
 `tests/data/**`. Each tests is a pair of `.toml` file and a `.txt`
