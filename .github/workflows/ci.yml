@@ -28,8 +28,10 @@ jobs:
   rust:
     name: Rust
     runs-on: ${{ matrix.os }}
-    env:
-      CC: deny_c
+
+    # FIXME: remove C dependencies
+    # env:
+    #   CC: deny_c
 
     strategy:
       fail-fast: false
