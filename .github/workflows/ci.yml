@@ -1,0 +1,129 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches:
+    - master
+    - staging
+    - trying
+
+env:
+  CARGO_INCREMENTAL: 0
+  CARGO_NET_RETRY: 10
+  CI: 1
+  RUST_BACKTRACE: full
+  RUSTFLAGS: "--deny warnings -Cdebuginfo=0"
+  RUSTUP_MAX_RETRIES: 10
+
+jobs:
+  # FIXME: add cargo-deny
+  # cargo-deny-check:
+  #   name: cargo deny check
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: EmbarkStudios/cargo-deny-action@master
+
+  rust:
+    name: Rust
+    runs-on: ${{ matrix.os }}
+    env:
+     CC: deny_c
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+          components: rustfmt, rust-src
+
+      # Workaround permissions bug
+      # FIXME: remove this when this issue is resolved:
+      # https://github.com/actions/cache/issues/133#issuecomment-599102035
+      - if: matrix.os == 'ubuntu-latest'
+        run: sudo chown -R $(whoami):$(id -ng) ~/.cargo/
+
+      - name: Cache cargo/registry/index
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/registry/index
+          key: |
+            ${{ runner.os }}-cargo-registry-index-${{ hashFiles('**/Cargo.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-index
+
+      - name: Cache cargo/registry/cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/registry/cache
+          key: |
+            ${{ runner.os }}-cargo-registry-cache-${{ hashFiles('**/Cargo.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-cache
+
+      - name: Cache cargo/git/db
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/git/db
+          key: |
+            ${{ runner.os }}-cargo-git-db-${{ hashFiles('**/Cargo.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-git-db
+
+      - run: cargo build
+      - run: cargo test --no-run
+      - run: cargo test
+
+  # FIXME: add typescript ci job
+  # typescript:
+  #   name: TypeScript
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+
+  #   runs-on: ${{ matrix.os }}
+
+  #   steps:
+  #   - name: Checkout repository
+  #     uses: actions/checkout@v2
+
+  #   - name: Install Nodejs
+  #     uses: actions/setup-node@v1
+  #     with:
+  #       node-version: 12.x
+
+  #   - run: npm ci
+  #     working-directory: ./editors/code
+
+  #   - run: npm audit || { sleep 10 && npm audit; } || { sleep 30 && npm audit; }
+  #     if: runner.os == 'Linux'
+  #     working-directory: ./editors/code
+
+  #   - run: npm run lint
+  #     working-directory: ./editors/code
+
+  #   - name: Run vscode tests
+  #     uses: GabrielBB/xvfb-action@v1.2
+  #     env:
+  #       VSCODE_CLI: 1
+  #     with:
+  #       run: npm --prefix ./editors/code test
+  #       # working-directory: ./editors/code  # does not work: https://github.com/GabrielBB/xvfb-action/issues/8
+
+  #   - run: npm run package --scripts-prepend-node-path
+  #     working-directory: ./editors/code
+
+
+  #       # - cargo run --package tasks -- verify
+  #       # - cargo test
+  #       # - cargo run --example api-walkthrough
