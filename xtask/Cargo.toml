@@ -1,5 +1,5 @@
 [package]
-name = "tasks"
+name = "xtask"
 version = "0.0.0"
 authors = ["Aleksey Kladov <aleksey.kladov@gmail.com>"]
 publish = false

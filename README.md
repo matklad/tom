@@ -50,7 +50,7 @@ Code-generation is used heavily:
 The generated code is committed: this way, clients of the library don't
 need to build the code-generator, which has a lot of dependencies.
 
-See `.cargo/config` file and the `tasks` subdirectories to understand how
+See `.cargo/config` file and the `xtask` subdirectories to understand how
 codegen works.
 
 ## Data Structures Walkthrough

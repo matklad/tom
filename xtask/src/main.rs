@@ -21,7 +21,7 @@ fn main() -> Result<()> {
                 .help("Verify that generated code is up-to-date"),
         )
     };
-    let matches = App::new("tasks")
+    let matches = App::new("xtask")
         .setting(clap::AppSettings::SubcommandRequiredElseHelp)
         .subcommand(gen_command("gen-ast"))
         .subcommand(gen_command("gen-symbols"))
