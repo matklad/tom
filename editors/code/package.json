@@ -45,10 +45,14 @@
     ],
     "main": "./out/extension",
     "contributes": {
-        "languages": [{
-            "id": "toml",
-            "extensions": [ ".toml" ]
-        }],
+        "languages": [
+            {
+                "id": "toml",
+                "extensions": [
+                    ".toml"
+                ]
+            }
+        ],
         "commands": [
             {
                 "command": "tom-lsp.syntaxTree",
