@@ -9,7 +9,7 @@ Yet another format-preserving TOML parser/manipulator.
 """
 
 [workspace]
-members = ["tasks", "lsp"]
+members = ["xtask", "lsp"]
 
 [dependencies]
 # public
