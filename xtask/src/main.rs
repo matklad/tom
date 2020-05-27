@@ -1,8 +1,3 @@
-extern crate clap;
-extern crate failure;
-extern crate heck;
-extern crate itertools;
-
 use clap::{App, Arg, SubCommand};
 use itertools::Itertools;
 use std::fs;
@@ -106,7 +101,7 @@ fn get_tests(verify: bool) -> Result<()> {
         let mut res = HashMap::new();
         let comment_blocks = s
             .lines()
-            .map(str::trim_left)
+            .map(str::trim_start)
             .group_by(|line| line.starts_with("//"));
 
         'outer: for (is_comment, block) in comment_blocks.into_iter() {
