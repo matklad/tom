@@ -1,4 +1,5 @@
 status = [
+    "cargo deny check",
     "Rust (ubuntu-latest)",
     "Rust (windows-latest)",
     "Rust (macos-latest)",
