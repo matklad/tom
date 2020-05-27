@@ -1,0 +1,63 @@
+# Docs: https://embarkstudios.github.io/cargo-deny/checks/index.html
+
+[advisories]
+vulnerability = "deny"
+unmaintained = "deny"
+yanked = "deny"
+# FIXME: fix all vulnerabilities:
+ignore = [
+    # Flaw in offset_of and span_of causes SIGILL, drops uninitialized memory of arbitrary type on panic in client code
+    # Affected versions of this crate caused traps and/or memory unsafety by zero-initializing references.
+    # They also could lead to uninitialized memory being dropped if the field for which the offset is requested was behind a deref coercion, and that deref coercion caused a panic.
+    "RUSTSEC-2019-0011"
+]
+
+# The lint level for crates with security notices. Note that as of
+# 2019-12-17 there are no security notice advisories in
+# https://github.com/rustsec/advisory-db
+notice = "deny"
+
+[bans]
+multiple-versions = "deny"
+skip = [
+    # FIXME: deduplicate all of these dependencies
+    { version = "*", name = "unicode-xid" },
+    { version = "*", name = "autocfg" },
+    { version = "*", name = "crossbeam-utils" },
+    { version = "*", name = "parking_lot" },
+    { version = "*", name = "parking_lot_core" },
+    { version = "*", name = "proc-macro2" },
+    { version = "*", name = "quote" },
+    { version = "*", name = "rand" },
+    { version = "*", name = "rand_core" },
+    { version = "*", name = "smallvec" },
+    { version = "*", name = "syn" },
+
+    # { name = "crate_name_here", version = "=0.11.0", depth = 20 },
+]
+deny = [
+    # https://www.reddit.com/r/rust/comments/ga7f56/why_dirs_and_directories_repositories_have_been/
+    # dirs crate has a lot of dependencies and there are better alternatives
+    { name = "dirs" },
+    { name = "dirs-sys" },
+]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []
+
+[licenses]
+unlicensed = "deny"
+copyleft = "deny"
+private = { ignore = true }
+
+# run `cargo deny list` to see the where these the licenses come from
+allow = ["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "BSL-1.0", "Unlicense", "ISC"]
+deny = []
+default = "deny"
+allow-osi-fsf-free = "neither"
+
+# We want really high confidence when inferring licenses from text
+confidence-threshold = 0.93
