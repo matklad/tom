@@ -21,9 +21,10 @@ export function activate(context: vscode.ExtensionContext) {
     registerCommand('tom-lsp.extendSelection', commands.extendSelection.handle);
 
     // Notifications are events triggered by the language server
-    const allNotifications: Iterable<
-        [string, lc.GenericNotificationHandler]
-    > = [['m/publishDecorations', notifications.publishDecorations.handle]];
+    const allNotifications: Iterable<[
+        string,
+        lc.GenericNotificationHandler
+    ]> = [['m/publishDecorations', notifications.publishDecorations.handle]];
 
     // The events below are plain old javascript events, triggered and handled by vscode
     vscode.window.onDidChangeActiveTextEditor(
