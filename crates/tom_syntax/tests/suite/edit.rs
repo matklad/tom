@@ -1,4 +1,4 @@
-use tom::{ast, Position::*, TomlDoc, TextRange};
+use tom_syntax::{ast, Position::*, TomlDoc, TextRange};
 use util::assert_eq_text;
 use ::{check_edit, toml};
 

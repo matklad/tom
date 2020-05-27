@@ -846,6 +846,23 @@ dependencies = [
 
 [[package]]
 name = "tom"
+version = "0.1.0"
+dependencies = [
+ "crossbeam-channel",
+ "failure",
+ "flexi_logger",
+ "gen_lsp_server",
+ "languageserver-types",
+ "log",
+ "serde",
+ "serde_derive",
+ "superslice",
+ "tom_syntax",
+ "url_serde",
+]
+
+[[package]]
+name = "tom_syntax"
 version = "0.0.1"
 dependencies = [
  "clap",
@@ -860,23 +877,6 @@ dependencies = [
  "serde_json",
  "text_unit",
  "uncover",
-]
-
-[[package]]
-name = "tom_lsp_server"
-version = "0.1.0"
-dependencies = [
- "crossbeam-channel",
- "failure",
- "flexi_logger",
- "gen_lsp_server",
- "languageserver-types",
- "log",
- "serde",
- "serde_derive",
- "superslice",
- "tom",
- "url_serde",
 ]
 
 [[package]]

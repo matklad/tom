@@ -1,4 +1,4 @@
-use tom::{TomlDoc, Item};
+use tom_syntax::{TomlDoc, Item};
 
 use Result;
 

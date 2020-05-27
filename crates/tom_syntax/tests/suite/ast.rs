@@ -1,4 +1,4 @@
-use tom::ast;
+use tom_syntax::ast;
 use ::{find, toml};
 
 #[test]

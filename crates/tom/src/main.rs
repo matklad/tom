@@ -8,7 +8,7 @@ extern crate languageserver_types;
 extern crate failure;
 extern crate crossbeam_channel;
 extern crate superslice;
-extern crate tom;
+extern crate tom_syntax;
 extern crate flexi_logger;
 #[macro_use]
 extern crate log;
@@ -26,7 +26,7 @@ use languageserver_types::{
 };
 use gen_lsp_server::{run_server, stdio_transport, handle_shutdown, RawMessage, RawResponse, RawNotification};
 use flexi_logger::{Logger, Duplicate};
-use tom::{TomlDoc, ast, TextRange, TextUnit, symbol::*};
+use tom_syntax::{TomlDoc, ast, TextRange, TextUnit, symbol::*};
 
 
 use line_index::{LineIndex, LineCol};
@@ -256,4 +256,3 @@ fn from_vs_position(position: Position, line_index: &LineIndex) -> TextUnit {
     };
     line_index.offset(line_col)
 }
-

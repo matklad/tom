@@ -30,14 +30,14 @@
         "label": "Build Server",
         "group": "build",
         "type": "shell",
-        "command": "cargo build --package rust-analyzer",
+        "command": "cargo build --package tom",
         "problemMatcher": "$rustc"
       },
       {
         "label": "Build Server (Release)",
         "group": "build",
         "type": "shell",
-        "command": "cargo build --release --package rust-analyzer",
+        "command": "cargo build --release --package tom",
         "problemMatcher": "$rustc"
       },
       {

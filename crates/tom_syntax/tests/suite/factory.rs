@@ -1,6 +1,6 @@
 use std::iter;
 use util::assert_eq_text;
-use tom::{CstNode, TomlDoc};
+use tom_syntax::{CstNode, TomlDoc};
 
 #[test]
 fn create_key_with_space() {

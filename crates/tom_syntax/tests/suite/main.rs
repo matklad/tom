@@ -1,6 +1,6 @@
 extern crate difference;
 // #[macro_use]
-extern crate tom;
+extern crate tom_syntax;
 #[macro_use]
 extern crate lazy_static;
 // extern crate serde_json;
@@ -19,7 +19,7 @@ use std::{
     time::Instant,
 };
 use util::{test_data_dir};
-use tom::{AstNode, TomlDoc};
+use tom_syntax::{AstNode, TomlDoc};
 
 #[test]
 fn simple_bench() {

@@ -3,7 +3,7 @@ use std::{
     fs::{self, read_dir},
     path::{Path, PathBuf},
 };
-use tom::{TomlDoc};
+use tom_syntax::{TomlDoc};
 use util::{print_difference, test_data_dir};
 
 enum ExpectErrors {

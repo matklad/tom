@@ -13,6 +13,12 @@ type Result<T> = ::std::result::Result<T, failure::Error>;
 
 mod gen_ast;
 
+const AST_NODES: &str = "crates/tom_syntax/src/ast/generated.rs";
+const SYMBOLS: &str = "crates/tom_syntax/src/symbol/generated.rs";
+
+const INLINE_TESTS_SRC: &str = "crates/tom_syntax/src/parser/grammar.rs";
+const INLINE_TESTS_OUT_DIR: &str = "crates/tom_syntax/tests/data/inline";
+
 fn main() -> Result<()> {
     let gen_command = |name| {
         SubCommand::with_name(name).arg(
@@ -39,10 +45,10 @@ fn main() -> Result<()> {
 fn run_gen_command(name: &str, verify: bool) -> Result<()> {
     match name {
         "gen-ast" => {
-            update("./src/ast/generated.rs", &gen_ast::gen_ast(), verify)?;
+            update(AST_NODES, &gen_ast::gen_ast(), verify)?;
         }
         "gen-symbols" => {
-            update("./src/symbol/generated.rs", &gen_symbols(), verify)?;
+            update(SYMBOLS, &gen_symbols(), verify)?;
         }
         "gen-tests" => get_tests(verify)?,
         _ => unreachable!(),
@@ -73,15 +79,14 @@ fn update(path: &str, contents: &str, verify: bool) -> Result<()> {
 }
 
 fn get_tests(verify: bool) -> Result<()> {
-    let src_dir = "./src/parser/grammar.rs";
-    let grammar = fs::read_to_string(src_dir)?;
+    let grammar = fs::read_to_string(INLINE_TESTS_SRC)?;
     let tests = collect_tests(&grammar);
     for (name, test) in &tests {
-        let path = format!("./tests/data/inline/test-{}.toml", name);
+        let path = format!("{}/test-{}.toml", INLINE_TESTS_OUT_DIR, name);
         update(&path, test, verify)?;
     }
     // Check for strays.
-    for file in fs::read_dir("tests/data/inline").unwrap() {
+    for file in fs::read_dir(INLINE_TESTS_OUT_DIR).unwrap() {
         let path = file.unwrap().path();
         let stem = path.file_stem().unwrap();
         let name = stem.to_str().unwrap();
