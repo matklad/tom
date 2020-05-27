@@ -15,7 +15,7 @@
     },
     "scripts": {
         "vscode:prepublish": "tsc && rollup -c",
-        "package": "vsce package -o rust-analyzer.vsix",
+        "package": "vsce package -o tom.vsix",
         "build": "tsc",
         "watch": "tsc --watch",
         "lint": "prettier **/*.{json,ts} --list-different error         && eslint -c .eslintrc.js --ext ts ./src",

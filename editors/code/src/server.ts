@@ -12,7 +12,7 @@ export class Server {
         notificationHandlers: Iterable<[string, lc.GenericNotificationHandler]>
     ) {
         const run: lc.Executable = {
-            command: process.env.__TOM_LSP_SERVER_DEBUG ?? 'tom_lsp_server',
+            command: process.env.__TOM_LSP_SERVER_DEBUG ?? 'tom',
             options: { cwd: '.' }
         };
         const serverOptions: lc.ServerOptions = {

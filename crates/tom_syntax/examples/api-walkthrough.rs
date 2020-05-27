@@ -1,7 +1,7 @@
 // extern crate tom;
 
 // use std::iter;
-// use tom::{
+// use tom_syntax::{
 //     TomlDoc, CstNode, Symbol, TextRange, Position::*,
 //     ast::{self, EntryOwner},
 //     symbol::*,

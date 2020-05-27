@@ -1,12 +1,13 @@
 # TOM
 
-[![Build Status](https://travis-ci.org/matklad/tom.svg?branch=master)](https://travis-ci.org/matklad/tom)
+[![CI](https://github.com/matklad/tom/workflows/CI/badge.svg)](https://github.com/matklad/tom/actions)
 [![Crates.io](https://img.shields.io/crates/v/tom.svg)](https://crates.io/crates/tom)
 [![API reference](https://docs.rs/tom/badge.svg)](https://docs.rs/tom/)
 
 
 **Status** a rewrite to the [rowan](https://github.com/rust-analyzer/rowan) library is in progress.
-Nothing works, but we have a language server in the lsp dir now!
+Nothing works, but we have a language server in the `crates/tom` dir now!
+The docs below may be outdated!
 
 Yet another TOML parser. Preserves whitespace for real this time!
 
@@ -16,7 +17,7 @@ Work in progress, take a look at
 relatively more ready.
 
 The best documentation at the moment is
-[./crates/tom/examples/api-walkthrough.rs](./crates/tom/examples/api-walkthrough.rs).
+[./crates/tom_syntax/examples/api-walkthrough.rs](./crates/tom/examples/api-walkthrough.rs).
 
 There's a WASM demo of the parser here: [https://matklad.github.io/tom/](https://matklad.github.io/tom/).
 
