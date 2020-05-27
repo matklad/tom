@@ -86,47 +86,32 @@ jobs:
       - run: cargo test --no-run
       - run: cargo test
 
-  # FIXME: add typescript ci job
-  # typescript:
-  #   name: TypeScript
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  typescript:
+    name: TypeScript
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
-  #   runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
 
-  #   steps:
-  #   - name: Checkout repository
-  #     uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
-  #   - name: Install Nodejs
-  #     uses: actions/setup-node@v1
-  #     with:
-  #       node-version: 12.x
+    - name: Install Nodejs
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
 
-  #   - run: npm ci
-  #     working-directory: ./editors/code
+    - run: npm ci
+      working-directory: ./editors/code
 
-  #   - run: npm audit || { sleep 10 && npm audit; } || { sleep 30 && npm audit; }
-  #     if: runner.os == 'Linux'
-  #     working-directory: ./editors/code
+    - run: npm audit || { sleep 10 && npm audit; } || { sleep 30 && npm audit; }
+      if: runner.os == 'Linux'
+      working-directory: ./editors/code
 
-  #   - run: npm run lint
-  #     working-directory: ./editors/code
+    - run: npm run lint
+      working-directory: ./editors/code
 
-  #   - name: Run vscode tests
-  #     uses: GabrielBB/xvfb-action@v1.2
-  #     env:
-  #       VSCODE_CLI: 1
-  #     with:
-  #       run: npm --prefix ./editors/code test
-  #       # working-directory: ./editors/code  # does not work: https://github.com/GabrielBB/xvfb-action/issues/8
-
-  #   - run: npm run package --scripts-prepend-node-path
-  #     working-directory: ./editors/code
-
-
-  #       # - cargo run --package tasks -- verify
-  #       # - cargo test
-  #       # - cargo run --example api-walkthrough
+    - run: npm run package --scripts-prepend-node-path
+      working-directory: ./editors/code

@@ -16,9 +16,10 @@ export class Highlighter {
         const decor = (color: string) =>
             vscode.window.createTextEditorDecorationType({ color });
 
-        const decorations: Iterable<
-            [string, vscode.TextEditorDecorationType]
-        > = [
+        const decorations: Iterable<[
+            string,
+            vscode.TextEditorDecorationType
+        ]> = [
             ['background', decor('#3F3F3F')],
             ['comment', decor('#7F9F7F')],
             ['string', decor('#CC9393')],
