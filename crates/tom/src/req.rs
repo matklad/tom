@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 use languageserver_types::{
     Url, Range, TextDocumentIdentifier,
     request::Request,

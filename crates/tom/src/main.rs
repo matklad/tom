@@ -1,18 +1,3 @@
-extern crate serde;
-#[macro_use]
-extern crate serde_derive;
-extern crate url_serde;
-extern crate gen_lsp_server;
-extern crate languageserver_types;
-#[macro_use]
-extern crate failure;
-extern crate crossbeam_channel;
-extern crate superslice;
-extern crate tom_syntax;
-extern crate flexi_logger;
-#[macro_use]
-extern crate log;
-
 mod line_index;
 mod req;
 mod caps;
@@ -26,8 +11,8 @@ use languageserver_types::{
 };
 use gen_lsp_server::{run_server, stdio_transport, handle_shutdown, RawMessage, RawResponse, RawNotification};
 use flexi_logger::{Logger, Duplicate};
-use tom_syntax::{TomlDoc, ast, TextRange, TextUnit, symbol::*};
-
+use tom_syntax::{TomlDoc, TextRange, TextUnit, symbol::*};
+use failure::format_err;
 
 use line_index::{LineIndex, LineCol};
 
