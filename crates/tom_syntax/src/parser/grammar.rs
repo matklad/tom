@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 use drop_bomb::DebugDropBomb;
 use crate::{parser::Parser, symbol::*, Symbol};
 

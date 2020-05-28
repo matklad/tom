@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 // extern crate clap;
 // #[macro_use]
 // extern crate failure;

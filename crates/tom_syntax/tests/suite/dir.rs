@@ -55,7 +55,7 @@ fn dir_tests(paths: &[&str], expect_errors: ExpectErrors) {
         }
 
         // // Check model against .json file.
-        // // TODO: Remove this once the API is stable enough.
+        // // FIXME: Remove this once the API is stable enough.
         // let actual_json = match ::std::panic::catch_unwind(|| to_json(Item::Map(doc.model()))) {
         //     Ok(json) => json,
         //     Err(e) => {
@@ -78,7 +78,7 @@ fn dir_tests(paths: &[&str], expect_errors: ExpectErrors) {
         // let actual_pretty = serde_json::to_string_pretty(&actual_json).unwrap();
         // let json_path = path.with_extension("json");
         // if !json_path.exists() {
-        //     // TODO: Remove this once model is more reliable.
+        //     // FIXME: Remove this once model is more reliable.
         //     println!("\nJSON not yet ready: {}", json_path.display());
         //     continue;
         //     // println!("\nfile: {}", json_path.display());
@@ -94,7 +94,7 @@ fn dir_tests(paths: &[&str], expect_errors: ExpectErrors) {
         // if actual_json != json {
         //     print_difference(&expected_pretty, &actual_pretty, &json_path);
         // }
-        // TODO: Uncomment this if you want to test the `Display` impl
+        // FIXME: Uncomment this if you want to test the `Display` impl
         // produces valid JSON.
         // if actual_pretty != expected_pretty {
         //     print_difference(&expected_pretty, &actual_pretty, &json_path);
@@ -116,7 +116,7 @@ fn dir_tests(paths: &[&str], expect_errors: ExpectErrors) {
 //     match model {
 //         Item::Map(map) => {
 //             let mut json_map = serde_json::Map::new();
-//             // TODO: add into_iter
+//             // FIXME: add into_iter
 //             for (k, v) in map.into_iter() {
 //                 json_map.insert(k.to_string(), to_json(v));
 //             }

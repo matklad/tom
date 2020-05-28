@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 use m_lexer::{Lexer, LexerBuilder, TokenKind};
 use lazy_static::lazy_static;
 

@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 pub /*(crate)*/ trait ChunkedText where Self: Sized {
     fn for_each_chunk<F: FnMut(&str) -> Result<(), T>, T>(self, f: F) -> Result<(), T>;
 

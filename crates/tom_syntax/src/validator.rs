@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 use crate::{
     SyntaxNodeRef, SyntaxError, TextRange, TomlDoc, ChunkedText,
     ast,
@@ -80,7 +82,7 @@ fn check_new_line<'a>(
     let right = right.into();
     assert_eq!(left.parent(), right.parent());
     let parent = left.parent().unwrap();
-    // TODO: more precise
+    // FIXME: more precise
     let start = left.range().start();
     let end = right.range().start();
     let range = TextRange::from_to(start, end);

@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 mod generated;
 
 use std::borrow::Cow;
@@ -29,7 +31,7 @@ impl<'a> ast::Key<'a> {
 
 impl<'a> ast::StringLit<'a> {
     pub fn value(self) -> Cow<'a, str> {
-        //TODO: broken completely
+        //FIXME: broken completely
         let text = self.text();
         let len = text.len();
         Cow::from(&text[1..len - 1])

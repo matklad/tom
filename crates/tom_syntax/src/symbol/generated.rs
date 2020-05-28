@@ -1,3 +1,4 @@
+//! Generated file, do not edit by hand, see `cargo xtask codegen`
 use super::{SymbolInfo, Symbol, NonZeroU8};
 
 pub(crate) const SYMBOLS: &[SymbolInfo] = &[

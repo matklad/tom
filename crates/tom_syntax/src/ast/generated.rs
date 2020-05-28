@@ -1,3 +1,4 @@
+//! Generated file, do not edit by hand, see `cargo xtask codegen`
 use crate::{
     SyntaxNode, SyntaxNodeRef, AstNode, AstChildren, TreeRoot, RefRoot, OwnedRoot, TomTypes,
     symbol::*,

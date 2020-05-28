@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 mod grammar;
 mod lexer;
 
