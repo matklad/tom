@@ -1,5 +1,5 @@
 use tom_syntax::ast;
-use ::{find, toml};
+use crate::{find, toml};
 
 #[test]
 fn string_escaping_trivial() {

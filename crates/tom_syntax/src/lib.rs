@@ -1,14 +1,4 @@
-extern crate m_lexer;
-extern crate itertools;
-extern crate text_unit;
-#[macro_use]
-extern crate lazy_static;
-#[macro_use]
-extern crate uncover;
-extern crate drop_bomb;
-extern crate rowan;
-
-define_uncover_macros!(enable_if(cfg!(debug_assertions)));
+uncover::define_uncover_macros!(enable_if(cfg!(debug_assertions)));
 
 mod chunked_text;
 mod rtree;
@@ -31,7 +21,7 @@ use std::{
 pub use rowan::{SmolStr, TextRange, TextUnit, WalkEvent};
 // pub use model::{Item, Map};
 pub use rtree::{SyntaxNode, SyntaxNodeRef, RefRoot, OwnedRoot, SyntaxNodeChildren, TreeRoot, TomTypes};
-pub(crate) use rtree::{GreenBuilder};
+pub(crate) use rtree::GreenBuilder;
 pub(crate) use chunked_text::ChunkedText;
 
 

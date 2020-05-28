@@ -2,7 +2,7 @@ mod generated;
 
 use std::{fmt, num::NonZeroU8};
 
-use Symbol;
+use crate::Symbol;
 
 pub use self::generated::*;
 

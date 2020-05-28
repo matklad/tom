@@ -1,7 +1,7 @@
 mod grammar;
 mod lexer;
 
-use ::{
+use crate::{
     symbol::*,
     SyntaxNode, GreenBuilder, Symbol, SmolStr, TextRange,
     SyntaxError,

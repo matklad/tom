@@ -1,5 +1,5 @@
 use drop_bomb::DebugDropBomb;
-use {parser::Parser, symbol::*, Symbol};
+use crate::{parser::Parser, symbol::*, Symbol};
 
 struct Mark {
     symbol: Symbol,

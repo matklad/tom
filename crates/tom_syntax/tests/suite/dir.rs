@@ -4,7 +4,7 @@ use std::{
     path::{Path, PathBuf},
 };
 use tom_syntax::{TomlDoc};
-use util::{print_difference, test_data_dir};
+use crate::util::{print_difference, test_data_dir};
 
 enum ExpectErrors {
     Yes,

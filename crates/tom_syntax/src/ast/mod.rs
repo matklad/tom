@@ -2,7 +2,7 @@ mod generated;
 
 use std::borrow::Cow;
 
-use ::{ast, AstNode, AstChildren};
+use crate::{ast, AstNode, AstChildren};
 pub use self::generated::*;
 
 pub trait EntryOwner<'a>: AstNode<'a> {

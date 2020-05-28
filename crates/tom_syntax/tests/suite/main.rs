@@ -1,10 +1,3 @@
-extern crate difference;
-// #[macro_use]
-extern crate tom_syntax;
-#[macro_use]
-extern crate lazy_static;
-// extern crate serde_json;
-
 mod ast;
 mod dir;
 // mod edit;
@@ -20,6 +13,7 @@ use std::{
 };
 use util::{test_data_dir};
 use tom_syntax::{AstNode, TomlDoc};
+use lazy_static::lazy_static;
 
 #[test]
 fn simple_bench() {

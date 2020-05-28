@@ -1,6 +1,7 @@
 use m_lexer::{Lexer, LexerBuilder, TokenKind};
+use lazy_static::lazy_static;
 
-use {symbol, Symbol, TextRange, TextUnit};
+use crate::{symbol, Symbol, TextRange, TextUnit};
 
 #[derive(Copy, Clone, Debug)]
 pub(crate) struct Token {
