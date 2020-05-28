@@ -147,7 +147,7 @@ pub fn gen_ast() -> String {
             buff.push_str("\n");
         }};
     }
-    ln!("use {{");
+    ln!("use crate::{{");
     ln!("SyntaxNode, SyntaxNodeRef, AstNode, AstChildren, TreeRoot, RefRoot, OwnedRoot, TomTypes,");
     ln!("symbol::*,");
     ln!("}};");
