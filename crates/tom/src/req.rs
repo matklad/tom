@@ -1,6 +1,7 @@
+use serde::{Serialize, Deserialize};
 use languageserver_types::{
-    Url, Range, Position, TextDocumentIdentifier,
-    request::{GotoDefinition, GotoDefinitionResponse, Request},
+    Url, Range, TextDocumentIdentifier,
+    request::Request,
     notification::{Notification},
 };
 

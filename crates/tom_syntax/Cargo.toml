@@ -2,6 +2,7 @@
 name = "tom_syntax"
 version = "0.0.1"
 authors = ["Aleksey Kladov <aleksey.kladov@gmail.com>"]
+edition = "2018"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/matklad/tom"
 description = """
