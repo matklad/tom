@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 // extern crate tom;
 
 // use std::iter;

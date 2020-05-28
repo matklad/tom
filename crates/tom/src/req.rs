@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 use serde::{Serialize, Deserialize};
 use languageserver_types::{
     Url, Range, TextDocumentIdentifier,

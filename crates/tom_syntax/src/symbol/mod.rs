@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 mod generated;
 
 use std::{fmt, num::NonZeroU8};

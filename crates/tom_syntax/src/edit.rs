@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 use std::{mem};
 use {
     CstNode, TomlDoc, ChunkedText,
@@ -310,7 +312,7 @@ impl IntoValue for i64 {
 
 impl<'a> IntoValue for &'a str {
     fn value_text(self) -> String {
-        //TODO: escaping
+        //FIXME: escaping
         format!("{:?}", self)
     }
 }

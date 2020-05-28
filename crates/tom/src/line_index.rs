@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 use crate::TextUnit;
 use superslice::Ext;
 
@@ -36,7 +38,7 @@ impl LineIndex {
     }
 
     pub fn offset(&self, line_col: LineCol) -> TextUnit {
-        //TODO: return Result
+        //FIXME: return Result
         self.newlines[line_col.line as usize] + line_col.col
     }
 }

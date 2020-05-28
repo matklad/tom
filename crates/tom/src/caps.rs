@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 use languageserver_types::{
     ServerCapabilities,
     TextDocumentSyncCapability,

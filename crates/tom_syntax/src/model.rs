@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 use std::{
     collections::BTreeMap,
     fmt,
@@ -120,7 +122,7 @@ impl fmt::Display for Item {
             Item::Integer(value) => value.fmt(f)?,
             Item::Float(value) => value.fmt(f)?,
             Item::Bool(value) => value.fmt(f)?,
-            Item::DateTime => f.write_str("TODO:date-time")?,
+            Item::DateTime => f.write_str("FIXME:date-time")?,
             Item::String(value) => fmt::Debug::fmt(value, f)?,
         }
         Ok(())
@@ -190,7 +192,7 @@ fn insert_into<'a>(
                 curr = &mut entry.1;
             }
             _ => {
-                // TODO:
+                // FIXME:
                 return None;
             }
         };

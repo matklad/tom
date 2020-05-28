@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 use tom_syntax::{TomlDoc, Item};
 
 use Result;

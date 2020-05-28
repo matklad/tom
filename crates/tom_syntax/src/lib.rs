@@ -1,3 +1,5 @@
+//! FIXME: write short doc here
+
 uncover::define_uncover_macros!(enable_if(cfg!(debug_assertions)));
 
 mod chunked_text;
