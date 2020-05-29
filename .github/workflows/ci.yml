@@ -27,9 +27,8 @@ jobs:
     name: Rust
     runs-on: ${{ matrix.os }}
 
-    # FIXME: remove C dependencies
-    # env:
-    #   CC: deny_c
+    env:
+      CC: deny_c
 
     strategy:
       fail-fast: false
