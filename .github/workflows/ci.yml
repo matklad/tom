@@ -3,17 +3,16 @@ on:
   pull_request:
   push:
     branches:
-    - master
-    - staging
-    - trying
+      - master
+      - staging
+      - trying
 
 env:
   CARGO_INCREMENTAL: 0
   CARGO_NET_RETRY: 10
   CI: 1
   RUST_BACKTRACE: full
-  # FIXME: fix all warnings and uncomment this line
-  # RUSTFLAGS: "--deny warnings -Cdebuginfo=0"
+  RUSTFLAGS: "--deny warnings -Cdebuginfo=0"
   RUSTUP_MAX_RETRIES: 10
 
 jobs:
@@ -46,7 +45,7 @@ jobs:
           toolchain: stable
           profile: minimal
           override: true
-          components: rustfmt, rust-src
+          components: rustfmt, rust-src, clippy
 
       # Workaround permissions bug
       # FIXME: remove this when this issue is resolved:
@@ -81,6 +80,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-git-db
 
+      - if: ${{ matrix.os == 'ubuntu-latest' }} # Run lining only once
+        run: cargo xtask lint
+
+      - if: ${{ matrix.os == 'ubuntu-latest' }} # Run fmt only once
+        run: cargo fmt --all -- --check
+
       - run: cargo build
       - run: cargo test --no-run
       - run: cargo test
@@ -95,22 +100,22 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Install Nodejs
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12.x
+      - name: Install Nodejs
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
 
-    - run: npm ci
-      working-directory: ./editors/code
+      - run: npm ci
+        working-directory: ./editors/code
 
-    - run: npm audit || { sleep 10 && npm audit; } || { sleep 30 && npm audit; }
-      if: runner.os == 'Linux'
-      working-directory: ./editors/code
+      - run: npm audit || { sleep 10 && npm audit; } || { sleep 30 && npm audit; }
+        if: runner.os == 'Linux'
+        working-directory: ./editors/code
 
-    - run: npm run lint
-      working-directory: ./editors/code
+      - run: npm run lint
+        working-directory: ./editors/code
 
-    - run: npm run package --scripts-prepend-node-path
-      working-directory: ./editors/code
+      - run: npm run package --scripts-prepend-node-path
+        working-directory: ./editors/code

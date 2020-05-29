@@ -2,12 +2,11 @@
 
 use heck::{CamelCase, ShoutySnakeCase};
 use anyhow::Result;
-use crate::{project_root_dir, codegen};
-
+use crate::{project_root_dir, codegen, reformat};
 
 pub fn gen_ast(mode: codegen::Mode) -> Result<()> {
     let out_file = project_root_dir().join(codegen::AST_NODES_OUT_FILE_PATH);
-    codegen::verify_or_overwrite(mode, &out_file, &ast_source_code())
+    codegen::verify_or_overwrite(mode, &out_file, &reformat(ast_source_code())?)
 }
 
 fn descr() -> Vec<AstNode> {
@@ -63,15 +62,16 @@ struct AstNode {
 impl AstNode {
     fn methods(mut self, names: &[&'static str]) -> AstNode {
         self.methods.extend(names.iter().map(|&name| {
-            let type_name = if name.ends_with("s") {
+            let type_name = if name.ends_with('s') {
                 &name[..name.len() - 1]
             } else {
                 name
-            }.to_camel_case();
+            }
+            .to_camel_case();
             Method {
                 name,
                 type_name,
-                arity: if name.ends_with("s") {
+                arity: if name.ends_with('s') {
                     Arity::Many
                 } else {
                     Arity::One
@@ -85,7 +85,7 @@ impl AstNode {
         let method = Method {
             name,
             type_name: type_name.to_owned(),
-            arity: if name.ends_with("s") {
+            arity: if name.ends_with('s') {
                 Arity::Many
             } else {
                 Arity::One
@@ -96,12 +96,12 @@ impl AstNode {
     }
 
     fn kinds(mut self, names: &[&'static str]) -> AstNode {
-        self.kinds.extend(names.iter().map(|&name| name));
+        self.kinds.extend(names.iter().copied());
         self
     }
 
     fn symbols(mut self, names: &[&'static str]) -> AstNode {
-        self.symbols.extend(names.iter().map(|&name| name));
+        self.symbols.extend(names.iter().copied());
         self
     }
 
@@ -157,7 +157,6 @@ fn ast_source_code() -> String {
             buff.push_str("\n");
         }};
     }
-    ln!("//! Generated file, do not edit by hand, see `cargo xtask codegen`");
     ln!("use crate::{{");
     ln!("SyntaxNode, SyntaxNodeRef, AstNode, AstChildren, TreeRoot, RefRoot, OwnedRoot, TomTypes,");
     ln!("symbol::*,");
@@ -166,7 +165,10 @@ fn ast_source_code() -> String {
 
     for n in descr.iter() {
         ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
-        ln!("pub struct {}Node<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);", n.name);
+        ln!(
+            "pub struct {}Node<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);",
+            n.name
+        );
         ln!("pub type {}<'a> = {}Node<RefRoot<'a>>;", n.name, n.name);
         ln!();
 
@@ -192,7 +194,10 @@ fn ast_source_code() -> String {
 
         ln!("impl<'a> From<{}<'a>> for SyntaxNodeRef<'a> {{", n.name);
         {
-            ln!("fn from(ast: {}<'a>) -> SyntaxNodeRef<'a> {{ ast.syntax() }}", n.name);
+            ln!(
+                "fn from(ast: {}<'a>) -> SyntaxNodeRef<'a> {{ ast.syntax() }}",
+                n.name
+            );
         }
         ln!("}}");
         ln!();
@@ -208,7 +213,7 @@ fn ast_source_code() -> String {
                 let symbols = if n.symbols.is_empty() {
                     vec![n.name.to_shouty_snake_case()]
                 } else {
-                    n.symbols.iter().map(|s| s.to_string()).collect()
+                    n.symbols.iter().map(|&s| s.to_string()).collect()
                 };
                 for s in symbols {
                     ln!("{} => Some({}Node(node)),", s, n.name);
@@ -243,11 +248,7 @@ fn ast_source_code() -> String {
             }
 
             for m in n.methods.iter() {
-                ln!(
-                    "pub fn {}(self) -> {} {{",
-                    m.name,
-                    m.ret_type()
-                );
+                ln!("pub fn {}(self) -> {} {{", m.name, m.ret_type());
                 ln!("{}", m.body());
                 ln!("}}");
             }

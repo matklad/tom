@@ -9,7 +9,6 @@ use rowan::{Types, WalkEvent, LeafAtOffset};
 
 use crate::{TextRange, TextUnit, Symbol, SyntaxError, ChunkedText};
 
-
 pub use rowan::TreeRoot;
 
 #[derive(Debug, Clone, Copy)]
@@ -101,15 +100,11 @@ impl<'a> SyntaxNodeRef<'a> {
         self.descendants().filter_map(|it| it.leaf_text())
     }
 
-    pub(crate) fn chunked_substring(
-        self,
-        range: TextRange,
-    ) -> impl ChunkedText + 'a {
-        self.descendants()
-            .filter_map(move |it| {
-                let subrange = intersect(it.range(), range)? - it.range().start();
-                Some(&it.leaf_text()?[subrange])
-            })
+    pub(crate) fn chunked_substring(self, range: TextRange) -> impl ChunkedText + 'a {
+        self.descendants().filter_map(move |it| {
+            let subrange = intersect(it.range(), range)? - it.range().start();
+            Some(&it.leaf_text()?[subrange])
+        })
     }
 }
 
@@ -132,9 +127,9 @@ impl<R: TreeRoot<TomTypes>> SyntaxNode<R> {
     pub fn range(&self) -> TextRange {
         self.0.range()
     }
-//     pub fn text(&self) -> SyntaxText {
-//         SyntaxText::new(self.borrowed())
-//     }
+    //     pub fn text(&self) -> SyntaxText {
+    //         SyntaxText::new(self.borrowed())
+    //     }
     pub fn is_leaf(&self) -> bool {
         self.0.is_leaf()
     }
@@ -179,14 +174,16 @@ impl<R: TreeRoot<TomTypes>> Iterator for SyntaxNodeChildren<R> {
     }
 }
 
-fn generate<'a, T: 'a, F: Fn(&T) -> Option<T> + 'a>(seed: Option<T>, step: F) -> impl Iterator<Item = T> + 'a {
-    ::std::iter::repeat(())
-        .scan(seed, move |state, ()| {
-            state.take().map(|curr| {
-                *state = step(&curr);
-                curr
-            })
+fn generate<'a, T: 'a, F: Fn(&T) -> Option<T> + 'a>(
+    seed: Option<T>,
+    step: F,
+) -> impl Iterator<Item = T> + 'a {
+    ::std::iter::repeat(()).scan(seed, move |state, ()| {
+        state.take().map(|curr| {
+            *state = step(&curr);
+            curr
         })
+    })
 }
 
 fn intersect(r1: TextRange, r2: TextRange) -> Option<TextRange> {

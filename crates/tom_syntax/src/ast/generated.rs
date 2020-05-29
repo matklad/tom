@@ -1,4 +1,5 @@
-//! Generated file, do not edit by hand, see `cargo xtask codegen`
+//! Generated file, do not edit by hand, see `xtask/src/codegen`
+
 use crate::{
     SyntaxNode, SyntaxNodeRef, AstNode, AstChildren, TreeRoot, RefRoot, OwnedRoot, TomTypes,
     symbol::*,
@@ -74,14 +75,22 @@ pub type Bool<'a> = BoolNode<RefRoot<'a>>;
 pub struct DateTimeNode<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);
 pub type DateTime<'a> = DateTimeNode<RefRoot<'a>>;
 
-
 impl<'a> AstNode<'a> for Doc<'a> {
-    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        Self::cast(node)
+    }
+    fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 }
 
 impl<'a> From<Doc<'a>> for SyntaxNodeRef<'a> {
-    fn from(ast: Doc<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
+    fn from(ast: Doc<'a>) -> SyntaxNodeRef<'a> {
+        ast.syntax()
+    }
 }
 
 impl<'a> Doc<'a> {
@@ -92,7 +101,9 @@ impl<'a> Doc<'a> {
         }
     }
 
-    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 
     pub fn tables(self) -> AstChildren<'a, Table<'a>> {
         AstChildren::new(self.syntax())
@@ -106,12 +117,21 @@ impl<'a> Doc<'a> {
 }
 
 impl<'a> AstNode<'a> for Table<'a> {
-    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        Self::cast(node)
+    }
+    fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 }
 
 impl<'a> From<Table<'a>> for SyntaxNodeRef<'a> {
-    fn from(ast: Table<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
+    fn from(ast: Table<'a>) -> SyntaxNodeRef<'a> {
+        ast.syntax()
+    }
 }
 
 impl<'a> Table<'a> {
@@ -122,7 +142,9 @@ impl<'a> Table<'a> {
         }
     }
 
-    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 
     pub fn header(self) -> TableHeader<'a> {
         AstChildren::new(self.syntax()).next().unwrap()
@@ -133,12 +155,21 @@ impl<'a> Table<'a> {
 }
 
 impl<'a> AstNode<'a> for ArrayTable<'a> {
-    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        Self::cast(node)
+    }
+    fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 }
 
 impl<'a> From<ArrayTable<'a>> for SyntaxNodeRef<'a> {
-    fn from(ast: ArrayTable<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
+    fn from(ast: ArrayTable<'a>) -> SyntaxNodeRef<'a> {
+        ast.syntax()
+    }
 }
 
 impl<'a> ArrayTable<'a> {
@@ -149,7 +180,9 @@ impl<'a> ArrayTable<'a> {
         }
     }
 
-    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 
     pub fn header(self) -> TableHeader<'a> {
         AstChildren::new(self.syntax()).next().unwrap()
@@ -160,12 +193,21 @@ impl<'a> ArrayTable<'a> {
 }
 
 impl<'a> AstNode<'a> for TableHeader<'a> {
-    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        Self::cast(node)
+    }
+    fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 }
 
 impl<'a> From<TableHeader<'a>> for SyntaxNodeRef<'a> {
-    fn from(ast: TableHeader<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
+    fn from(ast: TableHeader<'a>) -> SyntaxNodeRef<'a> {
+        ast.syntax()
+    }
 }
 
 impl<'a> TableHeader<'a> {
@@ -176,7 +218,9 @@ impl<'a> TableHeader<'a> {
         }
     }
 
-    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 
     pub fn keys(self) -> AstChildren<'a, Key<'a>> {
         AstChildren::new(self.syntax())
@@ -184,12 +228,21 @@ impl<'a> TableHeader<'a> {
 }
 
 impl<'a> AstNode<'a> for Entry<'a> {
-    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        Self::cast(node)
+    }
+    fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 }
 
 impl<'a> From<Entry<'a>> for SyntaxNodeRef<'a> {
-    fn from(ast: Entry<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
+    fn from(ast: Entry<'a>) -> SyntaxNodeRef<'a> {
+        ast.syntax()
+    }
 }
 
 impl<'a> Entry<'a> {
@@ -200,7 +253,9 @@ impl<'a> Entry<'a> {
         }
     }
 
-    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 
     pub fn keys(self) -> AstChildren<'a, Key<'a>> {
         AstChildren::new(self.syntax())
@@ -211,12 +266,21 @@ impl<'a> Entry<'a> {
 }
 
 impl<'a> AstNode<'a> for Key<'a> {
-    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        Self::cast(node)
+    }
+    fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 }
 
 impl<'a> From<Key<'a>> for SyntaxNodeRef<'a> {
-    fn from(ast: Key<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
+    fn from(ast: Key<'a>) -> SyntaxNodeRef<'a> {
+        ast.syntax()
+    }
 }
 
 impl<'a> Key<'a> {
@@ -227,7 +291,9 @@ impl<'a> Key<'a> {
         }
     }
 
-    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 
     pub fn kind(self) -> KeyKind<'a> {
         let node = self.syntax().children().next().unwrap();
@@ -239,16 +305,24 @@ impl<'a> Key<'a> {
         }
         unreachable!()
     }
-
 }
 
 impl<'a> AstNode<'a> for Value<'a> {
-    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        Self::cast(node)
+    }
+    fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 }
 
 impl<'a> From<Value<'a>> for SyntaxNodeRef<'a> {
-    fn from(ast: Value<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
+    fn from(ast: Value<'a>) -> SyntaxNodeRef<'a> {
+        ast.syntax()
+    }
 }
 
 impl<'a> Value<'a> {
@@ -259,7 +333,9 @@ impl<'a> Value<'a> {
         }
     }
 
-    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 
     pub fn kind(self) -> ValueKind<'a> {
         let node = self.syntax().children().next().unwrap();
@@ -283,16 +359,24 @@ impl<'a> Value<'a> {
         }
         unreachable!()
     }
-
 }
 
 impl<'a> AstNode<'a> for StringLit<'a> {
-    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        Self::cast(node)
+    }
+    fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 }
 
 impl<'a> From<StringLit<'a>> for SyntaxNodeRef<'a> {
-    fn from(ast: StringLit<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
+    fn from(ast: StringLit<'a>) -> SyntaxNodeRef<'a> {
+        ast.syntax()
+    }
 }
 
 impl<'a> StringLit<'a> {
@@ -306,7 +390,9 @@ impl<'a> StringLit<'a> {
         }
     }
 
-    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 
     pub fn text(self) -> &'a str {
         self.syntax().leaf_text().unwrap()
@@ -314,12 +400,21 @@ impl<'a> StringLit<'a> {
 }
 
 impl<'a> AstNode<'a> for BareKey<'a> {
-    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        Self::cast(node)
+    }
+    fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 }
 
 impl<'a> From<BareKey<'a>> for SyntaxNodeRef<'a> {
-    fn from(ast: BareKey<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
+    fn from(ast: BareKey<'a>) -> SyntaxNodeRef<'a> {
+        ast.syntax()
+    }
 }
 
 impl<'a> BareKey<'a> {
@@ -330,7 +425,9 @@ impl<'a> BareKey<'a> {
         }
     }
 
-    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 
     pub fn text(self) -> &'a str {
         self.syntax().leaf_text().unwrap()
@@ -338,12 +435,21 @@ impl<'a> BareKey<'a> {
 }
 
 impl<'a> AstNode<'a> for Array<'a> {
-    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        Self::cast(node)
+    }
+    fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 }
 
 impl<'a> From<Array<'a>> for SyntaxNodeRef<'a> {
-    fn from(ast: Array<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
+    fn from(ast: Array<'a>) -> SyntaxNodeRef<'a> {
+        ast.syntax()
+    }
 }
 
 impl<'a> Array<'a> {
@@ -354,7 +460,9 @@ impl<'a> Array<'a> {
         }
     }
 
-    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 
     pub fn values(self) -> AstChildren<'a, Value<'a>> {
         AstChildren::new(self.syntax())
@@ -362,12 +470,21 @@ impl<'a> Array<'a> {
 }
 
 impl<'a> AstNode<'a> for Dict<'a> {
-    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        Self::cast(node)
+    }
+    fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 }
 
 impl<'a> From<Dict<'a>> for SyntaxNodeRef<'a> {
-    fn from(ast: Dict<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
+    fn from(ast: Dict<'a>) -> SyntaxNodeRef<'a> {
+        ast.syntax()
+    }
 }
 
 impl<'a> Dict<'a> {
@@ -378,7 +495,9 @@ impl<'a> Dict<'a> {
         }
     }
 
-    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 
     pub fn entries(self) -> AstChildren<'a, Entry<'a>> {
         AstChildren::new(self.syntax())
@@ -386,12 +505,21 @@ impl<'a> Dict<'a> {
 }
 
 impl<'a> AstNode<'a> for Number<'a> {
-    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        Self::cast(node)
+    }
+    fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 }
 
 impl<'a> From<Number<'a>> for SyntaxNodeRef<'a> {
-    fn from(ast: Number<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
+    fn from(ast: Number<'a>) -> SyntaxNodeRef<'a> {
+        ast.syntax()
+    }
 }
 
 impl<'a> Number<'a> {
@@ -402,7 +530,9 @@ impl<'a> Number<'a> {
         }
     }
 
-    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 
     pub fn text(self) -> &'a str {
         self.syntax().leaf_text().unwrap()
@@ -410,12 +540,21 @@ impl<'a> Number<'a> {
 }
 
 impl<'a> AstNode<'a> for Bool<'a> {
-    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        Self::cast(node)
+    }
+    fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 }
 
 impl<'a> From<Bool<'a>> for SyntaxNodeRef<'a> {
-    fn from(ast: Bool<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
+    fn from(ast: Bool<'a>) -> SyntaxNodeRef<'a> {
+        ast.syntax()
+    }
 }
 
 impl<'a> Bool<'a> {
@@ -426,7 +565,9 @@ impl<'a> Bool<'a> {
         }
     }
 
-    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 
     pub fn text(self) -> &'a str {
         self.syntax().leaf_text().unwrap()
@@ -434,12 +575,21 @@ impl<'a> Bool<'a> {
 }
 
 impl<'a> AstNode<'a> for DateTime<'a> {
-    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self> where Self: Sized { Self::cast(node) }
-    fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    fn cast(node: SyntaxNodeRef<'a>) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        Self::cast(node)
+    }
+    fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 }
 
 impl<'a> From<DateTime<'a>> for SyntaxNodeRef<'a> {
-    fn from(ast: DateTime<'a>) -> SyntaxNodeRef<'a> { ast.syntax() }
+    fn from(ast: DateTime<'a>) -> SyntaxNodeRef<'a> {
+        ast.syntax()
+    }
 }
 
 impl<'a> DateTime<'a> {
@@ -450,7 +600,9 @@ impl<'a> DateTime<'a> {
         }
     }
 
-    pub fn syntax(self) -> SyntaxNodeRef<'a> { self.0 }
+    pub fn syntax(self) -> SyntaxNodeRef<'a> {
+        self.0
+    }
 
     pub fn text(self) -> &'a str {
         self.syntax().leaf_text().unwrap()

@@ -6,7 +6,7 @@ use std::{
 use xtask::{
     codegen::{self, Mode},
     not_bash::fs2,
-    project_root_dir
+    project_root_dir,
 };
 use walkdir::{DirEntry, WalkDir};
 
@@ -64,12 +64,17 @@ fn check_todo(path: &Path, text: &str) {
 }
 
 fn check_trailing_ws(path: &Path, text: &str) {
-    if is_exclude_dir(path, &["data"]) { // FIXME: change to `test_data`
+    if is_exclude_dir(path, &["data"]) {
+        // FIXME: change to `test_data`
         return;
     }
     for (line_number, line) in text.lines().enumerate() {
         if line.chars().last().map(char::is_whitespace) == Some(true) {
-            panic!("Trailing whitespace in {} at line {}", path.display(), line_number)
+            panic!(
+                "Trailing whitespace in {} at line {}",
+                path.display(),
+                line_number
+            )
         }
     }
 }
@@ -113,13 +118,13 @@ impl TidyDocs {
 
     fn finish(self) {
         if !self.missing_docs.is_empty() {
-            panic!("\nMissing docs strings\n\nmodules:\n{}\n\n", self.missing_docs.join("\n"));
+            panic!(
+                "\nMissing docs strings\n\nmodules:\n{}\n\n",
+                self.missing_docs.join("\n")
+            );
         }
 
-        let whitelist = [
-            "tom",
-            "tom_syntax",
-        ];
+        let whitelist = ["tom", "tom_syntax"];
 
         dbg!(&self.contains_fixme);
 
@@ -140,7 +145,10 @@ impl TidyDocs {
 
         for (krate, has_fixme) in has_fixmes.iter() {
             if !has_fixme {
-                panic!("crate {} is fully documented, remove it from the white list", krate)
+                panic!(
+                    "crate {} is fully documented, remove it from the white list",
+                    krate
+                )
             }
         }
     }
@@ -169,6 +177,10 @@ fn find_rust_files_recursively(path: &Path) -> impl Iterator<Item = PathBuf> {
         .filter(|path| path.extension().map(|it| it == "rs").unwrap_or(false));
 
     fn is_hidden(entry: &DirEntry) -> bool {
-        entry.file_name().to_str().map(|s| s.starts_with('.')).unwrap_or(false)
+        entry
+            .file_name()
+            .to_str()
+            .map(|s| s.starts_with('.'))
+            .unwrap_or(false)
     }
 }

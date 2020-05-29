@@ -1,10 +1,7 @@
 //! FIXME: write short doc here
 
 use languageserver_types::{
-    ServerCapabilities,
-    TextDocumentSyncCapability,
-    TextDocumentSyncOptions,
-    TextDocumentSyncKind,
+    ServerCapabilities, TextDocumentSyncCapability, TextDocumentSyncOptions, TextDocumentSyncKind,
 };
 
 pub fn server_capabilities() -> ServerCapabilities {
@@ -16,8 +13,8 @@ pub fn server_capabilities() -> ServerCapabilities {
                 will_save: None,
                 will_save_wait_until: None,
                 save: None,
-            }
+            },
         )),
-        .. Default::default()
+        ..Default::default()
     }
 }

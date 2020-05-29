@@ -11,7 +11,9 @@ use languageserver_types::{
     InitializeParams, Url, Range, Position,
     notification::{self},
 };
-use gen_lsp_server::{run_server, stdio_transport, handle_shutdown, RawMessage, RawResponse, RawNotification};
+use gen_lsp_server::{
+    run_server, stdio_transport, handle_shutdown, RawMessage, RawResponse, RawNotification,
+};
 use flexi_logger::{Logger, Duplicate};
 use tom_syntax::{TomlDoc, TextRange, TextUnit, symbol::*};
 use failure::format_err;
@@ -26,12 +28,7 @@ fn main() -> Result<(), failure::Error> {
         .directory("log")
         .start()?;
     let (receiver, sender, io_threads) = stdio_transport();
-    run_server(
-        caps::server_capabilities(),
-        receiver,
-        sender,
-        main_loop,
-    )?;
+    run_server(caps::server_capabilities(), receiver, sender, main_loop)?;
     io_threads.join()?;
     Ok(())
 }
@@ -53,37 +50,32 @@ fn main_loop(
                 let req = match req.cast::<req::DecorationsRequest>() {
                     Ok((id, params)) => {
                         let decorations = state.decorations(&params.uri);
-                        let resp = RawResponse::ok::<req::DecorationsRequest>(
-                            id,
-                            &decorations,
-                        );
+                        let resp = RawResponse::ok::<req::DecorationsRequest>(id, &decorations);
                         sender.send(RawMessage::Response(resp));
                         continue;
-                    },
+                    }
                     Err(req) => req,
                 };
                 let req = match req.cast::<req::SyntaxTree>() {
                     Ok((id, params)) => {
                         let tree = state.syntax_tree(&params.text_document.uri);
-                        let resp = RawResponse::ok::<req::SyntaxTree>(
-                            id,
-                            &tree,
-                        );
+                        let resp = RawResponse::ok::<req::SyntaxTree>(id, &tree);
                         sender.send(RawMessage::Response(resp));
                         continue;
-                    },
+                    }
                     Err(req) => req,
                 };
                 let _req = match req.cast::<req::ExtendSelection>() {
                     Ok((id, params)) => {
-                        let selections = state.extend_selections(&params.text_document.uri, &params.selections);
+                        let selections =
+                            state.extend_selections(&params.text_document.uri, &params.selections);
                         let resp = RawResponse::ok::<req::ExtendSelection>(
                             id,
                             &req::ExtendSelectionResult { selections },
                         );
                         sender.send(RawMessage::Response(resp));
                         continue;
-                    },
+                    }
                     Err(req) => req,
                 };
             }
@@ -120,18 +112,15 @@ fn main_loop(
                     }
                     Err(not) => not,
                 };
-
-
-            },
+            }
         }
     }
     Ok(())
 }
 
-
 #[derive(Default)]
 struct State {
-    files: HashMap<Url, (TomlDoc, LineIndex)>
+    files: HashMap<Url, (TomlDoc, LineIndex)>,
 }
 
 impl State {
@@ -155,7 +144,7 @@ impl State {
             let tag = match node.symbol() {
                 TABLE_HEADER => "keyword",
 
-                | BASIC_STRING
+                BASIC_STRING
                 | MULTILINE_BASIC_STRING
                 | LITERAL_STRING
                 | MULTILINE_LITERAL_STRING => "string",
@@ -177,9 +166,8 @@ impl State {
             uri: url,
             decorations,
         };
-        let msg = RawMessage::Notification(
-            RawNotification::new::<req::PublishDecorations>(&params)
-        );
+        let msg =
+            RawMessage::Notification(RawNotification::new::<req::PublishDecorations>(&params));
         sender.send(msg);
     }
 
@@ -203,15 +191,14 @@ impl State {
             Some((doc, _line_index)) => doc,
             None => return "".to_string(),
         };
-        return doc.debug();
+        doc.debug()
     }
 }
-
 
 pub(crate) fn extend(doc: &TomlDoc, range: TextRange) -> TextRange {
     let node = doc.cst().covering_node(range);
 
-    match node.ancestors().skip_while(|n| n.range() == range).next() {
+    match node.ancestors().find(|n| n.range() != range) {
         None => range,
         Some(parent) => parent.range(),
     }

@@ -12,7 +12,7 @@ impl Mark {
     fn new(symbol: Symbol) -> Mark {
         Mark {
             symbol,
-            bomb: DebugDropBomb::new("Mark dropped")
+            bomb: DebugDropBomb::new("Mark dropped"),
         }
     }
 }
@@ -83,7 +83,6 @@ impl<'t, 's> Parser<'t, 's> {
         match self.current() {
             EOF => {
                 self.error(msg);
-                return;
             }
             _ => {
                 let m = self.start(ERROR);

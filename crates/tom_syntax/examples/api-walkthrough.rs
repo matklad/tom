@@ -258,5 +258,4 @@
 //     doc.finish_edit_no_reparse();
 // }
 
-fn main() {
-}
+fn main() {}

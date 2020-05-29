@@ -5,12 +5,7 @@ mod dir;
 // mod model;
 mod util;
 
-use std::{
-    panic,
-    fs,
-    sync::Mutex,
-    time::Instant,
-};
+use std::{panic, fs, sync::Mutex, time::Instant};
 use util::{test_data_dir};
 use tom_syntax::{AstNode, TomlDoc};
 use lazy_static::lazy_static;
@@ -27,16 +22,17 @@ fn simple_bench() {
 
 fn toml(text: &str) -> TomlDoc {
     let doc = TomlDoc::new(text);
-    assert!(doc.errors().is_empty(),
-        "No errors expected, but found in:\n{}\nerrors:\n{:?}", text, doc.errors());
+    assert!(
+        doc.errors().is_empty(),
+        "No errors expected, but found in:\n{}\nerrors:\n{:?}",
+        text,
+        doc.errors()
+    );
     doc
 }
 
 fn find<'a, A: AstNode<'a>>(doc: &'a TomlDoc) -> A {
-    doc.cst().descendants()
-        .filter_map(A::cast)
-        .next()
-        .unwrap()
+    doc.cst().descendants().filter_map(A::cast).next().unwrap()
 }
 
 // fn subtree(node: CstNode, doc: &TomlDoc) -> Vec<CstNode> {

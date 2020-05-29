@@ -1,6 +1,9 @@
 //! FIXME: write short doc here
 
-pub /*(crate)*/ trait ChunkedText where Self: Sized {
+pub trait ChunkedText
+where
+    Self: Sized,
+{
     fn for_each_chunk<F: FnMut(&str) -> Result<(), T>, T>(self, f: F) -> Result<(), T>;
 
     fn contains_char(self, c: char) -> bool {
@@ -9,14 +12,16 @@ pub /*(crate)*/ trait ChunkedText where Self: Sized {
                 return Err(());
             }
             Ok(())
-        }).is_err()
+        })
+        .is_err()
     }
 
     fn write_to(self, buff: &mut String) {
         self.for_each_chunk(|chunk| {
             buff.push_str(chunk);
             Ok::<(), ()>(())
-        }).unwrap();
+        })
+        .unwrap();
     }
 
     fn into_string(self) -> String {
@@ -26,7 +31,7 @@ pub /*(crate)*/ trait ChunkedText where Self: Sized {
     }
 }
 
-impl<'a, I: Iterator<Item=&'a str>> ChunkedText for I {
+impl<'a, I: Iterator<Item = &'a str>> ChunkedText for I {
     fn for_each_chunk<F: FnMut(&str) -> Result<(), T>, T>(mut self, f: F) -> Result<(), T> {
         self.try_for_each(f)
     }

@@ -19,7 +19,7 @@ use crate::not_bash::fs2;
 #[derive(Copy, Clone)]
 pub enum Mode {
     Overwrite,
-    Verify
+    Verify,
 }
 
 fn verify_or_overwrite(mode: Mode, file_path: &Path, expected: &str) -> Result<()> {
