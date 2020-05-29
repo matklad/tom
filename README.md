@@ -141,3 +141,9 @@ supported.
 
 Because edits can create intermediate invalid documents, an edit
 operation has to be explicitly delimited (`start/finish _edit`).
+
+## License
+
+Tom is primarily distributed under the terms of both the MIT license and the Apache License (Version 2.0).
+
+See LICENSE-APACHE and LICENSE-MIT for details.
