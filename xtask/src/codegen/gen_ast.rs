@@ -4,7 +4,6 @@ use heck::{CamelCase, ShoutySnakeCase};
 use anyhow::Result;
 use crate::{project_root_dir, codegen};
 
-
 pub fn gen_ast(mode: codegen::Mode) -> Result<()> {
     let out_file = project_root_dir().join(codegen::AST_NODES_OUT_FILE_PATH);
     codegen::verify_or_overwrite(mode, &out_file, &ast_source_code())
@@ -67,7 +66,8 @@ impl AstNode {
                 &name[..name.len() - 1]
             } else {
                 name
-            }.to_camel_case();
+            }
+            .to_camel_case();
             Method {
                 name,
                 type_name,
@@ -166,7 +166,10 @@ fn ast_source_code() -> String {
 
     for n in descr.iter() {
         ln!("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
-        ln!("pub struct {}Node<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);", n.name);
+        ln!(
+            "pub struct {}Node<R: TreeRoot<TomTypes> = OwnedRoot>(SyntaxNode<R>);",
+            n.name
+        );
         ln!("pub type {}<'a> = {}Node<RefRoot<'a>>;", n.name, n.name);
         ln!();
 
@@ -192,7 +195,10 @@ fn ast_source_code() -> String {
 
         ln!("impl<'a> From<{}<'a>> for SyntaxNodeRef<'a> {{", n.name);
         {
-            ln!("fn from(ast: {}<'a>) -> SyntaxNodeRef<'a> {{ ast.syntax() }}", n.name);
+            ln!(
+                "fn from(ast: {}<'a>) -> SyntaxNodeRef<'a> {{ ast.syntax() }}",
+                n.name
+            );
         }
         ln!("}}");
         ln!();
@@ -243,11 +249,7 @@ fn ast_source_code() -> String {
             }
 
             for m in n.methods.iter() {
-                ln!(
-                    "pub fn {}(self) -> {} {{",
-                    m.name,
-                    m.ret_type()
-                );
+                ln!("pub fn {}(self) -> {} {{", m.name, m.ret_type());
                 ln!("{}", m.body());
                 ln!("}}");
             }

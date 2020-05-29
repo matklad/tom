@@ -4,6 +4,7 @@
 
 pub mod codegen;
 pub mod not_bash;
+pub mod pre_commit;
 use anyhow::{ensure, Result};
 
 use std::{
@@ -26,9 +27,10 @@ pub fn lint() -> Result<()> {
         Please run `rustup component add clippy` to install it."
     );
 
-    let allowed_lints = [
-        "clippy::cognitive_complexity"
-    ];
-    run!("cargo clippy --all-features --all-targets -- -A {}", allowed_lints.join(" -A "))?;
+    let allowed_lints = ["clippy::cognitive_complexity"];
+    run!(
+        "cargo clippy --all-features --all-targets -- -A {}",
+        allowed_lints.join(" -A ")
+    )?;
     Ok(())
 }

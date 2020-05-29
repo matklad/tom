@@ -33,7 +33,6 @@ pub fn gen_parser_tests(mode: codegen::Mode) -> Result<()> {
     Ok(())
 }
 
-
 fn collect_tests(rust_source_code: &str) -> HashMap<String, String> {
     let mut res = HashMap::new();
     let comment_blocks = rust_source_code

@@ -23,6 +23,13 @@ pub mod fs2 {
         fs::write(path, contents)
             .with_context(|| format!("Failed to write file {}", path.display()))
     }
+
+    pub fn copy(from: impl AsRef<Path>, to: impl AsRef<Path>) -> Result<u64> {
+        let from = from.as_ref();
+        let to = to.as_ref();
+        fs::copy(from, to)
+            .with_context(|| format!("Failed to copy {} to {}", from.display(), to.display()))
+    }
 }
 
 macro_rules! _run {
