@@ -3,11 +3,7 @@
 mod grammar;
 mod lexer;
 
-use crate::{
-    symbol::*,
-    SyntaxNode, GreenBuilder, Symbol, SmolStr, TextRange,
-    SyntaxError,
-};
+use crate::{symbol::*, SyntaxNode, GreenBuilder, Symbol, SmolStr, TextRange, SyntaxError};
 
 pub(crate) fn parse(input: &str) -> SyntaxNode {
     let tokens = lexer::tokenize(input);

@@ -12,7 +12,7 @@ impl Mark {
     fn new(symbol: Symbol) -> Mark {
         Mark {
             symbol,
-            bomb: DebugDropBomb::new("Mark dropped")
+            bomb: DebugDropBomb::new("Mark dropped"),
         }
     }
 }

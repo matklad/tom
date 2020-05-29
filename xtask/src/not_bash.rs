@@ -1,6 +1,6 @@
 //! A bad shell -- small cross platform module for writing glue code
 
-use anyhow::{Context, Result, ensure};
+use anyhow::{Context, Result, bail};
 
 pub mod fs2 {
     use super::*;
@@ -37,18 +37,24 @@ macro_rules! _run {
         run!($($expr),*; echo = true)
     };
     ($($expr:expr),* ; echo = $echo:expr) => {
-        $crate::not_bash::run_process(format!($($expr),*), $echo)
+        $crate::not_bash::run_process(format!($($expr),*), $echo, None)
+    };
+    ($($expr:expr),* ; <$stdin:expr) => {
+        $crate::not_bash::run_process(format!($($expr),*), false, Some($stdin))
     };
 }
 pub(crate) use _run as run;
-use std::process::{Stdio, Command};
+use std::{
+    io::Write,
+    process::{Stdio, Command},
+};
 
 #[doc(hidden)]
-pub(crate) fn run_process(cmd: String, echo: bool) -> Result<String> {
-    run_process_inner(&cmd, echo).with_context(|| format!("process `{}` failed", cmd))
+pub fn run_process(cmd: String, echo: bool, stdin: Option<&[u8]>) -> Result<String> {
+    run_process_inner(&cmd, echo, stdin).with_context(|| format!("process `{}` failed", cmd))
 }
 
-fn run_process_inner(cmd: &str, echo: bool) -> Result<String> {
+fn run_process_inner(cmd: &str, echo: bool, stdin: Option<&[u8]>) -> Result<String> {
     let mut args = shelx(cmd);
     let binary = args.remove(0);
 
@@ -56,18 +62,26 @@ fn run_process_inner(cmd: &str, echo: bool) -> Result<String> {
         println!("> {}", cmd)
     }
 
-    let output = Command::new(binary)
-        .args(args)
-        .stdin(Stdio::null())
-        .stderr(Stdio::inherit())
-        .output()?;
+    let mut command = Command::new(binary);
+    command.args(args).stderr(Stdio::inherit());
+    let output = match stdin {
+        None => command.stdin(Stdio::null()).output(),
+        Some(stdin) => {
+            command.stdin(Stdio::piped()).stdout(Stdio::piped());
+            let mut process = command.spawn()?;
+            process.stdin.take().unwrap().write_all(stdin)?;
+            process.wait_with_output()
+        }
+    }?;
     let stdout = String::from_utf8(output.stdout)?;
 
     if echo {
         print!("{}", stdout)
     }
 
-    ensure!(output.status.success(), "{}", output.status);
+    if !output.status.success() {
+        bail!("{}", output.status)
+    }
 
     Ok(stdout.trim().to_string())
 }

@@ -13,11 +13,7 @@ mod validator;
 pub mod ast;
 pub mod symbol;
 
-use std::{
-    num::NonZeroU8,
-    marker::PhantomData,
-};
-
+use std::{num::NonZeroU8, marker::PhantomData};
 
 // pub use edit::{IntoValue, Position};
 pub use rowan::{SmolStr, TextRange, TextUnit, WalkEvent};
@@ -25,7 +21,6 @@ pub use rowan::{SmolStr, TextRange, TextUnit, WalkEvent};
 pub use rtree::{SyntaxNode, SyntaxNodeRef, RefRoot, OwnedRoot, SyntaxNodeChildren, TreeRoot, TomTypes};
 pub(crate) use rtree::GreenBuilder;
 pub(crate) use chunked_text::ChunkedText;
-
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Symbol(NonZeroU8);
@@ -61,7 +56,10 @@ pub struct TomlDoc {
 impl TomlDoc {
     pub fn new(text: &str) -> TomlDoc {
         let root = parser::parse(text);
-        let mut doc = TomlDoc { root, validation_errors: Vec::new() };
+        let mut doc = TomlDoc {
+            root,
+            validation_errors: Vec::new(),
+        };
 
         let validation_errors = validator::validate(&doc);
         doc.validation_errors = validation_errors;
@@ -85,7 +83,9 @@ impl TomlDoc {
     // }
 
     pub fn errors(&self) -> Vec<SyntaxError> {
-        self.root.root_data().iter()
+        self.root
+            .root_data()
+            .iter()
             .chain(self.validation_errors.iter())
             .cloned()
             .collect()
@@ -108,10 +108,10 @@ impl TomlDoc {
                     }
                     buff.push('\n');
                     level += 1;
-                },
+                }
                 WalkEvent::Leave(_) => {
                     level -= 1;
-                },
+                }
             }
         }
 
@@ -126,7 +126,6 @@ impl TomlDoc {
         }
         buff
     }
-
 }
 
 pub trait AstNode<'a>: Clone + Copy + 'a {

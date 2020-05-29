@@ -2,11 +2,11 @@
 
 use heck::{CamelCase, ShoutySnakeCase};
 use anyhow::Result;
-use crate::{project_root_dir, codegen};
+use crate::{project_root_dir, codegen, reformat};
 
 pub fn gen_ast(mode: codegen::Mode) -> Result<()> {
     let out_file = project_root_dir().join(codegen::AST_NODES_OUT_FILE_PATH);
-    codegen::verify_or_overwrite(mode, &out_file, &ast_source_code())
+    codegen::verify_or_overwrite(mode, &out_file, &reformat(ast_source_code())?)
 }
 
 fn descr() -> Vec<AstNode> {
@@ -157,7 +157,6 @@ fn ast_source_code() -> String {
             buff.push_str("\n");
         }};
     }
-    ln!("//! Generated file, do not edit by hand, see `cargo xtask codegen`");
     ln!("use crate::{{");
     ln!("SyntaxNode, SyntaxNodeRef, AstNode, AstChildren, TreeRoot, RefRoot, OwnedRoot, TomTypes,");
     ln!("symbol::*,");

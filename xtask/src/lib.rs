@@ -10,6 +10,7 @@ use anyhow::{ensure, Result};
 use std::{
     env,
     path::{Path, PathBuf},
+    fmt,
 };
 use not_bash::run;
 
@@ -18,6 +19,15 @@ pub fn project_root_dir() -> PathBuf {
         env::var("CARGO_MANIFEST_DIR").unwrap_or_else(|_| env!("CARGO_MANIFEST_DIR").to_owned());
 
     Path::new(&manifest_dir).parent().unwrap().to_owned()
+}
+
+fn reformat(text: impl fmt::Display) -> Result<String> {
+    let stdout = run!(
+        "rustfmt --config-path {}", project_root_dir().join("rustfmt.toml").display();
+        <text.to_string().as_bytes()
+    )?;
+    let preamble = "Generated file, do not edit by hand, see `xtask/src/codegen`";
+    Ok(format!("//! {}\n\n{}\n", preamble, stdout))
 }
 
 pub fn lint() -> Result<()> {

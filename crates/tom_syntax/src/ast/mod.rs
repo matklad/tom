@@ -85,20 +85,20 @@ impl<'a> EntryOwner<'a> for ast::Dict<'a> {
         self.entries()
     }
 
-//     fn append_entry(self, doc: &mut TomlDoc, entry: Entry) {
-//         match self.entries(doc).last() {
-//             Some(old_entry) => {
-//                 let comma = doc.new_comma();
-//                 doc.insert(comma, After(old_entry.into()));
-//                 doc.insert(entry, After(comma));
-//             }
-//             None => {
-//                 let l_curly = self.cst().children(doc).first().unwrap();
-//                 doc.insert(entry, After(l_curly));
-//                 return;
-//             }
-//         }
-//     }
+    //     fn append_entry(self, doc: &mut TomlDoc, entry: Entry) {
+    //         match self.entries(doc).last() {
+    //             Some(old_entry) => {
+    //                 let comma = doc.new_comma();
+    //                 doc.insert(comma, After(old_entry.into()));
+    //                 doc.insert(entry, After(comma));
+    //             }
+    //             None => {
+    //                 let l_curly = self.cst().children(doc).first().unwrap();
+    //                 doc.insert(entry, After(l_curly));
+    //                 return;
+    //             }
+    //         }
+    //     }
 }
 
 impl<'a> EntryOwner<'a> for ast::Table<'a> {

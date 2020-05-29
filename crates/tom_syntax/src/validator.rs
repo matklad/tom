@@ -1,9 +1,6 @@
 //! FIXME: write short doc here
 
-use crate::{
-    SyntaxNodeRef, SyntaxError, TextRange, TomlDoc, ChunkedText,
-    ast,
-};
+use crate::{SyntaxNodeRef, SyntaxError, TextRange, TomlDoc, ChunkedText, ast};
 
 pub(crate) fn validate(doc: &TomlDoc) -> Vec<SyntaxError> {
     let mut errors = Vec::new();
