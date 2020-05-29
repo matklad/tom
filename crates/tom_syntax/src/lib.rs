@@ -124,8 +124,7 @@ impl TomlDoc {
                 buff += &format!("error@{:?} {:?}: {}\n", e.range(), text, e.message());
             }
         }
-        return buff;
-
+        buff
     }
 
 }
@@ -160,6 +159,6 @@ impl<'a, A: AstNode<'a>> Iterator for AstChildren<'a, A> {
                 return Some(a);
             }
         }
-        return None;
+        None
     }
 }

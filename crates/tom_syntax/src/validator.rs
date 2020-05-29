@@ -40,18 +40,17 @@ fn check_table<'a>(
     table: impl ast::EntryOwner<'a> + ast::TableHeaderOwner<'a>,
 ) {
     let header = table.header();
-    match (
-        header.syntax().children().next(),
-        header.syntax().children().last(),
-    ) {
-        (Some(first), Some(last)) => check_new_line(
+    let first = header.syntax().children().next();
+    let last = header.syntax().children().last();
+
+    if let (Some(first), Some(last)) = (first, last) {
+        check_new_line(
             errors,
             first,
             last,
             Forbid,
             "table header must fit into a single line",
-        ),
-        _ => (),
+        );
     }
     if let Some(entry) = table.entries().next() {
         check_new_line(

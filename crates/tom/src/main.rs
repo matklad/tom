@@ -203,7 +203,7 @@ impl State {
             Some((doc, _line_index)) => doc,
             None => return "".to_string(),
         };
-        return doc.debug();
+        doc.debug()
     }
 }
 
@@ -211,7 +211,7 @@ impl State {
 pub(crate) fn extend(doc: &TomlDoc, range: TextRange) -> TextRange {
     let node = doc.cst().covering_node(range);
 
-    match node.ancestors().skip_while(|n| n.range() == range).next() {
+    match node.ancestors().find(|n| n.range() != range) {
         None => range,
         Some(parent) => parent.range(),
     }

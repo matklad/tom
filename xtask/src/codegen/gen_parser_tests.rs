@@ -56,7 +56,7 @@ fn collect_tests(rust_source_code: &str) -> HashMap<String, String> {
             _ => continue,
         };
         let test_body = block.chain(iter::once("")).join("\n");
-        assert!(!test_body.trim().is_empty() && test_body.ends_with("\n"));
+        assert!(!test_body.trim().is_empty() && test_body.ends_with('\n'));
         if let Some(name) = res.insert(name, test_body) {
             panic!("Test name `{}` already used.", name);
         }

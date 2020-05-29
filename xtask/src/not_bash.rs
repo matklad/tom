@@ -1,6 +1,6 @@
 //! A bad shell -- small cross platform module for writing glue code
 
-use anyhow::{Context, Result};
+use anyhow::{Context, Result, ensure};
 
 pub mod fs2 {
     use super::*;
@@ -25,47 +25,47 @@ pub mod fs2 {
     }
 }
 
-// macro_rules! _run {
-//     ($($expr:expr),*) => {
-//         run!($($expr),*; echo = true)
-//     };
-//     ($($expr:expr),* ; echo = $echo:expr) => {
-//         $crate::not_bash::run_process(format!($($expr),*), $echo)
-//     };
-// }
-// pub(crate) use _run as run;
-// use std::process::{Stdio, Command};
+macro_rules! _run {
+    ($($expr:expr),*) => {
+        run!($($expr),*; echo = true)
+    };
+    ($($expr:expr),* ; echo = $echo:expr) => {
+        $crate::not_bash::run_process(format!($($expr),*), $echo)
+    };
+}
+pub(crate) use _run as run;
+use std::process::{Stdio, Command};
 
-// #[doc(hidden)]
-// pub(crate) fn run_process(cmd: String, echo: bool) -> Result<String> {
-//     run_process_inner(&cmd, echo).with_context(|| format!("process `{}` failed", cmd))
-// }
+#[doc(hidden)]
+pub(crate) fn run_process(cmd: String, echo: bool) -> Result<String> {
+    run_process_inner(&cmd, echo).with_context(|| format!("process `{}` failed", cmd))
+}
 
-// fn run_process_inner(cmd: &str, echo: bool) -> Result<String> {
-//     let mut args = shelx(cmd);
-//     let binary = args.remove(0);
+fn run_process_inner(cmd: &str, echo: bool) -> Result<String> {
+    let mut args = shelx(cmd);
+    let binary = args.remove(0);
 
-//     if echo {
-//         println!("> {}", cmd)
-//     }
+    if echo {
+        println!("> {}", cmd)
+    }
 
-//     let output = Command::new(binary)
-//         .args(args)
-//         .stdin(Stdio::null())
-//         .stderr(Stdio::inherit())
-//         .output()?;
-//     let stdout = String::from_utf8(output.stdout)?;
+    let output = Command::new(binary)
+        .args(args)
+        .stdin(Stdio::null())
+        .stderr(Stdio::inherit())
+        .output()?;
+    let stdout = String::from_utf8(output.stdout)?;
 
-//     if echo {
-//         print!("{}", stdout)
-//     }
+    if echo {
+        print!("{}", stdout)
+    }
 
-//     ensure!(output.status.success(), "{}", output.status);
+    ensure!(output.status.success(), "{}", output.status);
 
-//     Ok(stdout.trim().to_string())
-// }
+    Ok(stdout.trim().to_string())
+}
 
-// // Some fake shell lexing
-// fn shelx(cmd: &str) -> Vec<String> {
-//     cmd.split_whitespace().map(|it| it.to_string()).collect()
-// }
+// Some fake shell lexing
+fn shelx(cmd: &str) -> Vec<String> {
+    cmd.split_whitespace().map(|it| it.to_string()).collect()
+}

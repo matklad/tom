@@ -62,10 +62,10 @@ EOF
         let name = format!("{}: Symbol", s);
         let vis = if name == "EOF" { "(crate)" } else { "" };
         ln!(
-            r#"pub{} const {:<42} = Symbol(unsafe {{ NonZeroU8::new_unchecked({} + 1) }});"#,
+            r#"pub{} const {:<42} = Symbol(unsafe {{ NonZeroU8::new_unchecked({}) }});"#,
             vis,
             name,
-            i
+            i + 1
         )
     }
     buff

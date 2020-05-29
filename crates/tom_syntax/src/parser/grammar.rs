@@ -83,7 +83,6 @@ impl<'t, 's> Parser<'t, 's> {
         match self.current() {
             EOF => {
                 self.error(msg);
-                return;
             }
             _ => {
                 let m = self.start(ERROR);

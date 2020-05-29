@@ -63,7 +63,7 @@ struct AstNode {
 impl AstNode {
     fn methods(mut self, names: &[&'static str]) -> AstNode {
         self.methods.extend(names.iter().map(|&name| {
-            let type_name = if name.ends_with("s") {
+            let type_name = if name.ends_with('s') {
                 &name[..name.len() - 1]
             } else {
                 name
@@ -71,7 +71,7 @@ impl AstNode {
             Method {
                 name,
                 type_name,
-                arity: if name.ends_with("s") {
+                arity: if name.ends_with('s') {
                     Arity::Many
                 } else {
                     Arity::One
@@ -85,7 +85,7 @@ impl AstNode {
         let method = Method {
             name,
             type_name: type_name.to_owned(),
-            arity: if name.ends_with("s") {
+            arity: if name.ends_with('s') {
                 Arity::Many
             } else {
                 Arity::One
@@ -96,12 +96,12 @@ impl AstNode {
     }
 
     fn kinds(mut self, names: &[&'static str]) -> AstNode {
-        self.kinds.extend(names.iter().map(|&name| name));
+        self.kinds.extend(names.iter().copied());
         self
     }
 
     fn symbols(mut self, names: &[&'static str]) -> AstNode {
-        self.symbols.extend(names.iter().map(|&name| name));
+        self.symbols.extend(names.iter().copied());
         self
     }
 
@@ -208,7 +208,7 @@ fn ast_source_code() -> String {
                 let symbols = if n.symbols.is_empty() {
                     vec![n.name.to_shouty_snake_case()]
                 } else {
-                    n.symbols.iter().map(|s| s.to_string()).collect()
+                    n.symbols.iter().map(|&s| s.to_string()).collect()
                 };
                 for s in symbols {
                     ln!("{} => Some({}Node(node)),", s, n.name);

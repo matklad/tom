@@ -22,7 +22,8 @@ FLAGS:
     -V, --version    Prints version information
 
 SUBCOMMANDS:
-    codegen";
+    codegen
+    lint";
 
 fn main() -> Result<()> {
     let mut args = pico_args::Arguments::from_env();
@@ -35,6 +36,9 @@ fn main() -> Result<()> {
             codegen::gen_symbols(codegen::Mode::Overwrite)?;
             codegen::gen_parser_tests(codegen::Mode::Overwrite)?;
         },
+        "lint" => {
+            xtask::lint()?;
+        }
         _ => eprintln!("{}", USAGE)
     }
     Ok(())
