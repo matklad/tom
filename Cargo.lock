@@ -831,13 +831,10 @@ version = "0.0.1"
 dependencies = [
  "difference",
  "drop_bomb",
- "failure",
- "itertools",
  "lazy_static",
  "m_lexer",
  "regex",
  "rowan",
- "serde_json",
  "text_unit",
  "uncover",
 ]
