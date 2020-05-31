@@ -833,7 +833,6 @@ dependencies = [
  "drop_bomb",
  "lazy_static",
  "m_lexer",
- "regex",
  "rowan",
  "text_unit",
  "uncover",

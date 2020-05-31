@@ -14,7 +14,6 @@ Yet another format-preserving TOML parser/manipulator.
 text_unit = "0.1.5"
 
 # private
-regex = "1"
 lazy_static = "1"
 m_lexer = "0.0.4"
 uncover = "0.1"
