@@ -17,7 +17,7 @@ Work in progress, take a look at
 relatively more ready.
 
 The best documentation at the moment is
-[./crates/tom_syntax/examples/api-walkthrough.rs](./crates/tom/examples/api-walkthrough.rs).
+[./crates/tom_syntax/examples/api-walkthrough.rs](./crates/tom_syntax/examples/api-walkthrough.rs).
 
 There's a WASM demo of the parser here: [https://matklad.github.io/tom/](https://matklad.github.io/tom/).
 
